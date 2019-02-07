@@ -28,16 +28,6 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-      <h1>
-        Class
-       
-      </h1>
-     
-      <ol class="breadcrumb">
-       
-        <li class=""><a class="btn btn-success btn-sm" href="login.html" data-toggle="modal" data-target="#modal-addStudent" style="color: #fff"><i class="fa fa-plus"></i> <b>Add Class</b></a></li>
-      </ol>
-        
       <?php
     
         if(isset($_GET['insert'])){
@@ -120,11 +110,13 @@ if (!velifyLogin()) {
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
+        <div class="col-md-12">
           <div class="box">
             <div class="box-header">
-             
+             <div class="row">
+              <div class="col-md-8"><b><h3>Classes </h3> </b></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addStudent"><i class="fa fa-plus"></i><b> New Class</b></a></div>
+            </div>
             </div>
             
             <!-- /.box-header -->

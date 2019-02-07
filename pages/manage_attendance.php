@@ -37,7 +37,7 @@ if (!velifyLogin()) {
           aria-hidden="true">
           &times;
           </button>
-          Success! parent added  successfully.
+          Success! Attendance updated  successfully.
           </div>';   
         }
         if(isset($_GET['link'])){
@@ -67,160 +67,35 @@ if (!velifyLogin()) {
           Success! You have updated  successfully.
           </div>';   
         }
-       if(isset($_POST['save_admissionBtn'])){
-        
-          #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
-
-        # parent/Guardian Details
-        $parent_first_name=$_POST['parent_first_name'];
-        $parent_last_name=$_POST['parent_last_name'];
-        $parent_email=$_POST['parent_email'];
-        $parent_phone=$_POST['parent_phone'];
-        $parent_address=$_POST['parent_address'];
-        $parent_profession=$_POST['parent_profession'];
-        $parent_gender=$_POST['parent_gender'];
-         $parent_nationality=$_POST['parent_nationality'];
-        #generate parent ID based on phone
-        $rand = substr(number_format(time() * rand(),0,'',''),0,10);
-        $parent_ID= md5($rand);
-         # check image
-       if(isset($_FILES['parent_profile_photo']['name']) and !empty($_FILES['parent_profile_photo']['name'])){
-           $file=$_FILES['parent_profile_photo']['name'];
-             $path_parts = pathinfo($file);
-            $extension= $path_parts['extension'];
-
-          if ($_FILES["parent_profile_photo"]["size"] > 500000) {
-          echo "<script>alert('Sorry, your file is too large.')</script>";
-          $uploadOk = 0;
-          }
-          elseif($extension != "jpg" && $extension != "png" && $extension != "jpeg"
-          && $extension != "gif" ) {
-          echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
-          $uploadOk = 0;
-          }else{
-             $parent_profile_photo = addslashes(file_get_contents($_FILES['parent_profile_photo']['tmp_name']));
-            $parent_insert_query=mysqli_query($conn,"insert into `parents` ( parent_ID,school_ID, 
-          first_Name,last_Name,address,cell_Mobile_Phone,email,gender_MFU,profession,photo,nationality) 
-          values('$parent_ID','$school_ID','$parent_first_name','$parent_last_name','$parent_address','
-          $parent_phone','$parent_email','$parent_gender','$parent_profession','$parent_profile_photo','$parent_nationality') ");
-        if($parent_insert_query){
-          
-           echo '<script> window.location="parent.php?insert=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-          }
-        }else{
-            $parent_insert_query=mysqli_query($conn,"insert into `parents` ( parent_ID,school_ID, 
-          first_Name,last_Name,address,cell_Mobile_Phone,email,gender_MFU,profession,nationality) 
-          values('$parent_ID','$school_ID','$parent_first_name','$parent_last_name','$parent_address','
-          $parent_phone','$parent_email','$parent_gender','$parent_profession','$parent_nationality') ");
-        if($parent_insert_query){
-          
-           echo '<script> window.location="student.php?insert=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-
-        }
-      }
-      #edit parent
-       if(isset($_POST['edit_parentBtn'])){
-          #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
-
-        # parent/Guardian Details
-        $edit_parent_first_name=$_POST['edit_parent_first_name'];
-        #hidden input from edit form
-        $edit_parent_ID=$_POST['edit_parent_ID'];
-        $edit_parent_last_name=$_POST['edit_parent_last_name'];
-        $edit_parent_email=$_POST['edit_parent_email'];
-        $edit_parent_phone=$_POST['edit_parent_phone'];
-        $edit_parent_address=$_POST['edit_parent_address'];
-        $edit_parent_profession=$_POST['edit_parent_profession'];
-        $edit_parent_gender=$_POST['edit_parent_gender'];
-        $edit_parent_nationality=$_POST['edit_parent_nationality'];
-        # check image
-       if(isset($_FILES['edit_parent_profile_photo']['name']) and !empty($_FILES['edit_parent_profile_photo']['name'])){
-           $file=$_FILES['edit_parent_profile_photo']['name'];
-             $path_parts = pathinfo($file);
-            $extension= $path_parts['extension'];
-
-          if ($_FILES["edit_parent_profile_photo"]["size"] > 500000) {
-          echo "<script>alert('Sorry, your file is too large.')</script>";
-          $uploadOk = 0;
-          }
-          elseif($extension != "jpg" && $extension != "png" && $extension != "jpeg"
-          && $extension != "gif" ) {
-          echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
-          $uploadOk = 0;
-          }else{
-            $edit_parent_profile_photo = addslashes(file_get_contents($_FILES['edit_parent_profile_photo']['tmp_name']));
-              $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',photo='".$edit_parent_profile_photo."',nationality='".$edit_parent_nationality."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
-        if($result_query){
-          echo '<script> window.location="parent.php?update=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-          }
-        }else{
-            $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',nationality='".$edit_parent_nationality."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
-        if($result_query){
-          
-           echo '<script> window.location="parent.php?update=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-
-        }
+       if(isset($_POST['saveAttendanceBtn']))
+{
+    foreach ($_POST['attendance_status'] as $id => $attendance_status)
+    {
+        $roll_no = $_POST['roll_no'][$id];
+        $student_name = $_POST['student_name'][$id];
+        $date_created = date('Y-m-d H:i:s');
+        $date_modified = date('Y-m-d H:i:s');
+        $attendance=mysqli_query($conn,"insert into `attendance` (student_id, student_name, date_entered, date_modified, status
+          ) 
+          values('$roll_no', '$student_name', '$date_created', '$date_modified', '$attendance_status') ");
        
-      }
+    }
+     
+    if ($attendance) {
+      echo  $msg = "Attendance has been added successfully";
+       echo '<script> window.location="attendance.php?insert=True" </script>';
+    }else{
+       echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Oops! Please try again.
+          </div>';   
+    }
+}
 
-      #link parent with student 
-      if(isset($_POST['linkStudentBtn'])){
-        $school_ID = $_SESSION['login_user_school_ID'];
-        $link_student_ID= $_POST['link_studentID'];
-        $link_parentID=$_POST['link_parentID'];
-        $relation =$_POST['relation'];
-        $link_insert_query=mysqli_query($conn,"insert into `parent_relation` ( parent_ID,school_ID,student_ID,relation) 
-          values('$link_parentID','$school_ID','$link_student_ID','$relation') ");
-        if($link_insert_query){
-           echo '<script> window.location="parent.php?link=True" </script>';
-        }else{
-          echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-        }
-      }
+    
       ?>
     </section>
     <!-- Main content -->
@@ -231,74 +106,86 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Parents</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a></div>
-            </div>
+               
+              <form method="POST" action="manage_attendance.php">
+              <div class="col-md-4 pull-" style="text-align:">
+                <input type="date" name="attendance_date" class="form-control" required>
+              </div>
+              <div class="col-md-4 col-" style="text-align:">
+                <select class="form-control" name="status_type" >
+                  <option value="All">All</option>
+                  <option value="Present">Present</option>
+                  <option value="Absent">Absent</option>
+                </select>
+              </div>
+              <div class="col-md-4 col-" style="text-align:t">
+                <button class="btn btn-primary" type="submit" name="searchAttendance" href="" ><i class="fa fa-eye"></i> Veiw Attendance</button>
+              </div>
+            </form>
             </div>
             
             <!-- /.box-header -->
             <div class="box-body">
-               
-     
-     
-       
-       
-              <table id="example1" class="table table-bordered table-striped">
+               <table id="" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Gender</th>
-                  <th>Actions</th>
+                  <th># Adm No</th>
+                  <th>Sudent Name</th>
+                  <th>Date</th>
+                  <th>Attendance Status</th>
+                  
+                  
                 </tr>
                 </thead>
                 <tbody>
-                  <?php
-                   #get school Id from current session school id
+               <?php
+                if (isset($_POST['searchAttendance'])) {
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from parents where school_ID = '$school_ID'")or
+                  $attendanceDate=$_POST['attendance_date'];
+                  $status_type=$_POST['status_type'];
+                  if ($status_type !="All") {
+                   
+                   $attendance_query = mysqli_query($conn,"select * from attendance where status='$status_type' and DATE(date_entered)='$attendanceDate' and school_ID='$school_ID ' ")or
                    die(mysqli_error());
-                   while ($row1=mysqli_fetch_array($query2)){
-                   $parentID= $row1['parent_ID'];
-                   $img;
-                   if($row1['photo'] !=''){
-                    $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                   if($attendance_query){
+                    
+                   while ($attendance_row=mysqli_fetch_array($attendance_query)){
+                 echo"<tr>
+                       <td>".$attendance_row['student_id']."</td>
+                       <td> ".$attendance_row['student_name']."</td>
+                       <td> ".$attendance_row['date_entered']."</td>
+                       <td> ".$attendance_row['status']."</td>
+                    </tr>";
+                  }
+                }else{
+                  echo 'failed 1';
+                }
                   }else{
-                      $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
-                    }
-                  echo" <tr>
-                           <td>
-                             ".$img."
-                           </td>
-                            <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
-                            <td>".$row1['email']." </td>
-                             <td>".$row1['cell_Mobile_Phone']."</td> 
-                            <td>".$row1['gender_MFU']."</td>
-                             
-                            <td>";
-                           echo'  <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a>
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$parentID.'" onclick="editParentDetails(this.id)" data-toggle="modal" data-target="#modal-editParent"><span class="glyphicon glyphicon-pencil"></span></button>
-                             <button type="button" id="'.$row1['parent_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_parent_Modal"><span class="glyphicon glyphicon-trash"></span></button>
-                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#link_student_Modal" id="'.$row1['parent_ID'].'" onclick=showLinkparentID(this.id) ><a href="#"> Link Student</a></button>
-                           </td>
-                         </tr>';
-                    }
-                  ?>
+                    $attendance_query = mysqli_query($conn,"select * from attendance where DATE(date_entered)='$attendanceDate' and school_ID='$school_ID'")or
+                   die(mysqli_error());
+                   if($attendance_query){
+                   while ($attendance_row=mysqli_fetch_array($attendance_query)){
+                 echo"<tr>
+                       <td>".$attendance_row['student_id']."</td>
+                       <td> ".$attendance_row['student_name']."</td>
+                        <td> ".$attendance_row['date_entered']."</td>
+                       <td> ".$attendance_row['status']."</td>
+                    </tr>";
+                   
+                  }
+                }else{
+                  echo "Failed";
+                }
+                  }
+                  # code...
+                }
+               ?>
+     
+       </tbody>
                
-                 </tbody>
-                <tfoot>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Admin No</th>
-                  <th>Gender</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
-              </table>
+             </table>
+       
+       
             </div>
             <!-- /.box-body -->
           </div>

@@ -57,7 +57,7 @@
   </div>
 
   <div class="register-box-body">
-    <p class="login-box-msg">Register a new membership</p>
+    <p class="login-box-msg">Create an Account</p>
      <?php
      if(isset($_GET['insert'])){
     echo' <div class="alert alert-success alert-dismissable">
@@ -65,17 +65,26 @@
     aria-hidden="true">
     &times;
     </button>
-    Success! You have added successfully.
+     You have Registered successfully.
     </div>';   
     } 
       if(isset($_POST['registerBtn'])){
-      $schoolName= $_POST['schoolName'];
+      $schoolAddress=" ";
       $FName= $_POST['FName'];
       $SName= $_POST['SName'];
       $email= $_POST['email'];
       $phone= $_POST['phone'];
       $pass1= $_POST['pass1'];
       $pass2= $_POST['pass2'];
+      #school details
+      $schoolName= $_POST['schoolName'];
+      $schoolPhone= $_POST['schoolPhone'];
+      $schoolEmail= $_POST['schoolEmail'];
+      if(isset($_POST['schoolAddress'])){
+      $schoolAddress= $_POST['schoolAddress'];
+       }else{
+        $schoolAddress=" ";
+       }
       $registrationDate = date_create()->format('Y-m-d');
        $random = substr(number_format(time() * rand(),0,'',''),0,10);
       $datetime = date_create()->format('Y-m-d H:i:s');
@@ -84,9 +93,9 @@
       $result=mysqli_query($conn,"insert into `emailverify` (mailAddress, token, date_time) values('$email',
       '$random','$datetime')");
       if($result){
-      $query=mysqli_query($conn,"insert into `apparatus` (school_ID, first_name, second_name,email,password,registration_Date,phone) values('$school_ID',
-      '$FName','$SName','$email','$pass1','$registrationDate','$phone')");mysqli_query($conn,"insert into `school` (school_ID, school_Name,registration_Date) values('$school_ID',
-      '$schoolName','$registrationDate')");
+      $query=mysqli_query($conn,"insert into `apparatus` (school_ID, first_name, second_name,email,password,registration_Date,phone,role) values('$school_ID',
+      '$FName','$SName','$email','$pass1','$registrationDate','$phone','Super Admin')");mysqli_query($conn,"insert into `school` (school_ID, school_Name,registration_Date,phone,address_1,email) values('$school_ID',
+      '$schoolName','$registrationDate','$schoolPhone','$schoolAddress','$schoolEmail')");
       if($query){
         echo '<script> window.location="register.php?insert=True" </script>';
       }else{
@@ -102,54 +111,99 @@
       }
       
     }
+    
+ 
      ?>
-    <form  action="register.php" method="POST">
-      <div class="form-group has-feedback">
-        <input type="text" name="schoolName" class="form-control" placeholder="School Name" required>
-        <span class="glyphicon glyphicon-education form-control-feedback"></span>
-      </div>
-       <div class="form-group has-feedback">
-        <input type="text" name="FName" class="form-control" placeholder="First Name">
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="text" name="SName" class="form-control" placeholder="Second Name" required>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="email" name="email" class="form-control" placeholder="Email">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-         <input type="text" name="phone" autocomplete="username" placeholder="Phone" class="form-control" data-inputmask='"mask": "(254) 999-999-999"' data-mask>
-        <span class="glyphicon glyphicon-phone form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="password" name="pass1" id="pass1" class="form-control"  autocomplete="new-password" placeholder="Password">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
-      <div  id="confirmPasswordMessage"></div>
-      <div class="form-group has-feedback">
-        <input type="password" name="pass2" id="pass2" onkeyup="checkPass(this.value)" class="form-control"  autocomplete="new-password" placeholder="Retype password">
-        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
-      </div>
-      <div class="row">
-        <div class="col-xs-8">
-          <div class="checkbox icheck">
-            <label>
-              <input type="checkbox" name="agreeTerms"> I agree to the <a href="#">terms</a>
-            </label>
+     <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+          <li class="active col-md-5"><a href="#tab_1" data-toggle="tab"><b>Personal</b></a></li>
+          <li  class="col-md-5"><a href="#tab_2" data-toggle="tab"><b>Institution</b></a></li>
+          
+        </ul>
+        <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+              <form  action="register.php" method="POST">
+                
+                 <div class="form-group has-feedback">
+                  <input type="text" name="FName" class="form-control" placeholder="First Name">
+                  <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="text" name="SName" class="form-control" placeholder="Second Name" required>
+                  <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <select class="form-control" name="gender" required="">
+                    <option>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                 
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="text" name="nationality" class="form-control" placeholder="Nationality">
+                  <span class="glyphicon glyphicon-flag form-control-feedback"></span>
+                 
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="email" name="email" class="form-control" placeholder="Email">
+                  <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                   <input type="text" name="phone" autocomplete="username" placeholder="Phone" class="form-control" data-inputmask='"mask": "(254) 999-999-999"' data-mask>
+                  <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="password" name="pass1" id="pass1" class="form-control"  autocomplete="new-password" placeholder="Password">
+                  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div  id="confirmPasswordMessage"></div>
+                <div class="form-group has-feedback">
+                  <input type="password" name="pass2" id="pass2" onkeyup="checkPass(this.value)" class="form-control"  autocomplete="new-password" placeholder="Retype password">
+                  <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                </div>
+                
+
+          </div><!--end of tab_1 -->
+
+          <!--start  tab_2 -->
+          <div class="tab-pane " id="tab_2">
+            <div class="form-group has-feedback">
+                  <input type="text" name="schoolName" class="form-control" placeholder="School Name" required>
+                  <span class="glyphicon glyphicon-education form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="email" name="schoolEmail" class="form-control" placeholder="School Email" required>
+                  <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="number" name="schoolPhone" min="0" class="form-control" placeholder="School Phone No" required>
+                  <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                </div>
+                 <div class="form-group has-feedback">
+                  <input type="text" name="schoolAddress" class="form-control"  placeholder="School Address" >
+                  <span class="glyphicon glyphicon-map-marker form-control-feedback"></span>
+                </div>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <div class="checkbox icheck">
+                      <label>
+                        <input type="checkbox" name="agreeTerms"> I agree to the <a href="#">terms</a>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-xs-4">
+                    <button type="submit" name="registerBtn" class="btn btn-primary btn-block btn-flat">Register</button>
+                  </div>
+                  <!-- /.col -->
+                </div>
+              </form>
           </div>
         </div>
-        <!-- /.col -->
-        <div class="col-xs-4">
-          <button type="submit" name="registerBtn" class="btn btn-primary btn-block btn-flat">Register</button>
-        </div>
-        <!-- /.col -->
-      </div>
-    </form>
-
-    <a href="index.php" class="text-center">I already have a membership</a>
+    </div>
+    
+    <a href="index.php" class="text-center">I already have an Account</a>
   </div>
   <!-- /.form-box -->
 </div>

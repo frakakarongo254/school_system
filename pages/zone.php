@@ -28,15 +28,6 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-      <h1>
-        Zone
-       
-      </h1>
-     
-      <ol class="breadcrumb">
-       
-        <li class=""><a class="btn btn-success btn-sm" href="login.html" data-toggle="modal" data-target="#modal-addZone" style="color: #fff"><i class="fa fa-plus"></i> <b>Add Zone</b></a></li>
-      </ol>
         
       <?php
     
@@ -92,30 +83,30 @@ if (!velifyLogin()) {
         </div>'; 
        }
       }
-      # edit class
-      if(isset($_POST['editZoneBtn'])){
-        
-          #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
+        # edit zone
+        if(isset($_POST['editZoneBtn'])){
+
+        #get school Id from current session school id
+        $school_ID = $_SESSION['login_user_school_ID'];
         $edit_zone_name=$_POST['edit_zone_name'];
-         $edit_zone_id=$_POST['edit_zone_id'];
+        $edit_zone_id=$_POST['edit_zone_id'];
         $edit_oneWayCharge=$_POST['edit_oneWayCharge'];
         $edit_twoWayCharge=$_POST['edit_twoWayCharge'];
         $update_class_query=mysqli_query($conn,"update `zone` SET zone= '".$edit_zone_name."', oneWayCharge= '".$edit_oneWayCharge."',twoWayCharge= '".$edit_twoWayCharge."' where `zone_ID`='".$edit_zone_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
-        
+
         if($update_class_query){
-           echo '<script> window.location="zone.php?update=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
+        echo '<script> window.location="zone.php?update=True" </script>';
+        }else{
+        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
         aria-hidden="true">
         &times;
         </button>
         Sorry! Something went wrong.Please try again.
         </div>'; 
-       }
-      }
+        }
+        }
 
       
       ?>
@@ -124,11 +115,14 @@ if (!velifyLogin()) {
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
+        
+        <div class="col-md-12">
           <div class="box">
             <div class="box-header">
-             
+             <div class="row">
+              <div class="col-md-8"><b><h3>Zone</h3> </b></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addZone"><i class="fa fa-plus"></i><b> New Zone</b></a></div>
+            </div>
             </div>
             
             <!-- /.box-header -->

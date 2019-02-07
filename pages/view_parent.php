@@ -3,7 +3,11 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
-$get_parentID =$_GET['id'];
+$get_parentID='';
+if(isset($_GET['id'])){
+  $get_parentID =$_GET['id'];
+}
+
 ?>
 
 <?php include("include/header.php")?>
@@ -30,11 +34,20 @@ $get_parentID =$_GET['id'];
    
  <section class="content-header">
       <h1>
-        Parent
+        <b>Parent</b>
        
       </h1>
-     
-     
+     <?php
+     if(isset($_GET['id']) and isset($_GET['unlink'])){
+          echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! You have unlink the student  successfully.
+          </div>';   
+        }
+        ?>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -59,7 +72,7 @@ $get_parentID =$_GET['id'];
             <div class="box-body box-profile">
 
               <div class="row">
-                <div class="col-md-6 ">\
+                <div class="col-md-6 ">
                   <div class="pull-right">
                    <?php echo $image;?>
 
@@ -120,9 +133,9 @@ $get_parentID =$_GET['id'];
                    $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
-                   $student_regNoID= $row1['student_RegNo'];
+                   $student_ID= $row1['student_ID'];
                    #get student details
-                   $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && registration_No='$student_regNoID'")or
+                   $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_ID'")or
                    die(mysqli_error());
                    while ($row2=mysqli_fetch_array($query3)){
                     $img;
@@ -140,9 +153,8 @@ $get_parentID =$_GET['id'];
                             <td>".$row2['gender_MFU']."</td>
                             <td>Action</td>  
                             <td>";
-                           echo'  <button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button>
-                             <button type="button"  class="btn btn-info btn-flat" onclick="editStudentDetails()"><span class="glyphicon glyphicon-pencil"></span></button>
-                             <button type="button" id="'.$row2['registration_No'].'" class="btn btn-danger btn-flat" value="'.$row2['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                           echo'   <a class="btn btn-success btn-flat" href="view_student.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+                             <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['parent_ID'].'" onclick="delinkStudent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                            </td>
                          </tr>';
 
@@ -410,23 +422,23 @@ $get_parentID =$_GET['id'];
         </div>
         <!-- /.modal -->
        
-         <!-- delete student  Modal-->
-    <div class="modal  fade" id="delete_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <!-- unlink student  Modal-->
+    <div class="modal  fade" id="delink_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this student?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Unlink this student?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
             <script >
-               function deleteStudent(id,name){
+               function delinkStudent(student_id,parent_ID){
                   
-                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + name + '  </b>from the system?'
+                 document.getElementById("msg").innerHTML=' Are you sure you want to unlink this student from  parent/Guardian?'
                 var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="brand"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="deleteStudentFromSystem(this.id)">Delete</button></form></div>';
+                updiv.innerHTML ='<form method="POST" action="brand"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="'+parent_ID+'" id="'+ student_id +'" type="submit" data-dismiss="modal" onclick="delinkStudentFromParent(this.id,this.name)">Delete</button></form></div>';
                 }
             </script>
           
@@ -481,19 +493,19 @@ $get_parentID =$_GET['id'];
 </script>
 
 <script >
-  function deleteStudentFromSystem(RegNo){
-    alert(RegNo);
+  function delinkStudentFromParent(student_ID,parent_ID){
+    //alert(parent_ID);
   var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
   //alert(id);
-  var details= '&RegNo='+ RegNo;
+  var details= '&student_ID='+ student_ID;
   $.ajax({
   type: "POST",
-  url: "delete_student.php",
+  url: "unlink_student_parent.php",
   data: details,
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="children.php?delete=True" 
+ window.location='view_parent.php?id='+parent_ID+'&unlink=True' 
     }else{
       alert("OOp! Could not delete the student.Please try again!");
     }

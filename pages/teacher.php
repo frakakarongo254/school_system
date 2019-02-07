@@ -231,8 +231,8 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Parents</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a></div>
+              <div class="col-md-8"><b><h3>Teachers</h3> </b></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Teacher</b></a></div>
             </div>
             </div>
             
@@ -305,9 +305,9 @@ if (!velifyLogin()) {
           <!-- /.box -->
         </div>
       </div>
-    <!--- add parent Modal -->
+    <!--- add teacher Modal -->
       <div class="modal fade" id="modal-addParent">
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-sm">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -321,32 +321,23 @@ if (!velifyLogin()) {
               <!-- /.tab-pane -->
                    <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" enctype="multipart/form-data">
                 <div class="row">
-              <div class=" col-md-6 mb-3">
+              <div class=" col-md-">
                 <div class="form-group has-feedback input-group-lg">
-                      <label>First Name :</label>
+                      <label>Full Name :</label>
                <div class=" col-md- input-group input-group-">
                 <input type="text" name="parent_first_name"  class="form-control"   placeholder="First Name" required>
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                
               </div>
               </div>
               </div>
-              <div class=" col-md-6 mb-3">
-               <div class="form-group has-feedback input-group-">
-                      <label>Last Name :</label>
-               <div class=" col-md- input-group input-group">              
-                <input type="text" name="parent_last_name"  class="form-control"   placeholder="Last Name" required>
-                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-              </div>
-              </div>
-              </div>            
+                        
             </div>
               <br>
               <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
+              <div class="form-group  col-md-">
                 <label for="nationality">Gender:</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-gender"></i></span>
+              <div class=" col-md- input-group input-group-">
                 
                 <select name="parent_gender" class="form-control">
                   <option value="Male">Male</option>
@@ -359,11 +350,11 @@ if (!velifyLogin()) {
               <br>
              
             <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
+              <div class="form-group ">
                 <label for="nationality">Email :</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+              <div class=" col-md- input-group input-group-">
+               
                 <input type="email" name="parent_email" class="form-control" placeholder="" required>
               </div>
               
@@ -371,43 +362,43 @@ if (!velifyLogin()) {
             <br>
            
             <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
+              <div class="form-group  ">
                 <label for="phone">Phone :</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+              <div class=" col-md- input-group input-group-">
+               
                 <input type="tel" name="parent_phone" class="form-control" placeholder="" required>
               </div>    
             </div>
             <br>
             
             <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
+              <div class="form-group  ">
                 <label for="address">Address :</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+              <div class=" col-md- input-group input-group-">
+                
                 <input type="text" name="parent_address" class="form-control" placeholder="" required>
               </div>    
             </div>
             <br>
               <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
+              <div class="form-group  ">
                 <label for="nationality">Nationality:</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+              <div class=" col-md- input-group input-group-">
+                
                 <input type="text" name="parent_nationality" class="form-control" placeholder="" required>
               </div>    
             </div>
             <br>
             
             <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
+              <div class="form-group  ">
                 <label for="profession">Profession :</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-suitcase"></i></span>
+              <div class=" col-md- input-group input-group-">
+               
                 <input type="text" class="form-control" name="parent_profession" placeholder="Profession" required="">
               </div>    
             </div>

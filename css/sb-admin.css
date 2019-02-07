@@ -344,3 +344,8 @@ footer.sticky-footer {
 @media (min-width: 992px) {
   body.sidenav-toggled footer.sticky-footer {
     width: calc(100% - 55px); } }
+#tab{
+  font-size:20px;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+}

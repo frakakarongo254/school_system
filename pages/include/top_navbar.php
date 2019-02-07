@@ -1,11 +1,21 @@
  <header class="main-header">
 
-    <!-- Logo -->
+    <!-- Logo --><?php
+      $school_data_sql = mysqli_query($conn,"select * from `school` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+
+      $school_row = mysqli_fetch_array($school_data_sql,MYSQLI_ASSOC);
+      $school_row['school_Name'];
+      $logo;
+      if($school_row['logo_image'] !=''){
+      $logo = '<img class="img-circle" src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="50px" width="50px" />';
+      }else{
+        $logo = "<img class='img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='50px' width='50px'>";
+      }?>
     <a href="dashboard.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"></span>
+      <span class="logo-mini"><?php echo $logo;?></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><img src="../dist/img/logo1.png" class="img-circle" alt="User Image"></span>
+      <span class="logo-lg"><?php echo $logo;?></span>
     </a>
     
     <!-- Header Navbar: style can be found in header.less -->
@@ -14,6 +24,7 @@
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
+
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -57,24 +68,37 @@
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
+            <?php
+             $user_img;
+             if( $_SESSION['login_user_photo'] !==''){
+              $user_img='<img class="user-image" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['login_user_photo'] ).'"  height="90" width="90px" />';
+              // img circle class
+              $user_img_circle='<img class="img-circle" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['login_user_photo'] ).'"  height="90" width="90px" />';
+             }else{
+              $user_img='<img src="../dist/img/avatar.png" class="user-image" alt="User Image">';
+              // img circle class
+              $user_img_circle='<img src="../dist/img/avatar.png" class="img-circle" alt="User Image">';
+             }
+            ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="../dist/img/avatar.png" class="user-image" alt="User Image">
+              <?php echo $user_img ;?>
               <span class="hidden-xs"><?php echo $_SESSION['login_user_fname'] ;?></span>
             </a>
+            
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="../dist/img/avatar.png" class="img-circle" alt="User Image">
-
+               
+                <?php echo $user_img_circle ;?>
                 <p>
-                 <?php echo $_SESSION['login_user_fname'] ;?> - Web Developer
+                 <?php echo $_SESSION['login_user_fname'] .  " - "  .$_SESSION['login_user_role'];?> 
                   <small></small>
                 </p>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
+                  <a href="profile.php" class="btn btn-secondary btn-flat"><i class="fa fa-fw fa-user"></i>Profile</a>
                 </div>
                 <div class="pull-right">
                  <!-- Find logout Modal from footer file from include folder -->

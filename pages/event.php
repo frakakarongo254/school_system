@@ -28,15 +28,7 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-      <h1>
-        Events
-       
-      </h1>
-     
-      <ol class="breadcrumb">
-       
-        <li class=""><a class="budge btn-success btn-sm" href="login.html" data-toggle="modal" data-target="#modal-addEvent" style="color: #fff"><i class="fa fa-plus"></i> <b>Add Event</b></a></li>
-      </ol>
+      
         
       <?php
     
@@ -55,7 +47,7 @@ if (!velifyLogin()) {
           aria-hidden="true">
           &times;
           </button>
-          Success! Class updated  successfully.
+          Success! Event updated  successfully.
           </div>';   
         }
         if(isset($_GET['delete'])){
@@ -67,24 +59,22 @@ if (!velifyLogin()) {
           Success! You have deleted  successfully.
           </div>';   
         }
+        //Add event
        if(isset($_POST['addEventBtn'])){
-        
           #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
+        $school_ID = $_SESSION['login_user_school_ID'];
         $event_title=$_POST['event_title'];
         $event_location=$_POST['event_location'];
         $event_startime=$_POST['event_startime'];
         $event_endtime=$_POST['event_endtime'];
         $event_description=$_POST['event_description'];
-        
-       
-        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID, event_title,event_location,event_startime,event_endtime,event_description
+        $event_color=$_POST['event_color'];
+        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID, event_title,event_location,event_startime,event_endtime,event_description,event_color
           ) 
-          values('$school_ID','$event_title','$event_location','$event_startime','$event_endtime','$event_description') ");
-
-        
+          values('$school_ID','$event_title','$event_location','$event_startime','$event_endtime','$event_description','$event_color') ");
         if($event_insert_query){
            echo '<script> window.location="event.php?insert=True" </script>';
+          
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -95,18 +85,23 @@ if (!velifyLogin()) {
         </div>'; 
        }
       }
-      # edit class
-      if(isset($_POST['EditClassBtn'])){
-        
+      
+      #Edit event
+       if(isset($_POST['editEventBtn'])){
           #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
-        $class_name=$_POST['edit_class_name'];
-        $edit_class_id=$_POST['edit_class_id'];
-        $update_class_query=mysqli_query($conn,"update `class` SET class_name= '".$class_name."' where `class_ID`='".$edit_class_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+        $school_ID = $_SESSION['login_user_school_ID'];
+        $edit_event_ID=$_POST['edit_event_id'];
+        $edit_event_title=$_POST['edit_event_title'];
+        $edit_event_location=$_POST['edit_event_location'];
+        $edit_event_startime=$_POST['edit_event_startime'];
+        $edit_event_endtime=$_POST['edit_event_endtime'];
+        $edit_event_description=$_POST['edit_event_description'];
+        $edit_event_color=$_POST['edit_event_color'];
+        $update_udate_query=mysqli_query($conn,"update `event` SET event_title= '".$edit_event_title."', event_location= '".$edit_event_location."',event_startime= '".$edit_event_startime."',event_endtime= '".$edit_event_endtime."' ,event_description= '".$edit_event_description."',event_color= '".$edit_event_color."' where `event_ID`='".$edit_event_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
-        
-        if($update_class_query){
+        if($update_udate_query){
            echo '<script> window.location="event.php?update=True" </script>';
+          
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -117,48 +112,53 @@ if (!velifyLogin()) {
         </div>'; 
        }
       }
-
       
       ?>
     </section>
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-          <div class="box">
-            <div class="box-header">
-             
-            </div>
-            
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table>
+      <div class="row box">
+         <div class="col-md-2 box-primary ">
+          <table id="" class="table table-bordered table-striped">
                   <?php
-                   #get school Id from current session school id
-                   $school_ID = $_SESSION['login_user_school_ID'];
-                   $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID'")or
-                   die(mysqli_error());
-                   while ($event_row=mysqli_fetch_array($event_query)){
-                   $event_ID=$event_row['event_ID'];
+                  #get school Id from current session school id
+                  $school_ID = $_SESSION['login_user_school_ID'];
+                  $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID'")or
+                  die(mysqli_error());
+                  while ($event_row=mysqli_fetch_array($event_query)){
+                  $eventID=$event_row['event_ID'];
 
-                  echo" <tr>
-                          
-                            <td colpan=''>";
-                           echo'  
-                             <button type="button"  class="btn btn-info btn-flat btn-lg" id="'.$event_ID.'" onclick="editClassName()"   ><i class="fa fa-calendar style=width:200px;height:200px;" ></i></button>
+                  echo' <tr>
 
-                             
-                             
-                           </td>';
-                         echo"  <td><b>Start Time:</b>".$event_row['event_startime']."<br><b>Title:</b>".$event_row['event_title'] ."<br><b>End time:</b>".$event_row['event_endtime']."</td>
-                                 
-                         </tr>";
-                    }
+                    <td ><b>'.
+                   $event_row["event_title"].'</b>
+                   </td>
+                  <td>
+                  <a data-toggle="modal" data-target="#edit_event_Modal" href="#" id="'.$eventID.'" onclick="editEventFunc(this.id)"><span class="pull- badge bg-secondary"><i class="fa fa-pencil"></i> </span></a>
+                  <a data-toggle="modal" data-target="#delete_event_Modal" href="#" id="'.$eventID.'" onclick="deleteEventFunc(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> </span></a>
+                  </td>
+                         
+                  </tr>';
+                  }
                   ?>
                
                 </table>
+         </div>
+        <div class="col-md-10">
+          <div class="box">
+            <div class="box-header">
+             <div class="row">
+              
+              <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
+            </div>
+            </div>
+            
+            
+            <!-- /.box-header -->
+            <div class="box-body">
+              
+                <div id="calendar">calender</div>
             </div>
             <!-- /.box-body -->
           </div>
@@ -217,6 +217,13 @@ if (!velifyLogin()) {
             </div>
             <br>
           </div>
+          <div class="input-group my-colorpicker2">
+                  <input type="color" name="event_color" class="form-control my-colorpicker1">
+
+                  <div class="input-group-addon">
+                    <i></i>
+                  </div>
+                </div>
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
@@ -236,23 +243,23 @@ if (!velifyLogin()) {
         </div>
         <!-- /.modal -->
        
-         <!-- delete student  Modal-->
-    <div class="modal  fade" id="delete_class_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <!-- delete event  Modal-->
+    <div class="modal  fade" id="delete_event_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this Class?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete Event?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
             <script >
-               function deleteStudent(id,name){
+               function deleteEventFunc(id){
                   
-                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + name + '  </b>from the system?'
+                 document.getElementById("msg").innerHTML=' Are you sure you want to delete this event'
                 var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="class.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="deleteClassFromSystem(this.id)">Delete</button></form></div>';
+                updiv.innerHTML ='<form method="POST" action="event.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="deleteEventFromSystem(this.id)">Delete</button></form></div>';
                 }
             </script>
           
@@ -266,12 +273,12 @@ if (!velifyLogin()) {
     </div>
      </div>
 
-    <!-- edit class Modal-->
-    <div class="modal  fade" id="edit_class_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- edit Event Modal-->
+    <div class="modal  fade" id="edit_event_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><b>Edit Class</b></h5>
+            <h5 class="modal-title" id="exampleModalLabel"><b>Edit Event</b></h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -282,17 +289,17 @@ if (!velifyLogin()) {
                
             <script >
              
-               function editClassName(id){ 
-                
+               function editEventFunc(id){ 
+                 //alert(id);
                   if(id !=''){
-                    var details= '&class_id='+ id ;
+                    var details= '&event_id='+ id ;
                     $.ajax({
                     type: "POST",
-                    url: "edit_class.php",
+                    url: "edit_event.php",
                     data: details,
                     cache: false,
                     success: function(data) {
-                      document.getElementById("classMessage").innerHTML=data;
+                      document.getElementById("eventMessage").innerHTML=data;
                    
 
                     }
@@ -300,14 +307,14 @@ if (!velifyLogin()) {
                     });
                    
                   }else{
-                   document.getElementById("classMessage").innerHTML=' You have Not Yet selected a Class';
+                   document.getElementById("eventMessage").innerHTML=' You have Not Yet selected a Class';
                   }
                  
                 
                 }
             </script>
           
-          <div id="classMessage"></div>
+          <div id="eventMessage"></div>
 
         </div>
           </div>
@@ -339,35 +346,160 @@ if (!velifyLogin()) {
 
 
 <!-- include script-->
-<?php include("include/script.php")?>
+<!--<?php# include("include/script.php")?>-->
+<!-- jQuery 3 -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+<!-- Slimscroll -->
+<script src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../dist/js/demo.js"></script>
+<!-- fullCalendar -->
+<script src="../bower_components/moment/moment.js"></script>
+<script src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+<!-- bootstrap color picker -->
+<script src="../bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="../plugins/iCheck/icheck.min.js"></script>
+
 <!-- page script -->
 <script>
   $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+    function init_events(ele) {
+      ele.each(function () {
+
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+          title: $.trim($(this).text()) // use the element's text as the event title
+        }
+
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject)
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex        : 1070,
+          revert        : true, // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        })
+
+      })
+    }
+
+    init_events($('#external-events div.external-event'))
+
+    /* initialize the calendar
+     -----------------------------------------------------------------*/
+    //Date for the calendar events (dummy data)
+    var date = new Date()
+    var d    = date.getDate(),
+        m    = date.getMonth(),
+        y    = date.getFullYear()
+    $('#calendar').fullCalendar({
+      header    : {
+        left  : 'prev,next today',
+        center: 'title',
+        right : 'month,agendaWeek,agendaDay'
+      },
+      buttonText: {
+        today: 'today',
+        month: 'month',
+        week : 'week',
+        day  : 'day'
+      },
+      //Random default events
+      events    :'./json_event.php',
+      editable  : true,
+      droppable : true, // this allows things to be dropped onto the calendar !!!
+      drop      : function (date, allDay) { // this function is called when something is dropped
+
+        // retrieve the dropped element's stored Event Object
+        var originalEventObject = $(this).data('eventObject')
+
+        // we need to copy it, so that multiple events don't have a reference to the same object
+        var copiedEventObject = $.extend({}, originalEventObject)
+
+        // assign it the date that was reported
+        copiedEventObject.start           = date
+        copiedEventObject.allDay          = allDay
+        copiedEventObject.backgroundColor = $(this).css('background-color')
+        copiedEventObject.borderColor     = $(this).css('border-color')
+
+        // render the event on the calendar
+        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
+
+        // is the "remove after drop" checkbox checked?
+        if ($('#drop-remove').is(':checked')) {
+          // if so, remove the element from the "Draggable Events" list
+          $(this).remove()
+        }
+
+      }
+    })
+
+    /* ADDING EVENTS */
+    var currColor = '#3c8dbc' //Red by default
+    //Color chooser button
+    var colorChooser = $('#color-chooser-btn')
+    $('#color-chooser > li > a').click(function (e) {
+      e.preventDefault()
+      //Save color
+      currColor = $(this).css('color')
+      //Add color effect to button
+      $('#add-new-event').css({ 'background-color': currColor, 'border-color': currColor })
+    })
+    $('#add-new-event').click(function (e) {
+      e.preventDefault()
+      //Get value and make sure it is not null
+      var val = $('#new-event').val()
+      if (val.length == 0) {
+        return
+      }
+
+      //Create events
+      var event = $('<div />')
+      event.css({
+        'background-color': currColor,
+        'border-color'    : currColor,
+        'color'           : '#fff'
+      }).addClass('external-event')
+      event.html(val)
+      $('#external-events').prepend(event)
+
+      //Add draggable funtionality
+      init_events(event)
+
+      //Remove event from text input
+      $('#new-event').val('')
     })
   })
-
 </script>
 
 <script >
-  function deleteClassFromSystem(class_id){
+  // Delete event
+  function deleteEventFromSystem(event_id){
   //alert(id);
-  var details= '&class_id='+ class_id;
+  var details= '&event_id='+ event_id;
   $.ajax({
   type: "POST",
-  url: "delete_class.php",
+  url: "delete_event.php",
   data: details,
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="class.php?delete=True" 
+ window.location="event.php?delete=True" 
     }else{
       alert("OOp! Could not delete the class.Please try again!");
     }
@@ -377,6 +509,72 @@ if (!velifyLogin()) {
   });
   }
 </script>
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
 
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
+
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    })
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Colorpicker
+    $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+
+    //Timepicker
+    $('.timepicker').timepicker({
+      showInputs: false
+    })
+  })
+</script>
 </body>
 </html>

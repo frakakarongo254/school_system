@@ -39,6 +39,21 @@
            
           </a>
         </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-bar-chart"></i>
+            <span>Attendance</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="manage_attendance.php"><i class="fa fa-circle-o"></i> Manage Attendance</a></li>
+            <li><a href="attendance.php"><i class="fa fa-plus"></i> New attedance</a></li>
+            
+          </ul>
+        </li>
         <li>
           <a href="event.php">
             <i class="fa fa-calendar"></i> <span>Events</span>
@@ -51,11 +66,20 @@
            
           </a>
         </li>
-        <li>
-          <a href="student.php">
-            <i class="fa fa-user"></i> <span>Children</span>
-           
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-graduation-cap"></i>
+            <span>Student</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
           </a>
+          <ul class="treeview-menu">
+            <li><a href="student.php"><i class="fa fa-circle-o"></i> Manage student</a></li>
+            <li><a href="add_student.php"><i class="fa fa-plus"></i> Add Student</a></li>
+            
+          </ul>
         </li>
          <li>
           <a href="parent.php">
@@ -69,12 +93,7 @@
            
           </a>
         </li>
-         <li>
-          <a href="#">
-            <i class="fa fa-users"></i> <span>Staff</span>
-           
-          </a>
-        </li>
+        
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>

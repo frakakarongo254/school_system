@@ -28,14 +28,7 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-      <h1>
-        Student
-       
-      </h1>
-      <ol class="breadcrumb">
-       
-        <li class=""><a class="btn btn-success btn-sm" href="login.html" data-toggle="modal" data-target="#modal-addStudent" style="color: #fff"><i class="fa fa-plus"></i> <b>New Student</b></a></li>
-      </ol>
+     
       <?php
     
         if(isset($_GET['insert'])){
@@ -192,17 +185,15 @@ if (!velifyLogin()) {
     </section>
     <!-- Main content -->
     <section class="content">
-      <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Students</h3>
+   
+        <!-- Custom Tabs -->
+          <div class="nav-tabs-custom">
+          <div class="row">
+              <div class="col-md-8"><b><h3>Students</h3> </b></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="add_student.php" ><i class="fa fa-plus"></i><b> New Student </b></a></div>
             </div>
             
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+                 <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>Img</th>
@@ -243,8 +234,8 @@ if (!velifyLogin()) {
                             <td>".$row1['gender_MFU']."</td>
                             <td>".$status."</td>  
                             <td>";
-                           echo'  <button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button>
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$row1['registration_No'].'" onclick="editStudentDetails(this.id)" data-toggle="modal"  data-target="#modal-editStudent"><span class="glyphicon glyphicon-pencil"></span></button>
+                           echo'  <a class="btn btn-success btn-flat" href="view_student.php?id='.$row1['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+                            <a class="btn btn-info" href="edit_students.php?id='.$row1['student_ID'].'"> <span class="glyphicon glyphicon-pencil"></span></a>
                              <button type="button" id="'.$row1['registration_No'].'" class="btn btn-danger btn-flat" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                            </td>
                          </tr>';
@@ -263,203 +254,11 @@ if (!velifyLogin()) {
                 </tr>
                 </tfoot>
               </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-      </div>
-    <!--- add student Modal -->
-      <div class="modal fade" id="modal-addStudent">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">New Student</h4>
-              </div>
-              <div class="modal-body">
-                 <div class="nav-tabs-custom">
-                
-              <div class="tab-content">
-              <form id="fileinfo" name="fileinfo" action="student.php" method="POST" enctype="multipart/form-data">
-              <div class="row">
-                <div class=" col-md-6 mb-3">
-                  <div class="form-group has-feedback input-group-lg">
-                        <label>First Name :</label>
-                 <div class=" col-md- input-group input-group-">
-                  <input type="text" name="student_first_name"  class="form-control"   placeholder="First Name" required>
-                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                </div>
-                </div>
-                </div>
-                <div class=" col-md-6 mb-3">
-                 <div class="form-group has-feedback input-group-">
-                        <label>Last Name :</label>
-                 <div class=" col-md- input-group input-group">              
-                  <input type="text" name="student_last_name"  class="form-control"   placeholder="Last Name" required>
-                   <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                </div>
-                </div>
-                </div>            
-              </div>
-              <br>
               
-              <div class="row">
-                <div class="form-group  col-md-3 mb-3">
-                  <label for="nationality">Nickname :</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                  <input type="text" name="student_nickname"  class="form-control"   placeholder="Nickname" required>
-                </div>
-              </div>
-              <br>
-             
-               <div class="row">
-                 <div class="form-group  col-md-3 mb-3">
-                  <label for="nationality">Gender :</label>
-                </div>
-                <div class=" col-md- input-group input-group-">
-                  <div class="form-group">
-                  <label>
-                    <input type="radio" name="student_gender" class=" flat-red"  value="Male" checked>
-                    <label>Male</label>
-                  </label>
-                  <label>
-                    <input type="radio" name="student_gender" class=" flat-red" value="Female">
-                    <label>Female</label>
-                  </label>
-                
-                </div>
-                </div>
-              </div>
-              <br>
-              
-               <div class="row">
-               
-                <div class="form-group  col-md-3 mb-3">
-                  <label for="nationality">Date Of Birth :</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-gift"></i></span>
-                  <input type="date" name="student_dateOfBirth" class="form-control" placeholder="" required>
-                </div>
-                
-              </div>
-              <br>
-              
-               <div class="row">
-                <div class="form-group  col-md-3 mb-3">
-                  <label for="nationality">Admission Date :</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                  <input type="date" name="student_admission_date" class="form-control" placeholder="" required>
-                </div>
-                <br>
-              </div>
-              
-               <div class="row">
-                <div class="form-group  col-md-3 mb-3">
-                  <label for="nationality">Zone :</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-map"></i></span>
-                <select name="student_zone" class="form-control">
-                <?php
-                 $query_zone = mysqli_query($conn,"select * from zone where school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
-                   while ($zone_rows=mysqli_fetch_array($query_zone)){
-                    $student_regNoID= $zone_rows['class_name'];
-                  echo'  <option value="'.$zone_rows['zone'].'">'.$zone_rows['zone'].'</option>';
-                   }
-                ?>
-              </select>
-                
-                </div>
-                
-              </div>
-              <br>
-              <div class="row">
-                <div class="form-group  col-md-3 mb-3">
-                  <label for="zone">Transport Type:</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-              <span class="input-group-addon"><i class="fa fa-bus"></i></span>
-              <select name="zoneChargeType" class="form-control">
-               <option value="None">None</option>
-               <option value="oneWayCharge">One Way</option>
-               <option value="twoWayCharge">Two Way</option>
-              </select>
-                </div>
-              </div>
-              <br>
-               <div class="row">
-                <div class="form-group  col-md-3 mb-3">
-                  <label for="nationality">Class :</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-o"></i></span>
-                <select name="student_class" class="form-control">
-                <?php
-                 $qer = mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
-                   while ($rows1=mysqli_fetch_array($qer)){
-                    $student_regNoID= $rows1['class_name'];
-                  echo'  <option value="'.$rows1['class_name'].'">'.$rows1['class_name'].'</option>';
-                   }
-                ?>
-              </select>
-                
-                </div>
-                
-              </div>
-              <br>
-              
-               <div class="row">
-                 <div class="form-group  col-md-3 mb-3">
-                  <label for="nationality">Profile Photo :</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                  <input type="file"  class="form-control" name="student_profile_photo" >
-                </div>
-               
-                
-              </div>
-           
-            
-              <br>
-             
-               <div class="row">
-                <div class="form-group  col-md-3 mb-3">
-                 <label for="nationality">Healthy comment :</label>
-                </div>
-                <div class=" col-md-7 input-group input-group-">
-                  <textarea class="form-control" name="healthyComment" placeholder="Healthy comment" required></textarea>
-                </div>
-               
-              </div>
-               <div class="row">
-              <div class="col-md-12">
-                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="save_admissionBtn" class="btn btn-primary">Add Student</button>
-              </div>
-              </div>
-             
-              </form>
-            </div>
             <!-- /.tab-content -->
           </div>
-              </div>
-              
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+          <!-- nav-tabs-custom -->
+  
 
         <!--Edit student model-->
          
@@ -572,6 +371,22 @@ if (!velifyLogin()) {
 </script>
 
 <script >
+  function editStudentDetails(RegNo){
+               
+                var updiv = document.getElementById("editMessage"); //document.getElementById("highodds-details");
+                //alert(id);
+                var details= '&RegNo='+ RegNo;
+                $.ajax({
+                type: "POST",
+                url: "edit_student.php",
+                data: details,
+                cache: false,
+                success: function(data) {
+               
+                document.getElementById("editMessage").innerHTML=data;
+                 }
+                });
+                }
   function deleteStudentFromSystem(RegNo){
     alert(RegNo);
   var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
