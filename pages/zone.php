@@ -92,10 +92,10 @@ if (!velifyLogin()) {
         $edit_zone_id=$_POST['edit_zone_id'];
         $edit_oneWayCharge=$_POST['edit_oneWayCharge'];
         $edit_twoWayCharge=$_POST['edit_twoWayCharge'];
-        $update_class_query=mysqli_query($conn,"update `zone` SET zone= '".$edit_zone_name."', oneWayCharge= '".$edit_oneWayCharge."',twoWayCharge= '".$edit_twoWayCharge."' where `zone_ID`='".$edit_zone_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+        $update_zone_query=mysqli_query($conn,"update `zone` SET zone= '".$edit_zone_name."', oneWayCharge= '".$edit_oneWayCharge."',twoWayCharge= '".$edit_twoWayCharge."' where `zone_ID`='".$edit_zone_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
 
-        if($update_class_query){
+        if($update_zone_query){
         echo '<script> window.location="zone.php?update=True" </script>';
         }else{
         echo' <div class="alert alert-warning alert-dismissable">
@@ -164,7 +164,9 @@ if (!velifyLogin()) {
                  </tbody>
                 <tfoot>
                  <tr>   
-                  <th>Class Name</th>
+                  <th>Zone</th>
+                  <th>One Way Charge</th>
+                  <th>Two Way Charge</th>
                   <th>Actions</th>
                 </tr>
                 </tfoot>
@@ -176,7 +178,7 @@ if (!velifyLogin()) {
         </div>
         <div class="col-md-2"></div>
       </div>
-    <!--- add student Modal -->
+    <!--- add zone Modal -->
       <div class="modal fade" id="modal-addZone">
           <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -238,7 +240,7 @@ if (!velifyLogin()) {
         </div>
         <!-- /.modal -->
        
-         <!-- delete student  Modal-->
+         <!-- delete zone  Modal-->
     <div class="modal  fade" id="delete_zone_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">

@@ -88,6 +88,12 @@
           </a>
         </li>
          <li>
+          <a href="staff.php">
+            <i class="fa fa-users"></i> <span>Staffs</span>
+           
+          </a>
+        </li>
+         <li>
           <a href="#">
             <i class="fa fa-bell-o"></i> <span>Notification</span>
            
@@ -112,7 +118,7 @@
        
        
       
-        <li><a href=""><i class="fa fa-book"></i> <span>Documents</span></a></li>
+        <li><a href="document.php"><i class="fa fa-book"></i> <span>Documents</span></a></li>
           <li><a href="school_profile.php"><i class="fa fa fa-gears"></i> <span>Settings</span></a></li>
         
       </ul>

@@ -45,6 +45,8 @@
 <script src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- iCheck 1.0.1 -->
 <script src="../plugins/iCheck/icheck.min.js"></script>
+<!-- Select2 -->
+<script src="../bower_components/select2/dist/js/select2.full.min.js"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -59,6 +61,8 @@
 
     //Date range picker
     $('#reservation').daterangepicker()
+    //Date range picker
+    $('#reservation2').daterangepicker()
     //Date range picker with time picker
     $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
     //Date range as a button
@@ -84,6 +88,7 @@
     //Date picker
     $('#datepicker').datepicker({
       autoclose: true
+
     })
 
     //iCheck for checkbox and radio inputs
@@ -111,5 +116,12 @@
     $('.timepicker').timepicker({
       showInputs: false
     })
+    $(".years").datetimepicker({
+    format: "yyyy",
+    startView: 'decade',
+    minView: 'decade',
+    viewSelect: 'decade',
+    autoclose: true,
+});
   })
 </script>

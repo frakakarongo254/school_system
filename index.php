@@ -1,4 +1,4 @@
-<?php @ob_start();include('config.php');?>
+<?php include('config.php');?>
 <!DOCTYPE html>
 <html>
 <head>

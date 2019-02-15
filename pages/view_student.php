@@ -108,7 +108,89 @@ if(isset($_GET['id'])){
             
             <!-- /.box-header -->
             <div class="box-body">
-             
+             <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Document</a></li>
+                  <li><a href="#tab_2" data-toggle="tab">Student Parents</a></li>
+                  <li><a href="#tab_3" data-toggle="tab">Marks</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+                   hhjjj
+                    </div>
+                    <div class="tab-pane" id="tab_2">
+                           <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Img</th>
+                              <th>Name</th>
+                              <th>Phone</th>
+                              <th>Email</th>
+                              <th>Gender</th>
+                              <th>Relation</th>
+                              <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               #get school Id from current session school id
+                               $school_ID = $_SESSION['login_user_school_ID'];
+                               $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                               die(mysqli_error());
+                               while ($row1=mysqli_fetch_array($query2)){
+                               $parentID= $row1['parent_ID'];
+                               $parent_relation= $row1['relation'];
+                               #get student details
+                               $query3 = mysqli_query($conn,"select * from parents where school_ID = '$school_ID' && parent_ID='$parentID'")or
+                               die(mysqli_error());
+                               while ($row2=mysqli_fetch_array($query3)){
+                                $img;
+                               if($row2['photo'] !=''){
+                                $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
+                              }else{
+                                  $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                                }
+                                echo" <tr>
+                                       <td>
+                                        ".$img."
+                                       </td>
+                                        <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
+                                        <td>".$row2['cell_Mobile_Phone']." </td>
+                                         <td>".$row2['email']." </td>
+                                        <td>".$row2['gender_MFU']."</td>
+                                        <td>". $parent_relation."</td>
+                                          
+                                        <td>";
+                                       echo'   <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  View</button></a>
+
+                                        
+                                       </td>
+                                     </tr>';
+
+                               }
+                              
+                                }
+                              ?>
+                           
+                             </tbody>
+                            <tfoot>
+                            <tr>
+                             <th>Img</th>
+                              <th>Name</th>
+                              <th>Phone</th>
+                              <th>Email</th>
+                              <th>Gender</th>
+                              <th>Relation</th>
+                              <th>Actions</th>
+                            </tr>
+                            </tfoot>
+                          </table>
+                    </div>
+                     <div class="tab-pane" id="tab_3">
+                      gggggg
+                    </div>
+                </div>
+          </div>
             </div>
             <!-- /.box-body -->
           </div>

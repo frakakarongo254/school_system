@@ -168,9 +168,9 @@ if (!velifyLogin()) {
           echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
           $uploadOk = 0;
           }else{
-            $edit_parent_profile_photo = addslashes(file_get_contents($_FILES['edit_parent_profile_photo']['tmp_name']));
-              $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',photo='".$edit_parent_profile_photo."',nationality='".$edit_parent_nationality."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
-        if($result_query){
+          $edit_parent_profile_photo = addslashes(file_get_contents($_FILES['edit_parent_profile_photo']['tmp_name']));
+          $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',photo='".$edit_parent_profile_photo."',nationality='".$edit_parent_nationality."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
+          if($result_query){
           echo '<script> window.location="parent.php?update=True" </script>';
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
@@ -278,8 +278,11 @@ if (!velifyLogin()) {
                             <td>".$row1['gender_MFU']."</td>
                              
                             <td>";
+                            $_SESSION['parent_ID'] = $parentID; #send this id to the view parent  page as a session to use there 
                            echo'  <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a>
+
                              <button type="button"  class="btn btn-info btn-flat" id="'.$parentID.'" onclick="editParentDetails(this.id)" data-toggle="modal" data-target="#modal-editParent"><span class="glyphicon glyphicon-pencil"></span></button>
+
                              <button type="button" id="'.$row1['parent_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_parent_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                              <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#link_student_Modal" id="'.$row1['parent_ID'].'" onclick=showLinkparentID(this.id) ><a href="#"> Link Student</a></button>
                            </td>
@@ -292,9 +295,9 @@ if (!velifyLogin()) {
                 <tr>
                   <th>Img</th>
                   <th>Name</th>
-                  <th>Admin No</th>
+                  <th>Email</th>
+                  <th>Phone</th>
                   <th>Gender</th>
-                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
                 </tfoot>

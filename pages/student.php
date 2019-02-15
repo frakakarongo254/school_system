@@ -228,17 +228,21 @@ if (!velifyLogin()) {
                       
                     }
                   echo" <tr>
-                           <td>".$img."</td>
-                            <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
-                            <td>".$row1['registration_No']." </td>
-                            <td>".$row1['gender_MFU']."</td>
-                            <td>".$status."</td>  
-                            <td>";
-                           echo'  <a class="btn btn-success btn-flat" href="view_student.php?id='.$row1['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
-                            <a class="btn btn-info" href="edit_students.php?id='.$row1['student_ID'].'"> <span class="glyphicon glyphicon-pencil"></span></a>
-                             <button type="button" id="'.$row1['registration_No'].'" class="btn btn-danger btn-flat" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
-                           </td>
-                         </tr>';
+                  <td>".$img."</td>
+                  <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
+                  <td>".$row1['registration_No']." </td>
+                  <td>".$row1['gender_MFU']."</td>
+                  <td>".$status."</td>  
+                  <td>";
+               $_SESSION['student_ID']=$row1['student_ID'];#send student id as a session to the next page of view student
+
+                  echo'  <a class="btn btn-success btn-flat" href="view_student.php?id='.$row1['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+
+                  <a class="btn btn-info" href="edit_students.php?id='.$row1['student_ID'].'"> <span class="glyphicon glyphicon-pencil"></span></a>
+
+                  <button type="button" id="'.$row1['registration_No'].'" class="btn btn-danger btn-flat" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                  </td>
+                  </tr>';
                     }
                   ?>
                

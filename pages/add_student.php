@@ -77,6 +77,7 @@ if (!velifyLogin()) {
         $healthyComment=$_POST['healthyComment'];
         $Student_zone=$_POST['student_zone'];
         $zoneChargeType=$_POST['zoneChargeType'];
+        $student_class_id=$_POST['student_class_id'];
         #generate student Reg no based on the last regno from the database 
        $get_last_RegNo_query= mysqli_query($conn,"select * from `student` where `school_ID` ='".$school_ID."'");
        $get_last_RegNo=mysqli_num_rows ( $get_last_RegNo_query );
@@ -111,8 +112,8 @@ if (!velifyLogin()) {
           }else{
             $student_profile_photo = addslashes(file_get_contents($_FILES['student_profile_photo']['tmp_name']));
              $sudent_insert_query=mysqli_query($conn,"insert into `student` (first_Name,last_Name,nickname,
-          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,photo,nationality,zone,zone_transport_type) values('$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
-          '$student_gender','$student_profile_photo','$student_nationality','$Student_zone','$zoneChargeType') ");
+          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,photo,nationality,zone,zone_transport_type,class_ID) values('$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
+          '$student_gender','$student_profile_photo','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id') ");
         if($sudent_insert_query){
           
            echo '<script> window.location="add_student.php?insert=True" </script>';
@@ -128,8 +129,8 @@ if (!velifyLogin()) {
           }
         }else{
            $sudent_insert_query=mysqli_query($conn,"insert into `student` (first_Name,last_Name,nickname,
-          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,nationality,zone,zone_transport_type) values('$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
-          '$student_gender','$student_nationality','$Student_zone','$zoneChargeType') ");
+          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,nationality,zone,zone_transport_type,class_ID) values('$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
+          '$student_gender','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id') ");
         if($sudent_insert_query){
           
            echo '<script> window.location="add_student.php?insert=True" </script>';
@@ -149,38 +150,6 @@ if (!velifyLogin()) {
       }
 
 
-
-      #edit student details
-      if(isset($_POST['editStudentBtn'])){
-          #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
-
-        $edit_student_first_name=$_POST['edit_student_first_name'];
-        $edit_student_last_name=$_POST['edit_student_last_name'];
-        $edit_student_nickname=$_POST['edit_student_nickname'];
-        $edit_student_regNo=$_POST['edit_student_RegNo'];
-        $edit_student_dateOfBirth=$_POST['edit_student_dateOfBirth'];
-        $edit_student_admission_date=$_POST['edit_student_admission_date'];
-        $edit_student_gender=$_POST['edit_student_gender'];
-        $edit_healthyComment=$_POST['edit_healthyComment'];
-        $edit_status=$_POST['status'];
-       $edit_Student_zone=$_POST['edit_student_zone'];
-        $edit_zoneChargeType=$_POST['edit_zoneChargeType'];
-       
-        $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."' where `registration_No`='".$edit_student_regNo."' and `school_ID`='".$school_ID."' ");
-
-        if($result_query){
-           echo '<script> window.location="student.php?update=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-      }
       ?>
     </section>
     <!-- Main content -->
@@ -274,14 +243,16 @@ if (!velifyLogin()) {
                 </div>
                 <br>
               </div>
+
               <br>
-               <div class="row">
+              <div class="row">
                 <div class="form-group  col-md-3 mb-3">
                   <label for="nationality">Nationality:</label>
                 </div>
                 <div class=" col-md-5 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-o"></i></span>
-                  <input type="text" name="student_nationality" class="form-control" placeholder="Nationality" required>
+                  <select class="form-control select2" name="student_nationality" style="width: 100%;">
+                  <?php  include("include/nationality.php");?>
+                 </select>
                 </div>
                 <br>
               </div>
@@ -316,6 +287,27 @@ if (!velifyLogin()) {
               </div>
               <!-- /.tab-pane -->
               <div class="tab-pane " id="tab_2">
+                
+               <div class="row">
+                <div class="form-group  col-md-3 mb-3">
+                  <label for="nationality">Class:</label>
+                </div>
+                <div class=" col-md-5 input-group input-group-">
+                  <select class="form-control select2" name="student_class_id" style="width: 100%;" required>
+                    <option value="">--Select class--</option>
+                  <?php
+                 $query_class= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'")or
+                   die(mysqli_error());
+                   while ($class_rows=mysqli_fetch_array($query_class)){
+                    //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$class_rows['class_ID'].'">'.$class_rows['class_name'].'</option>';
+                   }
+                ?>
+                 </select>
+                </div>
+                <br>
+              </div>
+              <br>
                  <div class="row">
                 <div class="form-group  col-md-3 mb-3">
                   <label for="nationality">Zone :</label>

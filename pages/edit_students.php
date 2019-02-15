@@ -81,6 +81,7 @@ if (!velifyLogin()) {
        $edit_Student_zone=$_POST['edit_student_zone'];
         $edit_zoneChargeType=$_POST['edit_zoneChargeType'];
        $edit_student_nationality=$_POST['edit_student_nationality'];
+       $edit_student_class_id=$_POST['edit_student_class_id'];
 
         # check image
        if(isset($_FILES['edit_student_profile_photo']['name']) and !empty($_FILES['edit_student_profile_photo']['name'])){
@@ -98,7 +99,7 @@ if (!velifyLogin()) {
           $uploadOk = 0;
           }else{
             $edit_student_profile_photo = addslashes(file_get_contents($_FILES['edit_student_profile_photo']['tmp_name']));
-              $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',photo='".$edit_student_profile_photo."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
+              $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."',photo='".$edit_student_profile_photo."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
           echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
        }else{
@@ -112,7 +113,7 @@ if (!velifyLogin()) {
        }
           }
         }else{
-            $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
+            $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
           
            echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
@@ -225,17 +226,18 @@ if (!velifyLogin()) {
                 <br>
               </div>
               <br>
-               <div class="row">
+              <div class="row">
                 <div class="form-group  col-md-3 mb-3">
                   <label for="nationality">Nationality:</label>
                 </div>
                 <div class=" col-md-5 input-group input-group-">
-                  <span class="input-group-addon"><i class="fa fa-o"></i></span>
-                  <input type="text" name="edit_student_nationality" value="<?php echo $rows_details['nationality'];?>" class="form-control" placeholder="Nationality" required>
+                  <select class="form-control select2" name="edit_student_nationality" style="width: 100%;">
+                    <option value="<?php echo $rows_details['nationality'];?>" ><?php echo $rows_details['nationality'];?></option>
+                  <?php  include("include/nationality.php");?>
+                 </select>
                 </div>
                 <br>
               </div>
-              
               <br>
               
                <div class="row">
@@ -266,6 +268,31 @@ if (!velifyLogin()) {
               </div>
               <!-- /.tab-pane -->
               <div class="tab-pane " id="tab_2">
+                <div class="row">
+                <div class="form-group  col-md-3 mb-3">
+                  <label for="nationality">Class:</label>
+                </div>
+                <div class=" col-md-5 input-group input-group-">
+                  <select class="form-control select2" name="edit_student_class_id" style="width: 100%;" required>
+                   <?php
+                    $select_class= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."' and class_ID='".$rows_details['class_ID']."'")or
+                   die(mysqli_error());
+                   $row_selected = mysqli_fetch_array($select_class,MYSQLI_ASSOC);
+                   echo' <option value="'.$row_selected['class_ID'].'">'.$row_selected['class_name'].'</option>';
+                   ?>
+                   
+                  <?php
+                 $query_class= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'")or
+                   die(mysqli_error());
+                   while ($class_rows=mysqli_fetch_array($query_class)){
+                    //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$class_rows['class_ID'].'">'.$class_rows['class_name'].'</option>';
+                   }
+                ?>
+                 </select>
+                </div>
+                <br>
+              </div>
                  <div class="row">
                 <div class="form-group  col-md-3 mb-3">
                   <label for="nationality">Zone :</label>

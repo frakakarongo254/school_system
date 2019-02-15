@@ -39,13 +39,40 @@
          <div class="col-md-2 box-primary ">
           <h3><span class="fa fa-gear"></span><b class="color-primary" >Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="#"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
-                <li><a href="#"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
+                <li><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
+                <li><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
               </ul>
          </div>
        
          <div class="col-md-10  ">
           <?php
+          if(isset($_GET['insert'])){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! Stream added  successfully.
+          </div>';   
+        }
+        if(isset($_GET['update'])){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! Stream updated  successfully.
+          </div>';   
+        }
+        if(isset($_GET['delete'])){
+          echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! You have deleted  successfully.
+          </div>';   
+        }
           #Edit school Details
           if (isset($_POST['saveSchoolDetails'])) {
             $schoolName =$_POST['school_name'];
@@ -104,6 +131,50 @@
             echo '<script> alert("You must select an image") </script>';
             }
             }
+
+            # add stream
+            if (isset($_POST['addStreamBtn'])) {
+            $streamName =$_POST['stream_name'];
+            $class_insert_query=mysqli_query($conn,"insert into `stream` (school_ID, stream_name
+            ) 
+            values('".$_SESSION['login_user_school_ID']."','$streamName') ");
+
+
+            if($class_insert_query){
+            echo '<script> window.location="school_profile.php?insert=True" </script>';
+            }else{
+            echo' <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert"
+            aria-hidden="true">
+            &times;
+            </button>
+            Sorry! Something went wrong.Please try again.
+            </div>'; 
+            }
+            }
+
+            # edit stream
+        if(isset($_POST['editStreamBtn'])){
+        #get school Id from current session school id
+        $school_ID = $_SESSION['login_user_school_ID'];
+        $edit_stream_name=$_POST['edit_stream_name'];
+        $edit_stream_id=$_POST['edit_stream_id'];
+        
+        $update_stream_query=mysqli_query($conn,"update `stream` SET stream_name= '".$edit_stream_name."' where `stream_ID`='".$edit_stream_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+
+
+        if($update_stream_query){
+        echo '<script> window.location="school_profile.php?update=True" </script>';
+        }else{
+        echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+        }
+        }
           ?>
           <?php
            $school_ID=$_SESSION['login_user_school_ID'];
@@ -147,16 +218,55 @@
               
              </div>
              
-                 <div class="row">
-                   <div class="col-md-6">
-                     <h3>MOTO:</h3>
-                     <?php echo $school_row['school_moto']?>
-                   </div>
-                   <div class="col-md-6">
-                    <h3> Registration Date</h3>
-                    <?php echo $school_row['registration_Date']?>
-                   </div>
-                 </div>
+             
+             <div class="row">
+              <div class="col-md-5">
+                
+                 <h3>Stream:</h3>
+                 <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>   
+                  <th>Stream Name</th>
+                  <th>Actions</th>
+                  <th><a class="btn btn-success pull-right btn-sm" href="#" data-toggle="modal" data-target="#modal-addStream"><i class="fa fa-plus"></i><b> Add Stream</b></a></th>
+                </tr>
+                </thead>
+                <tbody>
+                  <?php
+                   #get school Id from current session school id
+                   $school_ID = $_SESSION['login_user_school_ID'];
+                   $query4 = mysqli_query($conn,"select * from stream where school_ID = '$school_ID'")or
+                   die(mysqli_error());
+                   while ($row4=mysqli_fetch_array($query4)){
+                   $stream_ID=$row4['stream_ID'];
+                  echo" <tr>
+                          
+                            <td>".$row4['stream_name']."</td>
+                           
+                            <td colspan='2'>";
+                           echo'  
+                             <button type="button"  class="btn btn-info btn-flat" id="'.$stream_ID.'" onclick="editStream(this.id)" data-toggle="modal"  data-target="#edit_stream_Modal"><span class="glyphicon glyphicon-pencil">  Edit</span></button>
+
+                             <button type="button" id="'.$row4['stream_ID'].'" class="btn btn-danger btn-flat" value="'.$row4['stream_name'].'" onclick="deleteStream(this.id,this.value)" data-toggle="modal"  data-target="#delete_stream_Modal"><span class="glyphicon glyphicon-trash"></span>  Remove</button>
+                             
+                           </td>
+                         </tr>';
+                    }
+                  ?>
+               
+                 </tbody>
+                
+              </table>
+               </div>
+               <div class="col-md-4">
+                 <h3>MOTO:</h3>
+                 <?php echo $school_row['school_moto']?>
+               </div>
+               <div class="col-md-3">
+                <h3> Registration Date</h3>
+                <?php echo $school_row['registration_Date']?>
+               </div>
+             </div>
             </div>
             <!-- /.box-body -->
           </div>
@@ -197,46 +307,47 @@
           </div>
           <div class="modal-body">
          <form id="fileinfo" name="" action="school_profile.php" method="POST" enctype="multipart/form-data">
+
          <div class="form-group">
                 <label>School Name:</label>
-                <div class="input-group ">
+               
                   <input type="text" class="form-control pull-right"  name="school_name" value="<?php echo $school_row['school_Name']?>">
-                </div>
+                
                 <!-- /.input group -->
             </div>
              <div class="form-group">
                 <label>Phone:</label>
-                <div class="input-group ">
+                
                   <input type="text" class="form-control pull-right" name="school_phone" value="<?php echo $school_row['phone']?>">
-                </div>
+                
                 <!-- /.input group -->
             </div>
             <div class="form-group">
                 <label>Address:</label>
-                <div class="input-group ">
+               
                   <input type="text" class="form-control pull-right" name="school_address" value="<?php echo $school_row['address_1']?>">
-                </div>
+             
                 <!-- /.input group -->
             </div>
              <div class="form-group">
                 <label>Email:</label>
-                <div class="input-group ">
+                
                   <input type="text" class="form-control pull-right" name="school_email" value="<?php echo $school_row['email']?>">
-                </div>
+                
                 <!-- /.input group -->
             </div>
             <div class="form-group">
                 <label>Web:</label>
-                <div class="input-group ">
+               
                   <input type="text" class="form-control pull-right" name="school_website" value="<?php echo $school_row['school_website']?>">
-                </div>
+                
                 <!-- /.input group -->
             </div>
             <div class="form-group">
                 <label>MOTO:</label>
-                <div class="input-group ">
+               
                   <textarea type="text" class="form-control " name="school_moto"><?php echo $school_row['school_moto']?></textarea>  
-                </div>
+              
                 <!-- /.input group -->
             </div>
          
@@ -250,12 +361,116 @@
         </div>
       </div>
     </div>
-      
+      <!--Add Stream-->
+         <div class="modal fade" id="modal-addStream" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Stream</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+         <form id="fileinfo" name="" action="school_profile.php" method="POST" >
+            <div class="form-group">   
+              <label for="nationality">Stream Name:</label>
+                <input type="text" class="form-control" name="stream_name" placeholder="Stream Name">  
+            </div>
+         
+        </div>
+          <div class="modal-footer">
+            <button type="submit" class="pull-left btn btn-primary" name="addStreamBtn" href="#">Add Stream</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            
+          </div>
+        </form>
         </div>
       </div>
-      <!-- /.row -->
+    </div>
+     <!-- edit stream Modal-->
+    <div class="modal  fade" id="edit_stream_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"><b>Edit Stream</b></h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+            <script >
+             
+               function editStream(stream_id){ 
+                
+                  if(stream_id !=''){
+                    var details= '&stream_id='+ stream_id ;
+                    $.ajax({
+                    type: "POST",
+                    url: "edit_stream.php",
+                    data: details,
+                    cache: false,
+                    success: function(data) {
+                      document.getElementById("editStreamMessage").innerHTML=data;
+                   
 
-    
+                    }
+
+                    });
+                   
+                  }else{
+                   document.getElementById("editStreamMessage").innerHTML=' You have Not Yet selected a Class';
+                  }
+                 
+                
+                }
+            </script>
+          
+          <div id="editStreamMessage"></div>
+
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     </div>
+         <!-- delete stream  Modal-->
+    <div class="modal  fade" id="delete_stream_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete this Class?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <script >
+               function deleteStream(stream_id,stream_name){
+                  
+                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + stream_name + '  </b>from the system?'
+                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
+                updiv.innerHTML ='<form method="POST" action="class.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ stream_id +'" type="submit" data-dismiss="modal" onclick="deleteStreamFromSystem(this.id)">Delete</button></form></div>';
+                }
+            </script>
+          
+          <div id="msg"></div>
+
+        </div>
+          <div class="modal-footer">
+           <div id="modalMsg"></div>
+        </div>
+      </div>
+    </div>
+     </div>
+  </div>
+</div>
+<!-- /.row -->
+
+
       
        
          
@@ -305,5 +520,26 @@
 
 <!-- include script-->
 <?php include("include/script.php")?>
+<script >
+  function deleteStreamFromSystem(stream_id){
+  alert(stream_id);
+  var details= '&stream_id='+ stream_id;
+  $.ajax({
+  type: "POST",
+  url: "delete_stream.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    if(data=='success'){
+ window.location="school_profile.php?delete=True" 
+    }else{
+      alert("OOp! Could not delete.Please try again!");
+    }
+  
+  }
+
+  });
+  }
+</script>
 </body>
 </html>
