@@ -86,10 +86,10 @@ if (!velifyLogin()) {
         $class_stream_id=$_POST['class_stream_id'];
         $class_year=$_POST['class_year'];
         $class_teacher_id=$_POST['class_teacher_id'];
-       
-        $class_insert_query=mysqli_query($conn,"insert into `class` (school_ID, stream_ID,level_ID,teacher_ID,year
+       $className=$_POST['className'];
+        $class_insert_query=mysqli_query($conn,"insert into `class` (school_ID,name, stream_ID,level_ID,teacher_ID,year
           ) 
-          values('$school_ID','$class_stream_id','$class_level_id','$class_teacher_id','$class_year') ");
+          values('$school_ID','$className','$class_stream_id','$class_level_id','$class_teacher_id','$class_year') ");
 
         
         if($class_insert_query){
@@ -114,7 +114,7 @@ if (!velifyLogin()) {
         $edit_class_year=$_POST['edit_class_year'];
         $edit_class_teacher_id=$_POST['edit_class_teacher_id'];
         $edit_class_id=$_POST['edit_class_id'];
-       $update_class_query=mysqli_query($conn,"update `class` SET level_ID= '".$edit_class_level_id."',year= '".$edit_class_year."',level_ID= '".$edit_class_level_id."',stream_ID= '".$edit_class_stream_id."',teacher_ID= '".$edit_class_teacher_id."' where `class_ID`='".$edit_class_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+        $update_class_query=mysqli_query($conn,"update `class` SET level_ID= '".$edit_class_level_id."',year= '".$edit_class_year."',level_ID= '".$edit_class_level_id."',stream_ID= '".$edit_class_stream_id."',teacher_ID= '".$edit_class_teacher_id."' where `class_ID`='".$edit_class_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
         
         if($update_class_query){
@@ -183,8 +183,6 @@ if (!velifyLogin()) {
         Sorry! Something went wrong.Please try again.
         </div>'; 
        }
-      }else{
-        echo "not yet";
       }
       
       ?>
@@ -207,6 +205,7 @@ if (!velifyLogin()) {
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>   
+                  <th>Name</th>
                   <th>Level</th>
                   <th>Stream</th>
                   <th>Year</th>
@@ -237,7 +236,7 @@ if (!velifyLogin()) {
                   
                   
                    echo" <tr>
-                          
+                          <td>".$row4['name']."</td>
                             <td>".$levelName_row['level_name']."</td>
                             <td>".$streamName_row['stream_name']."</td>
                             <td>".$row4['year']."</td>
@@ -334,7 +333,7 @@ if (!velifyLogin()) {
               <!-- /.tab-pane -->
             <form  action="class.php" method="POST">
             <div class="form-group">
-              <label>Year</label>
+              <label>Year:</label>
             <select class="form-control select2" name="class_year" style="width: 100%;" required>>
                 <?php 
                   $year = date('Y');
@@ -346,8 +345,11 @@ if (!velifyLogin()) {
                 ?>
               </select>
             </div>
+            <div class="form-group">
+                <label>Class Name:</label>
+              <input type="test" name="className" class="form-control">
               <div class="form-group">
-                <label>Level</label>
+                <label>Level:</label>
               <select class="form-control select2" name="class_level_id" style="width: 100%;" required>
                     <option value="">--Select Level--</option>
                   <?php
@@ -361,7 +363,7 @@ if (!velifyLogin()) {
                  </select>
                </div>
                <div class="form-group">
-                <label>Stream</label>
+                <label>Stream:</label>
               <select class="form-control select2" name="class_stream_id" style="width: 100%;" required>
                     <option value="">--Select Stream--</option>
                   <?php
@@ -375,7 +377,7 @@ if (!velifyLogin()) {
                  </select>
                </div>
                 <div class="form-group">
-                <label>Teacher</label>
+                <label>Teacher:</label>
               <select class="form-control select2" name="class_teacher_id" style="width: 100%;" required>
                     <option value="">--Select Teacher--</option>
                   <?php

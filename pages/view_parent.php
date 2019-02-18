@@ -109,72 +109,108 @@ if(isset($_GET['id'])){
       <div class="row">
         <div class="col-md-12">
           <div class="box">
-            <div class="box-header">
-             <h3><b>Children</b></h3>
-            </div>
+            
             
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Reg No</th>
-                  <th>Phone</th>
-                  <th>Gender</th>
-                  <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                   <?php
-                   #get school Id from current session school id
-                   $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
-                   die(mysqli_error());
-                   while ($row1=mysqli_fetch_array($query2)){
-                   $student_ID= $row1['student_ID'];
-                   #get student details
-                   $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_ID'")or
-                   die(mysqli_error());
-                   while ($row2=mysqli_fetch_array($query3)){
-                    $img;
-                   if($row2['photo'] !=''){
-                    $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
-                  }else{
-                      $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
-                    }
-                    echo" <tr>
-                           <td>
-                            ".$img."
-                           </td>
-                            <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
-                            <td>".$row2['registration_No']." </td>
-                            <td>".$row2['gender_MFU']."</td>
-                            <td>Action</td>  
-                            <td>";
-                           echo'   <a class="btn btn-success btn-flat" href="view_student.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
-                             <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['parent_ID'].'" onclick="delinkStudent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
-                           </td>
-                         </tr>';
+              <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Children</a></li>
+                  <li><a href="#tab_2" data-toggle="tab">Emails</a></li>
+                  <li><a href="#tab_3" data-toggle="tab">Bills</a></li>
+                   
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+                         <table id="example3" class="table table-bordered table-striped">
+                          <thead>
+                          <tr>
+                            <th>Img</th>
+                            <th>Name</th>
+                            <th>Reg No</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>Actions</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                             <?php
+                             #get school Id from current session school id
+                             $school_ID = $_SESSION['login_user_school_ID'];
+                             $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             die(mysqli_error());
+                             while ($row1=mysqli_fetch_array($query2)){
+                             $student_ID= $row1['student_ID'];
+                             #get student details
+                             $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                             die(mysqli_error());
+                             while ($row2=mysqli_fetch_array($query3)){
+                              $img;
+                             if($row2['photo'] !=''){
+                              $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
+                            }else{
+                                $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                              }
+                              echo" <tr>
+                                     <td>
+                                      ".$img."
+                                     </td>
+                                      <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
+                                      <td>".$row2['registration_No']." </td>
+                                      <td>".$row2['gender_MFU']."</td>
+                                      <td>Action</td>  
+                                      <td>";
+                                     echo'   <a class="btn btn-success btn-flat" href="view_student.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+                                       <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['parent_ID'].'" onclick="delinkStudent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                                     </td>
+                                   </tr>';
 
-                   }
-                  
-                    }
-                  ?>
-               
-                 </tbody>
-                <tfoot>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Admin No</th>
-                  <th>Gender</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
-              </table>
+                             }
+                            
+                              }
+                            ?>
+                         
+                           </tbody>
+                          <tfoot>
+                          <tr>
+                            <th>Img</th>
+                            <th>Name</th>
+                            <th>Admin No</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                          </tfoot>
+                        </table>
+                    </div>
+                    <div class="tab-pane " id="tab_2">
+                      <table id="example1" class="table table-bordered table-striped">
+                          <thead>
+                          <tr>
+                            
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Send on</th>
+                            <
+                          </tr>
+                          </thead>
+                          <tbody>
+                             
+                         
+                           </tbody>
+                          <tfoot>
+                          <tr>
+                           
+                          </tr>
+                          </tfoot>
+                        </table>
+                    </div>
+                    <div class="tab-pane " id="tab_3">
+                    </div>
+
+                  </div>
+                </div>
+              
             </div>
             <!-- /.box-body -->
           </div>
@@ -241,6 +277,17 @@ if(isset($_GET['id'])){
 <script>
   $(function () {
     $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+   $(function () {
+    $('#example3').DataTable()
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,

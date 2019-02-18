@@ -3,6 +3,8 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
+#get school Id from current session school id
+ $school_ID = $_SESSION['login_user_school_ID'];
 ?>
 
 <?php include("include/header.php")?>
@@ -68,22 +70,24 @@ if (!velifyLogin()) {
           </div>';   
         }
        if(isset($_POST['saveAttendanceBtn']))
-{
+ {
+
     foreach ($_POST['attendance_status'] as $id => $attendance_status)
-    {
-        $roll_no = $_POST['roll_no'][$id];
+    {   
+        $classID= $_POST['classID'][$id];
+        $student_id = $_POST['studentID'][$id];
         $student_name = $_POST['student_name'][$id];
         $date_created = date('Y-m-d H:i:s');
         $date_modified = date('Y-m-d H:i:s');
         $school_ID = $_SESSION['login_user_school_ID'];
-        $attendance=mysqli_query($conn,"insert into `attendance` (student_id, student_name, date_entered, date_modified, status,school_ID
+        $attendance=mysqli_query($conn,"insert into `attendance` (student_id, student_name,class_ID, date_entered, date_modified, status,school_ID
           ) 
-          values('$roll_no', '$student_name', '$date_created', '$date_modified', '$attendance_status','$school_ID') ");
+          values('$student_id', '$student_name','$classID', '$date_created', '$date_modified', '$attendance_status','$school_ID') ");
        
     }
      
     if ($attendance) {
-      echo  $msg = "Attendance has been added successfully";
+     // echo  $msg = "Attendance has been added successfully";
        echo '<script> window.location="attendance.php?insert=True" </script>';
     }else{
        echo' <div class="alert alert-danger alert-dismissable">
@@ -107,8 +111,32 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Attendance</h3> </b></div>
+              <form  method="POST" action="attendance.php">
+              <div class="col-md-6">
+                 <div class=" form-group">
+                
+                  <select class="form-control select2" name="attendance_class__id" style="width: 100%;" required>
+                    <option value="">--Select class--</option>
+                  <?php
+                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($crows=mysqli_fetch_array($query_c)){
+
+                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($class_rows=mysqli_fetch_array($query_level)){
+                          //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['level_name'].''.$crows['name'].'</option>';
+                   }
+                 
+                   }
+                ?>
+                 </select>
+                </div>
+              </div>
               
+              <div class="col-md-6">
+                <button type="submit" class="btn btn-success" name="searchAttendance">Search</button>
+              </div>
+             </form>
             </div>
             </div>
             
@@ -131,22 +159,16 @@ if (!velifyLogin()) {
                 </thead>
                 <tbody>
                   <?php
-                   #get school Id from current session school id
-                   $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from student where school_ID = '$school_ID'")or
+                  if (isset($_POST['searchAttendance'])) {
+                   echo $classID=$_POST['attendance_class__id'];
+                  
+                     $query2 = mysqli_query($conn,"select * from student where class_ID =' $classID' and school_ID = '$school_ID'")or
                    die(mysqli_error());
                    $x=0;
                    while ($row1=mysqli_fetch_array($query2)){
-                    $x++;
+                    $x ++;
                    $student_regNoID= $row1['registration_No'];
-                   $status;
-                   if($row1['status'] =='Inactive'){
-                     $status='<span class="btn btn-danger">Inctive</span>';
-                   }elseif ($row1['status'] =='Active') {
-                      $status='<span class="btn btn-success">Inctive</span>';
-                   }else{
-                    $status='<span class="btn btn-success">Active</span>';
-                   }
+                  
                    $img;
                    if($row1['photo'] !=''){
                      $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
@@ -155,12 +177,15 @@ if (!velifyLogin()) {
                       
                     }
                     $fullName=$row1['first_Name']." ". $row1['last_Name'];
-                  echo" <tr>
-                   <td>".$row1['registration_No']." <input type='hidden' name='roll_no[]'' value='".$row1['registration_No']."' /></td>
+
+                  echo"  <input type='hidden' name='classID[]'' value='".$classID."' />
+                  <tr>
+                     
+                   <td>".$row1['registration_No']." <input type='hidden' name='studentID[]'' value='".$row1['student_ID']."' /></td>
                   <td>".$img."</td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."<input type='hidden' name='student_name[]'' value='".$fullName."' /></td>";
                  
-                echo'  <td>
+                echo' <td>
                     <label for="present4">
                         <input type="radio" id="present'.$x.'" name="attendance_status['.$x.']" value="Present"> Present
                     </label>
@@ -171,6 +196,10 @@ if (!velifyLogin()) {
                  
                   </tr>';
                     }
+                    
+                  }
+                   
+                   
                   ?>
                
                
@@ -185,182 +214,7 @@ if (!velifyLogin()) {
           <!-- /.box -->
         </div>
       </div>
-    <!--- add parent Modal -->
-      <div class="modal fade" id="modal-addParent">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><b>New Parent</b></h4>
-              </div>
-              <div class="modal-body">
-                 <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-              <!-- /.tab-pane -->
-                   <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" enctype="multipart/form-data">
-                <div class="row">
-              <div class=" col-md-6 mb-3">
-                <div class="form-group has-feedback input-group-lg">
-                      <label>First Name :</label>
-               <div class=" col-md- input-group input-group-">
-                <input type="text" name="parent_first_name"  class="form-control"   placeholder="First Name" required>
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-              </div>
-              </div>
-              </div>
-              <div class=" col-md-6 mb-3">
-               <div class="form-group has-feedback input-group-">
-                      <label>Last Name :</label>
-               <div class=" col-md- input-group input-group">              
-                <input type="text" name="parent_last_name"  class="form-control"   placeholder="Last Name" required>
-                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-              </div>
-              </div>
-              </div>            
-            </div>
-              <br>
-              <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
-                <label for="nationality">Gender:</label>
-              </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-gender"></i></span>
-                
-                <select name="parent_gender" class="form-control">
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
-              
-            </div>
-               
-              <br>
-             
-            <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
-                <label for="nationality">Email :</label>
-              </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                <input type="email" name="parent_email" class="form-control" placeholder="" required>
-              </div>
-              
-            </div>
-            <br>
-           
-            <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
-                <label for="phone">Phone :</label>
-              </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                <input type="tel" name="parent_phone" class="form-control" placeholder="" required>
-              </div>    
-            </div>
-            <br>
-            
-            <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
-                <label for="address">Address :</label>
-              </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                <input type="text" name="parent_address" class="form-control" placeholder="" required>
-              </div>    
-            </div>
-            <br>
-              <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
-                <label for="nationality">Nationality:</label>
-              </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-flag"></i></span>
-                <input type="text" name="parent_nationality" class="form-control" placeholder="" required>
-              </div>    
-            </div>
-            <br>
-            
-            <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
-                <label for="profession">Profession :</label>
-              </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-suitcase"></i></span>
-                <input type="text" class="form-control" name="parent_profession" placeholder="Profession" required="">
-              </div>    
-            </div>
-            <br>
-            
-             <div class="row">   
-              <div class="form-group  col-md-3 mb-3">
-                <label for="nationality">Profile Photo :</label>
-              </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="file" name="parent_profile_photo" class="form-control" placeholder="" value="Photo" required> 
-              </div>    
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="save_admissionBtn" class="btn btn-primary">Add parent</button>
-              </div>
-              </div>
-          
-              <!-- /.tab-pane -->
-              </form>
-            </div>
-            <!-- /.tab-content -->
-          </div>
-              </div>
-              
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-         <!--Edit parent model-->
-         
-      <div class="modal fade" id="modal-editParent">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Parent</h4>
-              </div>
-              <div class="modal-body">
-                <script >
-                function editParentDetails(parent_ID){
-               
-                var updiv = document.getElementById("editMessage"); //document.getElementById("highodds-details");
-                //alert(id);
-                var details= '&parent_ID='+ parent_ID;
-                $.ajax({
-                type: "POST",
-                url: "edit_parent.php",
-                data: details,
-                cache: false,
-                success: function(data) {
-               
-                document.getElementById("editMessage").innerHTML=data;
-                 }
-                });
-                }
-                </script>
-                <div id="editMessage"></div>
-              </div>
-              
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        <!--end of edit parent modal-->
+   
        
          <!-- delete parent  Modal-->
     <div class="modal  fade" id="delete_parent_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -77,7 +77,7 @@ if (!velifyLogin()) {
         $healthyComment=$_POST['healthyComment'];
         $Student_zone=$_POST['student_zone'];
         $zoneChargeType=$_POST['zoneChargeType'];
-        $student_class_id=$_POST['student_class_id'];
+        $student_class_id=$_POST['student_Class_Id'];
         #generate student Reg no based on the last regno from the database 
        $get_last_RegNo_query= mysqli_query($conn,"select * from `student` where `school_ID` ='".$school_ID."'");
        $get_last_RegNo=mysqli_num_rows ( $get_last_RegNo_query );
@@ -293,14 +293,18 @@ if (!velifyLogin()) {
                   <label for="nationality">Class:</label>
                 </div>
                 <div class=" col-md-5 input-group input-group-">
-                  <select class="form-control select2" name="student_class_id" style="width: 100%;" required>
+                  <select class="form-control select2" name="student_Class_Id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
                   <?php
-                 $query_class= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
-                   while ($class_rows=mysqli_fetch_array($query_class)){
-                    //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$class_rows['class_ID'].'">'.$class_rows['class_name'].'</option>';
+                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($crows=mysqli_fetch_array($query_c)){
+
+                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($class_rows=mysqli_fetch_array($query_level)){
+                          //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['leve_name'].''.$crows['name'].'</option>';
+                   }
+                 
                    }
                 ?>
                  </select>
@@ -316,8 +320,7 @@ if (!velifyLogin()) {
                   <span class="input-group-addon"><i class="fa fa-map"></i></span>
                 <select name="student_zone" class="form-control">
                 <?php
-                 $query_zone = mysqli_query($conn,"select * from zone where school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
+                 $query_zone = mysqli_query($conn,"select * from zone where school_ID = '".$_SESSION['login_user_school_ID']."'");
                    while ($zone_rows=mysqli_fetch_array($query_zone)){
                     $student_regNoID= $zone_rows['class_name'];
                   echo'  <option value="'.$zone_rows['zone'].'">'.$zone_rows['zone'].'</option>';

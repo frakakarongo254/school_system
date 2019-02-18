@@ -108,17 +108,37 @@ if (!velifyLogin()) {
              <div class="row">
                
               <form method="POST" action="manage_attendance.php">
-              <div class="col-md-4 pull-" style="text-align:">
+               <div class="col-md-3">
+                  <div class=" form-group">
+                 
+                  <select class="form-control select2" name="attendance_class_id" style="width: 100%;" required>
+                    <option value="">--Select class--</option>
+                  <?php
+                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($crows=mysqli_fetch_array($query_c)){
+
+                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($class_rows=mysqli_fetch_array($query_level)){
+                          //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['level_name'].''.$crows['name'].'</option>';
+                   }
+                 
+                   }
+                ?>
+                 </select>
+                </div>
+               </div>
+              <div class="col-md-3 pull-" style="text-align:">
                 <input type="date" name="attendance_date" class="form-control" required>
               </div>
-              <div class="col-md-4 col-" style="text-align:">
+              <div class="col-md-3 col-" style="text-align:">
                 <select class="form-control" name="status_type" >
                   <option value="All">All</option>
                   <option value="Present">Present</option>
                   <option value="Absent">Absent</option>
                 </select>
               </div>
-              <div class="col-md-4 col-" style="text-align:t">
+              <div class="col-md-3 col-" style="text-align:t">
                 <button class="btn btn-primary" type="submit" name="searchAttendance" href="" ><i class="fa fa-eye"></i> Veiw Attendance</button>
               </div>
             </form>
@@ -143,41 +163,51 @@ if (!velifyLogin()) {
                    $school_ID = $_SESSION['login_user_school_ID'];
                   $attendanceDate=$_POST['attendance_date'];
                   $status_type=$_POST['status_type'];
+                  $attendance_class_id=$_POST['attendance_class_id'];
+                 
+               $query = mysqli_query($conn,"select * from student where student_ID='$attendance_class_id'  and school_ID='$school_ID ' ");
                   if ($status_type !="All") {
                    
-                   $attendance_query = mysqli_query($conn,"select * from attendance where status='$status_type' and DATE(date_entered)='$attendanceDate' and school_ID='$school_ID ' ")or
+                   $attendance_query = mysqli_query($conn,"select * from attendance where class_ID='$attendance_class_id' and status='$status_type' and DATE(date_entered)='$attendanceDate' and school_ID='$school_ID ' ")or
                    die(mysqli_error());
                    if($attendance_query){
                     
                    while ($attendance_row=mysqli_fetch_array($attendance_query)){
-                 echo"<tr>
-                       <td>".$attendance_row['student_id']."</td>
+                    $query = mysqli_query($conn,"select * from student where student_ID='".$attendance_row['student_id']."'  and school_ID='$school_ID ' ");
+                    while ($student_row=mysqli_fetch_array( $query)){
+                      echo"<tr>
+                       <td>".$student_row['registration_No']."</td>
                        <td> ".$attendance_row['student_name']."</td>
                        <td> ".$attendance_row['date_entered']."</td>
                        <td> ".$attendance_row['status']."</td>
                     </tr>";
+                    }
+                 
                   }
                 }else{
                   echo 'failed 1';
                 }
                   }else{
-                    $attendance_query = mysqli_query($conn,"select * from attendance where DATE(date_entered)='$attendanceDate' and school_ID='$school_ID'")or
+                    $attendance_query = mysqli_query($conn,"select * from attendance where class_ID='$attendance_class_id' and DATE(date_entered)='$attendanceDate' and school_ID='$school_ID'")or
                    die(mysqli_error());
                    if($attendance_query){
                    while ($attendance_row=mysqli_fetch_array($attendance_query)){
-                 echo"<tr>
-                       <td>".$attendance_row['student_id']."</td>
+                 $query = mysqli_query($conn,"select * from student where student_ID='".$attendance_row['student_id']."'  and school_ID='$school_ID ' ");
+                    while ($student_row=mysqli_fetch_array( $query)){
+                      echo"<tr>
+                       <td>".$student_row['registration_No']."</td>
                        <td> ".$attendance_row['student_name']."</td>
-                        <td> ".$attendance_row['date_entered']."</td>
+                       <td> ".$attendance_row['date_entered']."</td>
                        <td> ".$attendance_row['status']."</td>
                     </tr>";
+                    }
                    
                   }
                 }else{
                   echo "Failed";
                 }
                   }
-                  # code...
+                
                 }
                ?>
      

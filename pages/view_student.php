@@ -110,13 +110,71 @@ if(isset($_GET['id'])){
             <div class="box-body">
              <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#tab_1" data-toggle="tab">Document</a></li>
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Student Classes</a></li>
                   <li><a href="#tab_2" data-toggle="tab">Student Parents</a></li>
-                  <li><a href="#tab_3" data-toggle="tab">Marks</a></li>
+                  <li><a href="#tab_3" data-toggle="tab">Documents</a></li>
+                   <li><a href="#tab_4" data-toggle="tab">Student Statement</a></li>
+                    <li><a href="#tab_5" data-toggle="tab">Marks</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
-                   hhjjj
+                        <table id="table1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Year</th>
+                              <th>Class Name</th>
+                              <th>Stream</th>
+                              <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               #get school Id from current session school id
+                            $ses_sql2 = mysqli_query($conn,"select * from `student` where `student_ID` = '".$student_ID."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
+                            $row2 = mysqli_fetch_array($ses_sql2,MYSQLI_ASSOC);
+                          echo  $classid=$row2['class_ID'];
+                              $class_sql2 = mysqli_query($conn,"select * from `class` where `class_ID` = '".$classid."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
+                            $row3_class = mysqli_fetch_array($class_sql2 ,MYSQLI_ASSOC);
+
+                               $levelId=$row3_class['level_ID'];
+                                $streamid=$row3_class['stream_ID'];
+
+                              $level_sql2 = mysqli_query($conn,"select * from `carricula_level` where `carricula_level_ID` = '".$levelId."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
+                            $row4_level = mysqli_fetch_array($level_sql2 ,MYSQLI_ASSOC);
+                             // $streamid=$row4_level['stream_ID'];
+
+                             $stream_sql2 = mysqli_query($conn,"select * from `stream` where `stream_ID` = '".$streamid."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
+                            $row4_stream = mysqli_fetch_array($stream_sql2 ,MYSQLI_ASSOC);
+                               
+                                echo" <tr>
+                                       
+                                        <td>".$row3_class['year']."</td>
+                                        <td>".$row3_class['name']." </td>
+                                         <td>".$row4_stream['stream_name']." </td>
+                                        
+                                          
+                                        <td>";
+                                       echo'   <a href="#"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  View</button></a>
+
+                                        
+                                       </td>
+                                     </tr>';
+
+                               
+                              
+                                
+                              ?>
+                           
+                             </tbody>
+                            <tfoot>
+                            <tr>
+                             <th>Year</th>
+                              <th>Class Name</th>
+                              <th>Stream</th>
+                              <th>Actions</th>
+                            </tr>
+                            </tfoot>
+                          </table>
                     </div>
                     <div class="tab-pane" id="tab_2">
                            <table id="example1" class="table table-bordered table-striped">
@@ -186,8 +244,117 @@ if(isset($_GET['id'])){
                             </tfoot>
                           </table>
                     </div>
+
                      <div class="tab-pane" id="tab_3">
-                      gggggg
+                      <div class="row">
+              <div class="col-md-8"><b><h3>Documents</h3> </b></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addDocument"><i class="fa fa-plus"></i><b> New Document</b></a></div>
+            </div>
+                      <table id="example3" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Document Title</th>
+                              <th>Description</th>
+                              <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               #get school Id from current session school id
+                               $school_ID = $_SESSION['login_user_school_ID'];
+                               $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                               die(mysqli_error());
+                               while ($row1=mysqli_fetch_array($query2)){
+                               $parentID= $row1['parent_ID'];
+                               $parent_relation= $row1['relation'];
+                               #get student details
+                               $query3 = mysqli_query($conn,"select * from parents where school_ID = '$school_ID' && parent_ID='$parentID'")or
+                               die(mysqli_error());
+                               while ($row2=mysqli_fetch_array($query3)){
+                                $img;
+                               if($row2['photo'] !=''){
+                                $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
+                              }else{
+                                  $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                                }
+                                echo" <tr>
+                                       <td>
+                                        ".$img."
+                                       </td>
+                                        <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
+                                        <td>".$row2['cell_Mobile_Phone']." </td>
+                                         <td>".$row2['email']." </td>
+                                        <td>".$row2['gender_MFU']."</td>
+                                        <td>". $parent_relation."</td>
+                                          
+                                        <td>";
+                                       echo'   <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  View</button></a>
+
+                                        
+                                       </td>
+                                     </tr>';
+
+                               }
+                              
+                                }
+                              ?>
+                           
+                             </tbody>
+                            <tfoot>
+                            <tr>
+                             <th>#</th>
+                              <th>Document Title</th>
+                              <th>Description</th>
+                              <th>Actions</th>
+                            </tr>
+                            </tfoot>
+                          </table>
+                    </div>
+                    <div class="tab-pane" id="tab_4">
+                         <table id="table11" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Reference</th>
+                              <th>Amount</th>
+                              <th>Summary</th>
+                              
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               #get school Id from current session school id
+                               $school_ID = $_SESSION['login_user_school_ID'];
+                               $query2 = mysqli_query($conn,"select * from invoice_student where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                               die(mysqli_error());
+                               while ($row2=mysqli_fetch_array($query2)){
+                               $invoiveID= $row2['invoice_ID'];
+                              // $parent_relation= $row1['relation'];
+                               
+                                echo" <tr>
+                                       <td>".$row2['invoice_date']."</td>
+                                       <td>".$row2['reff_no']."</td>
+                                        <td>".$row2['amount']."</td>
+                                        <td>".$row2['summury']." </td>
+                                         
+                                          
+                                        <td>";
+                                       echo'   <a href="#"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  View</button></a>
+
+                                        
+                                       </td>
+                                     </tr>';
+
+                               
+                              
+                                }
+                              ?>
+                           
+                             </tbody>
+                            
+                          </table>
                     </div>
                 </div>
           </div>
@@ -197,7 +364,55 @@ if(isset($_GET['id'])){
           <!-- /.box -->
         </div>
       </div>
-   
+   <!--- add document Modal -->
+      <div class="modal fade" id="modal-addDocument">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b>Add Document</b></h4>
+              </div>
+              <div class="modal-body">
+                 <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+              <!-- /.tab-pane -->
+            <form  action="document.php" method="POST" enctype="multipart/form-data">
+               <div class="form-group">
+                <label>Title</label>
+                 <input type="text" name="document_title" class="form-control" placeholder="Title" required>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea type="text" name="document_desc" class="form-control" placeholder="Description" maxlength="100"></textarea>
+                
+              </div>
+              <div class="form-group">
+                <label>Document</label>
+                
+                <input type="file" name="zone_name" class="form-control" placeholder="" required>
+              </div>
+           
+            <br>
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                <button type="submit" name="addDocumentBtn" class="btn btn-primary">Add Document</button>
+              </div>
+              </div>
+             </form>
+            </div>
+            <!-- /.tab-content -->
+          </div>
+              </div>
+              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
        
          <!-- delete student  Modal-->
     <div class="modal  fade" id="delete_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -258,6 +473,40 @@ if(isset($_GET['id'])){
   $(function () {
     $('#example1').DataTable()
     $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+
+  $(function () {
+    $('#example3').DataTable()
+    $('#example4').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+  $(function () {
+    $('#table1').DataTable()
+    $('#table2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+  $(function () {
+    $('#table11').DataTable()
+    $('#table21').DataTable({
       'paging'      : true,
       'lengthChange': false,
       'searching'   : false,
