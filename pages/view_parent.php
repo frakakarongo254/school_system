@@ -3,6 +3,8 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
+$school_ID = $_SESSION['login_user_school_ID'];
+
 $get_parentID='';
 if(isset($_GET['id'])){
   $get_parentID =$_GET['id'];
@@ -47,7 +49,38 @@ if(isset($_GET['id'])){
           Success! You have unlink the student  successfully.
           </div>';   
         }
+
+        if(isset($_POST['sendEmail'])){
+        
+         $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+              $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+
+
+        $from=$senderemail_row['sender_email'];
+        $fromName=$senderemail_row['sender_name'];
+        $footer=$senderemail_row['sender_signature'];
+        $to=$_POST['email_to'];
+        $subject=$_POST['email_subject'];
+        $message=$_POST['email_message'];
+
+        $headers =  'MIME-Version: 1.0' . "\r\n"; 
+        $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
+
+//mail($to, $subject, $body, $headers);
+        $datetime = date_create()->format('Y-m-d H:i:s');
+        $send=mail($to,$subject,$message,$headers);
+        if($send){
+          echo "Email Sent successfully";
+          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,message,date_sent 
+          ) 
+          values('$school_ID','$subject','$to','$message','$datetime') ");
+        }else{
+           echo "Sorry! Email was not sent";
+        }
+      }   
         ?>
+
     </section>
     <!-- Main content -->
     <section class="content">
@@ -115,9 +148,9 @@ if(isset($_GET['id'])){
             <div class="box-body">
               <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#tab_1" data-toggle="tab">Children</a></li>
-                  <li><a href="#tab_2" data-toggle="tab">Emails</a></li>
-                  <li><a href="#tab_3" data-toggle="tab">Bills</a></li>
+                  <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Children</a></li>
+                  <li><a href="#tab_2" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Emails</a></li>
+                  <li><a href="#tab_3" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Bills</a></li>
                    
                 </ul>
                 <div class="tab-content">
@@ -184,6 +217,10 @@ if(isset($_GET['id'])){
                         </table>
                     </div>
                     <div class="tab-pane " id="tab_2">
+                    <div class="row">
+                    <div class="col-md-8"><b><h3>Emails</h3> </b></div>
+                    <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendEmail_Modal"><i class="fa fa-plus"></i><b> New Email</b></a></div>
+                    </div>
                       <table id="example1" class="table table-bordered table-striped">
                           <thead>
                           <tr>
@@ -191,7 +228,7 @@ if(isset($_GET['id'])){
                             <th>Subject</th>
                             <th>Message</th>
                             <th>Send on</th>
-                            <
+                            
                           </tr>
                           </thead>
                           <tbody>
@@ -206,6 +243,57 @@ if(isset($_GET['id'])){
                         </table>
                     </div>
                     <div class="tab-pane " id="tab_3">
+                       <table id="example1" class="table table-bordered table-striped">
+                          <thead>
+                          <tr>
+                            
+                            <th>Name</th>
+                           
+                            <th>Total</th>
+                            
+                            
+                          </tr>
+                          </thead>
+                          <tbody>
+                             <?php
+                              $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             die(mysqli_error());
+                             while ($row1=mysqli_fetch_array($query2)){
+                             $studentID= $row1['student_ID'];
+                             $total=0.00;
+                             $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentID'")or
+                             die(mysqli_error());
+                             while ($row2=mysqli_fetch_array($query3)){
+                               $name= $row2['first_Name']." ".$row2['last_Name'];
+                              $query4 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$studentID'")or
+                             die(mysqli_error());
+                             $std_name;
+                             $amt=0.00;
+                             while ($row3=mysqli_fetch_array($query4)){
+                              $amt= $amt + $row3['amount'];
+                                 $total=$total + $amt;
+                             }
+                              
+                              echo '<tr>
+                                   <td>'.$name.'</td>
+                                   
+                                   <td>'.$amt.'</td>
+                                   <td></td>
+                                 </tr>';
+                             }
+                             //echo $amt;
+                           }
+
+                          
+                             ?>
+                         
+                           </tbody>
+                          <tfoot>
+                          <tr>
+                           
+                          </tr>
+                          </tfoot>
+                        </table>
                     </div>
 
                   </div>
@@ -219,32 +307,52 @@ if(isset($_GET['id'])){
       </div>
    
        
-         <!-- unlink student  Modal-->
-    <div class="modal  fade" id="delink_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <!-- Send email to parent  Modal-->
+    <div class="modal  fade" id="sendEmail_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Unlink this student?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Send Email </h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <script >
-               function delinkStudent(student_id,parent_ID){
-                  
-                 document.getElementById("msg").innerHTML=' Are you sure you want to unlink this student from  parent/Guardian?'
-                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="brand"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="'+parent_ID+'" id="'+ student_id +'" type="submit" data-dismiss="modal" onclick="delinkStudentFromParent(this.id,this.name)">Delete</button></form></div>';
-                }
-            </script>
-          
-          <div id="msg"></div>
+             <form method="POST" action="view_parent.php?id=<?php echo $get_parentID?>">
+              <div class="form-group">
+                <input class="form-control" placeholder="To:" name="email_to"  value="<?php echo $row['email']?>" required>
+              </div>
+              <div class="form-group">
+                <input class="form-control" placeholder="Subject:" name="email_subject">
+              </div>
+             
+              <div class="form-group">
+                    
+                      <textarea class="form-control" id="editor1" name="email_message" rows="10" cols="80">
+                <?php 
+             $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+              $signt_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+              echo $signt_row['sender_signature'];
+              ?>
+                    </textarea>
+                     
+              </div>
+           
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+              <div class="pull-right">
+               <button type="reset" name="sendEmail" class="btn btn-danger "><i class="fa fa-"></i> Reset</button>
+                
+              </div>
+              <button type="submit" name="sendEmail" class="btn btn-primary "><i class="fa fa-envelope-o"></i> Send</button>
+             
+            </div>
+          </form>
+         
 
         </div>
-          <div class="modal-footer">
-           <div id="modalMsg"></div>
-        </div>
+          
       </div>
     </div>
      
@@ -324,6 +432,15 @@ if(isset($_GET['id'])){
 
   });
   }
+</script>
+<script>
+  $(function () {
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor1')
+    //bootstrap WYSIHTML5 - text editor
+    $('.textarea').wysihtml5()
+  })
 </script>
 </body>
 </html>

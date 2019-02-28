@@ -135,7 +135,7 @@ if(isset($_GET['id'])){
 
 
         if($update_level_query){
-        echo '<script> window.location="view_carricula.php?update=True" </script>';
+        echo '<script> window.location="view_carricula.php?id='.$carricula_id.'&update=True" </script>';
         }else{
         echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -218,7 +218,7 @@ if(isset($_GET['id'])){
           </div>
           <!-- /.box -->
     
-        <!-- add school carricula-->
+        <!-- add school level-->
     <div class="modal fade" id="modal-addLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -229,7 +229,7 @@ if(isset($_GET['id'])){
             </button>
           </div>
           <div class="modal-body">
-          <form  action="view_carricula.php" method="POST" enctype="multipart/form-data">
+          <form  action="view_carricula.php?id=<?php echo $carricula_id ?>" method="POST" enctype="multipart/form-data">
         
             <div class="form-group">   
               <label for="nationality">Level Number:</label>
@@ -276,9 +276,9 @@ if(isset($_GET['id'])){
             <script >
              
                function editLevel(level_id){ 
-                
+                   var carricula_id=<?php echo $carricula_id?>;
                   if(level_id !=''){
-                    var details= '&level_id='+ level_id ;
+                    var details= '&level_id='+ level_id +'&carricula_id='+ carricula_id ;
                     $.ajax({
                     type: "POST",
                     url: "edit_carriculaLevel.php",
@@ -393,7 +393,7 @@ if(isset($_GET['id'])){
 <?php include("include/script.php")?>
 <script >
   function deleteLevelFromSystem(level_id){
-  
+  var carricula_id=<?php echo $carricula_id?>;
   var details= '&level_id='+ level_id;
   $.ajax({
   type: "POST",
@@ -402,7 +402,7 @@ if(isset($_GET['id'])){
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="view_carricula.php?delete=True" 
+ window.location="view_carricula.php?id="+carricula_id+"&delete=True" 
     }else{
       alert("OOp! Could not delete .Please try again!");
     }

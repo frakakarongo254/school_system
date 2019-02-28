@@ -38,17 +38,22 @@ if (!velifyLogin()) {
         #get sender and signature from email setting table
          $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
               $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+
+
         $from=$senderemail_row['sender_email'];
         $fromName=$senderemail_row['sender_name'];
         $footer=$senderemail_row['sender_signature'];
         $to=$_POST['email_to'];
         $subject=$_POST['email_subject'];
         $message=$_POST['email_message'];
-        $headers  = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= 'From: '.$fromName .'<'.$from.'>' . "\r\n";
+
+        $headers =  'MIME-Version: 1.0' . "\r\n"; 
+        $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
+
+//mail($to, $subject, $body, $headers);
         $datetime = date_create()->format('Y-m-d H:i:s');
-        $send=mail($to,$subject,$message,$from,$headers);
+        $send=mail($to,$subject,$message,$headers);
         if($send){
           echo "Email Sent successfully";
           $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,message,date_sent 

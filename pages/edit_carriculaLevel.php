@@ -7,9 +7,10 @@
 }
 
   $level_id = $_POST['level_id'];
+  $carricula_id=$_POST['carricula_id'];
   $query_level_details = mysqli_query($conn,"select * from `carricula_level` where `carricula_level_ID` = '".$level_id."'  and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
      $rows_level = mysqli_fetch_array( $query_level_details,MYSQLI_ASSOC);
-echo '  <form  action="view_carricula.php" method="POST" >
+echo '  <form  action="view_carricula.php?id='.$carricula_id.'" method="POST" >
            <input type="hidden" name="edit_level_id" value="'.$rows_level['carricula_level_ID'].'">
             <div class="form-group">   
               <label for="nationality">Level Number:</label>

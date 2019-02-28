@@ -193,9 +193,9 @@
           <div class="box box-secondary col-md-">
             <div class="box-body box-profile col-md-">
               <div class="row">
-                <div class="col-md-12  ">
+                <div class="col-md-6  ">
                  <div class="" style="text-align: center;">
-                  <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-editSchoolDetails"><i class="fa fa-pencil"></i><b> Edit Details</b></a>
+                 
                   <center>
               <table>
                
@@ -215,20 +215,33 @@
             </center>
             </div>
               </div>
-              
+              <div class="col-md-3">
+                <div class="row">
+                 <h3>MOTO:</h3>
+                 <?php echo $school_row['school_moto']?>
+                </div>
+                <div class="row">
+                  <h3> Registration Date</h3>
+                <?php echo $school_row['registration_Date']?>
+                </div>
+               </div>
+               <div class="col-md-3">
+                 <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-editSchoolDetails"><i class="fa fa-pencil"></i><b> Edit Details</b></a>
+               </div>
              </div>
              
              
+             
              <div class="row">
-              <div class="col-md-5">
-                
-                 <h3>Stream:</h3>
+                <div class="col-md-12">
+                   <h3>Stream:</h3>
+                   <th><a class="btn btn-success pull-right btn-sm" href="#" data-toggle="modal" data-target="#modal-addStream"><i class="fa fa-plus"></i><b> Add Stream</b></a></th>
                  <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>   
                   <th>Stream Name</th>
                   <th>Actions</th>
-                  <th><a class="btn btn-success pull-right btn-sm" href="#" data-toggle="modal" data-target="#modal-addStream"><i class="fa fa-plus"></i><b> Add Stream</b></a></th>
+                  
                 </tr>
                 </thead>
                 <tbody>
@@ -257,15 +270,7 @@
                  </tbody>
                 
               </table>
-               </div>
-               <div class="col-md-4">
-                 <h3>MOTO:</h3>
-                 <?php echo $school_row['school_moto']?>
-               </div>
-               <div class="col-md-3">
-                <h3> Registration Date</h3>
-                <?php echo $school_row['registration_Date']?>
-               </div>
+                </div>
              </div>
             </div>
             <!-- /.box-body -->

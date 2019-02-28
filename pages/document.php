@@ -207,7 +207,7 @@ if (!velifyLogin()) {
         </div>
         <div class="col-md-2"></div>
       </div>
-    <!--- add zone Modal -->
+    <!--- add document Modal -->
       <div class="modal fade" id="modal-addZone">
           <div class="modal-dialog modal-sm">
             <div class="modal-content">

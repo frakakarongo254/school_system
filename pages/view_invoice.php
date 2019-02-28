@@ -4,6 +4,27 @@ if (!velifyLogin()) {
   header('location: ../index.php');
 }
  $school_ID=$_SESSION['login_user_school_ID'];
+ $get_invoice_ID="";
+ if (isset($_GET['invoice'])) {
+   # code...
+  $get_invoice_ID=$_GET['invoice'];
+ }
+ #get details form invoice
+ $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
+ $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
+ $invoice_amount=$row02['amount'];
+ $invoice_due_date=$row02['due_date'];
+ $invoice_date=$row02['invoice_date'];
+ $invoice_summury=$row02['summury'];
+ $invoice_amount_paid=$row02['amount_paid'];
+  $invoice_student_id=$row02['student_ID'];
+
+  #get student details
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
+ $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
+$studentId=$row03['student_ID'];
+ 
 ?>
 
 <?php include("include/header.php")?>
@@ -29,7 +50,85 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
+        
+      <?php
+    
+        
+         if(isset($_GET['invoice'])){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          <center><b>Success! Invoice updated successfuly.</b></center>
+          </div>';   
+        }
+       
+if(isset($_POST['save']))  
+{  
+  
+  $rand = substr(number_format(time() * rand(),0,'',''),0,10);
+  $Ref="INV-".$rand;
+$summury=$_POST['summury'];  
+$invoiceDate=$_POST['invoiceDate'];
+$invoiceDate=$_POST['invoiceDate'];
+//$date= $invoiceDate.format('MMMM D, YYYY');
+$dueDate= date('Y/m/d H:i:s');//$_POST['dueDate'];  
+$studentID=$invoice_student_id;
+$total_amount=$_POST['total_amount'];
+$new_balance;
+ if ($invoice_amount_paid >= $total_amount ) {
+   $new_balance= 0.00;
+ }else{
+  $new_balance= $total_amount - $invoice_amount_paid;
+ }
+    $delete_query=mysqli_query($conn,"DELETE FROM invoice_item WHERE `invoice_id`='".$get_invoice_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
+if ($delete_query) {
+$que=mysqli_query($conn,"update `invoice` SET amount='".$total_amount."', balance= '".$new_balance."',student_ID='".$studentID."',invoice_date='".$invoiceDate."',due_date='".$dueDate."',summury='".$summury."',reff_no='".$Ref."' where `invoice_ID`='".$get_invoice_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+   
      
+      if($que){
+
+      $id=mysqli_insert_id($conn);  
+      for($i = 0; $i<count($_POST['vote_head_id']); $i++){ 
+        
+      $query1=mysqli_query($conn,"INSERT INTO invoice_item  
+      SET   
+      invoice_id = '{$get_invoice_ID}',  
+      vote_head_ID = '{$_POST['vote_head_id'][$i]}',  
+      quantity = '{$_POST['qty'][$i]}',  
+      price = '{$_POST['price'][$i]}',  
+      amount = '{$_POST['total'][$i]}',
+      school_ID = '{$school_ID}'"); 
+
+    echo '<script> window.location="view_invoice.php?invoice='.$get_invoice_ID.'" </script>'; 
+      } 
+      if($query1){
+      echo '<script> window.location="view_invoice.php?invoice='.$get_invoice_ID.'" </script>'; 
+      }
+
+      }else{
+      echo' <div class="alert alert-warning alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert"
+      aria-hidden="true">
+      &times;
+      </button>
+      Sorry! Something went wrong.Please try again.
+      </div>'; 
+      } 
+
+
+
+    
+
+  
+  
+}else{
+  echo "failed";
+}
+
+
+}   
       
       ?>
     </section>
@@ -46,10 +145,7 @@ if (!velifyLogin()) {
             
             <!-- /.box-header -->
             <div class="box-body">
-                <?php
                 
-
-                ?>
                 <?php
 
                 $school_ID=$_SESSION['login_user_school_ID'];
@@ -65,305 +161,210 @@ if (!velifyLogin()) {
                 }
 
                 ?>
-                if(isset($_GET['id'])){
-  $invoiveId =$_GET['id'];
-  include('config.php');
-    $result_array = array();
+                <form method="POST" action="view_invoice.php?invoice=<?php echo $get_invoice_ID?>">
 
-  //$result=mysqli_query($conn,"select * from `invoice_item` where `invoice_id`='".$invoiveId."' and school_ID='$school_ID' ");
+                  <div class="row">
+                    <div class="col-md-4">
+                     
+                      <div class="row">
+                         <div class="col-md-12 ">
+                          
+                           <div class="pull-left"> <a ><i class="fa  pu"></i><b> <?php echo $logo?></b></a></div>
+                         </div>
+                       </div>
+                      <div class="row">
+                         <div class="col-md-12">
+                           <a ><i class="fa  fa-institution"></i><b><?php echo $school_row['school_Name']?></b></a>
+                         </div>
+                       </div>
+                        <div class="row">
+                         <div class="col-md-12">
+                           <a><i class="fa fa-bookmark-o"></i> Po. Box <?php echo $school_row['address_1']?></a>
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-12">
+                           <a ><i class="fa fa-phone"></i> <?php echo $school_row['phone']?></a>
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-12">
+                          <a><i class="fa fa-envelope-o"></i> <?php echo $school_row['email']?></a>
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-12">
+                          <a> <i class="fa fa-globe"></i> <?php echo $school_row['school_website']?></a>
+                         </div>
+                       </div>
 
+                    </div>
+                    <div class="col-md-2">
+                      
+                    </div>
+                    <div class="col-md-5">
+                      <b>To</b>:<br>
+                           <select class="form-control select2" name="studentId" style="width: 100%;" disabled>
+                    <option value="<?php echo $studentId ?>"><?php echo $studentName ?></option>
+                  <?php
+                 $query_c= mysqli_query($conn,"select * from student where school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($crows=mysqli_fetch_array($query_c)){
 
- if ($result->num_rows > 0) {
-   while($rowss = $result->fetch_assoc()) {
-     $ClientName=$row['product_name'];
-     $d=strtotime("today");
-          $todaysdate = date("d/m/Y", $d);
-     
-   }
- }
-    ?>
-  <table class="table">
- <thead>
- <tr>
- <th colspan="6"><b><?php echo $school_row['school_Name']."<br>". $school_row['address_1'] ."<br>". $school_row['phone']."<br>".$school_row['email']."<br>".$school_row['school_website']";?></b></th>
- <th></th>
- 
- <th style="margin-right:100px"><?php echo $ClientName."<br> Receipt #: ".$transactionCode ."<br> Date: " . $todaysdate ;?></th>
- </tr>
- <td><ul class="nav nav-pills nav-stacked">
-        <li><a href="#"><i class="fa  fa-institution"></i><b><?php echo $school_row['school_Name']?></b></a></li>
-        <li><a href="#"><i class="fa fa-bookmark-o"></i> Po. Box <?php echo $school_row['address_1']?></a></li>
-        <li><a href="#"><i class="fa fa-phone"></i> <?php echo $school_row['phone']?></a></li>
-        <li><a href="#"><i class="fa fa-envelope-o"></i> <?php echo $school_row['email']?></a></li>
-        <li><a href="#"><i class="fa fa-globe"></i> <?php echo $school_row['school_website']?></a></li>
-      </ul></td>
- </thead>
- </table>
-  <table class="table">
- <thead>
- <tr>
- <th>Date to pick</th>
- <th>Item</th>
- <th>Quantity</th>
- <th>Price</th>
- <th>Total</th>
- </tr>
- </thead>
- <tbody>
+                  echo'  <option value="'.$crows['student_ID'].'">'.$crows['first_Name'].' '.$crows['last_Name'].'</option>';
+                   }
+                 
+                   
+                ?>
+                 </select>
+                    <br>
+                   <b>Invoice Date:</b>
+                <div class=" col-md- input-group input-group-">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                  <input type="date" name="invoiceDate" id="" value="<?php echo $invoice_date?>" class="form-control" placeholder="Invoice Date" required>
+                </div>
+                <br>
+                <b>Due Date:</b>
+                <div class=" col-md- input-group input-group-">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                  <input type="date" name="dueDate" id="" value="<?php echo $invoice_due_date ?>" class="form-control" placeholder="Due Date" required>
+                </div>
+                <br>
+                <b>Summury:</b><br>
+                <textarea class="form-control" rows="3" name="summury" maxlength="100" placeholder="Summury" required>
+                  <?php echo $invoice_summury ?>
+                </textarea>
+                    </div>
+                    
+                  </div>
+               
+          <table class="table table-bordered table-hover" id="tab_logic">
+        <thead>
           
-        <?php
-        $tot=0;
-        while($rows = $result->fetch_assoc()) {
-          $vat=$rows["vat"];
-          $dueAmount=$rows["due_amount"];
-          $Balance=$rows["balance_amount"];
-          $paidAmount=$rows["paid_amount"];
-        $customer_name=$rows["customer_name"];
-        $grand_total=$rows["grand_total"];
-        $discount=$rows["discount"];
-        $pick_date=$rows["pick_date"];
-    echo '<form method="POST" action="createorder.php" role="form" name="form1" id="form1s"><tr>
-     <td>'.$rows["pick_date"] .'</td><td>'
-      .$rows["item"].
-       '</td>
-       
-       <td>'.$rows["quantity"].'</td>
-       <td>'.$rows["price"].'</td>
-       
-       <td>'.$rows["total"] ;
-       // delete and edit category button
-     echo"</td>
-      
-     
-    </tr>
-    
-    </form>";
-    
-    //array_push($result_array, $row);
-    
- $tot+=$rows['total'];
- 
+          <tr>
+            <th class="hidden text-center"> # </th>
+            <th class="text-center"> Product </th>
+            <th class="text-center"> Qty </th>
+            <th class="text-center"> Price </th>
+            <th class="text-center"> Total </th>
+          </tr>
+        </thead>
+        <tbody>
+           <?php
+                            #get school Id from current session school id
+                            
+                             $query2 = mysqli_query($conn,"select * from invoice_item where invoice_id='$get_invoice_ID' and school_ID = '$school_ID' ")or
+                             die(mysqli_error());
+                             while ($row2=mysqli_fetch_array($query2)){
+                             $invoice_item_ID= $row2['invoice_item_ID'];
+                              $vote_head_ID= $row2['vote_head_ID'];
+                              $query3 = mysqli_query($conn,"select * from vote_head where vote_head_ID='$vote_head_ID' and school_ID = '$school_ID' ")or
+                             die(mysqli_error());
+                             while ($row3=mysqli_fetch_array($query3)){
+                              echo" <tr>
+                                     
+                                      <td><select class='form-control' name='vote_head_id[]' style='width: 100%;' required>";
+                                   echo"   <option value='".$row3['vote_head_ID']."' selected='selected'>".$row3['name']."</option>";
+                                      
+                                      $query_votehead= mysqli_query($conn,"select * from vote_head where school_ID = '".$_SESSION['login_user_school_ID']."'");
+                                      while ($votehead_rows=mysqli_fetch_array($query_votehead)){
 
-    }
-  ?>
-    <tr>
-       
-         
-         
-     
-        
-         <td rowspan="7" colspan="2"></td>    
-         <td rowspan="" colspan=""><b>Sub total</b></td>    
-         <td><b>Ksh  <?php echo $tot;?></b></td>    
-         
-    </tr>
-    <tr>
-    
-         
-     
-         <td ><b>Tax</b></td>   
-         <td><b>Ksh  <?php echo $vat;?></b></td>    
-          
-    </tr>
-    <tr>
-    
-     
-         <td ><b>Discount</b></td>    
-         <td><b>Ksh  <?php echo $discount;?></b></td>   
-          
-    </tr>
-    <tr>
-    
-         
-     
-         <td ><b>Grand Total</b></td>   
-         <td><b>Ksh  <?php echo $grand_total;?></b></td>    
+                                      echo"  <option value='".$votehead_rows['vote_head_ID']."'>".$votehead_rows['name']."</option>";
+                                      }
+
+
+                                    
+                                   echo'   </select></td>
+                                      <td><input type="number" name="qty[]" placeholder="Enter Qty" class="form-control qty" value="'.$row2['quantity'].'" step="0" min="0"/> </td>
+                                      <td><input type="number" name="price[]" value="'.$row2['price'].'" placeholder="Enter Unit Price" class="form-control price" step="0.00" min="0"/></td>
+                                      <td><input type="number" name="total[]" placeholder="0.00" value="'.$row2['amount'].'" class="form-control total" readonly/></td>  
+                                      <td>';
+                                     echo'  
+                                       <button type="button" id="'.$invoice_item_ID.'" class="btn btn-danger btn-flat"  onclick="deleteInvoice_item(this.id)" ><span class="glyphicon glyphicon-trash"></span></button>
+                                     </td>
+                                   </tr>';
+
+                             }
+                            
+                          }
+                            ?>
+                         
+          <tr id='addr0'>
+            <td class="hidden">1</td>
+            <td><select class="form-control " name='vote_head_id[]' style="width: 100%;" >
+                    
+                  <?php
+                 $query_votehead= mysqli_query($conn,"select * from vote_head where school_ID = '".$_SESSION['login_user_school_ID']."'");
+                   while ($votehead_rows=mysqli_fetch_array($query_votehead)){
+
+                  echo'  <option value="'.$votehead_rows['vote_head_ID'].'">'.$votehead_rows['name'].'</option>';
+                   }
+                 
+                   
+                ?>
+                 </select></td>
+            <td><input type="number" name='qty[]' placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
+            <td><input type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
+            <td><input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/></td>
+          </tr>
+          <tr id='addr1'></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   
-    </tr>
-    <tr>
-    
-         
-     
-         <td ><b>Paid Amount</b></td>   
-         <td><b>Ksh  <?php echo $paidAmount;?></b></td>   
+  <div class="row clearfix" style="margin-top:20px">
+    <div class="pull-right col-md-4">
+      <table class="table table-bordered table-hover" id="tab_logic_total">
+        <tbody>
+          <tr class="hidden">
+            <th class="text-center">Sub Total</th>
+            <td class="text-center"><input type="number" name='sub_total' placeholder='0.00' class="form-control" id="sub_total" readonly/></td>
+          </tr>
+          <tr class="hidden">
+            <th class="text-center ">Tax</th>
+            <td class="text-center"><div class="input-group mb-2 mb-sm-0">
+                <input type="number" class="form-control" id="tax" placeholder="0">
+                <div class="input-group-addon">%</div>
+              </div></td>
+          </tr>
+          <tr class="hidden">
+            <th class="text-center">Tax Amount</th>
+            <td class="text-center"><input type="number" name='tax_amount' id="tax_amount" placeholder='0.00' class="form-control" readonly/></td>
+          </tr>
+          <tr>
+            <th class="text-center">Grand Total</th>
+            <td class="text-center"><input type="number" name='total_amount' id="total_amount" value="<?php echo $invoice_amount?>" placeholder='0.00' class="form-control" readonly/></td>
+          </tr>
+        </tbody>
+      </table>
   
-    </tr>
-    <tr>
-    
-         
-     
-         <td ><b>Due Amount</b></td>    
-         <td><b>Ksh  <?php echo $dueAmount;?></b></td>    
-  
-    </tr>
-    <tr>
-    
-         
-     
-         <td ><b>Balance Amount</b></td>    
-         <td><b>Ksh   <?php echo  $Balance;?></b></td>    
-  
-    </tr>
-    
-    </tbody>
-    
-</table>
-    <?php
-} else {
-    //echo  json_encode("No Match"); 
-}
-  
-}else{
-  echo"not yet";
-}
             </div>
             <!-- /.box-body -->
+
+  <div class="row ">
+    <div class="col-md-12">
+    <div class="col-md-1">
+       <button id="" class="btn btn-success pull-" name="save" required> Save</button>
+     </form>
+   </div>
+   <div class="col-md-1">
+      <button id="add_row" class="btn btn-default pull-">Add Row</button>
+     </div>
+     <div class="col-md-1">
+      <button id='delete_row' class="pull- btn btn-">Delete Row</button>
+    </div>
+  </div>
+  </div>
           </div>
           <!-- /.box -->
         </div>
         <div class="col-md-2"></div>
       </div>
-    <!--- add zone Modal -->
-      <div class="modal fade" id="modal-addZone">
-          <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><b>Add Zone</b></h4>
-              </div>
-              <div class="modal-body">
-                 <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-              <!-- /.tab-pane -->
-            <form  action="zone.php" method="POST">
-            <div class="row">   
-              <label for="nationality">Zone Name:</label>
-              <div class=" col-md-12 input-group input-group-">
-                
-                <input type="text" name="zone_name" class="form-control" placeholder="Zone Name" required>
-              </div>
-              <br>
-            </div>
-             <div class="row">   
-              <label for="nationality">One Way Charge:</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                <input type="text" class="form-control" name="oneWayCharge">
-                
-              </div>
-              
-            </div>
-           <br>
-            <div class="row">   
-              <label for="nationality">Two Way Charge:</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                <input type="text" class="form-control" name="twoWayCharge">
-                
-              </div>
-              
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-md-12">
-                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="addZoneBtn" class="btn btn-primary">Add Zone</button>
-              </div>
-              </div>
-             </form>
-            </div>
-            <!-- /.tab-content -->
-          </div>
-              </div>
-              
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+    
        
-         <!-- delete zone  Modal-->
-    <div class="modal  fade" id="delete_zone_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this Class?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <script >
-               function deleteZone(id,name){
-                  
-                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + name + '  </b>from the system?'
-                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="class.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="deleteZoneFromSystem(this.id)">Delete</button></form></div>';
-                }
-            </script>
-          
-          <div id="msg"></div>
+         
 
-        </div>
-          <div class="modal-footer">
-           <div id="modalMsg"></div>
-        </div>
-      </div>
-    </div>
-     </div>
-
-    <!-- edit zone Modal-->
-    <div class="modal  fade" id="edit_zone_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><b>Edit Zone</b></h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-            <script >
-             
-               function editZone(id){ 
-                
-                  if(id !=''){
-                    var details= '&zone_id='+ id ;
-                    $.ajax({
-                    type: "POST",
-                    url: "edit_zone.php",
-                    data: details,
-                    cache: false,
-                    success: function(data) {
-                      document.getElementById("classMessage").innerHTML=data;
-                   
-
-                    }
-
-                    });
-                   
-                  }else{
-                   document.getElementById("classMessage").innerHTML=' You have Not Yet selected a Class';
-                  }
-                 
-                
-                }
-            </script>
-          
-          <div id="classMessage"></div>
-
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-     </div>
+   
     </section>
     <!-- /.content -->
   </div>
@@ -390,6 +391,29 @@ if (!velifyLogin()) {
 <!-- include script-->
 <?php include("include/script.php")?>
 <!-- page script -->
+<script >
+  //delete invoice item function
+  function  deleteInvoice_item(invoice_item_id){
+   // alert(invoice_item_id);
+  //var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
+  //alert(id);
+  var details= '&invoice_item_id='+invoice_item_id;
+  $.ajax({
+  type: "POST",
+  url: "delete_invoice_item.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    window.location='view_invoice.php?invoice=<?php echo $get_invoice_ID?>' ;
+   
+  
+
+  }
+
+
+  });
+  }
+</script>
 <script>
   $(function () {
     $('#example1').DataTable()
