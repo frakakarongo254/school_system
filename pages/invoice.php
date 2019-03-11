@@ -143,7 +143,7 @@ if (!velifyLogin()) {
                               $query3 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
                               
                                while ($row3=mysqli_fetch_array($query3)){
-                                $name=$row3['first_Name']." ".$row3['first_Name'];
+                                $name=$row3['first_Name']." ".$row3['last_Name'];
                                 $reg=$row3['registration_No'];
                                 echo' <tr>
                                    <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row2['reff_no'].' </a></td>';
@@ -158,6 +158,8 @@ if (!velifyLogin()) {
                                       
                                        echo' 
                                           <td>
+                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
+
                                          <button type="button"  class="btn btn-success btn-flat" id="'.$invoiveID.'" onclick="takepayment(this.id)" data-toggle="modal" data-target="#payment_Modal"><span class="glyphicon "></span>Recieve Payment</button>
                                        </td>
                                     </tr>';

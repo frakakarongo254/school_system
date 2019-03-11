@@ -3,6 +3,8 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
+#get school Id from current session school id
+  $school_ID = $_SESSION['login_user_school_ID'];
 ?>
 
 <?php include("include/header.php")?>
@@ -37,7 +39,7 @@ if (!velifyLogin()) {
           aria-hidden="true">
           &times;
           </button>
-          Success! Zone added  successfully.
+          Success! Document added  successfully.
           </div>';   
         }
         if(isset($_GET['update'])){
@@ -46,7 +48,7 @@ if (!velifyLogin()) {
           aria-hidden="true">
           &times;
           </button>
-          Success! Zone updated  successfully.
+          Success! Document updated  successfully.
           </div>';   
         }
         if(isset($_GET['delete'])){
@@ -58,88 +60,174 @@ if (!velifyLogin()) {
           Success! You have deleted  successfully.
           </div>';   
         }
-       if(isset($_POST['addZoneBtn'])){
-        
-          #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
-        $zone_name=$_POST['zone_name'];
-        $oneWayCharge=$_POST['oneWayCharge'];
-        $twoWayCharge=$_POST['twoWayCharge'];
        
-        $class_insert_query=mysqli_query($conn,"insert into `zone` (school_ID, zone,oneWayCharge,twoWayCharge
-          ) 
-          values('$school_ID','$zone_name','$oneWayCharge','$twoWayCharge') ");
+    if (isset($_POST['addDocumentBtn'])) {
+      $document_title=$_POST['document_title'];
+      $document_desc=$_POST['document_desc'];
+      $date_created = date('Y-m-d H:i:s');
+      $file=$_FILES['documentfile']['name'];
+      $path_parts = pathinfo($file);
+      $extension= $path_parts['extension'];
+      $folder_path = 'document/';
+      $_FILES['documentfile']['type'];
+      
+   $filename = basename($_FILES['documentfile']['name']);
+    #check if that document already exist
 
-        
-        if($class_insert_query){
-           echo '<script> window.location="zone.php?insert=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-      }
-        # edit zone
-        if(isset($_POST['editZoneBtn'])){
+     $newname = $folder_path . $filename;
 
-        #get school Id from current session school id
-        $school_ID = $_SESSION['login_user_school_ID'];
-        $edit_zone_name=$_POST['edit_zone_name'];
-        $edit_zone_id=$_POST['edit_zone_id'];
-        $edit_oneWayCharge=$_POST['edit_oneWayCharge'];
-        $edit_twoWayCharge=$_POST['edit_twoWayCharge'];
-        $update_zone_query=mysqli_query($conn,"update `zone` SET zone= '".$edit_zone_name."', oneWayCharge= '".$edit_oneWayCharge."',twoWayCharge= '".$edit_twoWayCharge."' where `zone_ID`='".$edit_zone_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+    if ($extension == "pdf")
+    {
+        if (move_uploaded_file($_FILES['documentfile']['tmp_name'], $newname))
+        {
+
+            $filesql = "INSERT INTO document (file_name,student_ID,school_ID,title,description,date_created) VALUES('$filename','0','$school_ID','$document_title','$document_desc','$date_created')";
+            $fileresult = mysqli_query($conn,$filesql);
+             if (isset($fileresult))
+        {
+           // echo 'Success';
+            echo '<script> window.location="document.php?insert=true" </script>';
+
+        } else
+        {
+            echo 'fail';
+
+             echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+         <center> Oops! Something went wrong.Please try again.</center>
+          </div>';   
 
 
-        if($update_zone_query){
-        echo '<script> window.location="zone.php?update=True" </script>';
-        }else{
+        }
+        }
+        else
+        {
+
+           
+             echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          <center>Upload Failed.</center>.
+          </div>';   
+        }
+
+       
+    }
+    else
+    {
+       
         echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-        }
-        }
-        
-        if(isset($_POST['uploadImageBtn'])){
-            if(isset($_FILES['user_image']['name']) and !empty($_FILES['user_image']['name'])){
-            $file=$_FILES['user_image']['name'];
-            $path_parts = pathinfo($file);
-            $extension= $path_parts['extension'];
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+         <center> Document must be uploaded in PDF format.</center>
+          </div>';   
 
-            if ($_FILES["user_image"]["size"] > 500000) {
-            echo "<script>alert('Sorry, your file is too large.')</script>";
-            }
-            elseif($extension != "jpg" && $extension != "png" && $extension != "jpeg"
-            && $extension != "gif" ) {
-            echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
-            //$uploadOk = 0;
-            }else{
-            $photo = addslashes(file_get_contents($_FILES['user_image']['tmp_name']));
-            $updateImage_query=mysqli_query($conn,"update `apparatus` SET photo= '".$photo."' where  `apparatus_ID`='".$_SESSION['login_user_ID']."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
-            if($updateImage_query){
-            echo '<script> window.location="profile.php?update=True" </script>';
-            }else{
-            echo' <div class="alert alert-warning alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert"
-            aria-hidden="true">
-            &times;
-            </button>
-            Sorry! Something went wrong.Please try again.
-            </div>'; 
-            }
-            }
-            }else{
-            echo '<script> alert("You must select an image") </script>';
-            }
-            }
+    }
+
+}
+#edit document
+if(isset($_POST['editDocumentBtn'])){
+
+  
+  $edit_document_title=$_POST['edit_document_title'];
+  $edit_document_id=$_POST['edit_document_id'];
+  $edit_document_desc=$_POST['edit_document_desc'];
+  
+  if(isset($_FILES['edit_documentfile']['name'])){
+   $file=$_FILES['edit_documentfile']['name'];
+      $path_parts = pathinfo($file);
+      $extension= $path_parts['extension'];
+      $folder_path = 'document/';
+   
+      
+   $filename = basename($_FILES['edit_documentfile']['name']);
+    #check if that document already exist
+
+     $newname = $folder_path . $filename;
+
+    if ($extension == "pdf")
+    {
+        if (move_uploaded_file($_FILES['edit_documentfile']['tmp_name'], $newname))
+        {
+
+            $fileresult =mysqli_query($conn,"update `document` SET title= '".$edit_document_title."', description= '".$edit_document_desc."',file_name= '".$filename."' where `document_ID`='".$edit_document_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+            if ($fileresult)
+        {
+           // echo 'Success';
+            echo '<script> window.location="document.php?update=True" </script>';
+
+        } else
+        {
+          
+             echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          <center>Oops! Something went wrong.Please try again.</center>
+          </div>';   
+
+
+        }
+        }
+        else
+        {
+
+           
+             echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+         <center> Upload Failed.</center>
+          </div>';   
+        }
+
+        
+    }
+    else
+    {
+       
+        echo' <div class="alert alert-warning alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+         <center> Document must be uploaded in PDF format.</center>
+          </div>';   
+
+    }
+  }else{
+
+            $fileresult =mysqli_query($conn,"update `document` SET title= '".$edit_document_title."', description= '".$edit_document_desc."' where `document_ID`='".$edit_document_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+            if ($fileresult)
+        {
+           // echo 'Success';
+            echo '<script> window.location="document.php?update=True" </script>';
+
+        } else
+        {
+          
+             echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          <center>Oops! Something went wrong.Please try again.</center>
+          </div>';   
+
+
+        }
+  }
+
+}
       
       ?>
     </section>
@@ -153,7 +241,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Document</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addZone"><i class="fa fa-plus"></i><b> New Document</b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addDocument"><i class="fa fa-plus"></i><b> New Document</b></a></div>
             </div>
             </div>
             
@@ -162,6 +250,7 @@ if (!velifyLogin()) {
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>   
+                   <th>#</th>
                   <th>Title</th>
                   <th>Description</th>
                   <th>Actions</th>
@@ -169,26 +258,37 @@ if (!velifyLogin()) {
                 </thead>
                 <tbody>
                   <?php
-                   #get school Id from current session school id
-                   $school_ID = $_SESSION['login_user_school_ID'];
-                   $query4 = mysqli_query($conn,"select * from document where school_ID = '$school_ID'")or
-                   die(mysqli_error());
-                   while ($row4=mysqli_fetch_array($query4)){
-                   $document_ID=$row4['document_ID'];
-                  echo" <tr>
-                          
-                            <td>".$row4['title']."</td>
-                            <td>".$row4['description']."</td>
-                            
-                            <td>";
-                           echo'  
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$document_ID.'" onclick="editZone(this.id)" data-toggle="modal"  data-target="#edit_zone_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                    #get school Id from current session school id
+                               $school_ID = $_SESSION['login_user_school_ID'];
+                               $query2 = mysqli_query($conn,"select * from document where school_ID = '$school_ID' and student_ID='0' ")or
+                               die(mysqli_error());
+                               $x=0;
+                               while ($row1=mysqli_fetch_array($query2)){
+                                
+                                $x++;
+                               $documentID= $row1['document_ID'];  
+                              $document_name= $row1['file_name']; 
+                                echo" <tr>
+                                      <td>".$x."</td>
+                                        <td>".$row1['title']."</td>
+                                        <td>".$row1['description']." </td>
+                                         
+                                          
+                                        <td>";
+                                       echo'  
+                                       <button type="button"  class="btn btn-info btn-flat" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                             <button type="button" id="'.$row4['document_ID'].'" class="btn btn-danger btn-flat" value="'.$row4['title'].'" onclick="deleteZone(this.id,this.value)" data-toggle="modal"  data-target="#delete_zone_Modal"><span class="glyphicon glyphicon-trash"></span></button>
-                             
-                           </td>
-                         </tr>';
-                    }
+                                      
+
+                                        <a href="document/'.$document_name.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+
+                                         <button type="button"  class="btn btn-danger btn-flat" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+
+                                        
+                                       </td>
+                                     </tr>';
+
+                                }
                   ?>
                
                  </tbody>
@@ -208,7 +308,7 @@ if (!velifyLogin()) {
         <div class="col-md-2"></div>
       </div>
     <!--- add document Modal -->
-      <div class="modal fade" id="modal-addZone">
+      <div class="modal fade" id="modal-addDocument">
           <div class="modal-dialog modal-sm">
             <div class="modal-content">
               <div class="modal-header">
@@ -233,8 +333,12 @@ if (!velifyLogin()) {
               </div>
               <div class="form-group">
                 <label>Document</label>
+                <br>
                 
-                <input type="file" name="zone_name" class="form-control" placeholder="" required>
+                 <span class="btn btn-default btn-file">
+                    Browse File<input name="documentfile" type="file" class="form-control" required>
+                </span>
+            <br/><br/>
               </div>
            
             <br>
@@ -256,82 +360,72 @@ if (!velifyLogin()) {
           <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+
+           <!--Edit document model-->
+         
+      <div class="modal fade" id="modal-editDocument">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit Document</h4>
+              </div>
+              <div class="modal-body">
+                <script >
+                function editDocument(document_ID){
+               
+                var updiv = document.getElementById("docMessage"); //document.getElementById("highodds-details");
+             
+                alert(document_ID);
+                var details= '&document_id='+ document_ID ;
+                $.ajax({
+                type: "POST",
+                url: "edit_school_document.php",
+                data: details,
+                cache: false,
+                success: function(data) {
+               
+                document.getElementById("docMessage").innerHTML=data;
+                 }
+                });
+                }
+                </script>
+                <div id="docMessage"></div>
+              </div>
+              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
        
-         <!-- delete zone  Modal-->
-    <div class="modal  fade" id="delete_zone_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <!-- delete document  Modal-->
+    <div class="modal  fade" id="delete_document_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this Class?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete Document</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
             <script >
-               function deleteZone(id,name){
+               function deleteDocument(document_id){
                   
-                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + name + '  </b>from the system?'
+                 document.getElementById("deleteMsg").innerHTML=' Are you sure you want to delete this document?'
                 var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="class.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="deleteZoneFromSystem(this.id)">Delete</button></form></div>';
+                updiv.innerHTML ='<form method="POST" action="brand"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ document_id +'" type="submit" data-dismiss="modal" onclick="deleteDocumentFromSystem(this.id)">Delete</button></form></div>';
                 }
             </script>
           
-          <div id="msg"></div>
+          <div id="deleteMsg"></div>
 
         </div>
           <div class="modal-footer">
            <div id="modalMsg"></div>
-        </div>
-      </div>
-    </div>
-     </div>
-
-    <!-- edit zone Modal-->
-    <div class="modal  fade" id="edit_zone_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><b>Edit Zone</b></h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-            <script >
-             
-               function editZone(id){ 
-                
-                  if(id !=''){
-                    var details= '&zone_id='+ id ;
-                    $.ajax({
-                    type: "POST",
-                    url: "edit_zone.php",
-                    data: details,
-                    cache: false,
-                    success: function(data) {
-                      document.getElementById("classMessage").innerHTML=data;
-                   
-
-                    }
-
-                    });
-                   
-                  }else{
-                   document.getElementById("classMessage").innerHTML=' You have Not Yet selected a Class';
-                  }
-                 
-                
-                }
-            </script>
-          
-          <div id="classMessage"></div>
-
-        </div>
-          </div>
         </div>
       </div>
     </div>
@@ -378,25 +472,26 @@ if (!velifyLogin()) {
 </script>
 
 <script >
-  function deleteZoneFromSystem(zone_id){
-  alert(zone_id);
-  var details= '&zone_id='+ zone_id;
+  function deleteDocumentFromSystem(documentId){
+    alert(documentId);
+  var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
+  //alert(id);
+  var details= '&document_id='+ documentId;
   $.ajax({
   type: "POST",
-  url: "delete_zone.php",
+  url: "delete_document.php",
   data: details,
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="zone.php?delete=True" 
+ window.location="document.php?delete=True" 
     }else{
-      alert("OOp! Could not delete the Zone.Please try again!");
+      alert("OOp! Could not delete the student.Please try again!");
     }
-  
   }
-
   });
   }
+
 </script>
 </body>
 </html>

@@ -40,7 +40,7 @@ include("include/header.php")
           <div class="small-box bg-aqua">
             <div class="inner">
                <?php 
-               $query_admins= mysqli_query($conn,"select * from `apparatus` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
+               $query_admins= mysqli_query($conn,"select * from `admin` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
                  $query_admins_row=mysqli_num_rows (  $query_admins );
                   echo "<h3>".$query_admins_row.  "</h3>";
                 ?> 

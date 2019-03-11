@@ -116,7 +116,7 @@ echo '  <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" en
               <div class="col-md-12">
                  <input type="hidden" name="edit_parent_ID" value="'.$rows_parents['parent_ID'].'">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="edit_parentBtn" class="btn btn-primary">Edit parent</button>
+                <button type="submit" name="edit_parentBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>
           

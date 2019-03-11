@@ -26,7 +26,7 @@ echo ' <form  action="view_student.php?id='.$student_id.'" method="POST" enctype
                 <br>
                 
                  <span class="btn btn-default btn-file">
-                    Browse File<input name="edit_documentfile" type="file" class="form-control" required>
+                    Browse File<input name="edit_documentfile" type="file" class="form-control" >
                 </span>
             <br/><br/>
               </div>
@@ -35,7 +35,7 @@ echo ' <form  action="view_student.php?id='.$student_id.'" method="POST" enctype
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="editDocumentBtn" class="btn btn-primary">Edit Document</button>
+                <button type="submit" name="editDocumentBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>
              </form>';

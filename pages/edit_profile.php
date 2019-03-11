@@ -4,6 +4,8 @@
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
+ # check the current password
+$userID=$_SESSION['login_user_ID'];
 ?>
 
 <?php include("include/header.php")?>
@@ -67,7 +69,7 @@
                   //$address1=$_POST['address1'];
                   $nationality=$_POST['nationality'];
                  
-                 $result=mysqli_query($conn,"update `apparatus` SET first_name= '".$fname."',second_name= '".$sname."',email= '".$email."',phone='".$phone."',gender='".$gender."',nationality='".$nationality."' where `apparatus_ID`='".$login_session_user_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+                 $result=mysqli_query($conn,"update `admin` SET first_name= '".$fname."',second_name= '".$sname."',email= '".$email."',phone='".$phone."',gender='".$gender."',nationality='".$nationality."' where `admin_ID`='".$login_session_user_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
                  if($result){
                     echo '<script> window.location="edit_profile.php?insert=True" </script>';
                  }else{
@@ -86,13 +88,13 @@
                   $currentPassword=$_POST['currentPassword'];
                   $NewPassword=$_POST['NewPassword'];
 
-                  # check the current password
-                  $userID=$_SESSION['login_user_ID'];
-                  $ses_sql = mysqli_query($conn,"select password from `apparatus` where `apparatus_ID` = '".$userID."' ");
-                  $rows = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
+                 
+                  $ses_sql = mysqli_query($conn,"select password from `admin` where `admin_ID`='".$userID."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+                  $rowss = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
                   #confirm current password
-                  if( $currentPassword == $rows['password']){
-                    $query=mysqli_query($conn,"update `apparatus` SET password='".$currentPassword ."'");
+                 echo $rowss['password'];
+                  if( $currentPassword == $rowss['password']){
+                    $query=mysqli_query($conn,"update `admin` SET password='".$currentPassword ."' where `admin_ID`='".$userID."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
                     if($query){
                       echo '<script> window.location="edit_profile.php?updatePassword=True" </script>';
                     }else{
@@ -151,7 +153,7 @@
             //$uploadOk = 0;
             }else{
             $photo = addslashes(file_get_contents($_FILES['user_image']['tmp_name']));
-            $updateImage_query=mysqli_query($conn,"update `apparatus` SET photo= '".$photo."' where  `apparatus_ID`='".$_SESSION['login_user_ID']."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+            $updateImage_query=mysqli_query($conn,"update `admin` SET photo= '".$photo."' where  `admin_ID`='".$_SESSION['login_user_ID']."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
             if($updateImage_query){
             echo '<script> window.location="profile.php?update=True" </script>';
             }else{
@@ -171,7 +173,7 @@
           ?>
           <?php
           // $school_ID=$_SESSION['login_user_school_ID'];
-            $logedUser_data_sql = mysqli_query($conn,"select * from `apparatus` where `apparatus_ID` = '".$_SESSION['login_user_ID']."' and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+            $logedUser_data_sql = mysqli_query($conn,"select * from `admin` where `admin_ID` = '".$_SESSION['login_user_ID']."' and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
               
               $user_row = mysqli_fetch_array($logedUser_data_sql,MYSQLI_ASSOC);
             

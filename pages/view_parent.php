@@ -49,20 +49,29 @@ if(isset($_GET['id'])){
           Success! You have unlink the student  successfully.
           </div>';   
         }
+        if(isset($_GET['insert']) and $_GET['insert']=='email'  ){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Email was sent  successfully.
+          </div>';   
+        }
 
         if(isset($_POST['sendEmail'])){
         
          $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
-              $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-
-
+        $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+          $senderemail=$senderemail_row['sender_signature'];
+        $recipient_ID=$get_parentID;
         $from=$senderemail_row['sender_email'];
         $fromName=$senderemail_row['sender_name'];
         $footer=$senderemail_row['sender_signature'];
         $to=$_POST['email_to'];
         $subject=$_POST['email_subject'];
-        $message=$_POST['email_message'];
-
+        $msg=$_POST['email_message'];
+         $message=$msg ." <br>".  $senderemail;
         $headers =  'MIME-Version: 1.0' . "\r\n"; 
         $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
@@ -71,12 +80,21 @@ if(isset($_GET['id'])){
         $datetime = date_create()->format('Y-m-d H:i:s');
         $send=mail($to,$subject,$message,$headers);
         if($send){
-          echo "Email Sent successfully";
-          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,message,date_sent 
+          //echo "Email Sent successfully";
+          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,recipient_ID,message,date_sent 
           ) 
-          values('$school_ID','$subject','$to','$message','$datetime') ");
+          values('$school_ID','$subject','$to','$recipient_ID','$msg','$datetime') ");
         }else{
-           echo "Sorry! Email was not sent";
+          echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Sorry! please try again.
+          </div>';  
+        }
+        if($sudent_insert_query){
+            echo '<script> window.location="view_parent.php?id='.$recipient_ID.'&insert=email" </script>';
         }
       }   
         ?>
@@ -103,29 +121,120 @@ if(isset($_GET['id'])){
           <!-- Profile Image -->
           <div class="box box-primary ">
             <div class="box-body box-profile">
-
               <div class="row">
-                <div class="col-md-6 ">
-                  <div class="pull-right">
+                <div class="col-md-3 ">
+                  <div class="pull-left">
+                   
                    <?php echo $image;?>
 
-              <h3 class="profile-username text-center"><?php echo $row['first_Name'] ." ". $row['last_Name'];?></h3>
+              
             </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <table>
-                  <tr>
-                    <td><b>Phone:</b></td>
-                    <td><?php echo $row['cell_Mobile_Phone']?></td>
+                    <tr>
+                    <td><span style="font-size: 17px">Name:</span></td>
+                    <td><h3 class="profile-username "><b><?php echo $row['first_Name'] ." ". $row['last_Name'];?></b></h3></td>
                   </tr>
                   <tr>
-                    <td><b>Email:</b></td>
-                    <td><?php echo $row['email']?></td>
+                    <td><span style="font-size: 17px">Email:</span></td>
+                    <td><b><?php echo $row['email']?></b></td>
                   </tr>
                   <tr>
-                    <td><b>Gender:</b></td>
-                    <td><?php echo $row['gender_MFU']?></td>
+                    <td><span>Phone:</span></td>
+                    <td><b><?php echo $row['cell_Mobile_Phone']?></b></td>
                   </tr>
+                  <tr>
+                    <td><span>Nationality:</span></td>
+                    <td><b><?php echo $row['nationality']?></b></td>
+                  </tr>
+                  <tr>
+                    <td><span>Gender:</span></td>
+                    <td><b><?php echo $row['gender_MFU']?></b></td>
+                  </tr>
+                  
+                 </table>
+                </div>
+                <div class="col-md-5">
+                  <table>
+                    
+                  <tr>
+                    <td><span style="font-size: 17px">Total invoiced:</span></td>
+                    <td>
+                      <?php
+                      
+                                $amt_invoiced=0.00;
+                               $query21 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             die(mysqli_error());
+                             while ($row11=mysqli_fetch_array($query21)){
+                             $student_Id = $row11['student_ID'];
+                             $total=0.00;
+                             $query33 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_Id'")or
+                             die(mysqli_error());
+                             while ($row22=mysqli_fetch_array($query33)){
+                              $std_Id = $row22['student_ID'];
+                              // $name= $row2['first_Name']." ".$row2['last_Name'];
+                              $query44 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$std_Id'")or
+                             die(mysqli_error());
+                             $std_name;
+                             
+                             while ($row33=mysqli_fetch_array($query44)){
+                              $amt_invoiced= $amt_invoiced + $row33['amount'];
+                                 //$total=$total + $amt;
+                             }
+                           }
+                         }
+                       echo  $amt_invoiced;
+                               ?>
+
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span>Amount Paid:</span></td>
+                    <td>
+                      <?php
+                       
+                                $total_amount_paid=0.00;
+                               $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             die(mysqli_error());
+                             while ($row_amount=mysqli_fetch_array($amount_query)){
+                             $studentId = $row_amount['student_ID'];
+                             
+                             $que= mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentId'")or
+                             die(mysqli_error());
+                             while ($row_std=mysqli_fetch_array($que)){
+                              $stdId = $row_std['student_ID'];
+                              // $name= $row2['first_Name']." ".$row2['last_Name'];
+                              $que2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$stdId'")or
+                             die(mysqli_error());
+                             $std_name;
+                             
+                             while ($row_p=mysqli_fetch_array($que2)){
+                             
+                              $total_amount_paid=  $total_amount_paid + $row_p['amount_paid'];
+                             }
+                           }
+                         }
+                       echo  $total_amount_paid;
+                               ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span>Balance:</span></td>
+                    <td>
+                      <b>
+                        <?php $total_balance=0.00; $tol=$amt_invoiced - $total_amount_paid;
+                      if($tol <=0){
+                      $total_balance =0.00;
+                      }else{
+                       $total_balance=$tol;
+                      }
+                      echo $total_balance;
+                      ?></b>
+                    </td>
+                  </tr>
+                  
                  </table>
                 </div>
               </div>
@@ -227,12 +336,26 @@ if(isset($_GET['id'])){
                             
                             <th>Subject</th>
                             <th>Message</th>
-                            <th>Send on</th>
+                            <th>Sent on</th>
                             
                           </tr>
                           </thead>
                           <tbody>
+                              <?php
+                            $query02 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' && recipient_ID='$get_parentID'")or
+                               die(mysqli_error());
+                               
+                               while ($row0=mysqli_fetch_array($query02)){
+                                $date=$row0['date_sent'];
+                                  $datetime = date_create($date)->format('d-m-Y H:i:s');
+                                      echo ' <tr>
+                                      <td>'.$row0['email_subject'].'</td>
+                                       <td>'.$row0['message'].'</td>
+                                       <td>'. $datetime.'</td>
+                                       </tr>';
+                               }
                              
+                               ?>
                          
                            </tbody>
                           <tfoot>
@@ -246,7 +369,7 @@ if(isset($_GET['id'])){
                        <table id="example1" class="table table-bordered table-striped">
                           <thead>
                           <tr>
-                            
+                             <th>Ref</th>
                             <th>Name</th>
                            
                             <th>Total</th>
@@ -256,6 +379,7 @@ if(isset($_GET['id'])){
                           </thead>
                           <tbody>
                              <?php
+                             $total_bill=0.00;
                               $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
                              die(mysqli_error());
                              while ($row1=mysqli_fetch_array($query2)){
@@ -270,30 +394,34 @@ if(isset($_GET['id'])){
                              $std_name;
                              $amt=0.00;
                              while ($row3=mysqli_fetch_array($query4)){
-                              $amt= $amt + $row3['amount'];
+                              $total_bill= $total_bill + $row3['amount'];
                                  $total=$total + $amt;
-                             }
+                                $invoiceId=$row3['invoice_ID'];
                               
                               echo '<tr>
+                                     <td><a href="view_invoice.php?invoice='.$invoiceId.'"> '.$row3['reff_no'].' </a></td>
                                    <td>'.$name.'</td>
                                    
-                                   <td>'.$amt.'</td>
+                                   <td>'.$row3['amount'].'</td>
                                    <td></td>
                                  </tr>';
+                               }
                              }
                              //echo $amt;
                            }
-
+                         // echo $total_bill;
                           
                              ?>
                          
                            </tbody>
                           <tfoot>
                           <tr>
-                           
+                           <th class="text-center" colspan="2">Grand Total</th>
+                         <td class=""><b><?php  echo $total_bill;?></b></td>
                           </tr>
                           </tfoot>
                         </table>
+                
                     </div>
 
                   </div>
@@ -329,11 +457,7 @@ if(isset($_GET['id'])){
               <div class="form-group">
                     
                       <textarea class="form-control" id="editor1" name="email_message" rows="10" cols="80">
-                <?php 
-             $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
-              $signt_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-              echo $signt_row['sender_signature'];
-              ?>
+               
                     </textarea>
                      
               </div>

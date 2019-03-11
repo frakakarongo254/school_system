@@ -67,19 +67,11 @@
           </a>
         </li>
         
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-graduation-cap"></i>
-            <span>Student</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+         <li>
+          <a href="student.php">
+            <i class="fa fa-graduation-cap"></i> <span>Student</span>
+           
           </a>
-          <ul class="treeview-menu">
-            <li><a href="student.php"><i class="fa fa-circle-o"></i> Manage student</a></li>
-            <li><a href="add_student.php"><i class="fa fa-plus"></i> Add Student</a></li>
-            
-          </ul>
         </li>
          <li>
           <a href="parent.php">
@@ -94,7 +86,7 @@
           </a>
         </li>
          <li>
-          <a href="#">
+          <a href="notification.php">
             <i class="fa fa-bell-o"></i> <span>Notification</span>
            
           </a>
@@ -112,7 +104,7 @@
              <li><a href="fee_structure.php"><i class="fa fa-circle-o"></i>Fee  Structure</a></li>
             <li><a href="invoice.php"><i class="fa fa-circle-o"></i> Invoice</a></li>
             <!--<li><a href="fee.php"><i class="fa fa-circle-o"></i>Fees</a></li>-->
-            <li><a href="#"><i class="fa fa-circle-o"></i> Transactions</a></li>
+            <li><a href="transaction.php"><i class="fa fa-circle-o"></i> Transactions</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Mpesa Payments</a></li>
             
           </ul>

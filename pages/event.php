@@ -3,6 +3,8 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
+ #get school Id from current session school id
+ $school_ID = $_SESSION['login_user_school_ID'];
 ?>
 
 <?php include("include/header.php")?>
@@ -118,39 +120,14 @@ if (!velifyLogin()) {
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
-      <div class="row box">
-         <div class="col-md-2 box-primary ">
-          <table id="" class="table table-bordered table-striped">
-                  <?php
-                  #get school Id from current session school id
-                  $school_ID = $_SESSION['login_user_school_ID'];
-                  $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID'")or
-                  die(mysqli_error());
-                  while ($event_row=mysqli_fetch_array($event_query)){
-                  $eventID=$event_row['event_ID'];
-
-                  echo' <tr>
-
-                    <td ><b>'.
-                   $event_row["event_title"].'</b>
-                   </td>
-                  <td>
-                  <a data-toggle="modal" data-target="#edit_event_Modal" href="#" id="'.$eventID.'" onclick="editEventFunc(this.id)"><span class="pull- badge bg-secondary"><i class="fa fa-pencil"></i> </span></a>
-                  <a data-toggle="modal" data-target="#delete_event_Modal" href="#" id="'.$eventID.'" onclick="deleteEventFunc(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> </span></a>
-                  </td>
-                         
-                  </tr>';
-                  }
-                  ?>
-               
-                </table>
-         </div>
-        <div class="col-md-10">
+      <div class="row ">
+         <div class="col-md-"></div>
+        <div class="col-md-12" style="padding-left:30px;padding-right:30px;">
           <div class="box">
             <div class="box-header">
              <div class="row">
               
-              <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
+              <div class="col-md- col-pull-right " style="text-align:right;padding-right: 30px;"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
             </div>
             </div>
             
@@ -164,7 +141,65 @@ if (!velifyLogin()) {
           </div>
           <!-- /.box -->
         </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-"></div>
+      </div>
+      <div class="row ">
+          <div class="col-md-12 box "  style="padding-left:30px;padding-right:30px;">
+            <br>
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                  <th>title</th>
+                  <th>Location</th>
+                  <th>Start time</th>
+                  <th>End time</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                  
+                </tr>
+                </thead>
+                <tbody>
+            <?php
+          
+            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID'")or
+            die(mysqli_error());
+            while ($event_row=mysqli_fetch_array($event_query)){
+             $eventID=$event_row['event_ID'];
+             $start=$event_row["event_startime"];
+              $event_startime = date("d-m-Y", strtotime($start));
+              $end=$event_row["event_endtime"];
+              $event_endtime = date("d-m-Y", strtotime($end));
+            echo' <tr>
+
+              <td >'.
+             $event_row['event_title'].'
+             </td>
+            <td>'.$event_row["event_location"].'</td>
+            <td>'.$event_startime.'</td>
+            <td>'.$event_endtime.'</td>
+            <td>'.$event_row["event_description"].'</td>
+            <td>
+            <a data-toggle="modal" data-target="#edit_event_Modal" href="#" id="'.$eventID.'" onclick="editEventFunc(this.id)"><span class="pull- badge bg-secondary"><i class="fa fa-pencil"></i> </span></a>
+            <a data-toggle="modal" data-target="#delete_event_Modal" href="#" id="'.$eventID.'" onclick="deleteEventFunc(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> </span></a>
+            </td>
+                   
+            </tr>';
+            }
+            ?>
+          </tbody>
+                <tfoot>
+                <tr>
+                  <tr>
+                  <th>title</th>
+                  <th>Location</th>
+                  <th>Start time</th>
+                  <th>End time</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+                </tfoot>
+              </table>
+         </div>
       </div>
     <!--- add Event Modal -->
       <div class="modal fade" id="modal-addEvent">
@@ -197,7 +232,7 @@ if (!velifyLogin()) {
           <br>
            <div class="row">
             <div class=" col-md- input-group input-group-">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+              <span class="input-group-addon">Start <i class="glyphicon glyphicon-time"></i></span>
               <input type="date" name="event_startime"  id="datepicker" class="form-control"   placeholder="Starting Time" required>
             </div>
           </div>
@@ -205,7 +240,7 @@ if (!velifyLogin()) {
           <br>
            <div class="row">
             <div class=" col-md- input-group input-group-">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+              <span class="input-group-addon">End <i class="glyphicon glyphicon-time"></i></span>
               <input type="date" name="event_endtime"  class="form-control"   placeholder="Ending time" required>
             </div>
           </div>
@@ -369,7 +404,13 @@ if (!velifyLogin()) {
 <!-- iCheck 1.0.1 -->
 <script src="../plugins/iCheck/icheck.min.js"></script>
 
+<script src="../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- FastClick -->
+<!-- include script-->
+<?php //include("include/script.php")?>
 <!-- page script -->
+
 <script>
   $(function () {
 
@@ -575,6 +616,20 @@ if (!velifyLogin()) {
       showInputs: false
     })
   })
+</script>
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+
 </script>
 </body>
 </html>

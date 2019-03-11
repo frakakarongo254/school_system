@@ -5,10 +5,15 @@
   header('location: ../index.php');
 
 }
+include("include/header.php");
 
   $event_id = $_POST['event_id'];
   $query_event_details = mysqli_query($conn,"select * from `event` where `event_ID` = '".$event_id."'  and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
      $rows_event = mysqli_fetch_array( $query_event_details,MYSQLI_ASSOC);
+     $start=$rows_event["event_startime"];
+      $event_startime = date("d-m-Y", strtotime($start));
+      $end=$rows_event["event_endtime"];
+      $event_endtime = date("d-m-Y", strtotime($end));
 echo '<form  action="event.php" method="POST">
            <div class="row">
             <div class=" col-md- input-group input-group-">
@@ -28,7 +33,7 @@ echo '<form  action="event.php" method="POST">
            <div class="row">
             <div class=" col-md- input-group input-group-">
               <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              <input type="date" name="edit_event_startime"  id="datepicker" class="form-control"  value="'.$rows_event['event_startime'].'" placeholder="Starting Time" required>
+              <input type="date" name="edit_event_startime"   class="form-control"  value="'.$event_startime.'"  required>
             </div>
           </div>
            
@@ -36,7 +41,7 @@ echo '<form  action="event.php" method="POST">
            <div class="row">
             <div class=" col-md- input-group input-group-">
               <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              <input type="date" name="edit_event_endtime"  value="'.$rows_event['event_endtime'].'"  class="form-control"  placeholder="Ending time" required>
+              <input type="date" name="edit_event_endtime"  value="'.$event_endtime.'"  class="form-control"   required>
             </div>
           </div>
           <br>
@@ -57,9 +62,10 @@ echo '<form  action="event.php" method="POST">
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="editEventBtn" class="btn btn-primary">Add Event</button>
+                <button type="submit" name="editEventBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>
              </form>';
+             include("include/script.php");
 ?>
  

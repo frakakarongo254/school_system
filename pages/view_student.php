@@ -8,7 +8,16 @@ $student_ID="";
 if(isset($_GET['id'])){
   $student_ID =$_GET['id'];
 }
-
+ #get mile stone details from db
+$sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' LIMIT 1 ");
+ $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
+ $milestone_ID1=$row02['milestone_ID'];
+ $milestone_title1=$row02['title'];
+ $effective_date1=$row02['effective_date'];
+ $anticipated_date1=$row02['anticipated_date'];
+ $milestone_attempt_allowed1 =$row02['attempt_allowed'];
+ $milestone_official_desc1=$row02['description'];
+ $milestone_status1=$row02['status'];
 ?>
 
 <?php include("include/header.php")?>
@@ -141,8 +150,7 @@ if(isset($_GET['id'])){
 #edit document
 if(isset($_POST['editDocumentBtn'])){
 
-  #get school Id from current session school id
-  $school_ID = $_SESSION['login_user_school_ID'];
+ 
   $edit_document_title=$_POST['edit_document_title'];
   $edit_document_id=$_POST['edit_document_id'];
   $edit_document_desc=$_POST['edit_document_desc'];
@@ -235,6 +243,102 @@ if(isset($_POST['editDocumentBtn'])){
   }
 
 }
+
+#add milestone
+if(isset($_POST['saveMilestone']))  
+{  
+ 
+$milestone_effective_date=$_POST['milestone_effective_date'];
+$milestone_anticipated_date=$_POST['milestone_anticipated_date'];  
+$milestone_official_desc=$_POST['milestone_official_desc'];
+$milestone_title=$_POST['milestone_title'];
+$milestone_attempt_allowed=$_POST['milestone_attempt_allowed'];
+$milestone_status=$_POST['milestone_status'];
+
+$sql022 = mysqli_query($conn,"select * from `milestone` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' ");
+$row022 = mysqli_fetch_array($sql022 ,MYSQLI_ASSOC);
+$count= mysqli_num_rows($row022);
+if ($count > 0) {
+          $delete_query=mysqli_query($conn,"DELETE FROM milestone_levels WHERE `milestone_ID`='".$milestone_ID1."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
+          if ($delete_query) {
+          $que=mysqli_query($conn,"update `milestone` SET title='".$milestone_title."', effective_date= '".$milestone_effective_date."',description='".$milestone_official_desc."',anticipated_date='".$milestone_anticipated_date."',status='".$milestone_status."',attempt_allowed='".$milestone_attempt_allowed."' where `milestone_ID`='".$milestone_ID1."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+           
+             
+              if($que){
+
+             // $id=mysqli_insert_id($conn);  
+              for($i = 0; $i<count($_POST['milestone_level']); $i++){ 
+                $query1=mysqli_query($conn,"INSERT INTO milestone_levels  
+                        SET   
+                        milestone_ID = '{$milestone_ID1}',  
+                        milestone_level = '{$_POST['milestone_level'][$i]}',  
+                        description = '{$_POST['description'][$i]}',  
+                        formal_description = '{$_POST['formal_description'][$i]}',  
+                        school_ID = '{$school_ID}',
+                        student_ID = '{$student_ID}'"); 
+
+                  echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>'; 
+              } 
+              if($query1){
+              echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>'; 
+              }
+
+              }else{
+              echo' <div class="alert alert-warning alert-dismissable">
+              <button type="button" class="close" data-dismiss="alert"
+              aria-hidden="true">
+              &times;
+              </button>
+              Sorry! Something went wrong.Please try again.
+              </div>'; 
+              } 
+
+
+
+            
+
+
+
+          }else{
+          echo "failed";
+          }
+}else{
+$que=mysqli_query($conn,"insert into `milestone` (student_ID,school_ID, title,description,effective_date,anticipated_date,status,attempt_allowed
+        ) 
+        values('$student_ID','$school_ID','$milestone_title','$milestone_official_desc','$milestone_effective_date','$milestone_anticipated_date','$milestone_status','$milestone_attempt_allowed') ");
+if($que){
+  
+ $id=mysqli_insert_id($conn);  
+for($i = 0; $i<count($_POST['milestone_level']); $i++)  
+{  
+$query1=mysqli_query($conn,"INSERT INTO milestone_levels  
+SET   
+milestone_ID = '{$id}',  
+milestone_level = '{$_POST['milestone_level'][$i]}',  
+description = '{$_POST['description'][$i]}',  
+formal_description = '{$_POST['formal_description'][$i]}',  
+school_ID = '{$school_ID}',
+student_ID = '{$student_ID}'"); 
+
+echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>'; 
+} 
+ if($query1){
+  echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>';
+  //echo "inserted"; 
+ }
+
+}else{
+   echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+} 
+
+}   
+}    
           ?>
 </div>
 </div>
@@ -260,19 +364,26 @@ if(isset($_POST['editDocumentBtn'])){
               }
           ?>
           <!-- Profile Image -->
+          <section>
+             <b class="pull-" style="font-size: 20px">Student</b>
+          </section>
           <div class="box box-primary ">
             <div class="box-body box-profile">
               <div class="row">
-                <div class="col-md-6 ">
-                 <b class="pull-left" style="font-size: 20px">Student</b>
-                  <div class="pull-right">
+                <div class="col-md-3 ">
+                  <div class="pull-left">
+                   
                    <?php echo $image;?>
 
-              <h3 class="profile-username text-center"><?php echo $row['first_Name'] ." ". $row['last_Name'];?></h3>
+              
             </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <table>
+                    <tr>
+                    <td><span style="font-size: 17px">Name:</span></td>
+                    <td><h3 class="profile-username "><b><?php echo $row['first_Name'] ." ". $row['last_Name'];?></b></h3></td>
+                  </tr>
                   <tr>
                     <td><span style="font-size: 17px">Adm:</span></td>
                     <td><b><?php echo $row['registration_No']?></b></td>
@@ -287,12 +398,53 @@ if(isset($_POST['editDocumentBtn'])){
                   </tr>
                   <tr>
                     <td><span>Date of Birth:</span></td>
-                    <td><b><?php echo $row['date_of_Birth']?></b></td>
+                    <td><b><?php  $date=$row['date_of_Birth']; echo date("d-m-Y", strtotime($date))?></b></td>
                   </tr>
                   <tr>
                     <td><span>Admission Date:</span></td>
-                    <td><b><?php echo $row['admission_date']?></b></td>
+                    <td><b><?php $ad_date=$row['admission_date']; echo date("d-m-Y", strtotime($ad_date))?></b></td>
                   </tr>
+                 </table>
+                </div>
+                <div class="col-md-4">
+                  <table>
+                    
+                  <tr>
+                    <td><span style="font-size: 17px">Total invoiced:</span></td>
+                    <td>
+                      <?php
+                       $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                               die(mysqli_error());
+                               $total_invoiced=0.00;
+                               while ($row011=mysqli_fetch_array($query2)){
+                                        $total_invoiced= $total_invoiced + $row011['amount'];
+                               }
+                              echo $total_invoiced;
+                               ?>
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span>Amount Paid:</span></td>
+                    <td>
+                      <?php
+                       $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                               die(mysqli_error());
+                               $total_amount_paid=0.00;
+                               while ($row011=mysqli_fetch_array($query2)){
+                                         $total_amount_paid=  $total_amount_paid + $row011['amount_paid'];
+                               }
+                              echo  $total_amount_paid;
+                               ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span>Balance:</span></td>
+                    <td>
+                      <b><?php echo $total_invoiced - $total_amount_paid;?></b>
+                    </td>
+                  </tr>
+                  
                  </table>
                 </div>
               </div>
@@ -321,7 +473,7 @@ if(isset($_POST['editDocumentBtn'])){
                   <li><a href="#tab_2" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Parents</a></li>
                   <li><a href="#tab_3" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Documents</a></li>
                    <li><a href="#tab_4" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Statement</a></li>
-                    <li><a href="#tab_5" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Marks</a></li>
+                    <li><a href="#tab_5" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Milestone</a></li>
                        <li><a href="#tab_6" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
                 </ul>
                 <div class="tab-content">
@@ -517,6 +669,7 @@ if(isset($_POST['editDocumentBtn'])){
                          <table id="table11" class="table table-bordered table-striped">
                             <thead>
                             <tr>
+                              <th>Reff</th>
                               <th>Date</th>
                               <th>Invoiced</th>
                               <th>Paid</th>
@@ -559,41 +712,42 @@ if(isset($_POST['editDocumentBtn'])){
                               
                                 }*/
                                                                                    
-$result=mysqli_query($conn,"select i.invoice_ID,i.balance,i.invoice_date,i.amount,ifnull(sum(p.amount_paid),0) as paid,i.amount-ifnull(sum(amount),0) as due
-from invoice i
-left join payment p
-on p.invoice_ID=i.invoice_ID
-where i.student_ID='$student_ID'
-group by i.invoice_ID
-order by i.invoice_ID");
-$total_invoiced=0.00;
-$total_paid=0.00;
-$total_balance=0.00;
-while($rows = $result->fetch_assoc()) {
-$total_invoiced=$total_invoiced + $rows["amount"];
-$total_paid=$total_paid + $rows["paid"];
-$total_balance=$total_balance + $rows["balance"];
-$invoive_date= $rows['invoice_date'];
-$newDate = date("d-m-Y", strtotime($invoive_date));
-  $due;
-  if ($rows["due"]< 0) {
-    $due=0.00;
-  }else{
-    $due=$rows["due"];
-  }
- echo '<tr>
- <td> '.$newDate.'</td>
- <td> '.$rows["amount"].'</td>
- <td> '.$rows["paid"].'</td>
- <td> '.$rows["balance"].'</td>
- </tr>';
-}                        
-echo'<tr>
-  <td><b>TOTAL<b></td>
-   <td><b>'.$total_invoiced.'</b></td>
-   <td><b>'.$total_paid.'</b></td>
-   <td><b>'.$total_balance.'</b></td>
-<tr>'
+                        $result=mysqli_query($conn,"select i.invoice_ID,i.balance,i.reff_no,i.invoice_date,i.amount,ifnull(sum(p.amount_paid),0) as paid,i.amount-ifnull(sum(amount),0) as due
+                        from invoice i
+                        left join payment p
+                        on p.invoice_ID=i.invoice_ID
+                        where i.student_ID='$student_ID'
+                        group by i.invoice_ID
+                        order by i.invoice_ID");
+                        $total_invoiced=0.00;
+                        $total_paid=0.00;
+                        $total_balance=0.00;
+                        while($rows = $result->fetch_assoc()) {
+                        $total_invoiced=$total_invoiced + $rows["amount"];
+                        $total_paid=$total_paid + $rows["paid"];
+                        $total_balance=$total_balance + $rows["balance"];
+                        $invoive_date= $rows['invoice_date'];
+                        $newDate = date("d-m-Y", strtotime($invoive_date));
+                        $due;
+                        if ($rows["due"]< 0) {
+                          $due=0.00;
+                        }else{
+                          $due=$rows["due"];
+                        }
+                        echo '<tr>
+                        <td> <a href="view_invoice.php?invoice='.$rows["invoice_ID"].'"> '.$rows["reff_no"].' </a></td>
+                        <td> '.$newDate.'</td>
+                        <td> '.$rows["amount"].'</td>
+                        <td> '.$rows["paid"].'</td>
+                        <td> '.$rows["balance"].'</td>
+                        </tr>';
+                        }                        
+                        echo'<tr>
+                        <td colspan="2"><b>TOTAL<b></td>
+                         <td><b>'.$total_invoiced.'</b></td>
+                         <td><b>'.$total_paid.'</b></td>
+                         <td><b>'.$total_balance.'</b></td>
+                        <tr>'
 
                               ?>
                            
@@ -609,7 +763,160 @@ echo'<tr>
                         </div>
                     </div>
                     <div class="tab-pane" id="tab_5">
-                      eewewrrre
+                          <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                              <li class="active"><a href="#add_milestone1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Milestone</a></li>
+                             <!-- <li><a href="#milestone_process" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Advisor</a></li>
+                              <li><a href="printMilestone.php?student_ID=<?php //echo$student_ID ?>&milestone_ID=<?php //echo $milestone_ID1?>"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;"><i class="fa fa-print"></i>Print</a></li>-->
+                              
+                               
+                          </ul>
+                          <div class="tab-content">
+                              <div class="tab-pane active" id="add_milestone">
+                                    <form  name="fileinfo" action="view_student.php?id=<?php echo $student_ID?>" method="POST" enctype="multipart/form-data">
+                                            <div class="row">
+                                              <div class=" col-md-4 mb-3">
+                                                <div class="form-group ">
+                                                      <label>Effective Date:</label>
+                                              
+                                                <input type="date" name="milestone_effective_date" value="<?php echo $effective_date1?>" class="form-control"   placeholder="" required>
+                                              </div>
+                                              </div>
+                                              <div class=" col-md-4 mb-3">
+                                               <div class="form-group has-feedback input-group-">
+                                                      <label>Milestone title :</label>
+                                              
+                                                            
+                                                <input type="text" name="milestone_title"  class="form-control"   placeholder="milestone title"  value="<?php echo $milestone_title1?>"required>
+                                                 
+                                              </div>
+                                              </div>  
+                                              <div class=" col-md-4 mb-3">
+                                               <div class="form-group ">
+                                                      <label>Official description :</label>
+                                              
+                                                <input type="text" name="milestone_official_desc"  class="form-control"   value="<?php echo $milestone_official_desc1?>" placeholder="Official description" required>
+                                            
+                                              </div>
+                                              </div>           
+                                            </div>
+                                            <br>
+                                            
+                                           
+                                           
+                                             <div class="row">
+                                              <div class="col-md-4">
+                                               
+                                              <div class="form-group ">
+                                                      <label>Anticipated Date:</label>
+                                                             
+                                               <input type="date" min="0" class="form-control" name="milestone_anticipated_date" value="<?php echo $anticipated_date1?>">
+                                           
+                                              </div>
+                                            </div>
+                                              <div class="col-md-4">
+                                               
+                                              <div class="form-group ">
+                                                      <label>Attempt Allowed:</label>
+                                                          <?php echo $milestone_attempt_allowed1?>   
+                                               <input type="number" min="0" class="form-control" name="milestone_attempt_allowed" value="<?php echo $milestone_attempt_allowed1?>">
+                                           
+                                              </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                               
+                                              <div class="form-group ">
+                                                      <label>Status :</label>
+                                                          
+                                               <select class="form-control select2" name="milestone_status" style="width: 100%">
+                                                <option value="<?php  echo $milestone_status1 ?>"><?php  echo $milestone_status1 ?></option>
+                                                 <option value="Active">Active</option>
+                                                 <option value="Inactive">Inactive</option>
+                                               </select>
+                                           
+                                              </div>
+                                            </div>
+                                          
+                                          </div>
+                                          <div class="row">
+                                            <div class="col-md-12">
+                                                <table class="table table-bordered table-hover" id="tab_logic">
+                                                  <thead>
+                                                    <tr>
+                                                      
+                                                      <th class="text-center"> Milestone level </th>
+                                                      <th class="text-center"> Description </th>
+                                                      <th class="text-center"> Formal Description </th>
+                                                      
+                                                    </tr>
+                                                  </thead>
+                                                    <tbody>
+                                                        <?php
+                                                     
+                                                      
+                                                       $query2 = mysqli_query($conn,"select * from milestone_levels where milestone_ID='$milestone_ID1' and school_ID = '$school_ID' ")or
+                                                       die(mysqli_error());
+                                                       while ($row2=mysqli_fetch_array($query2)){
+                                                       $milestone_level_ID= $row2['milestone_level_ID'];
+                                                       $milestoneID= $row2['milestone_ID'];
+                                                       
+                                                      
+                                                   echo'<tr >
+                                                        
+                                                        <td>
+                                                        <input type="text" name="milestone_level[]" placeholder="Milestone level" class="form-control qty" value="'.$row2['milestone_level'].'"/>
+                                                        </td>
+                                                        <td>
+                                                        <input type="text" name="description[]" placeholder="Description" class="form-control qty" value="'.$row2['description'].'"/>
+                                                        </td>
+                                                        <td>
+                                                        <input type="text" name="formal_description[]" placeholder="Formal Description" class="form-control price" value="'.$row2['formal_description'].'"/>
+                                                        </td>
+                                                       <td>';
+                                                       echo'  
+                                                         <button type="button" id="'.$milestone_level_ID.'" class="btn btn-danger btn-flat"  onclick="deleteMilestone_level(this.id)" ><span class="glyphicon glyphicon-trash"></span></button>
+                                                       </td>
+                                                    </tr>';
+
+                                                       }
+                                                      
+                                                    
+                                                      ?>
+                                                    <tr id='addr0'>
+                                                      <td class="hidden">1</td>
+                                                      <td><input type="text" name="milestone_level[]" placeholder="Milestone level" class="form-control qty"step="0" min="0"/></td>
+                                                      <td><input type="text" name="description[]" placeholder="Description" class="form-control qty" /></td>
+                                                      <td><input type="text" name="formal_description[]" placeholder='Formal Description' class="form-control price" /></td>
+                                                      
+                                                    </tr>
+                                                    <tr id='addr1'></tr>
+                                                  </tbody>
+                                                </table>  
+                                            </div>
+                                          </div>
+                                          <div class="row ">
+                                            <div class="col-md-12">
+                                            <div class="col-md-1">
+                                               <button id="" class="btn btn-success pull-" name="saveMilestone" required> Save</button>
+                                             
+                                           </div>
+                                         </form>
+                                           <div class="col-md-1">
+                                              <button id="add_row" class="btn btn-default pull-">Add Row</button>
+                                             </div>
+                                             <div class="col-md-1">
+                                              <button id='delete_row' class="pull- btn btn-">Delete Row</button>
+                                            </div>
+                                          </div>
+                                          </div>
+                                           
+                              </div>
+                              <div class="tab-pane" id="milestone_process">
+                              jjjjj
+                              </div>
+
+                            </div>
+                          </div>
                     </div>
                     <div class="tab-pane" id="tab_6">
                       bcaacnanc
@@ -800,6 +1107,29 @@ echo'<tr>
 
 <!-- include script-->
 <?php include("include/script.php")?>
+<script >
+  //delete invoice item function
+  function  deleteMilestone_level(milestone_level_id){
+    alert(milestone_level_id);
+  //var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
+  //alert(id);
+  var details= '&milestone_level_id='+ milestone_level_id;
+  $.ajax({
+  type: "POST",
+  url: "delete_milestone_level.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    window.location='view_student.php?id=<?php echo $student_ID ?>' ;
+   
+  
+
+  }
+
+
+  });
+  }
+</script>
 <!-- page script -->
 <script>
   $(function () {
@@ -883,7 +1213,7 @@ echo'<tr>
   cache: false,
   success: function(data) {
     if(data=='success'){
-      alert(data);
+      //alert(data);
  window.location="view_student.php?id=<?php echo $student_ID?>&delete=True" 
     }else{
       alert(data);
@@ -892,6 +1222,60 @@ echo'<tr>
   }
   });
   }
+</script>
+
+<script >
+ $(document).ready(function(){
+    var i=1;
+    $("#add_row").click(function(){b=i-1;
+        $('#addr'+i).html($('#addr'+b).html()).find('td:first-child').html(i+1);
+        $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+        i++; 
+    });
+    $("#delete_row").click(function(){
+        if(i>1){
+        $("#addr"+(i-1)).html('');
+        i--;
+        }
+        calc();
+    });
+    
+    $('#tab_logic tbody').on('keyup change',function(){
+        calc();
+    });
+    $('#tax').on('keyup change',function(){
+        calc_total();
+    });
+    
+
+});
+
+function calc()
+{
+    $('#tab_logic tbody tr').each(function(i, element) {
+        var html = $(this).html();
+        if(html!='')
+        {
+            var qty = $(this).find('.qty').val();
+            var price = $(this).find('.price').val();
+            $(this).find('.total').val(qty*price);
+            
+            calc_total();
+        }
+    });
+}
+
+function calc_total()
+{
+    total=0;
+    $('.total').each(function() {
+        total += parseInt($(this).val());
+    });
+    $('#sub_total').val(total.toFixed(2));
+    tax_sum=total/100*$('#tax').val();
+    $('#tax_amount').val(tax_sum.toFixed(2));
+    $('#total_amount').val((tax_sum+total).toFixed(2));
+}
 </script>
 </body>
 </html>

@@ -63,7 +63,7 @@
             //$uploadOk = 0;
             }else{
             $photo = addslashes(file_get_contents($_FILES['user_image']['tmp_name']));
-            $updateImage_query=mysqli_query($conn,"update `apparatus` SET photo= '".$photo."' where  `apparatus_ID`='".$_SESSION['login_user_ID']."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+            $updateImage_query=mysqli_query($conn,"update `admin` SET photo= '".$photo."' where  `admin_ID`='".$_SESSION['login_user_ID']."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
             if($updateImage_query){
             echo '<script> window.location="profile.php?update=True" </script>';
             }else{
@@ -83,7 +83,7 @@
           ?>
           <?php
           // $school_ID=$_SESSION['login_user_school_ID'];
-            $logedUser_data_sql = mysqli_query($conn,"select * from `apparatus` where `apparatus_ID` = '".$_SESSION['login_user_ID']."' and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+            $logedUser_data_sql = mysqli_query($conn,"select * from `admin` where `admin_ID` = '".$_SESSION['login_user_ID']."' and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
               
               $user_row = mysqli_fetch_array($logedUser_data_sql,MYSQLI_ASSOC);
             //  $user_row['school_Name'];

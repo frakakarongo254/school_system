@@ -28,7 +28,7 @@ echo '  <form  action="view_carricula.php?id='.$carricula_id.'" method="POST" >
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="editLevelBtn" class="btn btn-primary">Edit Level</button>
+                <button type="submit" name="editLevelBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>
               

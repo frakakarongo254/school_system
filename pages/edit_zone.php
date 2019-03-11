@@ -42,7 +42,7 @@ echo ' <form  action="zone.php" method="POST">
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="editZoneBtn" class="btn btn-primary">Edit Zone</button>
+                <button type="submit" name="editZoneBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>
              </form>';

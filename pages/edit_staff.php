@@ -65,7 +65,7 @@ echo '  <form  action="staff.php" method="POST" enctype="multipart/form-data">
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="editStaffBtn" class="btn btn-primary">Edit Staff</button>
+                <button type="submit" name="editStaffBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>
               

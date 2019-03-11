@@ -312,7 +312,7 @@ if (!velifyLogin()) {
                    <div class="form-group has-feedback input-group-">
                         <label>Comment:</label>
                  <div class=" col-md-12 input-group input-group">              
-                 <textarea class="form-control" value="<?php echo $rows_details['other_Details'];?>" name="edit_healthyComment" placeholder="Healthy comment" required></textarea>
+                 <textarea class="form-control" name="edit_healthyComment" placeholder="Healthy comment" required><?php echo $rows_details['other_Details'];?></textarea>
                 </div>
                   </div>
                 </div>
@@ -346,7 +346,7 @@ if (!velifyLogin()) {
                <div class="row">
               <div class="col-md-9">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="editStudentBtn" class="btn btn-primary">Edit Student</button>
+                <button type="submit" name="editStudentBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>
              </form>

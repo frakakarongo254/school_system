@@ -18,7 +18,7 @@ echo ' <form id="fileinfo" name="" action="school_profile.php" method="POST" >
          
         </div>
           <div class="modal-footer">
-            <button type="submit" class="pull-left btn btn-primary" name="editStreamBtn" href="#">Edit Stream</button>
+            <button type="submit" class="pull-left btn btn-primary" name="editStreamBtn" href="#">Save Changes</button>
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
             
           </div>

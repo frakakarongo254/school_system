@@ -64,8 +64,7 @@
     <button type="button" class="close" data-dismiss="alert"
     aria-hidden="true">
     &times;
-    </button>
-     You have Registered successfully.
+    </button>You have registered  successfully.
     </div>';   
     } 
       if(isset($_POST['registerBtn'])){
@@ -86,25 +85,53 @@
         $schoolAddress=" ";
        }
       $registrationDate = date_create()->format('Y-m-d');
-       $random = substr(number_format(time() * rand(),0,'',''),0,10);
+       $authentication_key = substr(number_format(time() * rand(),0,'',''),0,10);
       $datetime = date_create()->format('Y-m-d H:i:s');
-       $school_ID= md5($random);
+       $school_ID= md5($authentication_key);
       if($pass1 == $pass2){
-      $result=mysqli_query($conn,"insert into `emailverify` (mailAddress, token, date_time) values('$email',
-      '$random','$datetime')");
-      if($result){
-      $query=mysqli_query($conn,"insert into `apparatus` (school_ID, first_name, second_name,email,password,registration_Date,phone,role) values('$school_ID',
-      '$FName','$SName','$email','$pass1','$registrationDate','$phone','Super Admin')");mysqli_query($conn,"insert into `school` (school_ID, school_Name,registration_Date,phone,address_1,email) values('$school_ID',
+         $query=mysqli_query($conn,"select * FROM `admin` where  `email`='".$email."'");
+         if($query->num_rows == 0){
+          $query=mysqli_query($conn,"insert into `admin` (school_ID, first_name, second_name,email,password,registration_Date,phone,role,authentication_key) values('$school_ID',
+      '$FName','$SName','$email','$pass1','$registrationDate','$phone','Super Admin','$authentication_key')");mysqli_query($conn,"insert into `school` (school_ID, school_Name,registration_Date,phone,address_1,email) values('$school_ID',
       '$schoolName','$registrationDate','$schoolPhone','$schoolAddress','$schoolEmail')");
       if($query){
-        echo '<script> window.location="register.php?insert=True" </script>';
-      }else{
-        echo "not inserted";
-      }
+       
+        echo "insered";
 
-      }else{
-      echo "Failed to insert";
+        $message = "Your Activation Code is ".$authentication_key."";
+        $to=$email;
+        $subject="Activation Code For Talkerscode.com";
+        $from = 'info@myschool.com';
+        $body='Your Activation Code is '.$authentication_key.' Please Click On This  <a href="verification.php?email='.$email.'&code='.$authentication_key.'"> link </a> to activate  your account.';
+        $headers = "From:".$from;
+        $send=0 ;//mail($to,$subject,$body,$headers);
+        if($send ==0){
+       // echo "An Activation Code Is Sent To You Check You Emails";
+         echo '<script> window.location="register.php?insert=True" </script>';
       }
+      }else{
+        echo' <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert"
+            aria-hidden="true">
+            &times;
+            </button>
+            Please try again.
+            </div>';
+        
+      }
+         }else{
+            echo' <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert"
+            aria-hidden="true">
+            &times;
+            </button>
+            That email is alredy registered.
+            </div>';
+         }
+     
+      
+
+      
 
       }else{
         echo "Password Mismatch";
@@ -141,9 +168,10 @@
                  
                 </div>
                 <div class="form-group has-feedback">
-                  <input type="text" name="nationality" class="form-control" placeholder="Nationality">
-                  <span class="glyphicon glyphicon-flag form-control-feedback"></span>
                  
+                 <select class="form-control select2" name="nationality" style="width: 100%;">
+                  <?php  include("pages/include/nationality.php");?>
+                 </select>
                 </div>
                 <div class="form-group has-feedback">
                   <input type="email" name="email" class="form-control" placeholder="Email">

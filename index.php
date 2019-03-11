@@ -1,4 +1,4 @@
-<?php include('config.php');?>
+<?php @ob_start(); include('config.php');?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +40,7 @@
      if(isset($_POST['SignIn']) and !empty($_POST['email']) and !empty($_POST['password'])){
        $email = mysqli_real_escape_string($conn,$_POST['email']);
        $password = mysqli_real_escape_string($conn,$_POST['password']);
-       $query=mysqli_query($conn,"select * FROM `apparatus` where `password`='".$password."' && `email`='".$email."'");
+       $query=mysqli_query($conn,"select * FROM `admin` where `password`='".$password."' && `email`='".$email."'");
          if($query->num_rows > 0){
           while($row = $query->fetch_assoc()){
             $email=$row['email'];
@@ -91,7 +91,7 @@
    
     <!-- /.social-auth-links -->
 
-    <a href="#">I forgot my password</a><br>
+    <a href="forgot_password.php">I forgot my password</a><br>
     <a href="register.php" class="text-center">Register a new school</a>
 
   </div>
