@@ -71,7 +71,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
          <div class="col-md-2 box-primary ">
         <span class="fa fa-gear"></span><b class="color-primary" >  Fee Structure</b>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="vote_head.php"><i class="fa fa-arrow-circle-right"></i> Vote Head</a></li>
+                <li><a href="fee_structure.php"><i class="fa fa-arrow-circle-right"></i> Vote Head</a></li>
                 <li><a href="#"><i class="fa fa-arrow-circle-right"></i>Fee Structure</a></li>
                   <li><a href="paymentMode.php"><i class="fa fa-arrow-circle-right"></i>Payment Mode</a></li>
               </ul>
@@ -101,7 +101,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
           ) 
           values('$school_ID','$vote_head_name') ");
               if($votehead_insert_query){
-              echo '<script> window.location="fee_structure.php?insert=true" </script>';
+              echo '<script> window.location="vote_head.php?insert=true" </script>';
               }else{
               echo' <div class="alert alert-warning alert-dismissable">
               <button type="button" class="close" data-dismiss="alert"
@@ -114,29 +114,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
            }
           }
 
-            # edit carricula
-        if(isset($_POST['editCarruculaBtn'])){
-        #get school Id from current session school id
-        $school_ID = $_SESSION['login_user_school_ID'];
-        $edit_carricula_name=$_POST['edit_carricula_name'];
-        $edit_carricula_code=$_POST['edit_carricula_code'];
-        $edit_carricula_id=$_POST['edit_carricula_id']; # from hidden input in edit form
         
-        $update_carri_query=mysqli_query($conn,"update `carricula` SET name= '".$edit_carricula_name."', code= '".$edit_carricula_code."' where `carricula_ID`='".$edit_carricula_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
-
-
-        if($update_carri_query){
-        echo '<script> window.location="school_carricula.php?update=True" </script>';
-        }else{
-        echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-        }
-        }
 
           ?>
          
@@ -178,7 +156,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                             
                            echo'   
 
-                             <button type="button" id="'.$votehead_row['vote_head_ID'].'" class="btn btn-danger btn-flat" value="'.$votehead_row['name'].'" onclick="deleteVoteHead(this.id,this.value)" data-toggle="modal"  data-target="#delete_carricula_Modal"><span class="glyphicon glyphicon-trash"></span>   Delete</button>
+                             <button type="button" id="'.$votehead_row['vote_head_ID'].'" class="btn btn-danger btn-flat" value="'.$votehead_row['name'].'" onclick="deleteVoteHead(this.id,this.value)" data-toggle="modal"  data-target="#delete_voteHead_Modal"><span class="glyphicon glyphicon-trash"></span>   Delete</button>
                            </td>
                          </tr>';
 
@@ -214,7 +192,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
             </button>
           </div>
           <div class="modal-body">
-          <form  action="fee_structure.php" method="POST" enctype="multipart/form-data">
+          <form  action="vote_head.php" method="POST" enctype="multipart/form-data">
         
             
             <div class="form-group">   
@@ -237,57 +215,9 @@ $school_ID = $_SESSION['login_user_school_ID'];
       
         </div>
 
-         <!-- edit carricula Modal-->
-    <div class="modal  fade" id="edit_carricula_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><b>Edit Carricula</b></h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-            <script >
-             
-               function editCarricula(carricula_id){ 
-                  if(carricula_id !=''){
-                    var details= '&carricula_id='+ carricula_id ;
-                    $.ajax({
-                    type: "POST",
-                    url: "edit_carricula.php",
-                    data: details,
-                    cache: false,
-                    success: function(data) {
-                     
-                      document.getElementById("editMessage").innerHTML=data;
-                   
-
-                    }
-
-                    });
-                   
-                  }else{
-                   document.getElementById("editMessage").innerHTML=' You have Not Yet selected a Class';
-                  }
-                 
-                
-                }
-            </script>
-          
-          <div id="editMessage"></div>
-
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-     </div>
+  
      <!-- delete carricula  Modal-->
-    <div class="modal  fade" id="delete_carricula_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal  fade" id="delete_voteHead_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -298,11 +228,11 @@ $school_ID = $_SESSION['login_user_school_ID'];
           </div>
           <div class="modal-body">
             <script >
-               function deleteCarricula(id,name){
+               function deleteVoteHead(voteHead_id,voteHead_name){
                   
-                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + name + '  </b>from the system?'
+                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + voteHead_name + '  </b>from the system?'
                 var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="class.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="deleteCarriculaFromSystem(this.id)">Delete</button></form></div>';
+                updiv.innerHTML ='<form method="POST" action="class.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ voteHead_id +'" type="submit" data-dismiss="modal" onclick="deleteVoteHeadFromSystem(this.id)">Delete</button></form></div>';
                 }
             </script>
           
@@ -369,19 +299,19 @@ $school_ID = $_SESSION['login_user_school_ID'];
 <!-- include script-->
 <?php include("include/script.php")?>
 <script >
-  function deleteCarriculaFromSystem(carricula_id){
-  alert(carricula_id);
-  var details= '&carricula_id='+ carricula_id;
+  function deleteVoteHeadFromSystem(voteHead_id){
+  //alert(voteHead_id);
+  var details= '&voteHead_id='+ voteHead_id;
   $.ajax({
   type: "POST",
-  url: "delete_carricula.php",
+  url: "delete_voteHead.php",
   data: details,
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="school_carricula.php?delete=True" 
+ window.location="vote_head.php?delete=True" 
     }else{
-      alert("OOp! Could not delete the Zone.Please try again!");
+      alert("OOp! Could not delete.Please try again!");
     }
   
   }

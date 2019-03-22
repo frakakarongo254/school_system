@@ -101,7 +101,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-             <li><a href="fee_structure.php"><i class="fa fa-circle-o"></i>Fee  Structure</a></li>
+             <li><a href="vote_head.php"><i class="fa fa-circle-o"></i>Finance settings</a></li>
             <li><a href="invoice.php"><i class="fa fa-circle-o"></i> Invoice</a></li>
             <!--<li><a href="fee.php"><i class="fa fa-circle-o"></i>Fees</a></li>-->
             <li><a href="transaction.php"><i class="fa fa-circle-o"></i> Transactions</a></li>

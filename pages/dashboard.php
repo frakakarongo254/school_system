@@ -4,7 +4,8 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
-include("include/header.php")
+include("include/header.php");
+include("include/fusioncharts.php");
 ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -112,7 +113,77 @@ include("include/header.php")
         <!-- ./col -->
       </div>
       <!-- /.row -->
+   <div class="row">
+     <div class="col-md-12">
+          <?php
+// This is a simple example on how to draw a chart using FusionCharts and PHP.
+// We have included includes/fusioncharts.php, which contains functions
+// to help us easily embed the charts.
+/* Include the `fusioncharts.php` file that contains functions  to embed the charts. */
 
+  //include("fusioncharts.php");
+
+/* The following 4 code lines contain the database connection information. Alternatively, you can move these code lines to a separate file and include the file here. You can also modify this code based on your database connection. */
+
+
+
+  // Form the SQL query that returns the top 10 most populous countries
+ // $strQuery = "SELECT product_name, available_quantity FROM product ORDER BY available_quantity DESC LIMIT 10";
+  //$result=mysqli_query($condb,"SELECT product_name, available_quantity FROM product ORDER BY available_quantity ");
+$result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student GROUP BY `class_ID`");
+  // Execute the query, or else return the error message.
+ // $result = $dbhandle->query($strQuery) or exit("Error code ({$dbhandle->errno}): {$dbhandle->error}");
+
+  // If the query returns a valid response, prepare the JSON string
+  if ($result) {
+    // The `$arrData` array holds the chart attributes and data
+    $arrData = array(
+      "chart" => array(
+          "caption" => "ANIMAL STOCK DETAILS CHART",
+          "paletteColors" => "#0075c2",
+          "bgColor" => "#ffffff",
+          "borderAlpha"=> "20",
+          "canvasBorderAlpha"=> "0",
+          "usePlotGradientColor"=> "0",
+          "plotBorderAlpha"=> "10",
+          "showXAxisLine"=> "1",
+          "xAxisLineColor" => "#999999",
+          "showValues" => "0",
+          "divlineColor" => "#999999",
+          "divLineIsDashed" => "1",
+          "showAlternateHGridColor" => "0"
+        )
+    );
+
+    $arrData["data"] = array();
+
+    // Push the data into the array
+    while($row = mysqli_fetch_array($result)) {
+      array_push($arrData["data"], array(
+          "label" => $row["class_ID"],
+          "value" => $row["count"]
+          )
+      );
+    }
+
+    /*JSON Encode the data to retrieve the string containing the JSON representation of the data in the array. */
+
+    $jsonEncodedData = json_encode($arrData);
+
+    /*Create an object for the column chart using the FusionCharts PHP class constructor. Syntax for the constructor is ` FusionCharts("type of chart", "unique chart id", width of the chart, height of the chart, "div id to render the chart", "data format", "data source")`. Because we are using JSON data to render the chart, the data format will be `json`. The variable `$jsonEncodeData` holds all the JSON data for the chart, and will be passed as the value for the data source parameter of the constructor.*/
+
+    $columnChart = new FusionCharts("column2D", "myFirstChart" , 600, 300, "chart-2", "json", $jsonEncodedData);
+
+    // Render the chart
+    $columnChart->render();
+
+    // Close the database connection
+   // $dbhandle->close();
+  } ?>
+  
+  <div id="chart-2"><!-- FusionCharts will render here--></div>
+     </div>
+   </div>
     
       
        

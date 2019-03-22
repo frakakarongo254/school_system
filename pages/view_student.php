@@ -643,7 +643,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
 
                                       
 
-                                        <a href="document/'.$document_name.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#"><button type="button"  class="btn btn-success btn-flat" id="'.$document_name.'" onclick="viewDoc(this.id)" data-toggle="modal" data-target="#modal-document"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
                                          <button type="button"  class="btn btn-danger btn-flat" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
 
@@ -1082,6 +1082,30 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
       </div>
     </div>
      </div>
+
+
+    <div class="modal fade" id="modal-document">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div id="pdf12">kkk</div>
+        <script >
+           function viewDoc(document_name){
+            alert("testing");
+            alert(document_name);
+            var updiv = document.getElementById("pdf12"); 
+              updiv.innerHTML ='hhjjjjjjjj <object type="application/pdf" data="document/'+$document_name+'" width="100%" height="500" style="height: 85vh;">No Support</object>';
+           }
+        </script>
+         
+        
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
     </section>
     <!-- /.content -->
   </div>

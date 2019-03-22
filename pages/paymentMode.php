@@ -71,37 +71,37 @@ $school_ID = $_SESSION['login_user_school_ID'];
          <div class="col-md-2 box-primary ">
         <span class="fa fa-gear"></span><b class="color-primary" >  Fee Structure</b>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="vote_head.php"><i class="fa fa-arrow-circle-right"></i> Vote Head</a></li>
+                <li><a href="fee_structure.php"><i class="fa fa-arrow-circle-right"></i> Vote Head</a></li>
                 <li><a href="#"><i class="fa fa-arrow-circle-right"></i>Fee Structure</a></li>
-                  <li><a href="paymentMode.php"><i class="fa fa-arrow-circle-right"></i>Payment Mode</a></li>
+                 <li><a href="paymentMode.php"><i class="fa fa-arrow-circle-right"></i>Payment Mode</a></li>
               </ul>
          </div>
        
          <div class="col-md-10  ">
           <?php
           #Add school carricula
-          if (isset($_POST['addVoteHeadBtn'])) {
+          if (isset($_POST['addpaymentMode'])) {
            
-            $vote_head_name=$_POST['vote_head_name'];
+            $paymentMode=$_POST['paymentMode'];
            
            #check if such carricula already exist
-            $votehead_data_sql = mysqli_query($conn,"select * from `vote_head` where `name` = '".$vote_head_name."' and `school_ID` = '".$school_ID."' ");
-            $votehead_row=mysqli_num_rows ( $votehead_data_sql);
-            if ($votehead_row !=0) {
+            $mode_data_sql = mysqli_query($conn,"select * from `payment_mode` where `mode_name` = '".$paymentMode."' and `school_ID` = '".$school_ID."' ");
+            $mode_row=mysqli_num_rows ( $mode_data_sql);
+            if ($mode_row !==0) {
               echo' <div class="alert alert-warning alert-dismissable">
               <button type="button" class="close" data-dismiss="alert"
               aria-hidden="true">
               &times;
               </button>
-              Such Vote head already exist.
+              Such Mode already exist.
               </div>'; 
             }else{
 
-             $votehead_insert_query=mysqli_query($conn,"insert into `vote_head` (school_ID, name
+             $votehead_insert_query=mysqli_query($conn,"insert into `payment_mode` (school_ID, mode_name
           ) 
-          values('$school_ID','$vote_head_name') ");
+          values('$school_ID','$paymentMode') ");
               if($votehead_insert_query){
-              echo '<script> window.location="fee_structure.php?insert=true" </script>';
+              echo '<script> window.location="paymentMode.php?insert=true" </script>';
               }else{
               echo' <div class="alert alert-warning alert-dismissable">
               <button type="button" class="close" data-dismiss="alert"
@@ -114,29 +114,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
            }
           }
 
-            # edit carricula
-        if(isset($_POST['editCarruculaBtn'])){
-        #get school Id from current session school id
-        $school_ID = $_SESSION['login_user_school_ID'];
-        $edit_carricula_name=$_POST['edit_carricula_name'];
-        $edit_carricula_code=$_POST['edit_carricula_code'];
-        $edit_carricula_id=$_POST['edit_carricula_id']; # from hidden input in edit form
-        
-        $update_carri_query=mysqli_query($conn,"update `carricula` SET name= '".$edit_carricula_name."', code= '".$edit_carricula_code."' where `carricula_ID`='".$edit_carricula_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
-
-
-        if($update_carri_query){
-        echo '<script> window.location="school_carricula.php?update=True" </script>';
-        }else{
-        echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-        }
-        }
+      
 
           ?>
          
@@ -146,7 +124,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
               <div class="row">
                 <div class="col-md-12  ">
                  <div class="" style="text-align: center;">
-                  <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-addCarrucula"><i class="fa fa-plus"></i><b> Add Vote Head</b></a>
+                  <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-addCarrucula"><i class="fa fa-plus"></i><b> Add Payment Mode</b></a>
                  
             </div>
               </div>
@@ -155,30 +133,30 @@ $school_ID = $_SESSION['login_user_school_ID'];
              
                  <div class="row">
                    <div class="col-md-12">
-                      <table id="example1" class="table table-bordered table-striped">
+                 <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Vote head</th>
+                  <th>Payment Mode</th>
                   <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                    <?php
                  
-                   $head_query = mysqli_query($conn,"select * from vote_head where school_ID = '$school_ID'")or
+                   $mode_query = mysqli_query($conn,"select * from payment_mode where school_ID = '$school_ID'")or
                    die(mysqli_error());    
                      
-                   while ($votehead_row=mysqli_fetch_array($head_query)){
-                         $votehead_row_ID= $votehead_row['vote_head_ID']; 
+                   while ($mode_row=mysqli_fetch_array($mode_query)){
+                         $mode_row_ID= $mode_row['paymentMode_ID']; 
                     echo" <tr>
                           
-                            <td>".$votehead_row['name']."</td>
+                            <td>".$mode_row['mode_name']."</td>
                             
                             <td>";
                             
                            echo'   
 
-                             <button type="button" id="'.$votehead_row['vote_head_ID'].'" class="btn btn-danger btn-flat" value="'.$votehead_row['name'].'" onclick="deleteVoteHead(this.id,this.value)" data-toggle="modal"  data-target="#delete_carricula_Modal"><span class="glyphicon glyphicon-trash"></span>   Delete</button>
+                             <button type="button" id="'.$mode_row['paymentMode_ID'].'" class="btn btn-danger btn-flat"  onclick="deletePaymentMode(this.id)" ><span class="glyphicon glyphicon-trash"></span>   Delete</button>
                            </td>
                          </tr>';
 
@@ -190,7 +168,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                  </tbody>
                 <tfoot>
                 <tr>
-                   <th>Vote head</th>
+                   <th>Payment Mode</th>
                   <th>Actions</th>
                 </tr>
                 </tfoot>
@@ -208,24 +186,24 @@ $school_ID = $_SESSION['login_user_school_ID'];
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
           <div class="modal-header btn-default">
-            <center><h5 class="modal-title" id="exampleModalLabel "><i class="fa fa-plus"></i>   <b>  Vote Head</b></h5></center>
+            <center><h5 class="modal-title" id="exampleModalLabel "><i class="fa fa-plus"></i>   <b>  PAYMENT MODE</b></h5></center>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
-          <form  action="fee_structure.php" method="POST" enctype="multipart/form-data">
+          <form  action="paymentMode.php" method="POST" enctype="multipart/form-data">
         
             
             <div class="form-group">   
-              <label for="nationality">Vote Head:</label>
-                <input type="text" class="form-control" name="vote_head_name" placeholder="eg. Boarding Fees, Exam Fees">  
+              <label for="nationality">Payment Mode:</label>
+                <input type="text" class="form-control" name="paymentMode" placeholder="eg. MPESA,CHEQUE,KCB ">  
             </div>
              
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="addVoteHeadBtn" class="btn btn-primary">Add Vote Head</button>
+                <button type="submit" name="addpaymentMode" class="btn btn-primary">SAVE</button>
               </div>
               </div>
               
@@ -291,7 +269,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete Carricula</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete Head vote</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -369,17 +347,17 @@ $school_ID = $_SESSION['login_user_school_ID'];
 <!-- include script-->
 <?php include("include/script.php")?>
 <script >
-  function deleteCarriculaFromSystem(carricula_id){
-  alert(carricula_id);
-  var details= '&carricula_id='+ carricula_id;
+  function deletePaymentMode(paymentMode_id){
+  alert(paymentMode_id);
+  var details= '&paymentMode_id='+ paymentMode_id;
   $.ajax({
   type: "POST",
-  url: "delete_carricula.php",
+  url: "delete_paymentMode.php",
   data: details,
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="school_carricula.php?delete=True" 
+ window.location="paymentMode.php?delete=True" 
     }else{
       alert("OOp! Could not delete the Zone.Please try again!");
     }
