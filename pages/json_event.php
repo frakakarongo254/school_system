@@ -6,8 +6,8 @@ $events = array();
 foreach ($query_event as $row_event) {
     $events[] = array (
         'title' => $row_event['event_title'],
-        'start' => date('Y-m-d H:i:s', strtotime($row_event['event_startime'])),
-        'end' => date('Y-m-d H:i:s', strtotime($row_event['event_endtime'])),
+        'start' => date('Y-m-d H:i:s', strtotime($row_event['event_startDate'])),
+        'end' => date('Y-m-d H:i:s', strtotime($row_event['event_endDate'])),
         'backgroundColor'=>$row_event['event_color'], //yellow
         'borderColor'    => $row_event['event_color'] //yellow
     );

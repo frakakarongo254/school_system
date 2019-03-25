@@ -9,6 +9,21 @@ $get_parentID='';
 if(isset($_GET['id'])){
   $get_parentID =$_GET['id'];
 }
+#get parent detailss
+$user_ID=$_SESSION['login_user_ID'];
+$ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$get_parentID."' ");
+  $parent_row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
+  $parent_row['first_Name'];
+  $parent_email=$parent_row['email'];
+  $parent_phone=$parent_row['cell_Mobile_Phone'];
+   $image;
+ if($parent_row['photo'] !=''){
+  $image = '<img class=" profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $parent_row['photo'] ).'"  height="40px" width="40px" alt="User profile picture"/>';
+}else{
+    $image = "<img class=' profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' alt='User profile picture'>";
+  }
+
+
 
 ?>
 
@@ -97,7 +112,74 @@ if(isset($_GET['id'])){
             echo '<script> window.location="view_parent.php?id='.$recipient_ID.'&insert=email" </script>';
         }
       }   
+
+      #save Notification
+      if(isset($_POST['saveNotication'])){
+         $notification=$_POST['notificationMessage'];
+         #get email sender settings
+       $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` =
+        '".$_SESSION['login_user_school_ID']."' ");
+        $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+        $senderemail=$senderemail_row['sender_signature'];
+        $from=$senderemail_row['sender_email'];
+        $fromName=$senderemail_row['sender_name'];
+        $footer=$senderemail_row['sender_signature'];
+        $to= $parent_email;
+        $subject="Notification";
+        $msg=$notification;
+        $message=$msg ." <br>".  $senderemail;
+        $headers =  'MIME-Version: 1.0' . "\r\n"; 
+        $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
+        $sendNotification;
+  $datetime = date_create()->format('Y-m-d H:i:s');
+         if (isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail']) ) {
+          #send both emill and sms and save
+          
+          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date 
+          ) 
+          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+           if ($notification_query) {
+              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+           }
+         $sendNotification=mail($to,$subject,$message,$headers);
+           
+         }elseif (isset($_POST['natificationWithSMS']) and !isset($_POST['natificationWithEmail'])) {
+           # send sms only and save
+          //$sendNotification=mail($to,$subject,$message,$headers);
+          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date
+          ) 
+          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+           if ($notification_query) {
+              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+           }
+         $sendNotification=mail($to,$subject,$message,$headers);
+         }elseif (!isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail'])) {
+           # send email only and save
+           //$sendNotification=mail($to,$subject,$message,$headers);
+            $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date 
+          ) 
+          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+           if ($notification_query) {
+              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+           }
+           $sendNotification=mail($to,$subject,$message,$headers);
+           
+         }else{
+           $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date 
+          ) 
+          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+           if ($notification_query) {
+              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+           }
+         $sendNotification=mail($to,$subject,$message,$headers);
+
+         }
+
+
+      }
         ?>
+      
 
     </section>
     <!-- Main content -->
@@ -106,18 +188,7 @@ if(isset($_GET['id'])){
       <div class="row">
        
          <div class="col-md-12 ">
-          <?php
-          $user_ID=$_SESSION['login_user_ID'];
-            $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$get_parentID."' ");
-              $row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
-              $row['first_Name'];
-               $image;
-             if($row['photo'] !=''){
-              $image = '<img class=" profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"  height="40px" width="40px" alt="User profile picture"/>';
-            }else{
-                $image = "<img class=' profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' alt='User profile picture'>";
-              }
-          ?>
+         
           <!-- Profile Image -->
           <div class="box box-primary ">
             <div class="box-body box-profile">
@@ -134,23 +205,23 @@ if(isset($_GET['id'])){
                   <table>
                     <tr>
                     <td><span style="font-size: 17px">Name:</span></td>
-                    <td><h3 class="profile-username "><b><?php echo $row['first_Name'] ." ". $row['last_Name'];?></b></h3></td>
+                    <td><h3 class="profile-username "><b><?php echo $parent_row['first_Name'] ." ". $parent_row['last_Name'];?></b></h3></td>
                   </tr>
                   <tr>
                     <td><span style="font-size: 17px">Email:</span></td>
-                    <td><b><?php echo $row['email']?></b></td>
+                    <td><b><?php echo $parent_row['email']?></b></td>
                   </tr>
                   <tr>
                     <td><span>Phone:</span></td>
-                    <td><b><?php echo $row['cell_Mobile_Phone']?></b></td>
+                    <td><b><?php echo $parent_row['cell_Mobile_Phone']?></b></td>
                   </tr>
                   <tr>
                     <td><span>Nationality:</span></td>
-                    <td><b><?php echo $row['nationality']?></b></td>
+                    <td><b><?php echo $parent_row['nationality']?></b></td>
                   </tr>
                   <tr>
                     <td><span>Gender:</span></td>
-                    <td><b><?php echo $row['gender_MFU']?></b></td>
+                    <td><b><?php echo $parent_row['gender_MFU']?></b></td>
                   </tr>
                   
                  </table>
@@ -260,7 +331,7 @@ if(isset($_GET['id'])){
                   <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Children</a></li>
                   <li><a href="#tab_2" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Emails</a></li>
                   <li><a href="#tab_3" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Bills</a></li>
-                   
+                   <li><a href="#tab_4" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
@@ -423,7 +494,49 @@ if(isset($_GET['id'])){
                         </table>
                 
                     </div>
+                    <div class="tab-pane " id="tab_4">
+                      <div class="row">
+                        <div class="col-md-8"><b><h3>Notification</h3> </b></div>
+                        <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendNotification_Modal">
+                          <i class="fa fa-plus"></i><b> New Notification</b></a></div>
+                      </div>
+                      <table id="example1" class="table table-bordered table-striped">
+                          <thead>
+                          <tr>
+                             <th>Notification</th>
+                            
+                           
+                            <th>Date</th>
+                            
+                            
+                          </tr>
+                          </thead>
+                          <tbody>
+                             <?php
 
+                              $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' && recipient_ID='$get_parentID'");
+                             while ($notf_row=mysqli_fetch_array($notf_query)){
+                              $date=$notf_row['notification_date'];
+                                 $newDate = date("d-m-Y", strtotime( $date));
+                              echo '<tr>
+                                     
+                                   <td>'.$notf_row['notification_message'].'</td>
+                                   
+                                   <td>'.$newDate.'</td>
+                                  
+                                 </tr>';
+                               
+                             
+                             //echo $amt;
+                           }
+                         // echo $total_bill;
+                          
+                             ?>
+                         
+                           </tbody>
+                         
+                        </table>
+                    </div>
                   </div>
                 </div>
               
@@ -471,6 +584,59 @@ if(isset($_GET['id'])){
               </div>
               <button type="submit" name="sendEmail" class="btn btn-primary "><i class="fa fa-envelope-o"></i> Send</button>
              
+            </div>
+          </form>
+         
+
+        </div>
+          
+      </div>
+    </div>
+    <!--Notification-->
+     <div class="modal  fade" id="sendNotification_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Send Notification </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <form method="POST" action="view_parent.php?id=<?php echo $get_parentID?>">
+             
+              <div class="form-group">
+                    
+                      <textarea class="form-control" id="editor1" name="notificationMessage" rows="3" cols=""  >
+               
+                    </textarea>
+                     
+              </div>
+               <div class="form-group">
+                <label>
+                  <input type="checkbox" name="natificationWithSMS" class="flat-red" checked>
+                  SMS
+                </label>
+                <label>
+                  <input type="checkbox" name="notificationWithEmail" class="flat-red">
+                  Email
+                </label>
+                
+              </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+              <div class="row">
+                <div class="col-md-3">
+                  <button type="submit" name="saveNotication" class="btn btn-primary "><i class="fa fa-envelope-o"></i> Save</button>
+                </div>
+              <div class="col-md-2">
+               <button type="reset"  class="btn btn-danger "><i class="fa fa-"></i>Clear </button>
+                
+              </div>
+              
+           
+             </div>
             </div>
           </form>
          

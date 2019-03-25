@@ -3,6 +3,8 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
+#get school Id from current session school id
+$school_ID = $_SESSION['login_user_school_ID'];
 ?>
 
 <?php include("include/header.php")?>
@@ -86,8 +88,7 @@ if (!velifyLogin()) {
         # edit zone
         if(isset($_POST['editZoneBtn'])){
 
-        #get school Id from current session school id
-        $school_ID = $_SESSION['login_user_school_ID'];
+        
         $edit_zone_name=$_POST['edit_zone_name'];
         $edit_zone_id=$_POST['edit_zone_id'];
         $edit_oneWayCharge=$_POST['edit_oneWayCharge'];
@@ -120,57 +121,51 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Zone</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addZone"><i class="fa fa-plus"></i><b> New Zone</b></a></div>
+              <div class="col-md-8"><b><h3>Notification</h3> </b></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"></div>
             </div>
             </div>
             
             <!-- /.box-header -->
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                <tr>   
-                  <th>Zone</th>
-                  <th>One Way Charge</th>
-                  <th>Two Way Charge</th>
-                  <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                  <?php
-                   #get school Id from current session school id
-                   $school_ID = $_SESSION['login_user_school_ID'];
-                   $query4 = mysqli_query($conn,"select * from zone where school_ID = '$school_ID'")or
-                   die(mysqli_error());
-                   while ($row4=mysqli_fetch_array($query4)){
-                   $zone_ID=$row4['zone_ID'];
-                  echo" <tr>
-                          
-                            <td>".$row4['zone']."</td>
-                            <td>".$row4['oneWayCharge']."</td>
-                            <td>".$row4['twoWayCharge']."</td>
-                             
-                            <td>";
-                           echo'  
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$zone_ID.'" onclick="editZone(this.id)" data-toggle="modal"  data-target="#edit_zone_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                          <thead>
+                          <tr>
+                             <th>Notification</th>
+                            
+                           
+                            <th>Date</th>
+                            
+                            
+                          </tr>
+                          </thead>
+                          <tbody>
+                             <?php
 
-                             <button type="button" id="'.$row4['zone_ID'].'" class="btn btn-danger btn-flat" value="'.$row4['zone'].'" onclick="deleteZone(this.id,this.value)" data-toggle="modal"  data-target="#delete_zone_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                              
-                           </td>
-                         </tr>';
-                    }
-                  ?>
-               
-                 </tbody>
-                <tfoot>
-                 <tr>   
-                  <th>Zone</th>
-                  <th>One Way Charge</th>
-                  <th>Two Way Charge</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
-              </table>
+                              $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' ");
+                             while ($notf_row=mysqli_fetch_array($notf_query)){
+                              $date=$notf_row['notification_date'];
+                                 $newDate = date("d-m-Y", strtotime( $date));
+                              echo '<tr>
+                                     
+                                   <td>'.$notf_row['notification_message'].'</td>
+                                   
+                                   <td>'.$newDate.'</td>
+                                   
+                                  
+                                 </tr>';
+                               
+                             
+                             //echo $amt;
+                           }
+                         // echo $total_bill;
+                          
+                             ?>
+                         
+                           </tbody>
+                         
+                        </table>
             </div>
             <!-- /.box-body -->
           </div>

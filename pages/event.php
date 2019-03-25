@@ -52,6 +52,15 @@ if (!velifyLogin()) {
           Success! Event updated  successfully.
           </div>';   
         }
+        if(isset($_GET['event'])){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! Event was sent  successfully.
+          </div>';   
+        }
         if(isset($_GET['delete'])){
           echo' <div class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
@@ -67,13 +76,15 @@ if (!velifyLogin()) {
         $school_ID = $_SESSION['login_user_school_ID'];
         $event_title=$_POST['event_title'];
         $event_location=$_POST['event_location'];
+        $event_startDate=$_POST['event_startDate'];
         $event_startime=$_POST['event_startime'];
+        $event_endDate=$_POST['event_endDate'];
         $event_endtime=$_POST['event_endtime'];
         $event_description=$_POST['event_description'];
         $event_color=$_POST['event_color'];
-        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID, event_title,event_location,event_startime,event_endtime,event_description,event_color
+        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID, event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color
           ) 
-          values('$school_ID','$event_title','$event_location','$event_startime','$event_endtime','$event_description','$event_color') ");
+          values('$school_ID','$event_title','$event_location','$event_startDate','$event_startime','$event_endDate','$event_endtime','$event_description','$event_color') ");
         if($event_insert_query){
            echo '<script> window.location="event.php?insert=True" </script>';
           
@@ -96,10 +107,12 @@ if (!velifyLogin()) {
         $edit_event_title=$_POST['edit_event_title'];
         $edit_event_location=$_POST['edit_event_location'];
         $edit_event_startime=$_POST['edit_event_startime'];
-        $edit_event_endtime=$_POST['edit_event_endtime'];
+        $edit_event_startDate=$_POST['edit_event_startDate'];
+        $edit_event_endDate=$_POST['edit_event_endDate'];
+         $edit_event_endtime=$_POST['edit_event_endtime'];
         $edit_event_description=$_POST['edit_event_description'];
         $edit_event_color=$_POST['edit_event_color'];
-        $update_udate_query=mysqli_query($conn,"update `event` SET event_title= '".$edit_event_title."', event_location= '".$edit_event_location."',event_startime= '".$edit_event_startime."',event_endtime= '".$edit_event_endtime."' ,event_description= '".$edit_event_description."',event_color= '".$edit_event_color."' where `event_ID`='".$edit_event_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+        $update_udate_query=mysqli_query($conn,"update `event` SET event_title= '".$edit_event_title."', event_location= '".$edit_event_location."',event_startDate='".$edit_event_startDate."',event_startime= '".$edit_event_startime."',event_endDate='".$edit_event_endDate."',event_endtime= '".$edit_event_endtime."' ,event_description= '".$edit_event_description."',event_color= '".$edit_event_color."' where `event_ID`='".$edit_event_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
         if($update_udate_query){
            echo '<script> window.location="event.php?update=True" </script>';
@@ -151,8 +164,8 @@ if (!velifyLogin()) {
                 <tr>
                   <th>title</th>
                   <th>Location</th>
-                  <th>Start time</th>
-                  <th>End time</th>
+                  <th>Start Date & time</th>
+                  <th>End Date  & time</th>
                   <th>Description</th>
                   <th>Action</th>
                   
@@ -161,24 +174,27 @@ if (!velifyLogin()) {
                 <tbody>
             <?php
           
-            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID'")or
+            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY event_startDate DESC, event_startime DESC")or
             die(mysqli_error());
             while ($event_row=mysqli_fetch_array($event_query)){
              $eventID=$event_row['event_ID'];
-             $start=$event_row["event_startime"];
-              $event_startime = date("d-m-Y", strtotime($start));
-              $end=$event_row["event_endtime"];
-              $event_endtime = date("d-m-Y", strtotime($end));
+             $start=$event_row["event_startDate"];
+              $event_startDate = date("d-m-Y", strtotime($start));
+              $event_starttime = $event_row['event_startime'];
+              $end=$event_row["event_endDate"];
+              $event_endDate= date("d-m-Y", strtotime($end));
+              $endtime=$event_row["event_endtime"];
             echo' <tr>
 
               <td >'.
              $event_row['event_title'].'
              </td>
             <td>'.$event_row["event_location"].'</td>
-            <td>'.$event_startime.'</td>
-            <td>'.$event_endtime.'</td>
+            <td>'.$event_startDate.'  '.$event_starttime.'</td>
+            <td>'.$event_endDate.'  '.$endtime.'</td>
             <td>'.$event_row["event_description"].'</td>
             <td>
+            <a data-toggle="modal" data-target="#view_event_Modal" href="#" id="'.$eventID.'" onclick="sendEventFunc(this.id)"><span class="pull- badge bg-success btn-success"><i class="fa fa-eye"></i> </span></a>
             <a data-toggle="modal" data-target="#edit_event_Modal" href="#" id="'.$eventID.'" onclick="editEventFunc(this.id)"><span class="pull- badge bg-secondary"><i class="fa fa-pencil"></i> </span></a>
             <a data-toggle="modal" data-target="#delete_event_Modal" href="#" id="'.$eventID.'" onclick="deleteEventFunc(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> </span></a>
             </td>
@@ -189,11 +205,10 @@ if (!velifyLogin()) {
           </tbody>
                 <tfoot>
                 <tr>
-                  <tr>
-                  <th>title</th>
+                 <th>title</th>
                   <th>Location</th>
-                  <th>Start time</th>
-                  <th>End time</th>
+                  <th>Start Date & time</th>
+                  <th>End Date  & time</th>
                   <th>Description</th>
                   <th>Action</th>
                 </tr>
@@ -203,7 +218,7 @@ if (!velifyLogin()) {
       </div>
     <!--- add Event Modal -->
       <div class="modal fade" id="modal-addEvent">
-          <div class="modal-dialog modal-sm">
+          <div class="modal-dialog modal-md">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -231,17 +246,38 @@ if (!velifyLogin()) {
           </div>
           <br>
            <div class="row">
-            <div class=" col-md- input-group input-group-">
-              <span class="input-group-addon">Start <i class="glyphicon glyphicon-time"></i></span>
-              <input type="date" name="event_startime"  id="datepicker" class="form-control"   placeholder="Starting Time" required>
+            <div class=" col-md-6">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">Start Date   <i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="date" name="event_startDate"  id="" class="form-control"   placeholder="Starting Time" required>
+            </div>
+          </div>
+          <div class="col-md-6 ">
+            <div class="input-group">
+                <span class="input-group-addon">Start Time:   <i class="glyphicon glyphicon-time"></i></span>
+                <input type="time" name="event_startime"  id="" class="form-control"   placeholder="Starting Time" required>
+                
+                
+              </div>
             </div>
           </div>
            
           <br>
-           <div class="row">
-            <div class=" col-md- input-group input-group-">
-              <span class="input-group-addon">End <i class="glyphicon glyphicon-time"></i></span>
-              <input type="date" name="event_endtime"  class="form-control"   placeholder="Ending time" required>
+           
+          <div class="row">
+            <div class=" col-md-6">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">End Date   <i class="glyphicon glyphicon-calendar"></i></span>
+             <input type="date" name="event_endDate"  class="form-control"   placeholder="Ending time" required>
+            </div>
+          </div>
+          <div class="col-md-6 ">
+            <div class="input-group">
+                <span class="input-group-addon">End Time:   <i class="glyphicon glyphicon-time"></i></span>
+                <input type="time" name="event_endtime"  id="" class="form-control"   placeholder="Starting Time" required>
+                
+                
+              </div>
             </div>
           </div>
           <br>
@@ -310,7 +346,7 @@ if (!velifyLogin()) {
 
     <!-- edit Event Modal-->
     <div class="modal  fade" id="edit_event_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel"><b>Edit Event</b></h5>
@@ -350,6 +386,42 @@ if (!velifyLogin()) {
             </script>
           
           <div id="eventMessage"></div>
+
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     </div>
+
+     <!-- view Event Modal-->
+    <div class="modal  fade" id="view_event_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"><b>Email Event</b></h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="nav-tabs-custom">
+              <div class="tab-content">
+               <div id="eventmsg"></div>
+            <script >
+             
+               function sendEventFunc(id){ 
+                 //alert(id);
+                   document.getElementById("eventmsg").innerHTML=' Are you sure you want to Email this event to parents'
+                var updiv = document.getElementById("eventfoot"); //document.getElementById("highodds-details");
+                updiv.innerHTML ='<form method="POST" action="event.php"><div class="modal-footer"><button class="btn btn-primary pull-left" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="emailEventToParent(this.id)">Email to Parent</button><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button></form></div>';
+                
+                
+                
+                }
+            </script>
+          
+          <div id="eventfoot"></div>
 
         </div>
           </div>
@@ -529,6 +601,28 @@ if (!velifyLogin()) {
 </script>
 
 <script >
+  // Email events to parents
+  function emailEventToParent(event_id){
+  alert(event_id);
+  var details= '&event_id='+ event_id;
+  $.ajax({
+  type: "POST",
+  url: "email_event_to_parent.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    alert(data);
+    if(data=='success'){
+ window.location="event.php?event=True" 
+    }else{
+      alert("OOp! Could not delete the class.Please try again!");
+    }
+  
+  }
+
+  });
+  }
+
   // Delete event
   function deleteEventFromSystem(event_id){
   //alert(id);

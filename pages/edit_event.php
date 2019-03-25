@@ -10,10 +10,12 @@ include("include/header.php");
   $event_id = $_POST['event_id'];
   $query_event_details = mysqli_query($conn,"select * from `event` where `event_ID` = '".$event_id."'  and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
      $rows_event = mysqli_fetch_array( $query_event_details,MYSQLI_ASSOC);
-     $start=$rows_event["event_startime"];
-      $event_startime = date("d-m-Y", strtotime($start));
-      $end=$rows_event["event_endtime"];
-      $event_endtime = date("d-m-Y", strtotime($end));
+      $event_startDate=$rows_event["event_startDate"];
+      //$event_startDate = date("d-m-Y", strtotime($start));
+      $event_starttime = $rows_event["event_startime"];
+      $event_endDate=$rows_event["event_endDate"];
+      //$event_endDate = date("d-m-Y", strtotime($end));
+      $event_endtime = $rows_event["event_startime"];
 echo '<form  action="event.php" method="POST">
            <div class="row">
             <div class=" col-md- input-group input-group-">
@@ -30,18 +32,39 @@ echo '<form  action="event.php" method="POST">
             </div>
           </div>
           <br>
+          
            <div class="row">
-            <div class=" col-md- input-group input-group-">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              <input type="date" name="edit_event_startime"   class="form-control"  value="'.$event_startime.'"  required>
+            <div class=" col-md-6">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">Start Date   <i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="date" name="edit_event_startDate"  id="" class="form-control"   placeholder="Starting Time" value="'.$event_startDate.'" required>
             </div>
           </div>
-           
+          <div class="col-md-6 ">
+            <div class="input-group">
+                <span class="input-group-addon">Start Time:   <i class="glyphicon glyphicon-time"></i></span>
+                <input type="time" name="edit_event_startime"  id="" value="'.$event_starttime.'" class="form-control"   placeholder="Starting Time" required>
+                
+                
+              </div>
+            </div>
+          </div>
           <br>
-           <div class="row">
-            <div class=" col-md- input-group input-group-">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-              <input type="date" name="edit_event_endtime"  value="'.$event_endtime.'"  class="form-control"   required>
+           
+          <div class="row">
+            <div class=" col-md-6">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">End Date   <i class="glyphicon glyphicon-calendar"></i></span>
+             <input type="date" name="edit_event_endDate"  class="form-control" value="'.$event_endDate.'" placeholder="Ending time" required>
+            </div>
+          </div>
+          <div class="col-md-6 ">
+            <div class="input-group">
+                <span class="input-group-addon">End Time:   <i class="glyphicon glyphicon-time"></i></span>
+                <input type="time" name="edit_event_endtime"  id="" class="form-control"   placeholder="Starting Time" value="'.$event_endtime.'" required>
+                
+                
+              </div>
             </div>
           </div>
           <br>

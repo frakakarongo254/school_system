@@ -139,7 +139,7 @@ $result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student 
     // The `$arrData` array holds the chart attributes and data
     $arrData = array(
       "chart" => array(
-          "caption" => "",
+          "caption" => "ANIMAL STOCK DETAILS CHART",
           "paletteColors" => "#0075c2",
           "bgColor" => "#ffffff",
           "borderAlpha"=> "20",
