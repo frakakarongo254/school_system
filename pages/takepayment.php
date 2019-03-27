@@ -85,10 +85,22 @@ echo '<form  action="invoice.php" method="POST">
             <input type="date" name="payment_date"    class="form-control"  placeholder="payment date" >
             </div>
            <div class="col-md-6">
+           <lable><b class="pull-center">Payment Method:</b></lable>
+               <select class="form-control select1" name="payment_mode">';
+               $query3 = mysqli_query($conn,"select * from payment_mode where  school_ID = '$school_ID' ")or
+        die(mysqli_error());
+        while ($row3=mysqli_fetch_array($query3)){
+           echo '<option value="'.$row3['mode_name'].'">'.$row3['mode_name'].'</option>';
+        }
+             echo  '</select>
+            </div>
+          </div>
+          </div>
+          <div class="row">
+          <div class="col-md-6">
            <lable><b class="pull-center">Remarks:</b></lable>
                <textarea class="form-control" name="payment_remarks"></textarea>
             </div>
-          </div>
           </div>
           <br>
           

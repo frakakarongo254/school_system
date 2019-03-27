@@ -135,7 +135,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                             
                            
                             <th>Date</th>
-                            
+                            <th>Action</th>
                             
                           </tr>
                           </thead>
@@ -145,6 +145,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                              
                               $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' ");
                              while ($notf_row=mysqli_fetch_array($notf_query)){
+                              $notification_id=$notf_row['notification_ID'];
                               $date=$notf_row['notification_date'];
                                  $newDate = date("d-m-Y", strtotime( $date));
                               echo '<tr>
@@ -152,7 +153,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                                    <td>'.$notf_row['notification_message'].'</td>
                                    
                                    <td>'.$newDate.'</td>
-                                   
+                                   <td><a   href="#" id="'.$notification_id.'" onclick="deleteNotificationFromSystem(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> Delete <span> </a></td>
                                   
                                  </tr>';
                                
@@ -356,17 +357,17 @@ $school_ID = $_SESSION['login_user_school_ID'];
 </script>
 
 <script >
-  function deleteZoneFromSystem(zone_id){
-  alert(zone_id);
-  var details= '&zone_id='+ zone_id;
+  function deleteNotificationFromSystem(notification_id){
+  //alert(notification_id);
+  var details= '&notification_id='+ notification_id;
   $.ajax({
   type: "POST",
-  url: "delete_zone.php",
+  url: "delete_notification.php",
   data: details,
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="zone.php?delete=True" 
+ window.location="notification.php?delete=True" 
     }else{
       alert("OOp! Could not delete the Zone.Please try again!");
     }

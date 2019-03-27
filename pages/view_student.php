@@ -474,7 +474,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                   <li><a href="#tab_3" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Documents</a></li>
                    <li><a href="#tab_4" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Statement</a></li>
                     <li><a href="#tab_5" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Milestone</a></li>
-                       <li><a href="#tab_6" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
+                       
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">

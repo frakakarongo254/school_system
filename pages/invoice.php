@@ -69,6 +69,7 @@ if (!velifyLogin()) {
          $slip_no=$_POST['slip_no'];
          $payment_date=$_POST['payment_date'];
          $payment_remarks=$_POST['payment_remarks'];
+         $payment_mode=$_POST['payment_mode'];
          $new_balance;
          if ($amount_paid >= $balance ) {
            $new_balance= 0.00;
@@ -76,9 +77,9 @@ if (!velifyLogin()) {
           $new_balance= $balance - $amount_paid;
          }
 
-          $payment_query=mysqli_query($conn,"insert into `payment` (school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date
+          $payment_query=mysqli_query($conn,"insert into `payment` (school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date,payment_mode
           ) 
-          values('$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date') ");
+          values('$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date','$payment_mode') ");
 
         
         if($payment_query){
@@ -106,7 +107,7 @@ if (!velifyLogin()) {
     <section class="content">
    
         <!-- Custom Tabs -->
-           <div class="box">
+           <div class="box" style="padding-left: 20px;padding-right:20px">
             <br>
           <div class="row">
               <div class="col-md-8"><b><h3>INVOICES</h3> </b></div>
@@ -269,28 +270,6 @@ if (!velifyLogin()) {
 
 </script>
 
-<script >
-  
- 
-  function takepayment(invoice_id){
-   //alert(invoice_id);
-  var details= '&invoice_id='+ invoice_id;
-  $.ajax({
-  type: "POST",
-  url: "takepayment.php",
-  data: details,
-  cache: false,
-  success: function(data) {
-    if(data=='success'){
-      alert(data);
- window.location="view_student.php?id=<?php echo $student_ID?>&delete=True" 
-    }else{
-      alert(data);
-      alert("OOp! Could not delete the student.Please try again!");
-    }
-  }
-  });
-  }
-</script>
+
 </body>
 </html>

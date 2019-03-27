@@ -92,7 +92,7 @@
     <!-- /.social-auth-links -->
 
     <a href="forgot_password.php">I forgot my password</a><br>
-    <a href="register.php" class="text-center">Register a new school</a>
+    <a href="register.php" class="text-center">Register  new school</a>
 
   </div>
   <!-- /.login-box-body -->

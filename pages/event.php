@@ -603,7 +603,7 @@ if (!velifyLogin()) {
 <script >
   // Email events to parents
   function emailEventToParent(event_id){
-  alert(event_id);
+ // alert(event_id);
   var details= '&event_id='+ event_id;
   $.ajax({
   type: "POST",
@@ -615,7 +615,7 @@ if (!velifyLogin()) {
     if(data=='success'){
  window.location="event.php?event=True" 
     }else{
-      alert("OOp! Could not delete the class.Please try again!");
+      alert("OOp! Could not send Email.Please try again!");
     }
   
   }

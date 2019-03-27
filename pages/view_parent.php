@@ -507,7 +507,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                             
                            
                             <th>Date</th>
-                            
+                            <th>Action</th>
                             
                           </tr>
                           </thead>
@@ -516,6 +516,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
 
                               $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' && recipient_ID='$get_parentID'");
                              while ($notf_row=mysqli_fetch_array($notf_query)){
+                              $notification_id=$notf_row['notification_ID'];
                               $date=$notf_row['notification_date'];
                                  $newDate = date("d-m-Y", strtotime( $date));
                               echo '<tr>
@@ -523,7 +524,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                    <td>'.$notf_row['notification_message'].'</td>
                                    
                                    <td>'.$newDate.'</td>
-                                  
+                                  <td><a   href="#" id="'.$notification_id.'" onclick="deleteNotificationFromSystem(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> Delete <span> </a></td>
                                  </tr>';
                                
                              
@@ -719,6 +720,26 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
 
   }
 
+
+  });
+  }
+
+   function deleteNotificationFromSystem(notification_id){
+  alert(notification_id);
+  var details= '&notification_id='+ notification_id;
+  $.ajax({
+  type: "POST",
+  url: "delete_notification.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    if(data=='success'){
+ window.location="notification.php?delete=True" 
+    }else{
+      alert("OOp! Could not delete the Zone.Please try again!");
+    }
+  
+  }
 
   });
   }

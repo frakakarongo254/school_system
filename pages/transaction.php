@@ -106,7 +106,7 @@ if (!velifyLogin()) {
     <section class="content">
    
         <!-- Custom Tabs -->
-           <div class="box">
+           <div class="box" style="padding-right: 20px;padding-left: 20px">
             <br>
           <div class="row">
               <div class="col-md-8"><b><h3>PAYMENT</h3> </b></div>
@@ -164,6 +164,8 @@ if (!velifyLogin()) {
                                        echo' 
                                           <td>
                                          <button type="button"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+
+                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"></span></a>
 
                                          <button type="button"  class="btn btn-primary btn-flat" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
                                        </td>
