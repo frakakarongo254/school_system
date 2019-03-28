@@ -84,6 +84,7 @@ if (!velifyLogin()) {
         if($update_payment_query){
            $update_query=mysqli_query($conn,"update `invoice` SET amount_paid= '".$amount_paid."', balance= '".$new_balance."' where `invoice_ID`='".$invoice_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
            if ($update_query) {
+            //echo '<script>confirm("Print receipt")</script>';
              echo '<script> window.location="transaction.php?insert=True" </script>';
            }else{
 
@@ -117,7 +118,8 @@ if (!velifyLogin()) {
                             <thead>
                             <tr>
                               
-                              <th>Invoice Reff</th>
+                              <th>Invoice Ref</th>
+                              <th>Receipt No </th>
                               <th>Date</th>
                               <th>Name</th>
                               <th>Remark</th>
@@ -129,7 +131,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' ")or
+                               $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' ORDER BY payment_date DESC")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
@@ -153,7 +155,8 @@ if (!velifyLogin()) {
                                 echo' <tr>
                                    <td>   <a href="view_invoice.php?invoice='.$invoiceID.'"> '.$invoice_ref.' </a></td>';
 
-                                  echo " <td>".$newDate."</td>
+                                  echo " <td> ".$slipNo."</td>
+                                          <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['remarks']." </td>
                                         <td>".$row2['amount_paid']."</td>
@@ -165,7 +168,7 @@ if (!velifyLogin()) {
                                           <td>
                                          <button type="button"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"></span></a>
+                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"> View</span></a>
 
                                          <button type="button"  class="btn btn-primary btn-flat" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
                                        </td>

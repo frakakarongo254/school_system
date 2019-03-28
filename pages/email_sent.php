@@ -28,10 +28,18 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-      <h1>
-        
+      <?php
+        if(isset($_GET['delete'])){
+          echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! You have deleted  successfully.
+          </div>';   
+        }
        
-      </h1>
+      ?>
     
     </section>
     <!-- Main content -->
@@ -85,17 +93,18 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID'")or
+                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' ORDER BY email_ID  ASC")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];
-                   
+                   $date=$row1['date_sent'];
+                   $newDate = date("d-m-Y H:m:s", strtotime($date));
                   echo" <tr>
                            <a href='vew_email.php?id=".$emailID."'>
                             <td>".$row1['recipient']." </td>
                              <td>".$row1['email_subject']."</td> 
-                            <td>".$row1['date_sent']."</td>";
-                          echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a></td>
+                            <td>".$newDate."</td>";
+                          echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
                           
                          </tr>';
                     }

@@ -27,7 +27,9 @@
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
  
-
+#Generate automatic receipt number
+echo time();
+$receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
 
 
 echo '<form  action="invoice.php" method="POST">
@@ -74,7 +76,8 @@ echo '<form  action="invoice.php" method="POST">
             </div>
              <div class="col-md-6 ">
              <lable><b class="pull-center">SLIP NO:</b></lable>
-              <input type="text" name="slip_no"    class="form-control"  placeholder="SLIP NO" >
+              <input type="hidden" name="slip_no"  value="'.$receipt_No.'"  class="form-control"  placeholder="SLIP NO" >
+              <input type="text" name="slip_no"  value="'.$receipt_No.'"  class="form-control"  placeholder="SLIP NO" readonly>
              </div>
           </div>
           </div>
@@ -86,7 +89,7 @@ echo '<form  action="invoice.php" method="POST">
             </div>
            <div class="col-md-6">
            <lable><b class="pull-center">Payment Method:</b></lable>
-               <select class="form-control select1" name="payment_mode">';
+               <select class="form-control select1" name="payment_Mode">';
                $query3 = mysqli_query($conn,"select * from payment_mode where  school_ID = '$school_ID' ")or
         die(mysqli_error());
         while ($row3=mysqli_fetch_array($query3)){

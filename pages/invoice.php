@@ -62,14 +62,14 @@ if (!velifyLogin()) {
         }
        
        if (isset($_POST['paymentBtn'])) {
-         $invoice_id=$_POST['invoice_id'];
+       $invoice_id=$_POST['invoice_id'];
          $student_id=$_POST['student_id'];
          $balance=$_POST['amount_balance'];
          $amount_paid=$_POST['amount_paid'];
          $slip_no=$_POST['slip_no'];
          $payment_date=$_POST['payment_date'];
          $payment_remarks=$_POST['payment_remarks'];
-         $payment_mode=$_POST['payment_mode'];
+         $payment_method=$_POST['payment_Mode'];
          $new_balance;
          if ($amount_paid >= $balance ) {
            $new_balance= 0.00;
@@ -77,9 +77,9 @@ if (!velifyLogin()) {
           $new_balance= $balance - $amount_paid;
          }
 
-          $payment_query=mysqli_query($conn,"insert into `payment` (school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date,payment_mode
+          $payment_query=mysqli_query($conn,"insert into `payment` (school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date,payment_method
           ) 
-          values('$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date','$payment_mode') ");
+          values('$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date','$payment_method') ");
 
         
         if($payment_query){
@@ -97,6 +97,8 @@ if (!velifyLogin()) {
         </div>'; 
            }
           
+       }else{
+        echo "Failed";
        }
 
 

@@ -184,14 +184,86 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
       <div class="row no-print">
         <div class="col-xs-12">
          
-          <a href="#" onclick="printPage('block1')"" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+          <a href="#" onclick="printPage('printDiv')"" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
         
          <!-- <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Generate PDF
           </button>-->
         </div>
       </div>
-    
+    <div id="printDiv" class="hidden">
+      <table  class="table "" style="width: 100%">
+        <thead>
+            <tr class="" >
+           
+            <th colspan="2">  <span class="pull-right">Date: <?php echo date('d-m-Y ')?></span> </th>
+            
+            </tr>
+            </thead>
+        <tbody>
+         <tr>
+          <td>
+            <?php echo $logo ?><br>
+             From
+          <address>
+            <strong><?php echo $school_row['school_Name']?></strong><br>
+            Po. Box <?php echo $school_row['address_1']?><br>
+            Phone: <?php echo $school_row['phone']?><br>
+            Email: <?php echo $school_row['email']?><br>
+            Website:<?php echo $school_row['school_website']?>
+          </address>
+           
+          </td>
+          <td class="pull-right">
+            <div class="col-md-offset-">
+             
+              
+            <b style="font-size: 30px;">RECEIPT</b><br>
+          <b>Reference:</b> <?php echo $payment_slip_no;?><br>
+          <b>Invoice #</b><?php echo $invoice_ref ?><br>
+          <br>
+          <b>Issue Date::</b><?php echo $invoice_date ?><br>
+          <br>
+          <b>To:</b> <br>
+          <?php echo $studentName; ?><br>
+          Adm # <?php echo $admNo;?>
+        </div>
+        </td>
+        </tr>
+      </tbody>
+      </table>
+       <table class="table table-striped" style="width:100%">
+            <thead>
+            <tr>
+           
+            <th> Particular </th>
+            <th>Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+           <?php
+        #get school Id from current session school id
+
+      
+        echo' <tr>
+               
+                <td>Payment for Invoice ' .$invoice_ref. '
+             
+
+              
+               </td>
+               
+                <td>'.$amount_paid.'</td>  
+                
+             </tr>';
+
+       
+        ?>
+            </tbody>
+          </table>
+          <p class="lead">Payment Methods: <br><?php echo $payment_method;?></p>
+          
+    </div>
     </section>
   </div>
   <!-- /.content-wrapper -->
@@ -224,7 +296,7 @@ function printPage(id)
 
    html+="</html>";
 
-   var printWin = window.open('','','left=0,top=0,width=1,height=1,toolbar=0,scrollbars=0,status  =0');
+   var printWin = window.open('','','left=0,top=0,width=100px,height=100px,toolbar=0,scrollbars=0,status  =0');
    printWin.document.write(html);
    printWin.document.close();
    printWin.focus();

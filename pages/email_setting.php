@@ -171,15 +171,16 @@ if (!velifyLogin()) {
             <!-- /.box-header -->
             <div class="box-body">
               
-               <div class="direct-chat-text">
+               <div class="direct-">
                    <?php
                $send_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
               $send_row = mysqli_fetch_array($send_sql,MYSQLI_ASSOC);
-             echo ' <b>Name:'.$send_row['sender_name'].'</b><br>';
-             echo ' <b>Email:'.$send_row['sender_email'].'</b><br>';
+             echo ' <b>Name:  </b>' .$send_row['sender_name'].'<br><br>';
+             echo ' <b> Email:  </b>' .$send_row['sender_email'].'<br>';
               ?>
               
             </div>
+            <br>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update_sender_Modal" id="" onclick="showLinkparentID(this.id)" > Update Sender</button>
             <!-- /.box-body -->
           </div>

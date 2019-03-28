@@ -37,8 +37,9 @@ if (!velifyLogin()) {
         $school_ID = $_SESSION['login_user_school_ID'];
         #get sender and signature from email setting table
          $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
-              $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-
+        $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+        $folder_path = 'document/';
+        $document="";
 
         $from=$senderemail_row['sender_email'];
         $fromName=$senderemail_row['sender_name'];
@@ -82,11 +83,13 @@ if (!velifyLogin()) {
             </div>
             <div class="box-body no-padding">
               <ul class="nav nav-pills nav-stacked">
-                <li><a href="#"><i class="fa fa-inbox"></i> Inbox
+                <li><a href="email_inbox.php"><i class="fa fa-inbox"></i> Inbox
                   <span class="label label-primary pull-right">12</span></a></li>
-                <li><a href="email_inbox.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
+                  <li><a href="email_compose.php"><i class="fa fa-pencil-square-o"></i> Compose</a></li>
+                <li><a href="email_sent.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
                 
-                <li><a href="#"><i class="fa fa-trash-o"></i> Trash</a></li>
+                <li><a href="email_setting.php"><i class="fa fa-gear"></i> Settings</a></li>
+                
               </ul>
             </div>
             <!-- /.box-body -->
@@ -131,7 +134,7 @@ if (!velifyLogin()) {
             <!-- /.box-body -->
             <div class="box-footer">
               <div class="pull-right">
-                <button type="button" class="btn btn-default"><i class="fa fa-pencil"></i> Draft</button>
+                
                 <button type="submit" name="sendEmail" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
               </div>
               <button type="reset" class="btn btn-default"><i class="fa fa-times"></i> Discard</button>
