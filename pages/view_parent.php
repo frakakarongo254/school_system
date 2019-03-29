@@ -388,9 +388,9 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           <tr>
                             <th>Img</th>
                             <th>Name</th>
-                            <th>Admin No</th>
+                            <th>Reg No</th>
+                            <th>Phone</th>
                             <th>Gender</th>
-                            <th>Status</th>
                             <th>Actions</th>
                           </tr>
                           </tfoot>
@@ -406,9 +406,9 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           <tr>
                             
                             <th>Subject</th>
-                            <th>Message</th>
-                            <th>Sent on</th>
                             
+                            <th>Sent on</th>
+                            <th>Action</th>
                           </tr>
                           </thead>
                           <tbody>
@@ -417,12 +417,13 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                die(mysqli_error());
                                
                                while ($row0=mysqli_fetch_array($query02)){
+                                $emailID=$row0['email_ID'];
                                 $date=$row0['date_sent'];
-                                  $datetime = date_create($date)->format('d-m-Y H:i:s');
+                                  $datetime = date_create($date)->format('d-m-Y ');
                                       echo ' <tr>
                                       <td>'.$row0['email_subject'].'</td>
-                                       <td>'.$row0['message'].'</td>
                                        <td>'. $datetime.'</td>
+                                       <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
                                        </tr>';
                                }
                              

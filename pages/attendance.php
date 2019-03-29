@@ -71,10 +71,10 @@ if (!velifyLogin()) {
         }
        if(isset($_POST['saveAttendanceBtn']))
  {
-
+   $class_ID= $_POST['classID'];
     foreach ($_POST['attendance_status'] as $id => $attendance_status)
     {   
-        $classID= $_POST['classID'][$id];
+        $classID= $class_ID;
         $student_id = $_POST['studentID'][$id];
         $student_name = $_POST['student_name'][$id];
         $date_created = date('Y-m-d H:i:s');
@@ -87,8 +87,8 @@ if (!velifyLogin()) {
     }
      
     if ($attendance) {
-     // echo  $msg = "Attendance has been added successfully";
-       echo '<script> window.location="attendance.php?insert=True" </script>';
+      echo  $msg = "Attendance has been added successfully";
+      // echo '<script> window.location="attendance.php?insert=True" </script>';
     }else{
        echo' <div class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"

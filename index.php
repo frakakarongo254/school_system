@@ -63,6 +63,7 @@
          }
        }
      ?>
+     <!--login form-->
     <form action="index.php" method="post">
       <div class="form-group has-feedback">
         <input type="email" class="form-control" name="email" placeholder="Email" required>

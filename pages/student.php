@@ -187,7 +187,7 @@ if (!velifyLogin()) {
     <section class="content">
    
         <!-- Custom Tabs -->
-          <div class="nav-tabs-custom">
+          <div class="nav-tabs-custom" style="padding-right: 20px;padding-left: 20px">
           <div class="row">
               <div class="col-md-8"><b><h3>Students</h3> </b></div>
               <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="add_student.php" ><i class="fa fa-plus"></i><b> New Student </b></a></div>
@@ -392,7 +392,7 @@ if (!velifyLogin()) {
                 });
                 }
   function deleteStudentFromSystem(RegNo){
-    alert(RegNo);
+   // alert(RegNo);
   var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
   //alert(id);
   var details= '&RegNo='+ RegNo;
