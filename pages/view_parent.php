@@ -73,6 +73,15 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
           Email was sent  successfully.
           </div>';   
         }
+         if(isset($_GET['cancel'])){
+          echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! You have canceled transaction  successfully.
+          </div>';   
+        }
 
         if(isset($_POST['sendEmail'])){
         
@@ -266,8 +275,8 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                     <td>
                       <?php
                        
-                                $total_amount_paid=0.00;
-                               $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                            $total_amount_paid=0.00;
+                            $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
                              die(mysqli_error());
                              while ($row_amount=mysqli_fetch_array($amount_query)){
                              $studentId = $row_amount['student_ID'];
@@ -331,6 +340,10 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                   <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Children</a></li>
                   <li><a href="#tab_2" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Emails</a></li>
                   <li><a href="#tab_3" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Bills</a></li>
+                  <li><a href="#tab_invoice" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Invoices</a></li>
+
+                  <li><a href="#tab_payment" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Payment</a></li>
+
                    <li><a href="#tab_4" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
                 </ul>
                 <div class="tab-content">
@@ -495,49 +508,202 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                         </table>
                 
                     </div>
-                    <div class="tab-pane " id="tab_4">
-                      <div class="row">
-                        <div class="col-md-8"><b><h3>Notification</h3> </b></div>
-                        <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendNotification_Modal">
-                          <i class="fa fa-plus"></i><b> New Notification</b></a></div>
-                      </div>
-                      <table id="example1" class="table table-bordered table-striped">
-                          <thead>
-                          <tr>
-                             <th>Notification</th>
-                            
-                           
-                            <th>Date</th>
-                            <th>Action</th>
-                            
-                          </tr>
-                          </thead>
-                          <tbody>
-                             <?php
-
-                              $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' && recipient_ID='$get_parentID'");
-                             while ($notf_row=mysqli_fetch_array($notf_query)){
-                              $notification_id=$notf_row['notification_ID'];
-                              $date=$notf_row['notification_date'];
-                                 $newDate = date("d-m-Y", strtotime( $date));
-                              echo '<tr>
-                                     
-                                   <td>'.$notf_row['notification_message'].'</td>
-                                   
-                                   <td>'.$newDate.'</td>
-                                  <td><a   href="#" id="'.$notification_id.'" onclick="deleteNotificationFromSystem(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> Delete <span> </a></td>
-                                 </tr>';
-                               
-                             
-                             //echo $amt;
-                           }
-                         // echo $total_bill;
+                    <div class="tab-pane " id="tab_invoice">
+                        <div class="row">
+                          <div class="col-md-8"><b><h3>Invoices</h3> </b></div>
                           
-                             ?>
-                         
-                           </tbody>
-                         
-                        </table>
+                        </div>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Reference</th>
+                              <th>Date</th>
+                              <th>Student</th>
+                              <th>Summary</th>
+                              <th>Amount</th>
+                              <th>Balance</th>
+                              <th>Action</th>
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               
+                                $total_amount_invoiced=0.00;
+                            $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             die(mysqli_error());
+                             while ($row_amount=mysqli_fetch_array($amount_query)){
+                             $studentId = $row_amount['student_ID'];
+                             
+                             $que= mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentId'")or
+                             die(mysqli_error());
+                             while ($row_std=mysqli_fetch_array($que)){
+                               $name=$row_std['first_Name']." ".$row_std['last_Name'];
+                                $reg=$row_std['registration_No'];
+                              $stdId = $row_std['student_ID'];
+                              // $name= $row2['first_Name']." ".$row2['last_Name'];
+                              $que2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$stdId'")or
+                             die(mysqli_error());
+                             $std_name;
+                             
+                             while ($row_in=mysqli_fetch_array($que2)){
+                              $total_amount_invoiced= $total_amount_invoiced + $row_in['amount']  ;
+                               $invoiveID= $row_in['invoice_ID'];
+                                $invoive_date= $row_in['invoice_date'];
+                                $studentid= $row_in['student_ID'];
+                               $newDate = date("d-m-Y", strtotime($invoive_date));
+                                $total_amount=0.00;
+                              echo' <tr>
+                                   <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row_in['reff_no'].' </a></td>';
+
+                                  echo " <td>".$newDate."</td>
+                                         <td>".$reg ." ".$name."</td>
+                                        <td>".$row_in['summury']." </td>
+                                        <td>".$row_in['amount']."</td>
+                                        <td>".$row_in['balance']."</td>";
+                                         
+                                          
+                                      
+                                       echo' 
+                                          <td>
+                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
+
+                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" "><span class= "glyphicon glyphicon-"></span>Recieve Payment</button></a>
+
+                                       
+                                       </td>
+                                    </tr>';
+                             }
+                           }
+                         }
+                     
+                               ?>
+                           
+                             </tbody>
+                           
+                          </table>
+                    </div>
+                    <div class="tab-pane " id="tab_payment">
+                        <div class="row">
+                          <div class="col-md-8"><b><h3>Payment</h3> </b></div>
+                          
+                        </div>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Receipt No </th>
+                              <th>Date</th>
+                              <th>Name</th>
+                              <th>Remark</th>
+                              <th>Amount</th>
+                              <th>Action</th>
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+
+                                 
+                               
+                                $total_amount_paid=0.00;
+                            $pay_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             die(mysqli_error());
+                             while ($row_amount=mysqli_fetch_array($pay_query)){
+                             $studentId = $row_amount['student_ID'];
+                             
+                             $query_std= mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentId'")or
+                             die(mysqli_error());
+                             while ($row_std=mysqli_fetch_array( $query_std)){
+                               $name=$row_std['first_Name']." ".$row_std['last_Name'];
+                                $reg=$row_std['registration_No'];
+                              $std_Id = $row_std['student_ID'];
+                              // $name= $row2['first_Name']." ".$row2['last_Name'];
+                              $que02 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$std_Id'")or
+                             die(mysqli_error());
+                             $std_name;
+                             
+                             while ($row2=mysqli_fetch_array($que02)){
+                              $total_amount_paid= $total_amount_paid + $row2['amount_paid']  ;
+                               $invoiceID= $row2['invoice_ID'];
+                               $paymentID= $row2['payment_ID'];
+                                $invoive_date= $row2['payment_date'];
+                                $studentid= $row2['student_ID'];
+                                $slipNo= $row2['slip_no'];
+                               $newDate = date("d-m-Y", strtotime($invoive_date));
+                                $total_amount=0.00;
+                                echo' <tr>
+                                   <td>   <a href="view_transaction.php?payment_ID='.$paymentID.'"> '.$slipNo.' </a></td>';
+
+                                  echo "
+                                        <td>".$newDate."</td>
+                                        <td>".$reg ." ".$name."</td>
+                                        <td>".$row2['remarks']." </td>
+                                        <td>".$row2['amount_paid']."</td>
+                                        ";
+                                       
+                                       echo' 
+                                          <td>
+                                           <a  href="edit_transaction.php?payment_id='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-pencil">Edit</span></a>
+
+                                        
+                                          
+
+                                         <button type="button"  class="btn btn-primary btn-flat" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
+                                       </td>
+                                    </tr>';
+                             }
+                           }
+                         }
+                            
+                               ?>
+                           
+                             </tbody>
+                           
+                          </table>
+                    </div>
+                    <div class="tab-pane " id="tab_4">
+                        <div class="row">
+                          <div class="col-md-8"><b><h3>Notification</h3> </b></div>
+                          <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendNotification_Modal">
+                            <i class="fa fa-plus"></i><b> New Notification</b></a></div>
+                        </div>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                               <th>Notification</th>
+                              
+                             
+                              <th>Date</th>
+                              <th>Action</th>
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+
+                                $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' && recipient_ID='$get_parentID'");
+                               while ($notf_row=mysqli_fetch_array($notf_query)){
+                                $notification_id=$notf_row['notification_ID'];
+                                $date=$notf_row['notification_date'];
+                                   $newDate = date("d-m-Y", strtotime( $date));
+                                echo '<tr>
+                                       
+                                     <td>'.$notf_row['notification_message'].'</td>
+                                     
+                                     <td>'.$newDate.'</td>
+                                    <td><a   href="#" id="'.$notification_id.'" onclick="deleteNotificationFromSystem(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> Delete <span> </a></td>
+                                   </tr>';
+                                 
+                               
+                               //echo $amt;
+                             }
+                           // echo $total_bill;
+                            
+                               ?>
+                           
+                             </tbody>
+                           
+                          </table>
                     </div>
                   </div>
                 </div>
@@ -647,7 +813,91 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
           
       </div>
     </div>
-     
+
+
+      <!-- delete Invoice  Modal-->
+    <div class="modal  fade" id="payment_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"><b>PAYMENT </b></h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+            <script >
+             
+               function takepayment(invoice_id){ 
+               alert(invoice_id);
+               //page that initiate the payment
+                var page='view_parent.php';
+                  if(invoice_id !=''){
+                    var details= '&invoice_id='+ invoice_id +'&page='+ page;
+                    $.ajax({
+                    type: "POST",
+                    url: "takepayment.php",
+                    data: details,
+                    cache: false,
+                    success: function(data) {
+                      //alert(data)
+                      document.getElementById("Message").innerHTML=data;
+                   
+
+                    }
+
+                    });
+                   
+                  }else{
+                   document.getElementById("Message").innerHTML=' You have Not Yet selected a Class';
+                  }
+                 
+                
+                }
+            </script>
+          
+          <div id="Message"></div>
+
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     </div>
+
+     <!-- #cancel transaction -->
+     <div class="modal  fade" id="cancel_transaction_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Cancel Transaction</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <script >
+               function cancelTransaction(payment_id,payment_slip_no){
+                 
+                 document.getElementById("msg").innerHTML=' Are you sure you want to cancel this transaction with slip no <b style="font-size:20px"> ' + payment_slip_no + '  </b>from the system?'
+                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
+               
+                    updiv.innerHTML ='<form method="POST" action=""><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">No</button><button class="btn btn-danger pull-left" name="deletebuttonFunc" id="'+ payment_id +'" type="submit" data-dismiss="modal" onclick="cancelTransactionFromSystem(this.id)">Yes</button></form></div>';
+                }
+            </script>
+          
+          <div id="msg"></div>
+
+        </div>
+          <div class="modal-footer">
+           <div id="modalMsg"></div>
+        </div>
+      </div>
+    </div>
+     </div>
     </section>
     <!-- /.content -->
   </div>
@@ -699,7 +949,26 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
   })
 
 </script>
-
+<script type="text/javascript">
+ function cancelTransactionFromSystem(payment_id){
+  var details= '&payment_id='+ payment_id;
+  $.ajax({
+  type: "POST",
+  url: "canceltransaction.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    if(data=='success'){
+     
+ window.location="view_parent.php?id=<?php echo $get_parentID?>&cancel=True" 
+    }else{
+      
+      alert("OOp! Could not cancel the transaction.Please try again!");
+    }
+  }
+  });
+  }
+</script>
 <script >
   function delinkStudentFromParent(student_ID,parent_ID){
     //alert(parent_ID);

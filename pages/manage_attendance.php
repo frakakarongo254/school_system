@@ -175,10 +175,12 @@ if (!velifyLogin()) {
                    while ($attendance_row=mysqli_fetch_array($attendance_query)){
                     $query = mysqli_query($conn,"select * from student where student_ID='".$attendance_row['student_id']."'  and school_ID='$school_ID ' ");
                     while ($student_row=mysqli_fetch_array( $query)){
+                      $date=$attendance_row['date_entered'];
+                      $newDate = date("d-m-Y", strtotime($date));
                       echo"<tr>
                        <td>".$student_row['registration_No']."</td>
                        <td> ".$attendance_row['student_name']."</td>
-                       <td> ".$attendance_row['date_entered']."</td>
+                       <td> ".$newDate."</td>
                        <td> ".$attendance_row['status']."</td>
                     </tr>";
                     }
@@ -194,10 +196,12 @@ if (!velifyLogin()) {
                    while ($attendance_row=mysqli_fetch_array($attendance_query)){
                  $query = mysqli_query($conn,"select * from student where student_ID='".$attendance_row['student_id']."'  and school_ID='$school_ID ' ");
                     while ($student_row=mysqli_fetch_array( $query)){
+                      $date=$attendance_row['date_entered'];
+                      $newDate = date("d-m-Y", strtotime($date));
                       echo"<tr>
                        <td>".$student_row['registration_No']."</td>
                        <td> ".$attendance_row['student_name']."</td>
-                       <td> ".$attendance_row['date_entered']."</td>
+                       <td> ".$newDate."</td>
                        <td> ".$attendance_row['status']."</td>
                     </tr>";
                     }

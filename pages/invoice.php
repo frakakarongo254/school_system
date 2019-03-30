@@ -163,7 +163,9 @@ if (!velifyLogin()) {
                                           <td>
                                            <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
-                                         <button type="button"  class="btn btn-success btn-flat" id="'.$invoiveID.'" onclick="takepayment(this.id)" data-toggle="modal" data-target="#payment_Modal"><span class="glyphicon "></span>Recieve Payment</button>
+                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span>Recieve Payment</button></a>
+
+                                         
                                        </td>
                                     </tr>';
 
@@ -180,57 +182,7 @@ if (!velifyLogin()) {
           <!-- nav-tabs-custom -->
   
 
-       
-           <!-- delete Invoice  Modal-->
-    <div class="modal  fade" id="payment_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><b>PAYMENT </b></h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-            <script >
-             
-               function takepayment(invoice_id){ 
-               // alert(invoice_id);
-                  if(invoice_id !=''){
-                    var details= '&invoice_id='+ invoice_id ;
-                    $.ajax({
-                    type: "POST",
-                    url: "takepayment.php",
-                    data: details,
-                    cache: false,
-                    success: function(data) {
-                      //alert(data)
-                      document.getElementById("Message").innerHTML=data;
-                   
-
-                    }
-
-                    });
-                   
-                  }else{
-                   document.getElementById("Message").innerHTML=' You have Not Yet selected a Class';
-                  }
-                 
-                
-                }
-            </script>
-          
-          <div id="Message"></div>
-
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-     </div>
+     
     </section>
     <!-- /.content -->
   </div>

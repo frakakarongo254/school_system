@@ -6,9 +6,11 @@
 }
   $school_ID=$_SESSION['login_user_school_ID'];
  $get_invoice_ID="";
+ $page="";
  if (isset($_POST['invoice_id'])) {
    # code...
  $get_invoice_ID=$_POST['invoice_id'];
+ $page=$_POST['page'];
  }
  #get details form invoice
  $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
@@ -32,7 +34,7 @@ echo time();
 $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
 
 
-echo '<form  action="invoice.php" method="POST">
+echo '<form  action="'.$page.'" method="POST">
            <div class="row">
            
            <div class="col-md-6">

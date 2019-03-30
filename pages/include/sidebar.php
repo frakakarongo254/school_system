@@ -18,21 +18,13 @@
            
           </a>
         </li>
-         <li class="treeview">
-          <a href="#">
-            <i class="fa fa-envelope-open"></i>
-            <span>Email</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+        <li>
+          <a href="email_inbox.php">
+            <i class="fa fa-envelope-open"></i> <span>Email</span>
+           
           </a>
-          <ul class="treeview-menu">
-            <li><a href="email_compose.php"><i class="fa fa-circle-o"></i> Compose Email</a></li>
-            <li><a href="email_inbox.php"><i class="fa fa-circle-o"></i> Sent Emails</a></li>
-            <li><a href="email_setting.php"><i class="fa fa-circle-o"></i> Email Settings</a></li>
-            
-          </ul>
         </li>
+        
         <li>
           <a href="class.php">
             <i class="fa fa-user"></i> <span>Class</span>
@@ -105,7 +97,7 @@
             <li><a href="invoice.php"><i class="fa fa-circle-o"></i> Invoice</a></li>
             <!--<li><a href="fee.php"><i class="fa fa-circle-o"></i>Fees</a></li>-->
             <li><a href="transaction.php"><i class="fa fa-circle-o"></i> Transactions</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Mpesa Payments</a></li>
+            
             
           </ul>
         </li>
