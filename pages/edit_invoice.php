@@ -18,6 +18,7 @@ if (!velifyLogin()) {
  $invoice_summury=$row02['summury'];
  $invoice_amount_paid=$row02['amount_paid'];
   $invoice_student_id=$row02['student_ID'];
+  $invoice_ref_no=$row02['reff_no'];
 
   #get student details
   $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
@@ -84,7 +85,7 @@ $new_balance;
  }
     $delete_query=mysqli_query($conn,"DELETE FROM invoice_item WHERE `invoice_id`='".$get_invoice_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
 if ($delete_query) {
-$que=mysqli_query($conn,"update `invoice` SET amount='".$total_amount."', balance= '".$new_balance."',student_ID='".$studentID."',invoice_date='".$invoiceDate."',due_date='".$dueDate."',summury='".$summury."',reff_no='".$Ref."' where `invoice_ID`='".$get_invoice_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+$que=mysqli_query($conn,"update `invoice` SET amount='".$total_amount."', balance= '".$new_balance."',student_ID='".$studentID."',invoice_date='".$invoiceDate."',due_date='".$dueDate."',summury='".$summury."' where `invoice_ID`='".$get_invoice_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
    
      
       if($que){
@@ -101,10 +102,12 @@ $que=mysqli_query($conn,"update `invoice` SET amount='".$total_amount."', balanc
       amount = '{$_POST['total'][$i]}',
       school_ID = '{$school_ID}'"); 
 
-    echo '<script> window.location="edit_invoice.php?invoice='.$get_invoice_ID.'&update=true" </script>'; 
+   // echo '<script> window.location="edit_invoice.php?invoice='.$get_invoice_ID.'&update=true" </script>'; 
       } 
       if($query1){
-      echo '<script> window.location="edit_invoice.php?invoice='.$get_invoice_ID.'&update=true" </script>'; 
+        $que02=mysqli_query($conn,"update `statement` SET Debit='".$total_amount."' where `ref_no`='".$invoice_ref_no."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+  echo $invoice_ref_no;
+     // echo '<script> window.location="edit_invoice.php?invoice='.$get_invoice_ID.'&update=true" </script>'; 
       }
 
       }else{
@@ -405,7 +408,7 @@ $que=mysqli_query($conn,"update `invoice` SET amount='".$total_amount."', balanc
   data: details,
   cache: false,
   success: function(data) {
-    window.location='view_invoice.php?invoice=<?php echo $get_invoice_ID?>' ;
+    window.location='edit_invoice.php?invoice=<?php echo $get_invoice_ID?>' ;
    
   
 

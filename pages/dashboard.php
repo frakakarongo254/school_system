@@ -7,6 +7,29 @@ if (!velifyLogin()) {
 include("include/header.php");
 include("include/fusioncharts.php");
 ?>
+<head>
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../bower_components/Ionicons/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+  <!-- Morris chart -->
+  <link rel="stylesheet" href="../bower_components/morris.js/morris.css">
+  <!-- jvectormap -->
+  <link rel="stylesheet" href="../bower_components/jvectormap/jquery-jvectormap.css">
+  <!-- Date Picker -->
+  <link rel="stylesheet" href="../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="../bower_components/bootstrap-daterangepicker/daterangepicker.css">
+  <!-- bootstrap wysihtml5 - text editor -->
+  <link rel="stylesheet" href="../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+  </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -69,7 +92,7 @@ include("include/fusioncharts.php");
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="staff.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -88,7 +111,7 @@ include("include/fusioncharts.php");
             <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="student.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -107,14 +130,14 @@ include("include/fusioncharts.php");
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="parent.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
       </div>
       <!-- /.row -->
    <div class="row">
-     <div class="col-md-12">
+     <div class="col-md-6">
           <?php
 // This is a simple example on how to draw a chart using FusionCharts and PHP.
 // We have included includes/fusioncharts.php, which contains functions
@@ -130,7 +153,7 @@ include("include/fusioncharts.php");
   // Form the SQL query that returns the top 10 most populous countries
  // $strQuery = "SELECT product_name, available_quantity FROM product ORDER BY available_quantity DESC LIMIT 10";
   //$result=mysqli_query($condb,"SELECT product_name, available_quantity FROM product ORDER BY available_quantity ");
-$result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student GROUP BY `class_ID`");
+/*$result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student GROUP BY `class_ID`");
   // Execute the query, or else return the error message.
  // $result = $dbhandle->query($strQuery) or exit("Error code ({$dbhandle->errno}): {$dbhandle->error}");
 
@@ -168,20 +191,139 @@ $result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student 
 
     /*JSON Encode the data to retrieve the string containing the JSON representation of the data in the array. */
 
-    $jsonEncodedData = json_encode($arrData);
+   //$jsonEncodedData = json_encode($arrData);
 
     /*Create an object for the column chart using the FusionCharts PHP class constructor. Syntax for the constructor is ` FusionCharts("type of chart", "unique chart id", width of the chart, height of the chart, "div id to render the chart", "data format", "data source")`. Because we are using JSON data to render the chart, the data format will be `json`. The variable `$jsonEncodeData` holds all the JSON data for the chart, and will be passed as the value for the data source parameter of the constructor.*/
 
-    $columnChart = new FusionCharts("column2D", "myFirstChart" , 600, 300, "chart-2", "json", $jsonEncodedData);
+    //$columnChart = new FusionCharts("column2D", "myFirstChart" , 600, 300, "chart-2", "json", $jsonEncodedData);
 
     // Render the chart
-    $columnChart->render();
+   // $columnChart->render();
 
     // Close the database connection
    // $dbhandle->close();
-  } ?>
+  //} ?>
   
-  <div id="chart-2"><!-- FusionCharts will render here--></div>
+ <!-- <div id="chart-2"> FusionCharts will render here--</div> -->
+ <div class="box box-info">
+            <div class="box-header">
+              <i class="fa fa-envelope"></i>
+
+              <h3 class="box-title">Quick Email</h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip"
+                        title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+              <!-- /. tools -->
+            </div>
+            <div class="box-body">
+                <?php
+          if(isset($_GET['send'])){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Email sent  successfully.
+          </div>';   
+        }
+          if(isset($_POST['sendEmail']) and !empty($_POST['emailMessage'])){
+        
+         $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+        $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+          $senderemail=$senderemail_row['sender_signature'];
+        
+        $from=$senderemail_row['sender_email'];
+        $fromName=$senderemail_row['sender_name'];
+        $footer=$senderemail_row['sender_signature'];
+        $to=$_POST['emailto'];
+        $subject=$_POST['emailSubject'];
+        $msg=$_POST['emailMessage'];
+         $message=$msg ." <br>".  $senderemail;
+        $headers =  'MIME-Version: 1.0' . "\r\n"; 
+        $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
+
+//mail($to, $subject, $body, $headers);
+        $datetime = date_create()->format('Y-m-d H:i:s');
+        $send=mail($to,$subject,$message,$headers);
+        if($send){
+          echo "Email Sent successfully";
+          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,message,date_sent 
+          ) 
+          values('$school_ID','$subject','$to','$message','$datetime') ");
+
+          echo '<script> window.location="dashboard.php?send=True" </script>';
+        }else{
+             echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Sorry! please try again.
+          </div>';  
+        }
+
+        
+      } 
+                ?>
+              <form action="dashboard.php" method="post">
+                <div class="form-group">
+                  <input type="email" class="form-control" name="emailto" placeholder="Email to:">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="emailSubject" placeholder="Subject">
+                </div>
+                <div>
+                  <textarea name="emailMessage" class="textarea" placeholder="Message"
+                            style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                </div>
+              
+            </div>
+            <div class="box-footer clearfix">
+              <button type="submit" class="pull-right btn btn-default" id="sendEmail" name="sendEmail">Send
+                <i class="fa fa-arrow-circle-right"></i></button>
+            </div>
+          </form>
+          </div>
+          <!-- /.box -->
+     </div>
+     <div class="col-md-6">
+          <div class="box box-solid bg-green-gradient">
+            <div class="box-header">
+              <i class="fa fa-calendar"></i>
+
+              <h3 class="box-title">Calendar</h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <!-- button with a dropdown -->
+                <div class="btn-group">
+                  <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-bars"></i></button>
+                  <ul class="dropdown-menu pull-right" role="menu">
+                    
+                    <li class="divider"></li>
+                    <li><a href="event.php">View Event calendar</a></li>
+                  </ul>
+                </div>
+                <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                </button>
+              </div>
+              <!-- /. tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <!--The calendar -->
+              <div id="calendar" style="width: 100%"></div>
+            </div>
+            <!-- /.box-body -->
+            
+          </div>
+          <!-- /.box -->
      </div>
    </div>
     
@@ -194,6 +336,10 @@ $result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student 
   </div>
   <!-- /.content-wrapper -->
 <!--include footer-->
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
 <?php
  include('include/footer.php');
  ?>
@@ -228,7 +374,43 @@ $result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student 
     </div>
 <!-- ./wrapper -->
 
-<?php include("include/script.php")?>
-
+<?php //include("include/script.php")?>
+<!-- jQuery 3 -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../bower_components/raphael/raphael.min.js"></script>
+<script src="../bower_components/morris.js/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="../bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<!-- jvectormap -->
+<script src="../plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="../plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="../bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="../bower_components/moment/min/moment.min.js"></script>
+<script src="../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- datepicker -->
+<script src="../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- Slimscroll -->
+<script src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="../dist/js/pages/dashboard.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../dist/js/demo.js"></script>
 </body>
 </html>

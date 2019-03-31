@@ -410,8 +410,10 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                   <table>
                     
                   <tr>
-                    <td><span style="font-size: 17px">Total invoiced:</span></td>
+                    <td><span style="font-size: 17px">Total invoiced:  </span></td>
                     <td>
+
+
                       <?php
                        $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$student_ID'")or
                                die(mysqli_error());
@@ -419,7 +421,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                                while ($row011=mysqli_fetch_array($query2)){
                                         $total_invoiced= $total_invoiced + $row011['amount'];
                                }
-                              echo $total_invoiced;
+                              echo'<b>'. $total_invoiced .'.00</b>';
                                ?>
 
                     </td>
@@ -434,14 +436,14 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                                while ($row011=mysqli_fetch_array($query2)){
                                          $total_amount_paid=  $total_amount_paid + $row011['amount_paid'];
                                }
-                              echo  $total_amount_paid;
+                              echo  '<b>'.$total_amount_paid.'.00<b>';
                                ?>
                     </td>
                   </tr>
                   <tr>
                     <td><span>Balance:</span></td>
                     <td>
-                      <b><?php echo $total_invoiced - $total_amount_paid;?></b>
+                      <b><?php  $bal= $total_invoiced - $total_amount_paid; echo '<b>'.$bal.'.00</b>';?></b>
                     </td>
                   </tr>
                   
@@ -666,88 +668,55 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                           </table>
                     </div>
                     <div class="tab-pane" id="tab_4">
+                      <div class="col-md-8"><b><h3>Statement</h3> </b></div>
+                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="print_statement.php?student_id=<?php echo  $student_ID;?>" ><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <table id="table11" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                              <th>Reff</th>
                               <th>Date</th>
-                              <th>Invoiced</th>
-                              <th>Paid</th>
-                              <th>Balance</th>
+                              <th>Description</th>
+                              <th>Reference</th>
+                              <th>Debit</th>
+                              <th>Credit</th>
+                              
                               
                               
                             </tr>
                             </thead>
                             <tbody>
                                <?php
-                               #get school Id from current session school id
-                             /*  $school_ID = $_SESSION['login_user_school_ID'];
-                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                              $result = mysqli_query($conn,"select * from statement where school_ID = '$school_ID' && student_ID='$student_ID'")or
                                die(mysqli_error());
-                               $total_amount=0.00;
-                               while ($row2=mysqli_fetch_array($query2)){
-                                $total_amount= $total_amount + $row2['amount']  ;
-                               $invoiveID= $row2['invoice_ID'];
-                                $invoive_date= $row2['invoice_date'];
-                               $newDate = date("d-m-Y", strtotime($invoive_date));
-                              // $parent_relation= $row1['relation'];
-                               
-                                echo" <tr>
-                                       <td>".$newDate."</td>
-                                       <td>".$row2['reff_no']."</td>
-                                        <td>".$row2['amount']."</td>
-                                        <td>".$row2['summury']." </td>";
-                                         
-                                          
-                                      
-                                      // echo' <td>  <a href="download_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" ><span class= "glyphicon glyphicon-print"> </span> Print  </button></a>
-
-                                      //  <a href="view_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" "><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
-
-                                       //  <button type="button"  class="btn btn-danger btn-flat" id="'.$invoiveID.'" onclick="deleteInvoice(this.id)" data-toggle="modal" data-target="#delete_invoice_Modal"><span class="glyphicon glyphicon-trash"></span></button>
-                                     //  </td>
-                                   echo'  </tr>';
-                                     
-                               
-                              
-                                }*/
-                                                                                   
-                        $result=mysqli_query($conn,"select i.invoice_ID,i.balance,i.reff_no,i.invoice_date,i.amount,ifnull(sum(p.amount_paid),0) as paid,i.amount-ifnull(sum(amount),0) as due
-                        from invoice i
-                        left join payment p
-                        on p.invoice_ID=i.invoice_ID
-                        where i.student_ID='$student_ID'
-                        group by i.invoice_ID
-                        order by i.invoice_ID");
-                        $total_invoiced=0.00;
-                        $total_paid=0.00;
+                        $total_Debit=0.00;
+                        $total_Credit=0.00;
                         $total_balance=0.00;
                         while($rows = $result->fetch_assoc()) {
-                        $total_invoiced=$total_invoiced + $rows["amount"];
-                        $total_paid=$total_paid + $rows["paid"];
-                        $total_balance=$total_balance + $rows["balance"];
-                        $invoive_date= $rows['invoice_date'];
-                        $newDate = date("d-m-Y", strtotime($invoive_date));
-                        $due;
-                        if ($rows["due"]< 0) {
-                          $due=0.00;
-                        }else{
-                          $due=$rows["due"];
-                        }
+                        $total_Debit= $total_Debit + $rows["Debit"];
+                        $total_Credit=$total_Credit + $rows["Credit"];
+                        $total_balance=$total_Credit + $total_Debit;
+                        $date_created= $rows['date_created'];
+                        $newDate = date("d-m-Y", strtotime($date_created));
+                       
                         echo '<tr>
-                        <td> <a href="view_invoice.php?invoice='.$rows["invoice_ID"].'"> '.$rows["reff_no"].' </a></td>
+                       
                         <td> '.$newDate.'</td>
-                        <td> '.$rows["amount"].'</td>
-                        <td> '.$rows["paid"].'</td>
-                        <td> '.$rows["balance"].'</td>
+                        <td> '.$rows["description"].'</td>
+                        <td> '.$rows["ref_no"].'</td>
+                        <td> '.$rows["Debit"].'</td>
+                        <td> '.$rows["Credit"].'</td>
                         </tr>';
-                        }                        
-                        echo'<tr>
-                        <td colspan="2"><b>TOTAL<b></td>
-                         <td><b>'.$total_invoiced.'</b></td>
-                         <td><b>'.$total_paid.'</b></td>
-                         <td><b>'.$total_balance.'</b></td>
-                        <tr>'
+                        }    
+
+                        echo'
+                        <tr>
+                        <hr>
+                        <td colspan="3"><b><b></td>
+                         <td><b>'.$total_Debit.'.00</b></td>
+                         <td><b>'.$total_Credit.'.00</b></td>
+                         
+                        </tr>
+                       
+                        '
 
                               ?>
                            
@@ -755,9 +724,14 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                             
                           </table>
                         <div class="row clearfix" style="margin-top:20px">
-                        <div class="pull-right col-md-4">
-                          <table>
-                           
+                        <div class="pull-right col-md-3">
+                          <table class="table">
+                              <tr>
+                <th style="width:50%">Balance</th>
+                <td><?php echo'<b>'. $total_balance.'.00 </b>';?></td>
+              </tr>
+             
+             
                           </table>
                         </div>
                         </div>

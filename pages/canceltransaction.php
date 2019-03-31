@@ -11,7 +11,7 @@ $payment_ID = $_POST['payment_id'];
  $row022 = mysqli_fetch_array($sql022 ,MYSQLI_ASSOC);
  $invoiceID=$row022['invoice_ID'];
  $amount_paid=$row022['amount_paid'];
- 
+ $slip_no=$row022['slip_no'];
  #get details form invoice
  $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$invoiceID' and `school_ID` = '".$school_ID."' ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
@@ -27,7 +27,8 @@ $new_amount_paid=0.00;
 if ($update_invoice_query) {
 //	header("Refresh:0; url=http://localhost/hardware/user.php");
 	
- 
+ $delete_query=mysqli_query($conn,"DELETE FROM statement WHERE `ref_no`='".$slip_no."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
+
 $delete_query=mysqli_query($conn,"DELETE FROM payment WHERE `payment_ID`='".$payment_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
 		if($delete_query){
 		echo 'success';

@@ -189,13 +189,21 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
           
 
           <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg
-            dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+            You can make payment via 
+           <?php 
+           $query3 = mysqli_query($conn,"select * from payment_mode where school_ID = '$school_ID' ")or
+        die(mysqli_error());
+        $mode="";
+        while ($row03=mysqli_fetch_array($query3)){
+         $mode=$mode.','.$row03['mode_name'].',';
+        }
+        echo $mode;
+          ?>
           </p>
         </div>
         <!-- /.col -->
         <div class="col-xs-6">
-          <p class="lead">Amount Due <?php echo $invoice_due_date ?></p>
+          <p class="lead">Due Date:   <?php echo $invoice_due_date ?></p>
 
           <div class="table-responsive">
             <table class="table">

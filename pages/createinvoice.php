@@ -4,6 +4,38 @@ if (!velifyLogin()) {
   header('location: ../index.php');
 }
  $school_ID=$_SESSION['login_user_school_ID'];
+
+// create invoice number automaticaly using this function
+ function invoice_num ($input, $pad_len = 7, $prefix = null) {
+    if ($pad_len <= strlen($input))
+        trigger_error('<strong>$pad_len</strong> cannot be less than or equal to the length of <strong>$input</strong> to generate invoice number', E_USER_ERROR);
+
+    if (is_string($prefix))
+        return sprintf("%s%s", $prefix, str_pad($input, $pad_len, "0", STR_PAD_LEFT));
+
+    return str_pad($input, $pad_len, "0", STR_PAD_LEFT);
+}
+//echo invoice_num(1);
+// Returns input with prefixed F- along with 7 zeros padded
+//echo invoice_num(1, 7, "F-"); // Output: F-0000001
+$dbValue=mysqli_query($conn,"SELECT invoice_ID, CONCAT( 'F-', LPAD(invoice_ID,7,'0')) FROM invoice");
+
+  
+ //echo $rows_event=mysqli_fetch_array($dbValue,MYSQLI_ASSOC);
+ $n = mysqli_query($conn,"SELECT max(invoice_ID) FROM invoice");
+ //echo $n;
+  //$event_startDate=$rows_event["event_startDate"];
+ $resultu = mysqli_query($conn,"SELECT max(invoice_ID) FROM invoice");
+
+if (!$resultu) {
+    die('Could not query:' . mysqli_error());
+}
+
+while($rowjj = mysqli_fetch_assoc($resultu)) {
+  //echo $id = $rowjj['invoice_ID'];
+   //$name = $row['name']; 
+   
+}
 ?>
 
 <?php include("include/header.php")?>
@@ -73,9 +105,13 @@ price = '{$_POST['price'][$i]}',
 amount = '{$_POST['total'][$i]}',
 school_ID = '{$school_ID}'"); 
 
-echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
+//echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
 } 
  if($query1){
+  #record on statement debit and credit
+  $que02=mysqli_query($conn,"insert into `statement` (student_ID,school_ID, Debit,ref_no,date_created,description
+        ) 
+        values('$studentID','$school_ID','$total_amount','$Ref','$invoiceDate','$summury') ");
   echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
  }
 

@@ -85,6 +85,9 @@ if (!velifyLogin()) {
         if($payment_query){
            $update_query=mysqli_query($conn,"update `invoice` SET amount_paid= '".$amount_paid."', balance= '".$new_balance."' where `invoice_ID`='".$invoice_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
            if ($update_query) {
+             $que02=mysqli_query($conn,"insert into `statement` (student_ID,school_ID, Credit,ref_no,date_created,description) 
+        values('$studentID','$school_ID','$amount_paid','$slip_no','$payment_date','$payment_remarks') ");
+
              echo '<script> window.location="invoice.php?insert=True" </script>';
            }else{
 

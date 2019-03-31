@@ -104,6 +104,9 @@ $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
         if($payment_query){
            $update_query=mysqli_query($conn,"update `invoice` SET amount_paid= '".$amount_paid."', balance= '".$new_balance."' where `invoice_ID`='".$invoice_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
            if ($update_query) {
+             $que02=mysqli_query($conn,"insert into `statement` (student_ID,school_ID, Credit,ref_no,date_created,description) 
+        values('$student_id','$school_ID','$amount_paid','$slip_no','$payment_date','$payment_remarks') ");
+
              echo '<script> window.location="payment.php?invoice_id='.$get_invoice_ID.'&insert=True" </script>';
            }else{
 
