@@ -38,9 +38,9 @@ if(isset($_GET['id'])){
       <div class="row">
        
            <div class="col-md-2 box-primary ">
-          <h3><span class="glyphicon glyphicon-list-alt"></span><b class="color-primary" >Saff Profile</b></h3>
+          <h3><span class="glyphicon glyphicon-list-alt"></span><b class="color-primary" >  Staff Profile</b></h3>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="view_staff.php"><i class="fa fa-arrow-circle-right"></i> Staff Details</a></li>
+                <li><a href="view_staff.php?id=<?php echo  $get_staffID;?>"><i class="fa fa-arrow-circle-right"></i> Staff Details</a></li>
                 <li><a href="#"><i class="fa fa-arrow-circle-right"></i> Staff Classes</a></li>
               </ul>
          </div>
@@ -126,66 +126,7 @@ if(isset($_GET['id'])){
              
                  <div class="row">
                    <div class="col-md-12">
-                       <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Reg No</th>
-                  <th>Phone</th>
-                  <th>Gender</th>
-                  <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                   <?php
-                   #get school Id from current session school id
-                   $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
-                   die(mysqli_error());
-                   while ($row1=mysqli_fetch_array($query2)){
-                   $student_ID= $row1['student_ID'];
-                   #get student details
-                   $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_ID'")or
-                   die(mysqli_error());
-                   while ($row2=mysqli_fetch_array($query3)){
-                    $img;
-                   if($row2['photo'] !=''){
-                    $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
-                  }else{
-                      $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
-                    }
-                    echo" <tr>
-                           <td>
-                            ".$img."
-                           </td>
-                            <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
-                            <td>".$row2['registration_No']." </td>
-                            <td>".$row2['gender_MFU']."</td>
-                            <td>Action</td>  
-                            <td>";
-                           echo'   <a class="btn btn-success btn-flat" href="view_student.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
-                             <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['parent_ID'].'" onclick="delinkStudent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
-                           </td>
-                         </tr>';
-
-                   }
-                  
-                    }
-                  ?>
-               
-                 </tbody>
-                <tfoot>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Admin No</th>
-                  <th>Gender</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
-              </table>
+                      
                    </div>
                    
                  </div>

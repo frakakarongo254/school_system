@@ -60,7 +60,7 @@ if (!velifyLogin()) {
             <div class="box-body no-padding">
               <ul class="nav nav-pills nav-stacked">
                 <li><a href="email_inbox.php"><i class="fa fa-inbox"></i> Inbox
-                  <span class="label label-primary pull-right">12</span></a></li>
+                  <span class="label label-primary pull-right">0</span></a></li>
                   <li><a href="email_compose.php"><i class="fa fa-pencil-square-o"></i> Compose</a></li>
                 <li><a href="email_sent.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
                 

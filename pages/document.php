@@ -8,7 +8,14 @@ if (!velifyLogin()) {
 ?>
 
 <?php include("include/header.php")?>
-
+<script type="text/javascript">
+        function openDocument () {
+            document.open ("text/html");
+            document.write ("/document/");
+            document.write ("<i>Italic text</i>");
+            document.close ();
+        }
+    </script>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
@@ -278,9 +285,9 @@ if(isset($_POST['editDocumentBtn'])){
                                        echo'  
                                        <button type="button"  class="btn btn-info btn-flat" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                                      
+                                      <button onclick="openDocument();">Replace the contents of the document</button>
 
-                                        <a href="document/'.$document_name.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#" class="openDocument"><button type="button"  class="btn btn-success btn-flat openDocument" name="'.$document_name.'" onclick="openDocument(this.name)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
                                          <button type="button"  class="btn btn-danger btn-flat" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
 
@@ -426,6 +433,37 @@ if(isset($_POST['editDocumentBtn'])){
         </div>
           <div class="modal-footer">
            <div id="modalMsg"></div>
+        </div>
+      </div>
+    </div>
+     </div>
+
+          <!-- open document  Modal-->
+    <div class="modal  fade" id="open_document_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Document</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <script >
+          
+            $('.openDocumentl').click(function(document_name){
+    var dlgOptions = { url:'/document/'+document_name+', autoSize: true, autoSizeStartWidth: 550 }; 
+    SP.UI.ModalDialog.showModalDialog(dlgOptions);
+    return false;
+    })
+            </script>
+            <div id="documMsg"></div>
+          
+          
+
+        </div>
+          <div class="modal-footer">
+           <div id="Msg"></div>
         </div>
       </div>
     </div>

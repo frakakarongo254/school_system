@@ -33,6 +33,15 @@ if (!velifyLogin()) {
        
       </h1>
      <?php
+      if(isset($_GET['sent'])){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Email was sent  successfully.
+          </div>';   
+        }
       if(isset($_POST['sendEmail'])){
         $school_ID = $_SESSION['login_user_school_ID'];
         #get sender and signature from email setting table
@@ -60,6 +69,7 @@ if (!velifyLogin()) {
           $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,message,date_sent 
           ) 
           values('$school_ID','$subject','$to','$message','$datetime') ");
+           echo '<script> window.location="email_compose.php?sent=True" </script>';
         }else{
            echo "Sorry! Email was not sent";
         }
@@ -84,7 +94,7 @@ if (!velifyLogin()) {
             <div class="box-body no-padding">
               <ul class="nav nav-pills nav-stacked">
                 <li><a href="email_inbox.php"><i class="fa fa-inbox"></i> Inbox
-                  <span class="label label-primary pull-right">12</span></a></li>
+                  <span class="label label-primary pull-right">0</span></a></li>
                   <li><a href="email_compose.php"><i class="fa fa-pencil-square-o"></i> Compose</a></li>
                 <li><a href="email_sent.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
                 

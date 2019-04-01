@@ -6,6 +6,7 @@ if (!velifyLogin()) {
 }
 include("include/header.php");
 include("include/fusioncharts.php");
+$school_ID =$_SESSION['login_user_school_ID'];
 ?>
 <head>
   <!-- Bootstrap 3.3.7 -->
@@ -29,6 +30,29 @@ include("include/fusioncharts.php");
   <link rel="stylesheet" href="../bower_components/bootstrap-daterangepicker/daterangepicker.css">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+  <script type="text/javascript">
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+  theme: "light1", // "light2", "dark1", "dark2"
+  animationEnabled: true, // change to true   
+  title:{
+    text: "STUDENTS POPULATION"
+  },
+  data: [
+  {
+    // Change type to "bar", "area", "spline", "pie","line",etc.
+    type: "column",
+    dataPoints: [
+    
+    ]
+  }
+  ]
+});
+chart.render();
+
+}
+</script>
   </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -137,7 +161,7 @@ include("include/fusioncharts.php");
       </div>
       <!-- /.row -->
    <div class="row">
-     <div class="col-md-6">
+     <div class="col-md-7">
           <?php
 // This is a simple example on how to draw a chart using FusionCharts and PHP.
 // We have included includes/fusioncharts.php, which contains functions
@@ -290,44 +314,80 @@ include("include/fusioncharts.php");
           </div>
           <!-- /.box -->
      </div>
-     <div class="col-md-6">
-          <div class="box box-solid bg-green-gradient">
-            <div class="box-header">
-              <i class="fa fa-calendar"></i>
+     <div class="col-md-5">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">Upcoming Events</h3>
 
-              <h3 class="box-title">Calendar</h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <!-- button with a dropdown -->
-                <div class="btn-group">
-                  <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-bars"></i></button>
-                  <ul class="dropdown-menu pull-right" role="menu">
-                    
-                    <li class="divider"></li>
-                    <li><a href="event.php">View Event calendar</a></li>
-                  </ul>
-                </div>
-                <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
-                <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
-                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
-              <!-- /. tools -->
             </div>
             <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <!--The calendar -->
-              <div id="calendar" style="width: 100%"></div>
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Location</th>
+                    
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+          
+            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY event_startDate ASC LIMIT 5")or
+            die(mysqli_error());
+            while ($event_row=mysqli_fetch_array($event_query)){
+             $eventID=$event_row['event_ID'];
+             $start=$event_row["event_startDate"];
+              $event_startDate = date("d-m-Y", strtotime($start));
+              $event_starttime = $event_row['event_startime'];
+              $end=$event_row["event_endDate"];
+              $event_endDate= date("d-m-Y", strtotime($end));
+              $endtime=$event_row["event_endtime"];
+            
+            echo '<tr>
+                    <td><a href="event.php">'.$event_startDate.'</a></td>
+                    <td>'.
+             $event_row['event_title'].'</td>
+                   
+                    <td>
+                      <div class="sparkbar" data-color="#00a65a" data-height="20">'.$event_row["event_location"].'</div>
+                    </td>
+                  </tr>';
+            }
+            ?>
+
+
+                  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
             </div>
             <!-- /.box-body -->
-            
+            <div class="box-footer clearfix">
+              <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Add new Event</a>
+              <a href="event.php" class="btn btn-sm btn-default btn-flat pull-right">View All Events</a>
+            </div>
+            <!-- /.box-footer -->
           </div>
           <!-- /.box -->
      </div>
    </div>
     
-      
+      <div class="row">
+         <div class="col-lg-12">
+
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script src="../graphs/assets/script/canvasjs.min.js"></script>
+    </div>
+      </div>
        
          
      

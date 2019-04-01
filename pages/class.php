@@ -317,99 +317,7 @@ if (!velifyLogin()) {
           <!-- /.box -->
         </div>
       </div>
-    <!--- add class Modal -->
-      <div class="modal fade" id="modal-addClass">
-          <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><b>Add Class</b></h4>
-              </div>
-              <div class="modal-body">
-                 <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-              <!-- /.tab-pane -->
-            <form  action="class.php" method="POST">
-            <div class="form-group">
-              <label>Year:</label>
-            <select class="form-control select2" name="class_year" style="width: 100%;" required>>
-                <?php 
-                  $year = date('Y');
-                  $min = $year - 60;
-                  $max = $year;
-                  for( $i=$max; $i>=$min; $i-- ) {
-                    echo '<option value='.$i.'>'.$i.'</option>';
-                  }
-                ?>
-              </select>
-            </div>
-            <div class="form-group">
-                <label>Class Name:</label>
-              <input type="test" name="className" class="form-control">
-              <div class="form-group">
-                <label>Level:</label>
-              <select class="form-control select2" name="class_level_id" style="width: 100%;" required>
-                    <option value="">--Select Level--</option>
-                  <?php
-                 $query_level2= mysqli_query($conn,"select * from carricula_level where school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
-                   while ($level2_rows=mysqli_fetch_array($query_level2)){
-                    //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$level2_rows['carricula_level_ID'].'">'.$level2_rows['level_name'].'</option>';
-                   }
-                ?>
-                 </select>
-               </div>
-               <div class="form-group">
-                <label>Stream:</label>
-              <select class="form-control select2" name="class_stream_id" style="width: 100%;" required>
-                    <option value="">--Select Stream--</option>
-                  <?php
-                 $query_stream2= mysqli_query($conn,"select * from stream where school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
-                   while ($stream2_rows=mysqli_fetch_array($query_stream2)){
-                    //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$stream2_rows['stream_ID'].'">'.$stream2_rows['stream_name'].'</option>';
-                   }
-                ?>
-                 </select>
-               </div>
-                <div class="form-group">
-                <label>Teacher:</label>
-              <select class="form-control select2" name="class_teacher_id" style="width: 100%;" required>
-                    <option value="">--Select Teacher--</option>
-                  <?php
-                 $query_staff_Teacher= mysqli_query($conn,"select * from staff where role='Teacher' and school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
-                   while ($teacher_rows=mysqli_fetch_array($query_staff_Teacher)){
-                    //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$teacher_rows['staff_ID'].'">'.$teacher_rows['full_Name'].'</option>';
-                   }
-                ?>
-                 </select>
-               </div>
-           <br>
-            <div class="row">
-              <div class="col-md-12">
-                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="addClassBtn" class="btn btn-primary">Add Class</button>
-              </div>
-              </div>
-             </form>
-            </div>
-            <!-- /.tab-content -->
-          </div>
-              </div>
-              
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-
+    
          <!--- add section Modal -->
       <div class="modal fade" id="modal-addSection">
           <div class="modal-dialog modal-sm">
@@ -651,6 +559,99 @@ if (!velifyLogin()) {
       </div>
     </div>
      </div>
+     <!--- add class Modal -->
+      <div class="modal fade" id="modal-addClass">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b>Add Class</b></h4>
+              </div>
+              <div class="modal-body">
+                 <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+              <!-- /.tab-pane -->
+            <form  action="class.php" method="POST">
+            <div class="form-group">
+              <label>Year:</label>
+            <select class="form-control select2" name="class_year" style="width: 100%;" required>>
+                <?php 
+                  $year = date('Y');
+                  $min = $year - 60;
+                  $max = $year;
+                  for( $i=$max; $i>=$min; $i-- ) {
+                    echo '<option value='.$i.'>'.$i.'</option>';
+                  }
+                ?>
+              </select>
+            </div>
+            <div class="form-group">
+                <label>Class Name:</label>
+              <input type="test" name="className" class="form-control">
+              <div class="form-group">
+                <label>Level:</label>
+              <select class="form-control select2" name="class_level_id" style="width: 100%;" required>
+                    <option value="">--Select Level--</option>
+                  <?php
+                 $query_level2= mysqli_query($conn,"select * from carricula_level where school_ID = '".$_SESSION['login_user_school_ID']."'")or
+                   die(mysqli_error());
+                   while ($level2_rows=mysqli_fetch_array($query_level2)){
+                    //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$level2_rows['carricula_level_ID'].'">'.$level2_rows['level_name'].'</option>';
+                   }
+                ?>
+                 </select>
+               </div>
+               <div class="form-group">
+                <label>Stream:</label>
+              <select class="form-control select2" name="class_stream_id" style="width: 100%;" required>
+                    <option value="">--Select Stream--</option>
+                  <?php
+                 $query_stream2= mysqli_query($conn,"select * from stream where school_ID = '".$_SESSION['login_user_school_ID']."'")or
+                   die(mysqli_error());
+                   while ($stream2_rows=mysqli_fetch_array($query_stream2)){
+                    //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$stream2_rows['stream_ID'].'">'.$stream2_rows['stream_name'].'</option>';
+                   }
+                ?>
+                 </select>
+               </div>
+                <div class="form-group">
+                <label>Teacher:</label>
+              <select class="form-control select2" name="class_teacher_id" style="width: 100%;" required>
+                    <option value="">--Select Teacher--</option>
+                  <?php
+                 $query_staff_Teacher= mysqli_query($conn,"select * from staff where role='Teacher' and school_ID = '".$_SESSION['login_user_school_ID']."'")or
+                   die(mysqli_error());
+                   while ($teacher_rows=mysqli_fetch_array($query_staff_Teacher)){
+                    //$student_regNoID= $class_rows['class_name'];
+                  echo'  <option value="'.$teacher_rows['staff_ID'].'">'.$teacher_rows['full_Name'].'</option>';
+                   }
+                ?>
+                 </select>
+               </div>
+           <br>
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                <button type="submit" name="addClassBtn" class="btn btn-primary">Add Class</button>
+              </div>
+              </div>
+             </form>
+            </div>
+            <!-- /.tab-content -->
+          </div>
+              </div>
+              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
     </section>
     <!-- /.content -->
   </div>

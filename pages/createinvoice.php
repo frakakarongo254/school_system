@@ -103,6 +103,7 @@ vote_head_ID = '{$_POST['vote_head_id'][$i]}',
 quantity = '{$_POST['qty'][$i]}',  
 price = '{$_POST['price'][$i]}',  
 amount = '{$_POST['total'][$i]}',
+ref_no = '{$Ref}',
 school_ID = '{$school_ID}'"); 
 
 //echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 

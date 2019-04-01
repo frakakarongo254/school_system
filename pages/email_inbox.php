@@ -85,7 +85,7 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID'")or
+                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and status='inbox'")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];

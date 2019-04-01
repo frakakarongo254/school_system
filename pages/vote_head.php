@@ -71,8 +71,8 @@ $school_ID = $_SESSION['login_user_school_ID'];
          <div class="col-md-2 box-primary ">
         <span class="fa fa-gear"></span><b class="color-primary" >  Fee Structure</b>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="fee_structure.php"><i class="fa fa-arrow-circle-right"></i> Vote Head</a></li>
-                <li><a href="#"><i class="fa fa-arrow-circle-right"></i>Fee Structure</a></li>
+                <li><a href="vote_head.php"><i class="fa fa-arrow-circle-right"></i> Vote Head</a></li>
+                <li><a href="fee_structure.php"><i class="fa fa-arrow-circle-right"></i>Fee Structure</a></li>
                   <li><a href="paymentMode.php"><i class="fa fa-arrow-circle-right"></i>Payment Mode</a></li>
               </ul>
          </div>

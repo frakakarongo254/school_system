@@ -148,7 +148,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
            <?php
         #get school Id from current session school id
 
-        $query2 = mysqli_query($conn,"select * from invoice_item where invoice_id='$get_invoice_ID' and school_ID = '$school_ID' ")or
+        $query2 = mysqli_query($conn,"select * from invoice_item where ref_no='$invoice_reff' and school_ID = '$school_ID' ")or
         die(mysqli_error());
         while ($row2=mysqli_fetch_array($query2)){
         $invoice_item_ID= $row2['invoice_item_ID'];
