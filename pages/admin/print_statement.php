@@ -5,9 +5,9 @@ if (!velifyLogin()) {
 }
  $school_ID=$_SESSION['login_user_school_ID'];
  $get_student_ID="";
- if (isset($_GET['student_id'])) {
+ if (isset($_POST['student_id'])) {
    # code...
-  $get_student_ID=$_GET['student_id'];
+  $get_student_ID=$_POST['student_id'];
  }
 
   #get student details
@@ -49,13 +49,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="../bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -70,13 +70,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 <body onload="window.print();">
 <div class="wrapper">
   <!-- Main content -->
-   <section class="invoice">
+  <?php echo '<section class="invoice">
       <!-- title row -->
       <div class="row">
         <div class="col-xs-12">
           <div class="text-center">
-            <i class="pull-"><?php echo $logo ?></i>
-            <strong><?php echo $school_row['school_Name']?></strong><br>
+            <i class="pull-">'. $logo .'</i>
+            <strong>'. $school_row['school_Name'].'</strong><br>
            STUDENT STATEMENT
           </div>
         </div>
@@ -89,15 +89,15 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
            <table style="width: 100%">
              <tr>
                <td>NAME :</td>
-               <td><?php echo $studentName;?></td>
+               <td>'. $studentName .'</td>
                <td>Print Date:</td>
-               <td><small class=""> <?php echo date('d-m-Y ')?></small></td>
+               <td><small class=""> '. date("d-m-Y ").'</small></td>
              </tr>
               <tr>
                <td>STUDENT NO :</td>
-               <td><?php echo $studentRegNo?></td>
+               <td>'. $studentRegNo.'</td>
                <td>CLASS :</td>
-               <td><?php echo $class_name?></td>
+               <td>'. $class_name.'</td>
              </tr>
            </table>
            
@@ -122,7 +122,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                             </tr>
                             </thead>
                             <tbody>
-                               <?php
+                               ';
                               $result = mysqli_query($conn,"select * from statement where school_ID = '$school_ID' && student_ID='$get_student_ID'")or
                                die(mysqli_error());
                         $total_Debit=0.00;
@@ -154,9 +154,9 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                          
                         </tr>
                        
-                        '
+                        
 
-                              ?>
+                              
                            
                              </tbody>
                             
@@ -166,7 +166,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                           <table class="table">
                               <tr>
                 <th style="width:50%">Balance</th>
-                <td><?php echo'<b>'. $total_balance.'.00 </b>';?></td>
+                <td> <b>'. $total_balance.'.00 </b></td>
               </tr>
              
              
@@ -180,7 +180,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
       <!-- this row will not appear when printing -->
      
-    </section>
+    </section>';?>;
   <!-- /.content -->
 </div>
 <!-- ./wrapper -->

@@ -5,9 +5,9 @@ if (!velifyLogin()) {
 }
  $school_ID=$_SESSION['login_user_school_ID'];
  $get_invoice_ID="";
- if (isset($_GET['invoice'])) {
+ if (isset($_POST['invoice_id'])) {
    # code...
-  $get_invoice_ID=$_GET['invoice'];
+  $get_invoice_ID=$_POST['invoice_id'];
  }
  #get details form invoice
  $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
@@ -64,13 +64,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="../bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -85,13 +85,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 <body onload="window.print();">
 <div class="wrapper">
   <!-- Main content -->
-   <section class="invoice">
+ <?php echo  '<section class="invoice">
       <!-- title row -->
       <div class="row">
         <div class="col-xs-12">
           <div class="page-">
-            <i class="pull-left"><?php echo $logo ?></i>
-            <small class="pull-right">Date: <?php echo date('d-m-Y ')?></small>
+            <i class="pull-left">'. $logo .'</i>
+            <small class="pull-right">Date: '.date('d-m-Y ').'</small>
           </div>
         </div>
         <!-- /.col -->
@@ -101,33 +101,33 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <div class="col-sm-4 invoice-col">
           From
           <address>
-            <strong><?php echo $school_row['school_Name']?></strong><br>
-            Po. Box <?php echo $school_row['address_1']?><br>
-            Phone: <?php echo $school_row['phone']?><br>
-            Email: <?php echo $school_row['email']?><br>
-            Website:<?php echo $school_row['school_website']?>
+            <strong>'. $school_row['school_Name'].'</strong><br>
+            Po. Box ' .$school_row['address_1'].'<br>
+            Phone: '. $school_row['phone'].'<br>
+            Email: '. $school_row['email'].'<br>
+            Website:'. $school_row['school_website'].'
           </address>
         </div>
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
           To
           <address>
-            <strong><?php echo $studentRegNo ." ". $studentName?> </strong><br>
+            <strong>'. $studentRegNo .' '. $studentName .'</strong><br>
             
           Parent<br>
-          <strong><?php echo $parentName;?></strong><br>
-            Phone: <?php echo $parentPhone ?><br>
-            Email: <?php echo $parentEmail ?><br>
+          <strong>'. $parentName.'</strong><br>
+            Phone: '. $parentPhone .'<br>
+            Email: '. $parentEmail .'<br>
            
           </address>
         </div>
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
-          <b>Invoice #<?php echo $invoice_reff ?></b><br>
+          <b>Invoice #'. $invoice_reff .'</b><br>
           <br>
-          <b>Invoice Date:</b><?php echo $invoice_date ?><br>
+          <b>Invoice Date:</b>'. $invoice_date .'<br>
           
-          <b>Account:</b> <?php echo $invoice_due_date ?>
+          <b>Account:</b> '. $invoice_due_date .'
         </div>
         <!-- /.col -->
       </div>
@@ -146,11 +146,11 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               <th>Subtotal</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody>'?>;
            <?php
         #get school Id from current session school id
 
-        $query2 = mysqli_query($conn,"select * from invoice_item where invoice_id='$get_invoice_ID' and school_ID = '$school_ID' ")or
+        $query2 = mysqli_query($conn,"select * from invoice_item where ref_no='$invoice_reff' and school_ID = '$school_ID' ")or
         die(mysqli_error());
         while ($row2=mysqli_fetch_array($query2)){
         $invoice_item_ID= $row2['invoice_item_ID'];
@@ -174,7 +174,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         }
 
         }
-        ?>
+
+        echo '
             </tbody>
           </table>
         </div>
@@ -190,6 +191,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
           <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
             You can make payment via 
+            ';?>
            <?php 
            $query3 = mysqli_query($conn,"select * from payment_mode where school_ID = '$school_ID' ")or
         die(mysqli_error());
@@ -198,19 +200,19 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
          $mode=$mode.','.$row03['mode_name'].',';
         }
         echo $mode;
-          ?>
+          echo '
           </p>
         </div>
         <!-- /.col -->
         <div class="col-xs-6">
-          <p class="lead">Due Date:   <?php echo $invoice_due_date ?></p>
+          <p class="lead">Due Date:  '. $invoice_due_date .'</p>
 
           <div class="table-responsive">
             <table class="table">
               
           
             <th class="" style="width:50%">Grand Total</th>
-            <td class=""><?php echo $invoice_amount?></td>
+            <td class="">'.$invoice_amount.'</td>
           </tr>
             </table>
           </div>
@@ -221,7 +223,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
       <!-- this row will not appear when printing -->
      
-    </section>
+    </section>';?>
   <!-- /.content -->
 </div>
 <!-- ./wrapper -->

@@ -36,11 +36,18 @@
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
-     <?php
+    
+    
+
+      <?php
      if(isset($_POST['SignIn']) and !empty($_POST['email']) and !empty($_POST['password'])){
+       $level = mysqli_real_escape_string($conn,$_POST['level']);
        $email = mysqli_real_escape_string($conn,$_POST['email']);
        $password = mysqli_real_escape_string($conn,$_POST['password']);
-       $query=mysqli_query($conn,"select * FROM `admin` where `password`='".$password."' && `email`='".$email."'");
+
+       function admin($email,$password,$conn){
+       // include('config.php');
+         $query=mysqli_query($conn,"select * FROM `admin` where `password`='".$password."' && `email`='".$email."'");
          if($query->num_rows > 0){
           while($row = $query->fetch_assoc()){
             $email=$row['email'];
@@ -49,7 +56,7 @@
             $_SESSION['login_user'] = $email;
             $_SESSION['login_user_school_ID'] = $school_ID;
          
-           header("location:pages/dashboard.php");
+           header("location:pages/admin/dashboard.php");
           }
 
          }else{
@@ -62,9 +69,55 @@
           </div>';  
          }
        }
+       function parents($email,$password,$conn){
+        include('config.php');
+         $query=mysqli_query($conn,"select * FROM `parents` where `password`='".$password."' && `email`='".$email."'");
+         if($query->num_rows > 0){
+          while($row = $query->fetch_assoc()){
+            $email=$row['email'];
+            $school_ID= $row['school_ID'];
+             session_start();
+            $_SESSION['login_user'] = $email;
+            $_SESSION['login_user_school_ID'] = $school_ID;
+         
+           header("location:pages/parent/dashboard.php");
+          }
+
+         }else{
+          echo' <div class="alert alert-warning alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Your Login Email or Password is invalid.
+          </div>';  
+         }
+       }
+       
+       
+       switch ($level) {
+         case 'Admin':
+           admin($email,$password,$conn);
+           break;
+           case 'Parent':
+           parents ($email,$password,$conn);
+           # code...
+           break;
+          
+         default:
+           # code...
+           break;
+       }
+       }
      ?>
-     <!--login form-->
     <form action="index.php" method="post">
+      <div class="form-group has-feedback">
+        <select class="form-control select1" name="level"  required="">
+          <option value="">Login As</option>
+          <option value="Admin">Admin</option>
+          <option value="Parent">Parent</option>
+        </select>
+      </div>
       <div class="form-group has-feedback">
         <input type="email" class="form-control" name="email" placeholder="Email" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -93,7 +146,7 @@
     <!-- /.social-auth-links -->
 
     <a href="forgot_password.php">I forgot my password</a><br>
-    <a href="register.php" class="text-center">Register  new school</a>
+    <a href="register.php" class="text-center">Register a new school</a>
 
   </div>
   <!-- /.login-box-body -->

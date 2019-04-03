@@ -257,7 +257,7 @@ $milestone_status=$_POST['milestone_status'];
 
 $sql022 = mysqli_query($conn,"select * from `milestone` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' ");
 $row022 = mysqli_fetch_array($sql022 ,MYSQLI_ASSOC);
-$count= mysqli_num_rows($row022);
+$count= mysqli_num_rows($sql022);
 if ($count > 0) {
           $delete_query=mysqli_query($conn,"DELETE FROM milestone_levels WHERE `milestone_ID`='".$milestone_ID1."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
           if ($delete_query) {
@@ -278,9 +278,11 @@ if ($count > 0) {
                         student_ID = '{$student_ID}'"); 
 
                   echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>'; 
+
               } 
               if($query1){
-              echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>'; 
+              echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>';
+               
               }
 
               }else{
@@ -324,7 +326,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
 } 
  if($query1){
   echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Milestone" </script>';
-  //echo "inserted"; 
+  
  }
 
 }else{
@@ -643,9 +645,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                                        echo'  
                                        <button type="button"  class="btn btn-info btn-flat" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                                      
-
-                                        <a href="#"><button type="button"  class="btn btn-success btn-flat" id="'.$document_name.'" onclick="viewDoc(this.id)" data-toggle="modal" data-target="#modal-document"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#"><button type="button"  class="btn btn-success btn-flat" id="'.$document_name.'" onclick="openDocument(this.id)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
                                          <button type="button"  class="btn btn-danger btn-flat" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
 
@@ -669,7 +669,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                     </div>
                     <div class="tab-pane" id="tab_4">
                       <div class="col-md-8"><b><h3>Statement</h3> </b></div>
-                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="print_statement.php?student_id=<?php echo  $student_ID;?>" ><i class="fa fa-print"></i><b> Print Statement</b></a></div>
+                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <table id="table11" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -876,17 +876,17 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                                            </div>
                                          </form>
                                            <div class="col-md-1">
-                                              <button id="add_row" class="btn btn-default pull-">Add Row</button>
+                                              <a id="add_row" class="btn btn-default pull-">Add Row</a>
                                              </div>
                                              <div class="col-md-1">
-                                              <button id='delete_row' class="pull- btn btn-">Delete Row</button>
+                                              <a id='delete_row' class=" btn btn-default">Delete Row</a>
                                             </div>
                                           </div>
                                           </div>
                                            
                               </div>
                               <div class="tab-pane" id="milestone_process">
-                              jjjjj
+                              
                               </div>
 
                             </div>
@@ -1058,31 +1058,93 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
      </div>
 
 
-    <div class="modal fade" id="modal-document">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <div id="pdf12">kkk</div>
-        <script >
-           function viewDoc(document_name){
-            alert("testing");
-            alert(document_name);
-            var updiv = document.getElementById("pdf12"); 
-              updiv.innerHTML ='hhjjjjjjjj <object type="application/pdf" data="document/'+$document_name+'" width="100%" height="500" style="height: 85vh;">No Support</object>';
-           }
-        </script>
-         
-        
+   <!-- open document  Modal-->
+    <div class="modal  fade" id="open_document_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Document</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+    <div id="dialog" style="display:">
+    
+</div> 
+            <script >
+          function openDocument(document_name){
+            
+            document.getElementById("dialog").innerHTML='<iframe src="document/'+document_name+'" style="width:100%;height:800px"></iframe>';
+          }
+  
+            </script>
+            <div id="documMsg"></div>
+          
+          
+
+        </div>
+          <div class="modal-footer">
+           <div id="Msg"></div>
+        </div>
       </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+     </div>
+
+
+      <!-- open Print statement-->
+    <div class="modal  fade" id="open_document_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Print statement</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+     <iframe id="printf" name="printf">
+
+    </iframe>
+            <script >
+         function printSatement(id) {
+         
+         var details= '&student_id='+ id;
+          $.ajax({
+          type: "POST",
+          url: "print_statement.php",
+          data: details,
+          cache: false,
+          success: function(data) {
+
+            //window.location='view_student.php?id=<?php// echo $student_ID ?>' ;
+           
+        var newWin = window.frames["printf"];
+        newWin.document.write('<body onload="window.print()">'+data+'</body>');
+        newWin.document.close();
+
+          }
+
+
+          });
+        } 
+  
+            </script>
+          
+          
+          
+
+        </div>
+          
+      </div>
+    </div>
+     </div>
+
+
     </section>
     <!-- /.content -->
   </div>
+  
   <!-- /.content-wrapper -->
 <!--include footer-->
 <?php
@@ -1106,6 +1168,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
 <!-- include script-->
 <?php include("include/script.php")?>
 <script >
+ 
   //delete invoice item function
   function  deleteMilestone_level(milestone_level_id){
     alert(milestone_level_id);
