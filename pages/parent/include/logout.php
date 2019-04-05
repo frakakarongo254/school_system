@@ -7,6 +7,6 @@
 $destroy=session_destroy();
    if($destroy) {
       
-	   header("Location:../../../../index.php");
+	   header("Location:../../../index.php");
    }
 ?>

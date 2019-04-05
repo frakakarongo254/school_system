@@ -306,6 +306,7 @@ if(isset($_POST['editDocumentBtn'])){
                  </tbody>
                 <tfoot>
                  <tr>   
+                  <th>#</th>
                   <th>Title</th>
                   <th>Description</th>
                   <th>Actions</th>
@@ -459,7 +460,7 @@ if(isset($_POST['editDocumentBtn'])){
 </div> 
             <script >
           function openDocument(document_name){
-            alert(document_name);
+           
             document.getElementById("dialog").innerHTML='<iframe src="document/'+document_name+'" style="width:100%;height:800px"></iframe>';
           }
   

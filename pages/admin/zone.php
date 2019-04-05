@@ -204,7 +204,7 @@ if (!velifyLogin()) {
              <div class="row">   
               <label for="nationality">One Way Charge:</label>
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <span class="input-group-addon"><i class="fa fa-">Ksh</i></span>
                 <input type="text" class="form-control" name="oneWayCharge">
                 
               </div>
@@ -214,7 +214,7 @@ if (!velifyLogin()) {
             <div class="row">   
               <label for="nationality">Two Way Charge:</label>
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <span class="input-group-addon"><i class="fa fa-"></i>Ksh</span>
                 <input type="text" class="form-control" name="twoWayCharge">
                 
               </div>

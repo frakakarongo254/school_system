@@ -37,13 +37,30 @@ echo '  <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" en
                 <label for="nationality">Gender:</label>
               </div>
               <div class=" col-md-5 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-gender"></i></span>
+               
                 
-                <select name="edit_parent_gender" class="form-control">
-                  <option value="'.$rows_parents['gender_MFU'].'">'.$rows_parents['gender_MFU'].'</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                 ';
+                   if($rows_parents['gender_MFU']=="Male"){
+              echo'    <label>
+                    <input type="radio" name="edit_parent_gender" class=" flat-red"  value="Male" checked>
+                    <label>Male</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="edit_parent_gender" class=" flat-red" value="Female">
+                    <label>Female</label>
+                  </label>';
+                 }else{
+                echo' <label>
+                    <input type="radio" name="edit_parent_gender" class=" flat-red"  value="Male" >
+                    <label>Male</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="edit_parent_gender" class=" flat-red" value="Female" checked>
+                    <label>Female</label>
+                  </label>';
+                 }           
+               echo'  
+               
               </div>
               
             </div>
@@ -87,7 +104,11 @@ echo '  <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" en
               </div>
               <div class=" col-md-5 input-group input-group-">
                 <span class="input-group-addon"><i class="fa fa-flag"></i></span>
-                <input type="text" value="'.$rows_parents['nationality'].'" name="edit_parent_nationality" class="form-control" placeholder="" required>
+                
+                 <select class="form-control select2" name="edit_parent_nationality" style="width: 100%;">
+                    <option value="'.$rows_parents['nationality'].'" >'. $rows_parents['nationality'].'</option>';
+                    include("include/nationality.php");
+                echo' </select>
               </div>    
             </div>
             <br>

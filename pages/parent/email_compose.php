@@ -3,6 +3,9 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../index.php');
 }
+
+$login_parent_ID=$_SESSION['login_user_ID'];
+$login_parent_email=$_SESSION['login_user_email'];
 ?>
 
 <?php include("include/header.php")?>
@@ -33,6 +36,7 @@ if (!velifyLogin()) {
        
       </h1>
      <?php
+
       if(isset($_GET['sent'])){
           echo' <div class="alert alert-success alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
@@ -44,16 +48,16 @@ if (!velifyLogin()) {
         }
       if(isset($_POST['sendEmail'])){
         $school_ID = $_SESSION['login_user_school_ID'];
-        #get sender and signature from email setting table
-         $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+        $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
         $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-        $folder_path = 'document/';
-        $document="";
-
-        $from=$senderemail_row['sender_email'];
-        $fromName=$senderemail_row['sender_name'];
-        $footer=$senderemail_row['sender_signature'];
-        $to=$_POST['email_to'];
+      
+         $to=$senderemail_row['sender_email'];
+        #get sender and signature from email setting table
+        $from=$_SESSION['login_user_email'];
+        $fromName=$_SESSION['login_user_fullName'];
+        $sender_ID=$_SESSION['login_user_ID'];
+        //$footer=$senderemail_row['sender_signature'];
+       
         $subject=$_POST['email_subject'];
         $message=$_POST['email_message'];
 
@@ -66,10 +70,9 @@ if (!velifyLogin()) {
         $send=mail($to,$subject,$message,$headers);
         if($send){
           echo "Email Sent successfully";
-          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,sender,message,date_sent 
+          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,recipient_ID,sender,sender_ID,message,date_sent 
           ) 
-          values('$school_ID','$subject','$to','$from','$message','$datetime') ");
-
+          values('$school_ID','$subject','$to','$school_ID','$from','$sender_ID','$message','$datetime') ");
            echo '<script> window.location="email_compose.php?sent=True" </script>';
         }else{
            echo "Sorry! Email was not sent";
@@ -99,7 +102,7 @@ if (!velifyLogin()) {
                   <li><a href="email_compose.php"><i class="fa fa-pencil-square-o"></i> Compose</a></li>
                 <li><a href="email_sent.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
                 
-                <li><a href="email_setting.php"><i class="fa fa-gear"></i> Settings</a></li>
+                <li><a href="#"></li>
                 
               </ul>
             </div>
@@ -118,37 +121,32 @@ if (!velifyLogin()) {
             <div class="box-body">
               <form method="POST" action="email_compose.php">
               <div class="form-group">
-                <input class="form-control" placeholder="To:" name="email_to" required>
+                <?php
+              $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+              $signt_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+               $signt_row['sender_email'];
+              ?>
+                <input class="form-control" placeholder="To:" name="email_to" value="<?php echo  $signt_row['sender_email'];?>" readonly>
               </div>
               <div class="form-group">
                 <input class="form-control" placeholder="Subject:" name="email_subject">
               </div>
-              <?php
-              $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
-              $signt_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-               $signt_row['sender_signature'];
-              ?>
+              
               <div class="form-group">
                     <textarea id="compose-textarea" class="textarea form-control"   style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"name="email_message">
                       
                     </textarea>
                      
               </div>
-              <div class="form-group">
-                <div class="btn btn-default btn-file">
-                  <i class="fa fa-paperclip"></i> Attachment
-                  <input type="file" name="attachment" class="form-control">
-                </div>
-                <p class="help-block">Max. 32MB</p>
-              </div>
+              
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
               <div class="pull-right">
+                <button type="reset" class="btn btn-default"><i class="fa fa-times"></i> Discard</button>
                 
-                <button type="submit" name="sendEmail" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
               </div>
-              <button type="reset" class="btn btn-default"><i class="fa fa-times"></i> Discard</button>
+              <button type="submit" name="sendEmail" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
             </div>
           </form>
             <!-- /.box-footer -->

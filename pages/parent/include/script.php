@@ -47,18 +47,7 @@
 <script src="../../plugins/iCheck/icheck.min.js"></script>
 <!-- Select2 -->
 <script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
-
-
-<!--finger print-->
-<script src="../finger-print/jquery-1.8.2.js"></script>
-<script src="../finger-print/mfs100-9.0.2.6.js"></script>
-
-
-
-
-
-
-
+<script src="../../dist/js/fusioncharts/fusioncharts.js"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -99,6 +88,12 @@
 
     //Date picker
     $('#datepicker').datepicker({
+      autoclose: true
+
+    })
+
+    //Date picker
+    $('#datepicker2').datepicker({
       autoclose: true
 
     })

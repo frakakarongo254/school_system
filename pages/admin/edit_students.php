@@ -192,14 +192,33 @@ if (!velifyLogin()) {
              
                <div class="row">
                 <div class="col-md-4">
-                 <div class="form-group">
-                  <label>Gender</label>
-                <select name="edit_student_gender" class="form-control">
-               <option value="<?php echo $rows_details['gender_MFU'];?>"><?php echo $rows_details['gender_MFU'];?></option>
-               <option value="Male">Male</option>
-               <option value="Female">Female</option>
-              </select>
-            </div>
+                 
+            <div class="form-group">
+                        <label>Gender:</label>
+                 <div class=" form-group">  
+                 <?php if($rows_details['gender_MFU']=="Male"){
+              echo'    <label>
+                    <input type="radio" name="edit_student_gender" class=" flat-red"  value="Male" checked>
+                    <label>Male</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="edit_student_gender" class=" flat-red" value="Female">
+                    <label>Female</label>
+                  </label>';
+                 }else{
+                echo' <label>
+                    <input type="radio" name="edit_student_gender" class=" flat-red"  value="Male" >
+                    <label>Male</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="edit_student_gender" class=" flat-red" value="Female" checked>
+                    <label>Female</label>
+                  </label>';
+                 }?>            
+                 
+                </div>
+                </div>
+
                 </div>
                 
               
@@ -241,12 +260,28 @@ if (!velifyLogin()) {
                 <div class="col-md-4">
                   <div class="form-group">
                         <label>Status:</label>
-                            
-                  <select class="form-control select2" name="edit_student_status" style="width: 100%;">
-                    <option value="<?php echo $rows_details['status'];?>" ><?php echo $rows_details['status'];?></option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                 </select>
+                   
+                 <div class="form-group">
+                  <?php if($rows_details['status']=="Active"){
+              echo'    <label>
+                    <input type="radio" name="edit_student_status" class=" flat-red"  value="Active" checked>
+                    <label>Active</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="edit_student_status" class=" flat-red" value="Inactive">
+                    <label>Inactive</label>
+                  </label>';
+                 }else{
+                echo' <label>
+                    <input type="radio" name="edit_student_status" class=" flat-red"  value="Active" >
+                    <label>Active</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="edit_student_status" class=" flat-red" value="Inactive" checked>
+                    <label>Inactive</label>
+                  </label>';
+                 }?>            
+                 </div>
                 
                 </div>
                 
@@ -345,7 +380,7 @@ if (!velifyLogin()) {
             
                <div class="row">
               <div class="col-md-9">
-                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                
                 <button type="submit" name="editStudentBtn" class="btn btn-primary">Save Changes</button>
               </div>
               </div>

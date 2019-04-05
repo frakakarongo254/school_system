@@ -214,9 +214,9 @@ if (!velifyLogin()) {
                    $student_regNoID= $row1['registration_No'];
                    $status;
                    if($row1['status'] =='Inactive'){
-                     $status='<span class="btn btn-danger">Inctive</span>';
+                     $status='<span class="btn btn-danger">Inactive</span>';
                    }elseif ($row1['status'] =='Active') {
-                      $status='<span class="btn btn-success">Inctive</span>';
+                      $status='<span class="btn btn-success">Active</span>';
                    }else{
                     $status='<span class="btn btn-success">Active</span>';
                    }

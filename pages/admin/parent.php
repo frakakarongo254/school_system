@@ -348,14 +348,19 @@ if (!velifyLogin()) {
               <div class="form-group  col-md-3 mb-3">
                 <label for="nationality">Gender:</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
-                <span class="input-group-addon"><i class="fa fa-gender"></i></span>
-                
-                <select name="parent_gender" class="form-control">
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
+              <div class="col-md-7 input-group input-group">
+                        <label>Gender:</label>
+                 <div class=" col-md- input-group input-group">              
+                 <label>
+                    <input type="radio" name="parent_gender" class=" flat-red"  value="Male" checked>
+                    <label>Male</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="parent_gender" class=" flat-red" value="Female">
+                    <label>Female</label>
+                  </label>
+                </div>
+                </div>
               
             </div>
                
@@ -400,7 +405,10 @@ if (!velifyLogin()) {
               </div>
               <div class=" col-md-7 input-group input-group-">
                 <span class="input-group-addon"><i class="fa fa-flag"></i></span>
-                <input type="text" name="parent_nationality" class="form-control" placeholder="" required>
+             
+                <select class="form-control select2" name="parent_nationality" style="width: 100%;" required="">
+                  <?php  include("include/nationality.php");?>
+                 </select>
               </div>    
             </div>
             <br>

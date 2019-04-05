@@ -275,9 +275,10 @@ chart.render();
         $send=mail($to,$subject,$message,$headers);
         if($send){
           echo "Email Sent successfully";
-          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,message,date_sent 
+        
+          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,sender,message,date_sent 
           ) 
-          values('$school_ID','$subject','$to','$message','$datetime') ");
+          values('$school_ID','$subject','$to','$from','$message','$datetime') ");
 
           echo '<script> window.location="dashboard.php?send=True" </script>';
         }else{

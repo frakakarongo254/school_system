@@ -12,52 +12,49 @@
           <a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a>
         
         </li>
-         
+        
         <li>
-          <a href="class.php">
-            <i class="fa fa-user"></i> <span>Class</span>
+          <a href="email_inbox.php">
+            <i class="fa fa-envelope-open"></i> <span>Email</span>
            
           </a>
         </li>
         
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-bar-chart"></i>
-            <span>Attendance</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="manage_attendance.php"><i class="fa fa-circle-o"></i> Manage Attendance</a></li>
-            <li><a href="attendance.php"><i class="fa fa-plus"></i> New attedance</a></li>
-            
-          </ul>
-        </li>
-       
+      
         
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-graduation-cap"></i>
-            <span>Student</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="student.php"><i class="fa fa-circle-o"></i> Manage student</a></li>
-            <li><a href="add_student.php"><i class="fa fa-plus"></i> Add Student</a></li>
-            
-          </ul>
-        </li>
-       
+        
          <li>
-          <a href="staff.php">
-            <i class="fa fa-users"></i> <span>Lecturers</span>
+          <a href="children.php">
+            <i class="fa fa-graduation-cap"></i> <span>Children</span>
            
           </a>
         </li>
         
+         <li>
+          <a href="notification.php">
+            <i class="fa fa-bell-o"></i> <span>Notification</span>
+           
+          </a>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>Finance</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            
+            <li><a href="#"><i class="fa fa-circle-o"></i> Invoices</a></li>
+            <!--<li><a href="fee.php"><i class="fa fa-circle-o"></i>Fees</a></li>-->
+            <li><a href="#"><i class="fa fa-circle-o"></i>Payment</a></li>
+            
+            
+          </ul>
+        </li>
+       
         
       </ul>
     </section>

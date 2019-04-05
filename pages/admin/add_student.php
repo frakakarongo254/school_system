@@ -339,7 +339,7 @@ if (!velifyLogin()) {
              </div>
                <div class="col-md-2">
                  <div style="border: ;height: 100px;width: 100px;">
-                   <img id="blah" alt="your image" src="../dist/img/user.jpg" width="100" height="100" />
+                   <img id="blah" alt="your image" src="../../dist/img/user.jpg" width="100" height="100" />
                  </div>
                  <br>
                   <span class="btn btn-default btn-file">

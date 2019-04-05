@@ -102,6 +102,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
           ) 
           values('$school_ID','$vote_head_id','$vote_head_amount') ");
               if($votehead_insert_query){
+               
               echo '<script> window.location="fee_structure.php?insert=true" </script>';
               }else{
               echo' <div class="alert alert-warning alert-dismissable">
@@ -206,7 +207,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="vote_head_amount[]" class="form-control">
+                          <input type="text" name="vote_head_amount" class="form-control">
                         </div> 
                   
                       </div>
@@ -362,7 +363,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
 <?php include("include/script.php")?>
 <script >
   function deleteFeeItemFromSystem(fee_item_id){
-  alert(fee_item_id);
+ // alert(fee_item_id);
   var details= '&item_id='+ fee_item_id;
   $.ajax({
   type: "POST",
