@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
 ?>
 
@@ -52,7 +52,19 @@ if (!velifyLogin()) {
             <div class="box-body no-padding">
               <ul class="nav nav-pills nav-stacked">
                 <li><a href="email_inbox.php"><i class="fa fa-inbox"></i> Inbox
-                  <span class="label label-primary pull-right">12</span></a></li>
+                  <span class="label label-primary pull-right">
+                     <?php 
+                      $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+                    $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+                   
+                    $school_email=$senderemail_row['sender_email'];
+
+               $query_inbox= mysqli_query($conn,"select * from `email` where `school_ID` ='".$_SESSION['login_user_school_ID']."' and recipient='$school_email' and status='0'");
+                $query_inbox_row=mysqli_num_rows ( $query_inbox );
+                echo $query_inbox_row ;
+                ?> 
+
+                  </span></a></li>
                   <li><a href="email_compose.php"><i class="fa fa-pencil-square-o"></i> Compose</a></li>
                 <li><a href="email_sent.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
                 
@@ -85,7 +97,7 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and status='inbox'")or
+                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and recipient='$school_email' and status='0'")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];

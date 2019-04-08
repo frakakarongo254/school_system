@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
   $student_ID = '';
  if(isset($_GET['id'])){

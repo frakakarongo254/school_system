@@ -3,6 +3,10 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../../index.php');
 }
+ //$school_ID = $_SESSION['login_user_school_ID'];
+$login_parent_ID=$_SESSION['login_user_ID'];
+$login_parent_email=$_SESSION['login_user_email'];
+
  $school_ID=$_SESSION['login_user_school_ID'];
  $get_invoice_ID="";
  if (isset($_GET['invoice'])) {

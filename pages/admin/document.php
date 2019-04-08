@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
 #get school Id from current session school id
   $school_ID = $_SESSION['login_user_school_ID'];

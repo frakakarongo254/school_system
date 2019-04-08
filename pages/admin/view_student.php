@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
 $school_ID=$_SESSION['login_user_school_ID'];
 $student_ID="";
@@ -804,7 +804,8 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                                                           
                                                <select class="form-control select2" name="milestone_status" style="width: 100%">
                                                 <option value="<?php  echo $milestone_status1 ?>"><?php  echo $milestone_status1 ?></option>
-                                                 <option value="Active">Active</option>
+                                                 <option value="In Progress">In Progress</option>
+                                                 <option value="Complete">Complete</option>
                                                  <option value="Inactive">Inactive</option>
                                                </select>
                                            

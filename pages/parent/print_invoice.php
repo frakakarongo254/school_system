@@ -4,6 +4,7 @@ if (!velifyLogin()) {
   header('location: ../../index.php');
 }
  $school_ID=$_SESSION['login_user_school_ID'];
+  $login_parent_ID=$_SESSION['login_user_ID'];
  $get_invoice_ID="";
  if (isset($_POST['invoice_id'])) {
    # code...

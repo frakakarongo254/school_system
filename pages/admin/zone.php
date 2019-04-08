@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
 ?>
 
@@ -362,7 +362,7 @@ if (!velifyLogin()) {
 
 <script >
   function deleteZoneFromSystem(zone_id){
-  alert(zone_id);
+  //alert(zone_id);
   var details= '&zone_id='+ zone_id;
   $.ajax({
   type: "POST",

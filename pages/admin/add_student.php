@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
 ?>
 
@@ -256,13 +256,18 @@ if (!velifyLogin()) {
                 </div>
                  <div class="col-md-4">
                   <div class="form-group">
-                        <label>Status:</label>
-                            
-                  <select class="form-control select2" name="student_status" style="width: 100%;">
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                 </select>
-                
+                     
+                    <label>Status:</label>
+                 <div class=" col-md- input-group input-group">              
+                 <label>
+                    <input type="radio" name="student_status" class=" flat-red"  value="Active" checked>
+                    <label>Active</label>
+                  </label>
+                  <label>
+                    <input type="radio" name="student_status" class=" flat-red" value="Inactive">
+                    <label>Inactive</label>
+                  </label>
+                </div>
                 </div>
                 </div>
                 <div class="col-md-4">
@@ -352,7 +357,7 @@ if (!velifyLogin()) {
             
               <div class="row">
               <div class="col-md-9">
-                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                <button type="reset" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
                 <button type="submit" name="save_admissionBtn" class="btn btn-primary">Add Student</button>
               </div>
               </div>

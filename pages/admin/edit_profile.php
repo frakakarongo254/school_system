@@ -2,7 +2,7 @@
 
     if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ..../index.php');
 }
  # check the current password
 $userID=$_SESSION['login_user_ID'];

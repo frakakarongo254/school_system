@@ -33,15 +33,26 @@
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">0</span>
+              <span class="label label-success">
+                 <?php 
+                      $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+                    $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+                   
+                    $school_email=$senderemail_row['sender_email'];
+
+               $query_inbox= mysqli_query($conn,"select * from `email` where `school_ID` ='".$_SESSION['login_user_school_ID']."' and recipient='$school_email' and status='0'");
+                $query_inbox_row=mysqli_num_rows ( $query_inbox );
+                echo $query_inbox_row ;
+                ?> 
+              </span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 0 messages</li>
+              <li class="header">You have <?php  echo $query_inbox_row;?>  messages</li>
               <li>
                 <!-- inner menu: contains the actual data -->
               
               </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
+              <li class="footer"><a href="email_inbox.php">See All Messages</a></li>
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->

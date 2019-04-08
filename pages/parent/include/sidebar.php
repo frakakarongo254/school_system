@@ -47,9 +47,9 @@
           </a>
           <ul class="treeview-menu">
             
-            <li><a href="#"><i class="fa fa-circle-o"></i> Invoices</a></li>
+            <li><a href="invoice.php"><i class="fa fa-circle-o"></i> Invoices</a></li>
             <!--<li><a href="fee.php"><i class="fa fa-circle-o"></i>Fees</a></li>-->
-            <li><a href="#"><i class="fa fa-circle-o"></i>Payment</a></li>
+            <li><a href="transaction.php"><i class="fa fa-circle-o"></i>Payment</a></li>
             
             
           </ul>

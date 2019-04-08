@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
  $school_ID=$_SESSION['login_user_school_ID'];
 
@@ -201,7 +201,7 @@ school_ID = '{$school_ID}'");
                     </div>
                     <div class="col-md-5">
                       <b>To</b>:<br>
-                           <select class="form-control select2" name="studentId" style="width: 100%;" required>
+                           <select class="form-control select2" name="studentId" style="width: 100%;" onchange="transportTypeFun(this.value)" required>
                     <option value="">--Select Student--</option>
                   <?php
                  $query_c= mysqli_query($conn,"select * from student where school_ID = '".$_SESSION['login_user_school_ID']."'");
@@ -245,9 +245,15 @@ school_ID = '{$school_ID}'");
           </tr>
         </thead>
         <tbody>
+         
+          
+           <tr id='addr00'>
+           
+          </tr>
           <tr id='addr0'>
             <td>1</td>
-            <td><select class="form-control " name='vote_head_id[]' style="width: 100%;" required>
+            <td>
+              <select class="form-control " name='vote_head_id[]' style="width: 100%;" required>
                     <option value="">--Select item--</option>
                   <?php
                  $query_votehead= mysqli_query($conn,"select * from vote_head where school_ID = '".$_SESSION['login_user_school_ID']."'");
@@ -348,6 +354,26 @@ school_ID = '{$school_ID}'");
 <!-- include script-->
 <?php include("include/script.php")?>
 <!-- page script -->
+<script >
+  function transportTypeFun(student_id){
+ //alert(student_id);
+ var mydiv=document.getElementById("addr00");
+   var details= '&student_id='+ student_id;
+  $.ajax({
+  type: "POST",
+  url: "check_transportType.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+  //alert(data);
+  
+    mydiv.innerHTML = data;
+}
+  });
+
+
+  }
+</script>
 <script>
   $(function () {
     $('#example1').DataTable()

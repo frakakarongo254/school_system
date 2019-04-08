@@ -4,40 +4,40 @@ if (!velifyLogin()) {
   header('location: ../../index.php');
 }
  $school_ID=$_SESSION['login_user_school_ID'];
- $get_invoice_ID="";
- if (isset($_GET['invoice'])) {
+  $login_parent_ID=$_SESSION['login_user_ID'];
+ $get_payment_ID="";
+ if (isset($_GET['payment_ID'])) {
    # code...
-  $get_invoice_ID=$_GET['invoice'];
+  $get_payment_ID=$_GET['payment_ID'];
  }
  #get details form invoice
- $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
+ $sql022 = mysqli_query($conn,"select * from `payment` where  payment_ID='$get_payment_ID' and `school_ID` = '".$school_ID."' ");
+ $row022 = mysqli_fetch_array($sql022 ,MYSQLI_ASSOC);
+ $invoiceID=$row022['invoice_ID'];
+ $amount_paid=$row022['amount_paid'];
+ $payment_date=$row022['payment_date'];
+ $payment_remarks=$row022['remarks'];
+ $payment_slip_no=$row022['slip_no'];
+ $payment_method=$row022['payment_method'];
+
+ #get details form invoice
+ $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$invoiceID' and `school_ID` = '".$school_ID."' ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
+ $invoice_ID=$row02['invoice_ID'];
  $invoice_amount=$row02['amount'];
- $due_date=$row02['due_date'];
- $invoice_due_date = date("d-m-Y", strtotime($due_date));
- $inv_date=$row02['invoice_date'];
- $invoice_date=date("d-m-Y", strtotime($inv_date));
+ $invoice_due_date=$row02['due_date'];
+ $invoice_date=$row02['invoice_date'];
  $invoice_summury=$row02['summury'];
- $invoice_amount_paid=$row02['amount_paid'];
- $invoice_student_id=$row02['student_ID'];
- $invoice_reff=$row02['reff_no'];
+  $invoice_student_id=$row02['student_ID'];
+  $invoice_balance=$row02['balance'];
+   $invoice_ref=$row02['reff_no'];
 
   #get student details
   $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
-$studentRegNo=$row03['registration_No'];
-
-#get parent details
-  $sql033 = mysqli_query($conn,"select * from `parent_relation` where  student_ID='$invoice_student_id' and `school_ID` = '".$school_ID."'  LIMIT 1");
-  $row033 = mysqli_fetch_array($sql033 ,MYSQLI_ASSOC);
- $parentID=$row033['parent_ID'] ;
-  $sql034 = mysqli_query($conn,"select * from `parents` where  parent_ID='$parentID' and `school_ID` = '".$school_ID."' ");
-  $row034 = mysqli_fetch_array($sql034 ,MYSQLI_ASSOC);
-  $parentName=$row034['first_Name']." ".$row034['last_Name'];
-  $parentPhone=$row034['cell_Mobile_Phone'];
-  $parentEmail=$row034['email'];
+$admNo=$row03['registration_No'];
 
   #get school details
 $school_ID=$_SESSION['login_user_school_ID'];
@@ -84,7 +84,9 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
    
     <!-- /.content -->
      <section class="invoice">
+      <div id="block1">
       <!-- title row -->
+
       <div class="row">
         <div class="col-xs-12">
           <div class="page-">
@@ -107,25 +109,18 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
           </address>
         </div>
         <!-- /.col -->
-        <div class="col-sm-4 invoice-col">
-          To
-          <address>
-            <strong><?php echo $studentRegNo ." ". $studentName?> </strong><br>
-            
-          Parent<br>
-          <strong><?php echo $parentName;?></strong><br>
-            Phone: <?php echo $parentPhone ?><br>
-            Email: <?php echo $parentEmail ?><br>
-           
-          </address>
-        </div>
+        
         <!-- /.col -->
-        <div class="col-sm-4 invoice-col">
-          <b>Invoice #<?php echo $invoice_reff ?></b><br>
+        <div class="col-sm-4 invoice-col pull-right">
+          <b style="font-size: 30px;">RECEIPT</b><br>
+          <b>Reference:</b> <?php echo $payment_slip_no;?><br>
+          <b>Invoice #</b><?php echo $invoice_ref ?><br>
           <br>
-          <b>Invoice Date:</b><?php echo $invoice_date ?><br>
-          
-          <b>Account:</b> <?php  ?>
+          <b>Issue Date::</b><?php echo $invoice_date ?><br>
+          <br>
+          <b>To:</b> <br>
+          <?php echo $studentName; ?><br>
+          Adm # <?php echo $admNo;?>
         </div>
         <!-- /.col -->
       </div>
@@ -138,40 +133,28 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
             <thead>
             <tr>
            
-            <th> Product </th>
-            <th > Qty </th>
-            <th> Price </th>
-              <th>Subtotal</th>
+            <th> Particular </th>
+            <th>Amount</th>
             </tr>
             </thead>
             <tbody>
            <?php
         #get school Id from current session school id
 
-        $query2 = mysqli_query($conn,"select * from invoice_item where invoice_id='$get_invoice_ID' and school_ID = '$school_ID' ")or
-        die(mysqli_error());
-        while ($row2=mysqli_fetch_array($query2)){
-        $invoice_item_ID= $row2['invoice_item_ID'];
-        $vote_head_ID= $row2['vote_head_ID'];
-        $query3 = mysqli_query($conn,"select * from vote_head where vote_head_ID='$vote_head_ID' and school_ID = '$school_ID' ")or
-        die(mysqli_error());
-        while ($row3=mysqli_fetch_array($query3)){
+      
         echo' <tr>
                
-                <td>'.$row3['name'].'
+                <td>Payment for Invoice ' .$invoice_ref. '
              
 
               
                </td>
-                <td>'.$row2['quantity'].'</td>
-                <td>'.$row2['price'].'</td>
-                <td>'.$row2['amount'].'</td>  
+               
+                <td>'.$amount_paid.'</td>  
                 
              </tr>';
 
-        }
-
-        }
+       
         ?>
             </tbody>
           </table>
@@ -184,87 +167,67 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <!-- accepted payments column -->
         <div class="col-xs-6">
           <p class="lead">Payment Methods:</p>
-          
+          <?php echo $payment_method;?>
 
-          <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-             You can make payment via 
-           <?php 
-           $query3 = mysqli_query($conn,"select * from payment_mode where school_ID = '$school_ID' ")or
-        die(mysqli_error());
-        $mode="";
-        while ($row03=mysqli_fetch_array($query3)){
-         $mode=$mode.','.$row03['mode_name'];
-        }
-        echo $mode;
-          ?>
-          </p>
+          
         </div>
         <!-- /.col -->
         <div class="col-xs-6">
-          <p class="lead"> Due Date: <?php echo $invoice_due_date ?></p>
+         
 
-          <div class="table-responsive">
-            <table class="table">
-              
-          
-            <th class="" style="width:50%">Grand Total</th>
-            <td class=""><?php echo $invoice_amount?></td>
-          </tr>
-            </table>
-          </div>
+         
         </div>
         <!-- /.col -->
       </div>
       <!-- /.row -->
-
+</div>
       <!-- this row will not appear when printing -->
       <div class="row no-print">
         <div class="col-xs-12">
-          <a href="#" target="_blank" class="btn btn-default" id="<?php echo $get_invoice_ID?>" onclick="print_invoice(this.id)" data-toggle="modal" data-target="#Print_invoice_Modal"><i class="fa fa-print" ></i> Print</a>
-         <a href="invoice.php"> <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
-          </button></a>
+         
+         
+          <a href="#" target="_blank" class="btn btn-default" id="<?php echo $get_payment_ID?>" onclick="printReceipt(this.id)" data-toggle="modal" data-target="#Print_receipt_Modal"><i class="fa fa-print" ></i> Print</a>
+        
          <!-- <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Generate PDF
           </button>-->
         </div>
       </div>
-       <!-- open Print statement-->
-    <div class="modal  fade" id="Print_invoice_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+     <!-- open Print statement-->
+    <div class="modal  fade" id="Print_receipt_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Print Invoice</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Print Receipt</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
-     <iframe id="printf" name="printf" style="width: 100%;height: 600px">
+     <iframe id="printf" name="printf" style="width:100%;height: 600px;">
 
     </iframe>
             <script >
-         function print_invoice(invoice_id) {
+         function printReceipt(payment_id) {
+               
+        var details= '&payment_id='+payment_id;
+        $.ajax({
+        type: "POST",
+        url: "print_receipt.php",
+        data: details,
+        cache: false,
+        success: function(data) {
+          
+          var newWin = window.frames["printf"];
+              newWin.document.write('<body onload="window.print()">'+data+'</body>');
+              newWin.document.close();
         
-         var details= '&invoice_id='+ invoice_id;
-          $.ajax({
-          type: "POST",
-          url: "print_invoice.php",
-          data: details,
-          cache: false,
-          success: function(data) {
- 
-            //window.location='view_student.php?id=<?php// echo $student_ID ?>' ;
-           
-        var newWin = window.frames["printf"];
-        newWin.document.write('<body onload="window.print()">'+data+'</body>');
-        newWin.document.close();
-
-          }
+        }
 
 
-          });
-        } 
-  
+  });
+}
             </script>
           
           
@@ -300,9 +263,9 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
 <!-- include script-->
 <?php include("include/script.php")?>
+
 <!-- page script -->
 <script >
-
   //delete invoice item function
   function  deleteInvoice_item(invoice_item_id){
    // alert(invoice_item_id);

@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
 ?>
 
@@ -81,6 +81,7 @@ if (!velifyLogin()) {
         $parent_profession=$_POST['parent_profession'];
         $parent_gender=$_POST['parent_gender'];
          $parent_nationality=$_POST['parent_nationality'];
+         $parent_password=$_POST['parent_password'];
         #generate parent ID based on phone
         $rand = substr(number_format(time() * rand(),0,'',''),0,10);
         $parent_ID= md5($rand);
@@ -101,9 +102,9 @@ if (!velifyLogin()) {
           }else{
              $parent_profile_photo = addslashes(file_get_contents($_FILES['parent_profile_photo']['tmp_name']));
             $parent_insert_query=mysqli_query($conn,"insert into `parents` ( parent_ID,school_ID, 
-          first_Name,last_Name,address,cell_Mobile_Phone,email,gender_MFU,profession,photo,nationality) 
+          first_Name,last_Name,address,cell_Mobile_Phone,email,gender_MFU,profession,photo,nationality,password) 
           values('$parent_ID','$school_ID','$parent_first_name','$parent_last_name','$parent_address','
-          $parent_phone','$parent_email','$parent_gender','$parent_profession','$parent_profile_photo','$parent_nationality') ");
+          $parent_phone','$parent_email','$parent_gender','$parent_profession','$parent_profile_photo','$parent_nationality','$parent_password') ");
         if($parent_insert_query){
           
            echo '<script> window.location="parent.php?insert=True" </script>';
@@ -119,9 +120,9 @@ if (!velifyLogin()) {
           }
         }else{
             $parent_insert_query=mysqli_query($conn,"insert into `parents` ( parent_ID,school_ID, 
-          first_Name,last_Name,address,cell_Mobile_Phone,email,gender_MFU,profession,nationality) 
+          first_Name,last_Name,address,cell_Mobile_Phone,email,gender_MFU,profession,nationality,password) 
           values('$parent_ID','$school_ID','$parent_first_name','$parent_last_name','$parent_address','
-          $parent_phone','$parent_email','$parent_gender','$parent_profession','$parent_nationality') ");
+          $parent_phone','$parent_email','$parent_gender','$parent_profession','$parent_nationality','$parent_password') ");
         if($parent_insert_query){
           
            echo '<script> window.location="student.php?insert=True" </script>';
@@ -153,6 +154,7 @@ if (!velifyLogin()) {
         $edit_parent_profession=$_POST['edit_parent_profession'];
         $edit_parent_gender=$_POST['edit_parent_gender'];
         $edit_parent_nationality=$_POST['edit_parent_nationality'];
+        $edit_parent_password=$_POST['edit_parent_password'];
         # check image
        if(isset($_FILES['edit_parent_profile_photo']['name']) and !empty($_FILES['edit_parent_profile_photo']['name'])){
            $file=$_FILES['edit_parent_profile_photo']['name'];
@@ -169,7 +171,7 @@ if (!velifyLogin()) {
           $uploadOk = 0;
           }else{
           $edit_parent_profile_photo = addslashes(file_get_contents($_FILES['edit_parent_profile_photo']['tmp_name']));
-          $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',photo='".$edit_parent_profile_photo."',nationality='".$edit_parent_nationality."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
+          $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',photo='".$edit_parent_profile_photo."',nationality='".$edit_parent_nationality."',password='". $edit_parent_password."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
           if($result_query){
           echo '<script> window.location="parent.php?update=True" </script>';
        }else{
@@ -183,7 +185,7 @@ if (!velifyLogin()) {
        }
           }
         }else{
-            $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',nationality='".$edit_parent_nationality."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
+            $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',nationality='".$edit_parent_nationality."', password='". $edit_parent_password."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
           
            echo '<script> window.location="parent.php?update=True" </script>';
@@ -385,6 +387,16 @@ if (!velifyLogin()) {
               <div class=" col-md-7 input-group input-group-">
                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                 <input type="tel" name="parent_phone" class="form-control" placeholder="" required>
+              </div>    
+            </div>
+            <br>
+            <div class="row">   
+              <div class="form-group  col-md-3 mb-3">
+                <label for="phone">Password :</label>
+              </div>
+              <div class=" col-md-7 input-group input-group-">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <input type="Password" name="parent_password" class="form-control" placeholder="" required>
               </div>    
             </div>
             <br>

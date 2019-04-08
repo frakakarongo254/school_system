@@ -2,7 +2,7 @@
 
     if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 
 }
 
@@ -87,7 +87,16 @@ echo '  <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" en
               </div>    
             </div>
             <br>
-            
+             <div class="row">   
+              <div class="form-group  col-md-3 mb-3">
+                <label for="phone">Password :</label>
+              </div>
+              <div class=" col-md-5 input-group input-group-">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <input type="Password" name="edit_parent_password" class="form-control" value="'.$rows_parents['password'].'" placeholder="" required>
+              </div>    
+            </div>
+            <br>
             <div class="row">   
               <div class="form-group  col-md-3 mb-3">
                 <label for="address">Address :</label>

@@ -5,6 +5,8 @@ if (!velifyLogin()) {
 }
 #get school Id from current session school id
  $school_ID = $_SESSION['login_user_school_ID'];
+ $login_parent_ID=$_SESSION['login_user_ID'];
+$login_parent_email=$_SESSION['login_user_email'];
 ?>
 
 <?php include("include/header.php")?>
@@ -51,17 +53,18 @@ if (!velifyLogin()) {
           Updated successfully.
           </div>';   
         }
-        if(isset($_GET['delete'])){
+        if(isset($_GET['cancel'])){
           echo' <div class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
           aria-hidden="true">
           &times;
           </button>
-          Success! You have deleted  successfully.
+          Success! You have canceled transaction  successfully.
           </div>';   
         }
        
        if (isset($_POST['paymentBtn'])) {
+        $payment_id=$_POST['payment_id'];
          $invoice_id=$_POST['invoice_id'];
          $student_id=$_POST['student_id'];
          $balance=$_POST['amount_balance'];
@@ -76,15 +79,15 @@ if (!velifyLogin()) {
           $new_balance= $balance - $amount_paid;
          }
 
-          $payment_query=mysqli_query($conn,"insert into `payment` (school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date
-          ) 
-          values('$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date') ");
+         
+           $update_payment_query=mysqli_query($conn,"update `payment` SET amount_paid= '".$amount_paid."', slip_no= '".$slip_no."',remarks='".$payment_remarks."',payment_date='".$payment_date."' where `payment_ID`='".$payment_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
         
-        if($payment_query){
+        if($update_payment_query){
            $update_query=mysqli_query($conn,"update `invoice` SET amount_paid= '".$amount_paid."', balance= '".$new_balance."' where `invoice_ID`='".$invoice_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
            if ($update_query) {
-             echo '<script> window.location="invoice.php?insert=True" </script>';
+            //echo '<script>confirm("Print receipt")</script>';
+             echo '<script> window.location="transaction.php?insert=True" </script>';
            }else{
 
          echo' <div class="alert alert-warning alert-dismissable">
@@ -106,10 +109,10 @@ if (!velifyLogin()) {
     <section class="content">
    
         <!-- Custom Tabs -->
-           <div class="box" style="padding-left: 40px;padding-right:40px">
+           <div class="box" style="padding-right: 20px;padding-left: 20px">
             <br>
           <div class="row">
-              <div class="col-md-8"><b><h3>INVOICES</h3> </b></div>
+              <div class="col-md-8"><b><h3>PAYMENT</h3> </b></div>
               <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="createinvoice.php" ><i class="fa fa-plus"></i><b> New Invoice </b></a></div>
             </div>
             
@@ -117,56 +120,60 @@ if (!velifyLogin()) {
                             <thead>
                             <tr>
                               
-                              <th>Reference</th>
+                              <th>Invoice Ref</th>
+                              <th>Receipt No </th>
                               <th>Date</th>
                               <th>Name</th>
-                              <th>Summary</th>
+                              <th>Remark</th>
                               <th>Amount</th>
-                              <th>Balance</th>
-                              <th>Action</th>
+                              
                               
                             </tr>
                             </thead>
                             <tbody>
                                <?php
-                               
-                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ")or
+                                $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$login_parent_ID'")or
+                             die(mysqli_error());
+                             while ($row11=mysqli_fetch_array($query2)){
+                             $studentid= $row11['student_ID'];
+                               $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' and student_ID='$studentid' ORDER BY payment_date DESC")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
-                                $total_amount= $total_amount + $row2['amount']  ;
-                               $invoiveID= $row2['invoice_ID'];
-                                $invoive_date= $row2['invoice_date'];
+                                $total_amount= $total_amount + $row2['amount_paid']  ;
+                               $invoiceID= $row2['invoice_ID'];
+                               $paymentID= $row2['payment_ID'];
+                                $invoive_date= $row2['payment_date'];
                                 $studentid= $row2['student_ID'];
+                                $slipNo= $row2['slip_no'];
                                $newDate = date("d-m-Y", strtotime($invoive_date));
                                 $total_amount=0.00;
-                              $query3 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+                                $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='$invoiceID' and school_ID = '$school_ID' ");
                               
                                while ($row3=mysqli_fetch_array($query3)){
-                                $name=$row3['first_Name']." ".$row3['last_Name'];
-                                $reg=$row3['registration_No'];
+                                $invoice_ref=$row3['reff_no'];
+                              $query4 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+                              
+                               while ($row4=mysqli_fetch_array($query4)){
+                                $name=$row4['first_Name']." ".$row4['last_Name'];
+                                $reg=$row4['registration_No'];
                                 echo' <tr>
-                                   <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row2['reff_no'].' </a></td>';
+                                   <td>   <a href="view_invoice.php?invoice='.$invoiceID.'"> '.$invoice_ref.' </a></td>';
 
-                                  echo " <td>".$newDate."</td>
+                                  echo '<td><a  href="view_transaction.php?payment_ID='.$paymentID.'"   >'.$slipNo.'</a></td>';
+                                     echo   "  <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
-                                        <td>".$row2['summury']." </td>
-                                        <td>".$row2['amount']."</td>
-                                        <td>".$row2['balance']."</td>";
-                                         
-                                          
-                                      
-                                       echo' 
-                                          <td>
-                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
-
-                                         <button type="button"  class="btn btn-success btn-flat" id="'.$invoiveID.'" onclick="takepayment(this.id)" data-toggle="modal" data-target="#payment_Modal"><span class="glyphicon "></span>Recieve Payment</button>
-                                       </td>
-                                    </tr>';
+                                        <td>".$row2['remarks']." </td>
+                                        <td>".$row2['amount_paid']."</td>
+                                        ";
+                                       
+                                    echo '</tr>';
 
                                
                               }
                                 }
+                              }
+                            }
                               ?>
                            
                              </tbody>
@@ -179,7 +186,7 @@ if (!velifyLogin()) {
 
        
            <!-- delete Invoice  Modal-->
-    <div class="modal  fade" id="payment_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal  fade" id="edit_payment_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -194,13 +201,13 @@ if (!velifyLogin()) {
                
             <script >
              
-               function takepayment(invoice_id){ 
+               function editpayment(payment_id){ 
                // alert(invoice_id);
-                  if(invoice_id !=''){
-                    var details= '&invoice_id='+ invoice_id ;
+                  if(payment_id !=''){
+                    var details= '&payment_id='+ payment_id ;
                     $.ajax({
                     type: "POST",
-                    url: "takepayment.php",
+                    url: "editpayment.php",
                     data: details,
                     cache: false,
                     success: function(data) {
@@ -224,6 +231,36 @@ if (!velifyLogin()) {
 
         </div>
           </div>
+        </div>
+      </div>
+    </div>
+     </div>
+    <!-- #cancel transaction -->
+     <div class="modal  fade" id="cancel_transaction_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Cancel Transaction</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <script >
+               function cancelTransaction(payment_id,payment_slip_no){
+                 
+                 document.getElementById("msg").innerHTML=' Are you sure you want to cancel this transaction with slip no <b style="font-size:20px"> ' + payment_slip_no + '  </b>from the system?'
+                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
+               
+                    updiv.innerHTML ='<form method="POST" action=""><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">No</button><button class="btn btn-danger pull-left" name="deletebuttonFunc" id="'+ payment_id +'" type="submit" data-dismiss="modal" onclick="cancelTransactionFromSystem(this.id)">Yes</button></form></div>';
+                }
+            </script>
+          
+          <div id="msg"></div>
+
+        </div>
+          <div class="modal-footer">
+           <div id="modalMsg"></div>
         </div>
       </div>
     </div>
@@ -254,6 +291,28 @@ if (!velifyLogin()) {
 <!-- include script-->
 <?php include("include/script.php")?>
 <!-- page script -->
+<script type="text/javascript">
+ function cancelTransactionFromSystem(payment_id){
+  
+   
+  var details= '&payment_id='+ payment_id;
+  $.ajax({
+  type: "POST",
+  url: "canceltransaction.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    if(data=='success'){
+     
+ window.location="transaction.php?cancel=True" 
+    }else{
+      
+      alert("OOp! Could not delete the student.Please try again!");
+    }
+  }
+  });
+  }
+</script>
 <script>
   $(function () {
     $('#example1').DataTable()
@@ -269,28 +328,5 @@ if (!velifyLogin()) {
 
 </script>
 
-<script >
-  
- 
-  function takepayment(invoice_id){
-   //alert(invoice_id);
-  var details= '&invoice_id='+ invoice_id;
-  $.ajax({
-  type: "POST",
-  url: "takepayment.php",
-  data: details,
-  cache: false,
-  success: function(data) {
-    if(data=='success'){
-      alert(data);
- window.location="view_student.php?id=<?php echo $student_ID?>&delete=True" 
-    }else{
-      alert(data);
-      alert("OOp! Could not delete the student.Please try again!");
-    }
-  }
-  });
-  }
-</script>
 </body>
 </html>

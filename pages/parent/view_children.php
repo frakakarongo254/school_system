@@ -71,7 +71,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
              if($row['photo'] !=''){
               $image = '<img class=" profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"  height="40px" width="40px" alt="User profile picture"/>';
             }else{
-                $image = "<img class=' profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' alt='User profile picture'>";
+                $image = "<img class=' profile-user-img img-responsive img-circle' src='../../dist/img/avatar.png' alt='User profile picture'>";
               }
           ?>
           <!-- Profile Image -->
@@ -381,7 +381,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                           
                          <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" onclick="printMilestone(this.id)"  data-toggle="modal" data-target="#print_milestone_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <div id="milestone_print">
-                                <table id="table11" class="table ">
+                                <table id="table" class="table " style="width: 100%">
                                   <tr>
                                     <td><label>STUDENT NAME:</label>
                                       <?php echo  $student_name?>
@@ -392,7 +392,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                                   </tr>
                                 </table>
 
-                                <table id="table11" class="table ">
+                                <table id="table1" class="table " style="width: 100%">
                                   <tr>
                                     <td>
                                        <label>Effective Date:</label><br>
@@ -424,13 +424,13 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                                 </table>
 
 
-                                <table class="table table-bordered table-hover" id="tab_logic">
+                                <table class="table table-bordered " id="" style="width: 100%">
                                                   <thead>
                                                     <tr>
                                                       
-                                                      <th class="text-center"> Milestone level </th>
-                                                      <th class="text-center"> Description </th>
-                                                      <th class="text-center"> Formal Description </th>
+                                                      <th class=""> Milestone level </th>
+                                                      <th class=""> Description </th>
+                                                      <th class=""> Formal Description </th>
                                                       
                                                     </tr>
                                                   </thead>
@@ -529,12 +529,13 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
             </button>
           </div>
           <div class="modal-body">
-     <iframe id="printM" name="printM" style="width: 100%:height;600px">
+     <iframe id="printM" name="printM" style="width: 100%;height:600px;">
 
     </iframe>
             <script >
          function printMilestone(id) {
-          var data=document.getElementById("milestone_print").innerOuter;
+          var data=document.getElementById("milestone_print").outerHTML;
+         
             var newWin = window.frames["printM"];
         newWin.document.write('<body onload="window.print()">'+data+'</body>');
         newWin.document.close();
