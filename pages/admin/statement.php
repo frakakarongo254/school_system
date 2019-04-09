@@ -172,10 +172,7 @@ if (!velifyLogin()) {
                           </table>
             <!-- /.tab-content -->
           </div>
-          <!-- nav-tabs-custom -->
-  
-
-       
+          
            <!-- delete Invoice  Modal-->
     <div class="modal  fade" id="payment_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

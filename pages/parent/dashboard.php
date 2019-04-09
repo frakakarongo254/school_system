@@ -208,7 +208,6 @@ chart.render();
             </div>
             <div class="box-body">
                 <?php
-          
       if(isset($_GET['sent'])){
           echo' <div class="alert alert-success alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
@@ -250,7 +249,9 @@ chart.render();
            echo "Sorry! Email was not sent";
         }
       }   
-                ?>
+
+
+        ?>
               <form action="dashboard.php" method="post">
                <?php $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
               $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);?>
