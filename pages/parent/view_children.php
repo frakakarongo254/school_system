@@ -25,7 +25,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 <!--include header-->
 
@@ -35,23 +35,26 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
 ?>
 <!--include sidebar after header-->
 <?php
-  include("include/sidebar.php");
+ // include("include/sidebar.php");
 
 ?>
  
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="background-color:  whitesmoke;">
+    <div class="container">
     <!-- Content Header (Page header) -->
-   <section class="">
-     <div class="row">
+   <section class="content-header">
+    
+      <ol class="breadcrumb">
+        <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
        
-         <div class="col-md-12 ">
-         
+        <li class="active">Student Details</li>
+      </ol>
      
-</div>
-</div>
+
+
    </section>
 
     <!-- Main content -->
@@ -557,7 +560,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
     </section>
     <!-- /.content -->
   </div>
-  
+  </div>
   <!-- /.content-wrapper -->
 <!--include footer-->
 <?php

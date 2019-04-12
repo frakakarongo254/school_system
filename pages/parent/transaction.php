@@ -28,7 +28,7 @@ $login_parent_email=$_SESSION['login_user_email'];
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="background-color: lightgray;">
     <!-- Content Header (Page header) -->
    
  <section class="content-header">

@@ -36,6 +36,12 @@
            
           </a>
         </li>
+         <li>
+          <a href="dashboard3.php ">
+            <i class="fa fa-bell-o"></i> <span>dashboard2</span>
+           
+          </a>
+        </li>
         
         <li class="treeview">
           <a href="#">

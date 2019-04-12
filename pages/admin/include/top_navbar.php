@@ -113,8 +113,8 @@
                 </div>
                 <div class="pull-right">
                  <!-- Find logout Modal from footer file from include folder -->
-                  <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Sign out</a>
+                  <a class="nav-link"  href="#" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw fa-sign-out"></i><b>Sign out</b></a>
                 </div>
               </li>
             </ul>

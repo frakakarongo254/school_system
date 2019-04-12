@@ -87,7 +87,7 @@ if (!velifyLogin()) {
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Email</th>
+                  <th>From</th>
                   <th>Subject</th>               
                   <th>Date</th>
                   <th>View</th>
@@ -101,12 +101,15 @@ if (!velifyLogin()) {
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];
+                    $date=$row1['date_sent'];
+                   $newDate= date("d-m-Y", strtotime($date));
+             
                    
                   echo" <tr>
                            <a href='vew_email.php?id=".$emailID."'>
-                            <td>".$row1['recipient']." </td>
+                            <td>".$row1['sender']." </td>
                              <td>".$row1['email_subject']."</td> 
-                            <td>".$row1['date_sent']."</td>";
+                            <td>".$newDate."</td>";
                           echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a></td>
                           
                          </tr>';
@@ -116,7 +119,7 @@ if (!velifyLogin()) {
                  </tbody>
                 <tfoot>
                 <tr>
-                  <th>Email</th>
+                  <th>From</th>
                   <th>Subject</th>               
                   <th>Date</th>
                   <th>View</th>

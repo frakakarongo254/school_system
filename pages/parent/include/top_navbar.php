@@ -1,6 +1,11 @@
- <header class="main-header">
 
-    <!-- Logo --><?php
+
+
+
+
+
+
+<!-- Logo --><?php
       $school_data_sql = mysqli_query($conn,"select * from `school` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
 
       $school_row = mysqli_fetch_array($school_data_sql,MYSQLI_ASSOC);
@@ -11,23 +16,29 @@
       }else{
         $logo = "<img class='img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='50px' width='50px'>";
       }?>
-    <a href="dashboard.php" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><?php echo $logo;?></span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><?php echo $logo;?></span>
-    </a>
-    
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a>
 
-      <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
+
+
+   <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      
+        <div class="navbar-header">
+          
+          <a href="dashboard.php" class=" " style="padding-left: 20px"><?php echo $logo;?></a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+<div class="container">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+          
+          
+        </div>
+        <!-- /.navbar-collapse -->
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+           <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
            
           <li class="dropdown messages-menu">
@@ -110,12 +121,12 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="profile.php" class="btn btn-secondary btn-flat"><i class="fa fa-fw fa-user"></i>Profile</a>
+                  <a href="profile.php" class="btn btn-secondary btn-flat"><i class="fa fa-fw fa-user"></i><b>Profile</b></a>
                 </div>
                 <div class="pull-right">
                  <!-- Find logout Modal from footer file from include folder -->
-                  <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Sign out</a>
+                  <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw fa-sign-out"></i><b>Sign out</b></a>
                 </div>
               </li>
             </ul>
@@ -125,9 +136,9 @@
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-"></i></a>
           </li>
         </ul>
+        </div>
+        <!-- /.navbar-custom-menu -->
       </div>
-
-
-
+      <!-- /.container-fluid -->
     </nav>
   </header>

@@ -20,7 +20,7 @@ if(isset($_GET['id'])){
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 <!--include header-->
 
@@ -30,19 +30,24 @@ if(isset($_GET['id'])){
 ?>
 <!--include sidebar after header-->
 <?php
-  include("include/sidebar.php");
+  //include("include/sidebar.php");
 
 ?>
  
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="background-color:  whitesmoke;">
     <!-- Content Header (Page header) -->
+     <div class="container ">
    
  <section class="content-header">
       <h1>
-        
+         <ol class="breadcrumb">
+        <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+       
+        <li class="active">Notification</li>
+      </ol>
        
       </h1>
     
@@ -95,6 +100,7 @@ if(isset($_GET['id'])){
     </section>
     <!-- /.content -->
   </div>
+</div>
   <!-- /.content-wrapper -->
 <!--include footer-->
 <?php

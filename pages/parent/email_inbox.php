@@ -1,7 +1,7 @@
 <?php  include("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
-  header('location: ../index.php');
+  header('location: ../../index.php');
 }
 $login_parent_ID=$_SESSION['login_user_ID'];
 $login_parent_email=$_SESSION['login_user_email'];
@@ -97,12 +97,14 @@ $login_parent_email=$_SESSION['login_user_email'];
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];
+                    $date=$row1['date_sent'];
+                   $newDate= date("d-m-Y", strtotime($date));
                    
                   echo" <tr>
                            <a href='vew_email.php?id=".$emailID."'>
                             <td>".$row1['sender']." </td>
                              <td>".$row1['email_subject']."</td> 
-                            <td>".$row1['date_sent']."</td>";
+                            <td>". $newDate."</td>";
                           echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a></td>
                           
                          </tr>';

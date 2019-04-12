@@ -57,7 +57,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue layout-top-nav bg-gainsboro">
 <div class="wrapper">
 <!--include header-->
 
@@ -67,18 +67,22 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 ?>
 <!--include sidebar after header-->
 <?php
-  include("include/sidebar.php");
+  //include("include/sidebar.php");
 
 ?>
  
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper bg-lightgray" style="background-color: whitesmoke;">
     <!-- Content Header (Page header) -->
-   
+   <div class="container">
  <section class="content-header">
-      
+       <ol class="breadcrumb">
+        <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+       
+        <li class="active">Payments</li>
+      </ol>
     </section>
     <!-- Main content -->
    
@@ -241,6 +245,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
     </section>
   </div>
+</div>
   <!-- /.content-wrapper -->
 <!--include footer-->
 <?php

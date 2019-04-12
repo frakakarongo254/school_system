@@ -11,7 +11,7 @@ $login_parent_email=$_SESSION['login_user_email'];
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue layout-top-nav" >
 <div class="wrapper">
 <!--include header-->
 
@@ -21,15 +21,16 @@ $login_parent_email=$_SESSION['login_user_email'];
 ?>
 <!--include sidebar after header-->
 <?php
-  include("include/sidebar.php");
+  //include("include/sidebar.php");
 
 ?>
  
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="background-color: whitesmoke;">
     <!-- Content Header (Page header) -->
+    <div class="container">
    
  <section class="content-header">
       
@@ -131,6 +132,15 @@ $login_parent_email=$_SESSION['login_user_email'];
       }
       
       ?>
+       <h1>
+        Events
+        
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+       
+        <li class="active">Event</li>
+      </ol>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -142,7 +152,7 @@ $login_parent_email=$_SESSION['login_user_email'];
             <div class="box-header">
              <div class="row">
               
-              <div class="col-md- col-pull-right " style="text-align:right;padding-right: 30px;"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
+            
             </div>
             </div>
             
@@ -428,6 +438,7 @@ $login_parent_email=$_SESSION['login_user_email'];
     </section>
     <!-- /.content -->
   </div>
+</div>
   <!-- /.content-wrapper -->
 <!--include footer-->
 <?php

@@ -5,6 +5,9 @@
    
    
    $user_check = $_SESSION['login_user'];
+   if (isset($user_check)) {
+     # code...
+   
    //$user_level = $_SESSION['login_user_level'];
    
    $ses_sql = mysqli_query($conn,"select * from `parents` where `email` = '".$user_check."' ");
@@ -28,5 +31,9 @@
 	}
    
     
+}
+
+}else{
+  header('location: ../../index.php');
 }
 ?>

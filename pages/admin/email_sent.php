@@ -109,7 +109,7 @@ if (!velifyLogin()) {
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];
                    $date=$row1['date_sent'];
-                   $newDate = date("d-m-Y H:m:s", strtotime($date));
+                   $newDate = date("d-m-Y", strtotime($date));
                   echo" <tr>
                            <a href='vew_email.php?id=".$emailID."'>
                             <td>".$row1['recipient']." </td>

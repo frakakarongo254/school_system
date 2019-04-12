@@ -60,6 +60,15 @@ if (!velifyLogin()) {
           Success! You have deleted  successfully.
           </div>';   
         }
+        if(isset($_GET['invoice'])){
+          echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! Invoice created successfuly.
+          </div>';   
+        }
        
        if (isset($_POST['paymentBtn'])) {
        $invoice_id=$_POST['invoice_id'];
@@ -136,7 +145,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ")or
+                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ORDER BY invoice_date  DESC ")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){

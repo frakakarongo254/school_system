@@ -113,7 +113,7 @@ school_ID = '{$school_ID}'");
   $que02=mysqli_query($conn,"insert into `statement` (student_ID,school_ID, Debit,ref_no,date_created,description
         ) 
         values('$studentID','$school_ID','$total_amount','$Ref','$invoiceDate','$summury') ");
-  echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
+  echo '<script> window.location="invoice.php?invoice=True" </script>'; 
  }
 
 }else{

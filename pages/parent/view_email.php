@@ -22,7 +22,7 @@ if(isset($_GET['id'])){
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 <!--include header-->
 
@@ -32,63 +32,32 @@ if(isset($_GET['id'])){
 ?>
 <!--include sidebar after header-->
 <?php
-  include("include/sidebar.php");
+  //include("include/sidebar.php");
 
 ?>
  
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="padding-left: 50px;padding-right: 50px;" style="background-color:   whitesmoke;">
     <!-- Content Header (Page header) -->
-   
+     <div class="container">
  <section class="content-header">
-      <h1>
-        
+      <ol class="breadcrumb">
+        <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
        
-      </h1>
+        <li class="active">Email</li>
+      </ol>
+     
     
     </section>
+    <br>
     <!-- Main content -->
     <section class="content">
       <div class="row">
-        <div class="col-md-3">
-          <a href="email_compose.php" class="btn btn-primary btn-block margin-bottom">Compose</a>
-
-          <div class="box box-solid">
-            <div class="box-header with-border">
-              <h3 class="box-title">Folders</h3>
-
-              <div class="box-tools">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-              </div>
-            </div>
-            <div class="box-body no-padding">
-              <ul class="nav nav-pills nav-stacked">
-                  
-                 <li><a href="email_inbox.php"><i class="fa fa-inbox"></i> Inbox
-                  <span class="label label-primary pull-right">
-                     <?php 
-               $query_inbox= mysqli_query($conn,"select * from `email` where `school_ID` ='".$_SESSION['login_user_school_ID']."' and recipient='$login_parent_email' and status='0'");
-                $query_inbox_row=mysqli_num_rows ( $query_inbox );
-                echo $query_inbox_row ;
-                ?> 
-                  </span></a></li>
-                  <li><a href="email_compose.php"><i class="fa fa-pencil-square-o"></i> Compose</a></li>
-                <li><a href="email_sent.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
-                
-                <li><a href="#"></a></li>
-                
-              </ul>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
-       
-        </div>
+        
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-12">
     
           <div class="col-md-12">
           
@@ -158,6 +127,7 @@ if(isset($_GET['id'])){
     </section>
     <!-- /.content -->
   </div>
+</div>
   <!-- /.content-wrapper -->
 <!--include footer-->
 <?php
