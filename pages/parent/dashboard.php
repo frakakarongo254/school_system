@@ -10,6 +10,18 @@ $login_parent_email=$_SESSION['login_user_email'];
 include("include/header.php");
 include("include/fusioncharts.php");
 
+$sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login_parent_ID."' ");
+   $parent_row = mysqli_fetch_array($sql,MYSQLI_ASSOC);
+   $parent_row['first_Name'];
+  $parent_email=$parent_row['email'];
+  $parent_phone=$parent_row['cell_Mobile_Phone'];
+   $image;
+ if($parent_row['photo'] !=''){
+  $image = '<img class=" profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $parent_row['photo'] ).'"  height="40px" width="40px" alt="User profile picture"/>';
+}else{
+    $image = "<img class=' profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' alt='User profile picture'>";
+  }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -45,7 +57,7 @@ include("include/fusioncharts.php");
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 
-  <?php include("include/top_navbar.php");?>
+  
   <!-- Full Width Column -->
   <div class="content-wrapper">
     <div class="container">
@@ -62,6 +74,51 @@ include("include/fusioncharts.php");
             <h3 class="box-title">Dashboard</h3>
           </div>
           <div class="box-body">
+		  <div class="row">
+		       <!-- Profile Image -->
+         
+            <div class="box-body box-profile">
+              <div class="row">
+                <div class="col-md-3 ">
+                  <div class="pull-left">
+                   
+                   <?php echo $image;?>
+
+              
+            </div>
+                </div>
+                <div class="col-md-9">
+                  <table class="table" style="width: 100%;" >
+                    <tr>
+                    <td><span style="font-size: 17px">Name:</span></td>
+                    <td><h3 class="profile-username "><b><?php echo $parent_row['first_Name'] ." ". $parent_row['last_Name'];?></b></h3></td>
+                    <td><span style="font-size: 17px">Email:</span></td>
+                    <td><b><?php echo $parent_row['email']?></b></td>
+                  </tr>
+                 
+                  <tr>
+                    <td><span>Phone:</span></td>
+                    <td><b><?php echo $parent_row['cell_Mobile_Phone']?></b></td>
+                     <td><span>Nationality:</span></td>
+                    <td><b><?php echo $parent_row['nationality']?></b></td>
+                  </tr>
+                  
+                  <tr>
+                    <td><span>Gender:</span></td>
+                    <td><b><?php echo $parent_row['gender_MFU']?></b></td>
+                  </tr>
+                  
+                 </table>
+                </div>
+                
+              </div>
+             <hr>
+            </div>
+            <!-- /.box-body -->
+         
+          <!-- /.box -->
+
+		  </div>
               <div class="row">
                 <div class="col-lg-4 col-xs-6">
                   <!-- small box -->
@@ -316,10 +373,10 @@ include("include/fusioncharts.php");
           <!-- /.box -->
      </div>
            </div>
-        </div>
+       
       </section>
       <!-- /.content -->
-      <section class="content" style="padding-left: 60px;padding-right: 60px;">
+      <section class="content" >
          <div class="box box-default">
           <div class="box-header with-border">
            
@@ -332,7 +389,7 @@ include("include/fusioncharts.php");
                       <li><a href="#email_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Email</a></li>
                       <li><a href="#notification_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
                        <li><a href="#finance_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Finance</a></li>
-                      <li class="pull-right"><a href="#" class="text-muted" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;"><i class="fa fa-gear"></i></a></li>
+                      
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane active" id="children_tab">
@@ -683,6 +740,7 @@ include("include/fusioncharts.php");
       </section>
 
     </div>
+	</div>
     <!-- /.container -->
   </div>
   <!-- /.content-wrapper -->

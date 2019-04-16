@@ -39,7 +39,7 @@ if(isset($_GET['id'])){
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper" style="padding-left: 50px;padding-right: 50px;" style="background-color:   whitesmoke;">
+  <div class="content-wrapper" style="padding-left: 50px;padding-right: 50px;background-color:   whitesmoke;">
     <!-- Content Header (Page header) -->
      <div class="container">
  <section class="content-header">
@@ -80,7 +80,7 @@ if(isset($_GET['id'])){
             <!-- /.box-header -->
             <div class="box-body">
               <?php echo "<b style='font-size:18px'>From:</b> <b>". $email_row['sender']."</b>";?>
-               <div class="direct-chat-text">
+               <div class="direct-text">
                    <?php
                    
                   

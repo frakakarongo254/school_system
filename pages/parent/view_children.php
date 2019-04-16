@@ -200,7 +200,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                               <th>Year</th>
                               <th>Class Name</th>
                               <th>Stream</th>
-                              <th>Actions</th>
+                             
                             </tr>
                             </thead>
                             <tbody>
@@ -228,13 +228,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                                         <td>".$row3_class['name']." </td>
                                          <td>".$row4_stream['stream_name']." </td>
                                         
-                                          
-                                        <td>";
-                                       echo'  <a href="#"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  View</button></a>
-
-                                        
-                                       </td>
-                                     </tr>';
+                                     </tr>";
 
                                
                               
@@ -246,7 +240,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                              <th>Year</th>
                               <th>Class Name</th>
                               <th>Stream</th>
-                              <th>Actions</th>
+                             
                             </tr>
                             </tfoot>
                           </table>
@@ -287,11 +281,11 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                                           
                                         <td>";
                                        echo'  
-                                       <button type="button"  class="btn btn-info btn-flat" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span></button>
+                                       <button type="button"  class="btn btn-info btn-xs" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
 
-                                        <a href="#"><button type="button"  class="btn btn-success btn-flat" id="'.$document_name.'" onclick="openDocument(this.id)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#"><button type="button"  class="btn btn-xs btn-success btn-flat" id="'.$document_name.'" onclick="openDocument(this.id)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span> view </button></a>
 
-                                         <button type="button"  class="btn btn-danger btn-flat" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                                         <button type="button"  class="btn btn-xs btn-danger " id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span> Delete</button>
 
                                         
                                        </td>

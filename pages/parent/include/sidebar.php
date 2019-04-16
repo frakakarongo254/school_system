@@ -6,7 +6,7 @@
       
       
       <!-- sidebar menu: style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree">
+      <ul class="sidebar-menu" data-widget="tree" style="">
         <li class="header">MAIN NAVIGATION</li>
         <li class="active ">
           <a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a>
@@ -33,12 +33,6 @@
          <li>
           <a href="notification.php">
             <i class="fa fa-bell-o"></i> <span>Notification</span>
-           
-          </a>
-        </li>
-         <li>
-          <a href="dashboard3.php ">
-            <i class="fa fa-bell-o"></i> <span>dashboard2</span>
            
           </a>
         </li>
