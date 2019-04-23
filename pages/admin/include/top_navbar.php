@@ -47,7 +47,7 @@
               </span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have <?php  echo $query_inbox_row;?>  messages</li>
+              <li class="header">You have <?php  echo $query_inbox_row;?> unread messages</li>
               <li>
                 <!-- inner menu: contains the actual data -->
               
@@ -109,7 +109,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="profile.php" class="btn btn-secondary btn-flat"><i class="fa fa-fw fa-user"></i>Profile</a>
+                  <a href="profile.php" class="btn btn-secondary btn-flat"><i class="fa fa-fw fa-user"></i><b>Profile</b></a>
                 </div>
                 <div class="pull-right">
                  <!-- Find logout Modal from footer file from include folder -->

@@ -45,17 +45,18 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
   <div class="content-wrapper" style="background-color:  whitesmoke;">
     <div class="container">
     <!-- Content Header (Page header) -->
-   <section class="content-header">
-    
-      <ol class="breadcrumb">
+   
+    <section class="content-header">
+      <h1>
+         <ol class="breadcrumb">
         <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
        
         <li class="active">Student Details</li>
       </ol>
-     
-
-
-   </section>
+       
+      </h1>
+    
+    </section>
 
     <!-- Main content -->
     <section class="content ">
@@ -92,7 +93,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
               
             </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 table-responsive">
                   <table>
                     <tr>
                     <td><span style="font-size: 17px">Name:</span></td>
@@ -193,7 +194,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                        
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab_1">
+                    <div class="tab-pane active table-responsive" id="tab_1">
                         <table id="table1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -246,7 +247,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                           </table>
                     </div>
                     
-                     <div class="tab-pane" id="tab_3">
+                     <div class="tab-pane table-responsive" id="tab_3">
                       <div class="row">
               <div class="col-md-8"><b><h3>Documents</h3> </b></div>
               
@@ -305,7 +306,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                             </tfoot>
                           </table>
                     </div>
-                    <div class="tab-pane" id="tab_4">
+                    <div class="tab-pane table-responsive" id="tab_4">
                       <div class="col-md-8"><b><h3>Statement</h3> </b></div>
                       <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <table id="table11" class="table table-bordered table-striped">
@@ -331,7 +332,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                         while($rows = $result->fetch_assoc()) {
                         $total_Debit= $total_Debit + $rows["Debit"];
                         $total_Credit=$total_Credit + $rows["Credit"];
-                        $total_balance=$total_Credit - $total_Debit;
+                        $total_balance=$total_Debit - $total_Credit;
                         $date_created= $rows['date_created'];
                         $newDate = date("d-m-Y", strtotime($date_created));
                        
@@ -374,7 +375,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                         </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="tab_5">
+                    <div class="tab-pane table-responsive" id="tab_5">
                           
                          <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" onclick="printMilestone(this.id)"  data-toggle="modal" data-target="#print_milestone_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <div id="milestone_print">

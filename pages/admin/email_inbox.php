@@ -80,10 +80,10 @@ if (!velifyLogin()) {
         <div class="col-md-9">
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Sent Message</h3>
+              <h3 class="box-title">Inbox Message</h3>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
+            <div class="box-body table-responsive">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -97,34 +97,39 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and recipient='$school_email' and status='0'")or
+                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and recipient='$school_email'  ORDER BY date_sent DESC")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];
                     $date=$row1['date_sent'];
                    $newDate= date("d-m-Y", strtotime($date));
-             
-                   
-                  echo" <tr>
+                   $rowitem="";
+                   if ($row1['status'] ==0) {
+                     $rowitem="<b><tr>
+                           <a href='vew_email.php?id=".$emailID."'>
+                            <td><b>".$row1['sender']." </b></td>
+                             <td><b>".$row1['email_subject']."</b></td> 
+                            <td><b>".$newDate."</b></td>
+                            <td><a href='view_email.php?id=".$emailID."' ><button type='button'  class='btn btn-success btn-sm' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-'></span>view</button></a></td></b>
+                          
+                         </tr>";
+                   }else{
+                    $rowitem="<tr>
                            <a href='vew_email.php?id=".$emailID."'>
                             <td>".$row1['sender']." </td>
                              <td>".$row1['email_subject']."</td> 
-                            <td>".$newDate."</td>";
-                          echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a></td>
-                          
-                         </tr>';
+                            <td>".$newDate."</td>
+                            <td><a href='view_email.php?id=".$emailID."'><button type='button'  class='btn btn-success btn-sm' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-'></span>view</button></a></td>
+                              </tr>";
+
+                   }
+                   
+                  echo  $rowitem;
                     }
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                  <th>From</th>
-                  <th>Subject</th>               
-                  <th>Date</th>
-                  <th>View</th>
-                </tr>
-                </tfoot>
+               
               </table>
             </div>
             <!-- /.box-body -->

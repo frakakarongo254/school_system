@@ -171,6 +171,7 @@ $login_parent_email=$_SESSION['login_user_email'];
       <div class="row ">
           <div class="col-md-12 box "  style="padding-left:30px;padding-right:30px;">
             <br>
+            <div id="printEventDiv">
           <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -220,6 +221,7 @@ $login_parent_email=$_SESSION['login_user_email'];
                 </tr>
                 </tfoot>
               </table>
+            </div>
          </div>
       </div>
     <!--- add Event Modal -->
@@ -432,6 +434,39 @@ $login_parent_email=$_SESSION['login_user_email'];
         </div>
           </div>
         </div>
+      </div>
+    </div>
+     </div>
+       <div class="modal  fade" id="print_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Student Milestone</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+     <iframe id="printM" name="printM" style="width: 100%;height:600px;">
+
+    </iframe>
+            <script >
+        
+          var data=document.getElementById("printEventDiv").outerHTML;
+         
+            var newWin = window.frames["printM"];
+        newWin.document.write('<body onload="window.print()">'+data+'</body>');
+        newWin.document.close();
+         
+         
+  
+            </script>
+          
+          
+          
+
+        </div>
+          
       </div>
     </div>
      </div>

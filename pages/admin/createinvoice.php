@@ -368,6 +368,7 @@ school_ID = '{$school_ID}'");
   //alert(data);
   
     mydiv.innerHTML = data;
+   
 }
   });
 

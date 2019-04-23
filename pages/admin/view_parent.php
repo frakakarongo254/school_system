@@ -210,7 +210,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
               
             </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 table-responsive">
                   <table>
                     <tr>
                     <td><span style="font-size: 17px">Name:</span></td>
@@ -235,7 +235,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                   
                  </table>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 table-responsive">
                   <table>
                     
                   <tr>
@@ -339,7 +339,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                 <ul class="nav nav-tabs">
                   <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Children</a></li>
                   <li><a href="#tab_2" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Emails</a></li>
-                  <li><a href="#tab_3" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Bills</a></li>
+                 
                   <li><a href="#tab_invoice" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Invoices</a></li>
 
                   <li><a href="#tab_payment" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Payment</a></li>
@@ -347,7 +347,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                    <li><a href="#tab_4" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab_1">
+                    <div class="tab-pane active table-responsive" id="tab_1">
                          <table id="example3" class="table table-bordered table-striped">
                           <thead>
                           <tr>
@@ -409,7 +409,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           </tfoot>
                         </table>
                     </div>
-                    <div class="tab-pane " id="tab_2">
+                    <div class="tab-pane table-responsive" id="tab_2">
                     <div class="row">
                     <div class="col-md-8"><b><h3>Emails</h3> </b></div>
                     <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendEmail_Modal"><i class="fa fa-plus"></i><b> New Email</b></a></div>
@@ -426,7 +426,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           </thead>
                           <tbody>
                               <?php
-                            $query02 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' && recipient_ID='$get_parentID'")or
+                            $query02 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' && recipient_ID='$get_parentID' ORDER BY date(date_sent)")or
                                die(mysqli_error());
                                
                                while ($row0=mysqli_fetch_array($query02)){
@@ -450,65 +450,8 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           </tfoot>
                         </table>
                     </div>
-                    <div class="tab-pane " id="tab_3">
-                       <table id="example1" class="table table-bordered table-striped">
-                          <thead>
-                          <tr>
-                             <th>Ref</th>
-                            <th>Name</th>
-                           
-                            <th>Total</th>
-                            
-                            
-                          </tr>
-                          </thead>
-                          <tbody>
-                             <?php
-                             $total_bill=0.00;
-                              $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
-                             die(mysqli_error());
-                             while ($row1=mysqli_fetch_array($query2)){
-                             $studentID= $row1['student_ID'];
-                             $total=0.00;
-                             $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentID'")or
-                             die(mysqli_error());
-                             while ($row2=mysqli_fetch_array($query3)){
-                               $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $query4 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$studentID'")or
-                             die(mysqli_error());
-                             $std_name;
-                             $amt=0.00;
-                             while ($row3=mysqli_fetch_array($query4)){
-                              $total_bill= $total_bill + $row3['amount'];
-                                 $total=$total + $amt;
-                                $invoiceId=$row3['invoice_ID'];
-                              
-                              echo '<tr>
-                                     <td><a href="view_invoice.php?invoice='.$invoiceId.'"> '.$row3['reff_no'].' </a></td>
-                                   <td>'.$name.'</td>
-                                   
-                                   <td>'.$row3['amount'].'</td>
-                                   <td></td>
-                                 </tr>';
-                               }
-                             }
-                             //echo $amt;
-                           }
-                         // echo $total_bill;
-                          
-                             ?>
-                         
-                           </tbody>
-                          <tfoot>
-                          <tr>
-                           <th class="text-center" colspan="2">Grand Total</th>
-                         <td class=""><b><?php  echo $total_bill;?></b></td>
-                          </tr>
-                          </tfoot>
-                        </table>
-                
-                    </div>
-                    <div class="tab-pane " id="tab_invoice">
+                    
+                    <div class="tab-pane table-responsive" id="tab_invoice">
                         <div class="row">
                           <div class="col-md-8"><b><h3>Invoices</h3> </b></div>
                           
@@ -583,7 +526,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                            
                           </table>
                     </div>
-                    <div class="tab-pane " id="tab_payment">
+                    <div class="tab-pane table-responsive" id="tab_payment">
                         <div class="row">
                           <div class="col-md-8"><b><h3>Payment</h3> </b></div>
                           
@@ -662,7 +605,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           </table>
                           
                     </div>
-                    <div class="tab-pane " id="tab_4">
+                    <div class="tab-pane table-responsive" id="tab_4">
                         <div class="row">
                           <div class="col-md-8"><b><h3>Notification</h3> </b></div>
                           <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendNotification_Modal">
@@ -730,7 +673,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
           <div class="modal-body">
              <form method="POST" action="view_parent.php?id=<?php echo $get_parentID?>">
               <div class="form-group">
-                <input class="form-control" placeholder="To:" name="email_to"  value="<?php echo $row['email']?>" required>
+                <input class="form-control" placeholder="To:" name="email_to"  value="<?php echo $parent_email ?>" required>
               </div>
               <div class="form-group">
                 <input class="form-control" placeholder="Subject:" name="email_subject">

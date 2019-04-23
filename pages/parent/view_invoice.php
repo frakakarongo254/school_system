@@ -82,15 +82,20 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
     <!-- Content Header (Page header) -->
      <div class="container">
    
- <section class="content-header">
-       <ol class="breadcrumb">
+ 
+    <section class="content-header">
+      <h1>
+         <ol class="breadcrumb">
         <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
        
         <li class="active">Invoices</li>
       </ol>
+       
+      </h1>
+    
     </section>
     <!-- Main content -->
-   <br>
+   
     <!-- /.content -->
      <section class="invoice">
       <!-- title row -->

@@ -61,7 +61,8 @@ if (!velifyLogin()) {
        if(isset($_POST['save_admissionBtn'])){
        // $student_profile_photo = addslashes(file_get_contents($_FILES['student_profile_photo']['tmp_name']));
         
-        
+        $student_nickname="";
+        $healthyComment="";
          
           #get school Id from current session school id
         $school_ID = $_SESSION['login_user_school_ID'];
@@ -79,6 +80,7 @@ if (!velifyLogin()) {
         $Student_zone=$_POST['student_zone'];
         $zoneChargeType=$_POST['zoneChargeType'];
         $student_class_id=$_POST['student_Class_Id'];
+        $eventTitle=$student_first_name ." ".$student_last_name . " Birthday";
         #generate student Reg no based on the last regno from the database 
        $get_last_RegNo_query= mysqli_query($conn,"select * from `student` where `school_ID` ='".$school_ID."'");
        $get_last_RegNo=mysqli_num_rows ( $get_last_RegNo_query );
@@ -115,9 +117,26 @@ if (!velifyLogin()) {
              $sudent_insert_query=mysqli_query($conn,"insert into `student` (first_Name,last_Name,nickname,
           registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,photo,nationality,zone,zone_transport_type,class_ID,status) values('$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
           '$student_gender','$student_profile_photo','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status') ");
+
+             
         if($sudent_insert_query){
-         
+        $student_id=mysqli_insert_id($conn);
+        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID,student_ID ,event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color,event_type
+          ) 
+          values('$school_ID','$student_id','$eventTitle','School','$student_dateOfBirth','12:00am','$student_dateOfBirth','12:00pm','Student Birthday','#000000','Birthday') ");
+            if ($event_insert_query) {
+            
            echo '<script> window.location="add_student.php?insert=True" </script>';
+            }else{
+               echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+            }
+
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -134,7 +153,22 @@ if (!velifyLogin()) {
           '$student_gender','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status') ");
         if($sudent_insert_query){
         
+          $student_id=mysqli_insert_id($conn);
+        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID,student_ID ,event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color,event_type
+          ) 
+          values('$school_ID','$student_id','$eventTitle','School','$student_dateOfBirth','12:00am','$student_dateOfBirth','12:00pm','Student Birthday','#000000','Birthday') ");
+            if ($event_insert_query) {
+            
            echo '<script> window.location="add_student.php?insert=True" </script>';
+            }else{
+               echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+            }
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -194,7 +228,7 @@ if (!velifyLogin()) {
                         <label>Nickname :</label>
                  <div class=" col-md- input-group input-group">              
                   <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                  <input type="text" name="student_nickname"  class="form-control"   placeholder="Nickname" required>
+                  <input type="text" name="student_nickname"  class="form-control"   placeholder="Nickname" >
                 </div>
                 </div>
                 </div>           
@@ -324,7 +358,7 @@ if (!velifyLogin()) {
                    <div class="form-group has-feedback input-group-">
                         <label>Comment:</label>
                  <div class=" col-md-12 input-group input-group">              
-                 <textarea class="form-control" rows="" name="healthyComment" placeholder="Healthy comment" required></textarea>
+                 <textarea class="form-control" rows="" name="healthyComment" placeholder="Healthy comment" ></textarea>
                 </div>
                   </div>
                 </div>
@@ -382,9 +416,7 @@ if (!velifyLogin()) {
   </div>
   <!-- /.content-wrapper -->
 <!--include footer-->
-<?php
- include('include/footer.php');
- ?>
+
 <!--include settings-sidebar-->
  
  <?php

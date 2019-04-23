@@ -94,7 +94,7 @@ if (!velifyLogin()) {
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Email</th>
+                  <th>To</th>
                   <th>Subject</th>               
                   <th>Date</th>
                   <th>View</th>
@@ -111,7 +111,7 @@ if (!velifyLogin()) {
                    $date=$row1['date_sent'];
                    $newDate = date("d-m-Y", strtotime($date));
                   echo" <tr>
-                           <a href='vew_email.php?id=".$emailID."'>
+                           
                             <td>".$row1['recipient']." </td>
                              <td>".$row1['email_subject']."</td> 
                             <td>".$newDate."</td>";
@@ -124,7 +124,7 @@ if (!velifyLogin()) {
                  </tbody>
                 <tfoot>
                 <tr>
-                  <th>Email</th>
+                  <th>To</th>
                   <th>Subject</th>               
                   <th>Date</th>
                   <th>View</th>

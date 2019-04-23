@@ -1,7 +1,7 @@
  <footer class="main-footer">
     
-    <strong>Copyright &copy; 2019  All rights
-    reserved.
+    <center><strong>Copyright &copy; 2019  All rights
+    reserved.</strong></center>
   </footer>
   <!-- Logout Modal-->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

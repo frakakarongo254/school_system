@@ -7,6 +7,11 @@ if (!velifyLogin()) {
 $get_emailID="";
 if(isset($_GET['id'])){
   $get_emailID =$_GET['id'];
+  
+  
+  #mark email as read
+   $update_email_read_status=mysqli_query($conn,"update `email` SET status= '1' where `email_ID`='".$get_emailID."'  && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+
 } else{
   header('location: ../index.php');
 }
@@ -60,7 +65,18 @@ if(isset($_GET['id'])){
               <ul class="nav nav-pills nav-stacked">
                   
                  <li><a href="email_inbox.php"><i class="fa fa-inbox"></i> Inbox
-                  <span class="label label-primary pull-right">12</span></a></li>
+                  <span class="label label-primary pull-right">
+                     <?php 
+                      $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+                    $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+                   
+                    $school_email=$senderemail_row['sender_email'];
+
+               $query_inbox= mysqli_query($conn,"select * from `email` where `school_ID` ='".$_SESSION['login_user_school_ID']."' and recipient='$school_email' and status='0'");
+                $query_inbox_row=mysqli_num_rows ( $query_inbox );
+                echo $query_inbox_row ;
+                ?> 
+                  </span></a></li>
                   <li><a href="email_compose.php"><i class="fa fa-pencil-square-o"></i> Compose</a></li>
                 <li><a href="email_sent.php"><i class="fa fa-envelope-o"></i> Sent</a></li>
                 
@@ -86,6 +102,8 @@ if(isset($_GET['id'])){
               $email_row = mysqli_fetch_array($emil_sql,MYSQLI_ASSOC);
               $e_date=$email_row['date_sent'];
               $newDate = date("d-m-Y H:m:s", strtotime($e_date));
+              $sender=$email_row['sender'];
+              $recipient=$email_row['recipient'];
               ?>
                <h3 class="text-centre box-title">Subject: <b><?php echo $email_row['email_subject'];?> </b></h3><span class="pull-right"><?php echo $newDate;?>  <a href="#" onclick="deleteEmail(id)" id="<?php echo $get_emailID; ?>" data-toggle="modal" data-target="#delete_email_Modal" style="color:red"><i class="fa fa-trash-o"></i> Delete</a></span>
               <div class="box-tools pull-right">
@@ -96,7 +114,14 @@ if(isset($_GET['id'])){
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <?php echo "<b style='font-size:18px'>Sent To:</b> <b>". $email_row['recipient']."</b>";?>
+
+              <?php
+               if($school_email == $recipient){
+              echo "<b style='font-size:18px'>From:</b> <b>". $email_row['sender']."</b>";
+            }else{
+              echo "<b style='font-size:18px'>To:</b> <b>". $email_row['recipient']."</b>";
+            }
+            ?>
                <div class="direct-chat-text">
                    <?php
                    

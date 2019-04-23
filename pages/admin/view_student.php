@@ -693,7 +693,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                         while($rows = $result->fetch_assoc()) {
                         $total_Debit= $total_Debit + $rows["Debit"];
                         $total_Credit=$total_Credit + $rows["Credit"];
-                        $total_balance=$total_Credit - $total_Debit;
+                        $total_balance=$total_Debit - $total_Credit;
                         $date_created= $rows['date_created'];
                         $newDate = date("d-m-Y", strtotime($date_created));
                        

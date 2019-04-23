@@ -12,7 +12,7 @@ $get_emailID="";
 if(isset($_GET['id'])){
   $get_emailID =$_GET['id'];
   #mark email as read
-   $update_email_read_status=mysqli_query($conn,"update `email` SET status= '1' where `email_ID`='".$get_emailID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+   $update_email_read_status=mysqli_query($conn,"update `email` SET status= '1' where `email_ID`='".$get_emailID."' and recipient='".$login_parent_email."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 } else{
   header('location: ../../index.php');
 }
@@ -42,16 +42,19 @@ if(isset($_GET['id'])){
   <div class="content-wrapper" style="padding-left: 50px;padding-right: 50px;background-color:   whitesmoke;">
     <!-- Content Header (Page header) -->
      <div class="container">
- <section class="content-header">
-      <ol class="breadcrumb">
+ 
+    <section class="content-header">
+      <h1>
+         <ol class="breadcrumb">
         <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a></li>
        
         <li class="active">Email</li>
       </ol>
-     
+       
+      </h1>
     
     </section>
-    <br>
+    
     <!-- Main content -->
     <section class="content">
       <div class="row">

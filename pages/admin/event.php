@@ -26,7 +26,7 @@ if (!velifyLogin()) {
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="padding-left:30px;padding-right:30px;">
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
@@ -127,20 +127,133 @@ if (!velifyLogin()) {
         </div>'; 
        }
       }
-      
+      #print event
+      if (isset($_POST['printEventBtn'])) {
+        $start=$_POST['printFromDate'];
+       $to= $_POST['printToDate'];
+       $type=$_POST['print_event_type'];
+       if ($type =="Birthday") {
+        ?>
+        <div id="printEventDiv" class="hidden">
+          <div style="font-size: 20px;">Event list for the period starting <b>From: <?php echo date("d-m-Y", strtotime($start)) . "  To  " . date("d-m-Y", strtotime($to)) ?></b> </div>
+         <table id="example134" class=" " style="width:100%">
+            <thead>
+                <tr>
+                  <th class="pull-left">Title</th>
+                  <th class="pull-left">Location</th>
+                  <th class="pull-left">Date</th>
+                  <th class="pull-left">Description</th>
+                
+                  
+                </tr>
+                </thead>
+                <tbody>
+            <?php
+           
+            $event_query = mysqli_query($conn,"select * from event where date(event_startDate) between date('$start') and date('$to') and school_ID = '$school_ID' and event_type='Birthday' ORDER BY event_startDate DESC")or
+            die(mysqli_error());
+            while ($event_row=mysqli_fetch_array($event_query)){
+             $eventID=$event_row['event_ID'];
+             $start=$event_row["event_startDate"];
+              $event_startDate = date("d-m-Y", strtotime($start));
+              $event_starttime = $event_row['event_startime'];
+              $end=$event_row["event_endDate"];
+              $event_endDate= date("d-m-Y", strtotime($end));
+              $endtime=$event_row["event_endtime"];
+            echo' <tr>
+
+              <td >'.
+             $event_row['event_title'].'
+             </td>
+            <td>'.$event_row["event_location"].'</td>
+            <td>'.$event_startDate.'</td>
+            
+            <td>'.$event_row["event_description"].'</td>
+           
+                   
+            </tr>';
+            }
+            ?>
+          </tbody>
+               
+              </table>
+            </div>
+            <script type="text/javascript">
+              $( "#print_event_modal" ).on('shown', function(){
+    alert("I want this to appear after the modal has opened!");
+});
+            </script>
+        <?php
+         
+       }else{
+         ?>
+        <div id="printEventDiv" class="hidden">
+          <div>Event from "</div>
+         <table id="example134" class=" " style="width:100%">
+            <thead>
+                <tr>
+                  <th class="pull-left">Title</th>
+                  <th class="pull-left">Location</th>
+                  <th class="pull-left">Date</th>
+                  <th class="pull-left">Description</th>
+                
+                  
+                </tr>
+                </thead>
+                <tbody>
+            <?php
+           
+            $event_query = mysqli_query($conn,"select * from event where date(event_startDate) between date('$start') and date('$to') and school_ID = '$school_ID' ORDER BY event_startDate DESC")or
+            die(mysqli_error());
+            while ($event_row=mysqli_fetch_array($event_query)){
+             $eventID=$event_row['event_ID'];
+             $start=$event_row["event_startDate"];
+              $event_startDate = date("d-m-Y", strtotime($start));
+              $event_starttime = $event_row['event_startime'];
+              $end=$event_row["event_endDate"];
+              $event_endDate= date("d-m-Y", strtotime($end));
+              $endtime=$event_row["event_endtime"];
+            echo' <tr>
+
+              <td >'.
+             $event_row['event_title'].'
+             </td>
+            <td>'.$event_row["event_location"].'</td>
+            <td>'.$event_startDate.'</td>
+            
+            <td>'.$event_row["event_description"].'</td>
+           
+                   
+            </tr>';
+            }
+            ?>
+          </tbody>
+               
+              </table>
+            </div>
+            <script type="text/javascript">
+              $( "#print_event_modal" ).on('shown', function(){
+    //alert("I want this to appear after the modal has opened!");
+});
+            </script>
+        <?php
+         
+
+       }
+      }
       ?>
     </section>
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row ">
-         <div class="col-md-"></div>
-        <div class="col-md-12" style="padding-left:30px;padding-right:30px;">
+        
+        <div class="col-md-12" style="">
           <div class="box">
             <div class="box-header">
              <div class="row">
               
-              <div class="col-md- col-pull-right " style="text-align:right;padding-right: 30px;"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
+              <div class="col-md- col-pull-right " style=""><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
             </div>
             </div>
             
@@ -154,18 +267,28 @@ if (!velifyLogin()) {
           </div>
           <!-- /.box -->
         </div>
-        <div class="col-md-"></div>
+      
       </div>
       <div class="row ">
-          <div class="col-md-12 box "  style="padding-left:30px;padding-right:30px;">
-            <br>
-          <table id="example1" class="table table-bordered table-striped">
+          <div class="col-md-12 box "  style="">
+           
+           <div class="box">
+			<div class="box-header">
+             <div class="row">
+              
+              <div class="col-md-12 pull- " style=""><a class="btn btn-primary pull-right" href="" data-toggle="modal" data-target="#modal-printEvent"><i class="fa fa-print"></i><b> Print Event</b></a></div>
+            </div>
+            </div>
+			<div class="box-body table-responsive">
+          <table id="example1" class="table table-bordered table-striped table-responsive">
             <thead>
                 <tr>
-                  <th>title</th>
+                  <th>Title</th>
                   <th>Location</th>
-                  <th>Start Date & time</th>
-                  <th>End Date  & time</th>
+                  <th>Starting Date</th>
+				  <th>Starting  time</th>
+                  <th>Ending Date </th>
+				  <th>Ending time</th>
                   <th>Description</th>
                   <th>Action</th>
                   
@@ -190,11 +313,13 @@ if (!velifyLogin()) {
              $event_row['event_title'].'
              </td>
             <td>'.$event_row["event_location"].'</td>
-            <td>'.$event_startDate.'  '.$event_starttime.'</td>
-            <td>'.$event_endDate.'  '.$endtime.'</td>
+            <td>'.$event_startDate.'</td>
+			<td>'.$event_starttime.'</td>
+            <td>'.$event_endDate.'</td>
+			 <td>'.$endtime.'</td>
             <td>'.$event_row["event_description"].'</td>
             <td>
-            <a data-toggle="modal" data-target="#view_event_Modal" href="#" id="'.$eventID.'" onclick="sendEventFunc(this.id)"><span class="pull- badge bg-success btn-success"><i class="fa fa-eye"></i> </span></a>
+            <a data-toggle="modal" data-target="#view_event_Modal" href="#" id="'.$eventID.'" onclick="sendEventFunc(this.id)"><span class="pull- badge bg-success btn-success"><i class="fa fa-envelope-open"></i> </span></a>
             <a data-toggle="modal" data-target="#edit_event_Modal" href="#" id="'.$eventID.'" onclick="editEventFunc(this.id)"><span class="pull- badge bg-secondary"><i class="fa fa-pencil"></i> </span></a>
             <a data-toggle="modal" data-target="#delete_event_Modal" href="#" id="'.$eventID.'" onclick="deleteEventFunc(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> </span></a>
             </td>
@@ -203,19 +328,13 @@ if (!velifyLogin()) {
             }
             ?>
           </tbody>
-                <tfoot>
-                <tr>
-                 <th>title</th>
-                  <th>Location</th>
-                  <th>Start Date & time</th>
-                  <th>End Date  & time</th>
-                  <th>Description</th>
-                  <th>Action</th>
-                </tr>
-                </tfoot>
+               
               </table>
+			</div>
          </div>
-      </div>
+		 </div>
+     
+	 </div>
     <!--- add Event Modal -->
       <div class="modal fade" id="modal-addEvent">
           <div class="modal-dialog modal-md">
@@ -299,6 +418,84 @@ if (!velifyLogin()) {
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
                 <button type="submit" name="addEventBtn" class="btn btn-primary">Add Event</button>
+              </div>
+              </div>
+             </form>
+            </div>
+            <!-- /.tab-content -->
+          </div>
+              </div>
+              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <div class="modal fade" id="modal-printEvent">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b>Print Event</b></h4>
+              </div>
+              <div class="modal-body">
+                 <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+              <!-- /.tab-pane -->
+            <form  action="event.php" method="POST">
+          
+           <br>
+           
+          <br>
+           <div class="row">
+            <div class=" col-md-12">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">FROM:   <i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="date" name="printFromDate"  id="" class="form-control"   placeholder="Starting Time" required>
+            </div>
+          </div>
+          
+          </div>
+           
+          <br>
+           
+          <div class="row">
+            <div class=" col-md-12">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">TO:   <i class="glyphicon glyphicon-calendar"></i></span>
+             <input type="date" name="printToDate"  class="form-control"   placeholder="Ending time" required>
+            </div>
+          </div>
+          
+          </div>
+          <br>
+           <div class="row">
+            <div class=" col-md-12 ">
+              <div class="form-group has-feedback input-group-">
+                  
+                 <div class=" col-md- input-group input-group">              
+                 <label>
+                    <input type="radio" name="print_event_type" class=" flat-red"  value="All" checked>
+                    <label>ALL Events</label>
+                  </label>
+                  <br>
+                  <label>
+                    <input type="radio" name="print_event_type" class=" flat-red" value="Birthday">
+                    <label>Birthday Events</label>
+                  </label>
+                </div>
+                </div>
+            </div>
+            <br>
+          </div>
+         
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                <button type="submit" name="printEventBtn" class="btn btn-primary">Print</button>
               </div>
               </div>
              </form>
@@ -426,6 +623,39 @@ if (!velifyLogin()) {
         </div>
           </div>
         </div>
+      </div>
+    </div>
+     </div>
+      <div class="modal  fade" id="print_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Print Events</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+     <iframe id="printM" name="printM" style="width: 100%;height:600px;">
+
+    </iframe>
+            <script >
+        
+          var data=document.getElementById("printEventDiv").outerHTML;
+         
+            var newWin = window.frames["printM"];
+        newWin.document.write('<body onload="window.print()">'+data+'</body>');
+        newWin.document.close();
+         
+         
+  
+            </script>
+          
+          
+          
+
+        </div>
+          
       </div>
     </div>
      </div>

@@ -1,5 +1,5 @@
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
+  <aside class="main-sidebar skin-purple" style="background-color: ">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- Sidebar user panel -->
@@ -12,12 +12,7 @@
           <a href="dashboard.php"><i class="fa fa-dashboard"></i> Dashboard </a>
         
         </li>
-         <li>
-          <a href="#">
-            <i class="fa fa-envelope-o"></i> <span>SMS</span>
-           
-          </a>
-        </li>
+         
         <li>
           <a href="email_inbox.php">
             <i class="fa fa-envelope-open"></i> <span>Email</span>

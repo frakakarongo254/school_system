@@ -42,6 +42,9 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="../../bower_components/fullcalendar/dist/fullcalendar.min.css">
+  <link rel="stylesheet" href="../../bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -56,15 +59,15 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
+<?php
+  include("include/top_navbar.php");
 
+?>
   
   <!-- Full Width Column -->
   <div class="content-wrapper">
     <div class="container">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        
-      </section>
+      
 
       <!-- Main content -->
       <section class="content">
@@ -79,52 +82,54 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
          
             <div class="box-body box-profile">
               <div class="row">
-                <div class="col-md-3 ">
-                  <div class="pull-left">
-                   
-                   <?php echo $image;?>
-
-              
+                <div class="col-md-6 ">
+                  <div class="row">
+                   <div class="col-md-2">
+                     <span style="font-size: 17px">Name:</span>
+                   </div>
+                   <div class="col-md-2">
+                     <b><?php echo $parent_row['first_Name'] ." ". $parent_row['last_Name'];?></b>
+                   </div>
+                    <div class="col-md-2">
+                     <span style="font-size: 17px">Email:</span>
+                   </div>
+                   <div class="col-md-2">
+                     <b><?php echo $parent_row['email']?></b>
+                   </div>
+            </div>
+            <br>
+             <div class="row">
+                   <div class="col-md-2">
+                     <span style="font-size: 17px">Phone:</span>
+                   </div>
+                   <div class="col-md-2">
+                     <b><?php echo $parent_row['cell_Mobile_Phone']?></b>
+                   </div>
+                    <div class="col-md-2">
+                     <span>Nationality:</span>
+                   </div>
+                   <div class="col-md-2">
+                     <b><?php echo $parent_row['nationality']?></b>
+                   </div>
+            </div>
+            <br>
+            <div class="row">
+                   <div class="col-md-2">
+                     <span style="font-size: 17px">Gender:</span>
+                   </div>
+                   <div class="col-md-2">
+                     <b><?php echo $parent_row['gender_MFU']?></b>
+                   </div>
+                    
             </div>
                 </div>
-                <div class="col-md-9">
-                  <table class="table" style="width: 100%;" >
-                    <tr>
-                    <td><span style="font-size: 17px">Name:</span></td>
-                    <td><h3 class="profile-username "><b><?php echo $parent_row['first_Name'] ." ". $parent_row['last_Name'];?></b></h3></td>
-                    <td><span style="font-size: 17px">Email:</span></td>
-                    <td><b><?php echo $parent_row['email']?></b></td>
-                  </tr>
-                 
-                  <tr>
-                    <td><span>Phone:</span></td>
-                    <td><b><?php echo $parent_row['cell_Mobile_Phone']?></b></td>
-                     <td><span>Nationality:</span></td>
-                    <td><b><?php echo $parent_row['nationality']?></b></td>
-                  </tr>
-                  
-                  <tr>
-                    <td><span>Gender:</span></td>
-                    <td><b><?php echo $parent_row['gender_MFU']?></b></td>
-                  </tr>
-                  
-                 </table>
-                </div>
-                
-              </div>
-             <hr>
-            </div>
-            <!-- /.box-body -->
-         
-          <!-- /.box -->
-
-		  </div>
-              <div class="row">
-                <div class="col-lg-4 col-xs-6">
+                <div class="col-md-6">
+                  <div class="row">
+                     <div class="col-lg-4 col-xs-6 col-md-4">
                   <!-- small box -->
                   <div class="small-box bg-aqua">
                     <div class="inner">
-                       <p><b><h2>Total Invoice Value</h2></b></p>
+                       <p><b>Invoice Value</b></p>
                        <?php
                               
                                         $amt_invoiced=0.00;
@@ -148,7 +153,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                      }
                                    }
                                  }
-                               echo  "<h1>Ksh ".$amt_invoiced.".00 </h1>";
+                               echo  "Ksh ".$amt_invoiced.".00";
                                        ?>
 
                      
@@ -156,18 +161,17 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                     <div class="icon">
                       <i class="ion ion-"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    
                   </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
+                <div class="col-lg-4 col-xs-6 ">
                   <!-- small box -->
                   <div class="small-box bg-green">
                     <div class="inner">
                      
-                          <p><b><h2>Total Amount Paid</h2></b></p>
+                          <p><b> Amount Paid</b></p>
 
-                      <p>
+                    
                         
                          <?php
                                
@@ -192,35 +196,42 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                      }
                                    }
                                  }
-                                echo  "<h1>Ksh ".$total_amount_paid.".00 </h1>";
+                                echo  "Ksh ".$total_amount_paid.".00 ";
                                        ?>
-                      </p>
+                      
                     </div>
                     <div class="icon">
                       <i class="ion ion-"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                   
                   </div>
                 </div>
-                <!-- ./col -->
                 <div class="col-lg-4 col-xs-6">
                   <!-- small box -->
                   <div class="small-box bg-yellow">
                     <div class="inner">
-                        <p><h2><b>Balance</b></h2>
-                        <?php echo '<h1>Ksh '. $tol=$amt_invoiced - $total_amount_paid.'.00</h1>';?>
+                        <p><b>Balance</b></p>
+                        <?php echo 'Ksh '. $tol=$amt_invoiced - $total_amount_paid.'.00';?>
                     
                     </div>
                     <div class="icon">
                       <i class="ion "></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+
                   </div>
                 </div>
-                <!-- ./col -->
+                  </div>
+                </div>
                 
-                <!-- ./col -->
               </div>
+             <hr>
+            </div>
+            <!-- /.box-body -->
+         
+          <!-- /.box -->
+
+		  </div>
+             
           </div>
           <!-- /.box-body -->
         </div>
@@ -333,7 +344,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                   <tbody>
                     <?php
           
-            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY event_startDate ASC LIMIT 5")or
+            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY event_startDate DESC LIMIT 5")or
             die(mysqli_error());
             while ($event_row=mysqli_fetch_array($event_query)){
              $eventID=$event_row['event_ID'];
@@ -366,7 +377,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
             <!-- /.box-body -->
             <div class="box-footer clearfix">
              
-              <a href="event.php" class="btn btn-sm btn-default btn-flat pull-right">View All Events</a>
+              <a href="" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#view_event_modal">View All Events</a>
             </div>
             <!-- /.box-footer -->
           </div>
@@ -392,7 +403,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                       
                     </ul>
                     <div class="tab-content">
-                      <div class="tab-pane active" id="children_tab">
+                      <div class="tab-pane active table-responsive" id="children_tab">
                             <table id="example3" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -440,20 +451,11 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                   ?>
                                
                                  </tbody>
-                                <tfoot>
-                                <tr>
-                                  <th>Img</th>
-                                  <th>Name</th>
-                                  <th>Reg No</th>
-                                  
-                                  <th>Gender</th>
-                                  <th>Actions</th>
-                                </tr>
-                                </tfoot>
+                               
                               </table>
                       </div>
                       <!-- /.tab-pane -->
-                      <div class="tab-pane" id="email_tab">
+                      <div class="tab-pane table-responsive" id="email_tab">
                             <div class="nav-tabs-custom">
                               <ul class="nav nav-tabs">
                                 <li class="active"><a href="#email_inbox_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Inbox</a></li>
@@ -461,7 +463,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                
                               </ul>
                               <div class="tab-content">
-                                <div class="tab-pane active" id="email_inbox_tab">
+                                <div class="tab-pane active table-responsive" id="email_inbox_tab">
                                       <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                         <tr>
@@ -493,17 +495,10 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                           ?>
                                        
                                          </tbody>
-                                        <tfoot>
-                                        <tr>
-                                          <th>From</th>
-                                          <th>Subject</th>               
-                                          <th>Date</th>
-                                          <th>View</th>
-                                        </tr>
-                                        </tfoot>
+                                        
                                       </table>
                                 </div>
-                                <div class="tab-pane " id="email_sent_tab">
+                                <div class="tab-pane table-responsive" id="email_sent_tab">
                                           <table id="example1" class="table table-bordered table-striped">
                                               <thead>
                                               <tr>
@@ -535,21 +530,14 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                 ?>
                                              
                                                </tbody>
-                                              <tfoot>
-                                              <tr>
-                                                <th>To</th>
-                                                <th>Subject</th>               
-                                                <th>Date</th>
-                                                <th>View</th>
-                                              </tr>
-                                              </tfoot>
+                                              
                                           </table>
                                 </div>
                               </div>
                             </div>
                       </div>
                       <!-- /.tab-pane -->
-                      <div class="tab-pane" id="notification_tab">
+                      <div class="tab-pane table-responsive" id="notification_tab">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -590,7 +578,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                               </table>
                       </div>
                       <!-- /.tab-pane -->
-                      <div class="tab-pane" id="finance_tab">
+                      <div class="tab-pane table-responsive" id="finance_tab">
                         <div class="nav-tabs-custom">
                               <ul class="nav nav-tabs">
                                 <li class="active"><a href="#invoice_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Invoices</a></li>
@@ -661,7 +649,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                             </table>
                                      
                                 </div>
-                                <div class="tab-pane" id="payment_tab">
+                                <div class="tab-pane table-responsive" id="payment_tab">
                                            <table id="example1" class="table table-bordered table-striped">
                                               <thead>
                                               <tr>
@@ -732,14 +720,31 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                       <!-- /.tab-pane -->
                     </div>
                     <!-- /.tab-content -->
-                  </div>
-                  <!-- nav-tabs-custom -->
+              
+         <div class="modal  fade" id="view_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"><b>Event Calender</b></h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
           </div>
+          <div class="modal-body">
+    
+                <div id="calendar">calender</div>
+          
+          
+          
+
         </div>
-        
+          
+      </div>
+    </div>
+     </div>
       </section>
 
-    </div>
+    
 	</div>
     <!-- /.container -->
   </div>
@@ -749,7 +754,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
  ?>
 </div>
 <!-- ./wrapper -->
-
+<?php include('event_javascript.php')?>
 <!-- jQuery 3 -->
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -758,6 +763,9 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
 <script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
+<!--Full calender-->
+<script src="../../bower_components/moment/moment.js"></script>
+<script src="../../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->

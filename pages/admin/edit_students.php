@@ -67,7 +67,10 @@ if (!velifyLogin()) {
 
       #edit student details
       if(isset($_POST['editStudentBtn'])){
+        $edit_student_nickname="";
+        $edit_healthyComment="";
           #get school Id from current session school id
+
          $school_ID = $_SESSION['login_user_school_ID'];
 
         $edit_student_first_name=$_POST['edit_student_first_name'];
@@ -82,7 +85,7 @@ if (!velifyLogin()) {
         $edit_zoneChargeType=$_POST['edit_zoneChargeType'];
        $edit_student_nationality=$_POST['edit_student_nationality'];
        $edit_student_class_id=$_POST['edit_student_class_id'];
-
+       $eventTitle=$edit_student_first_name ." ". $edit_student_last_name . "  Birthday";
         # check image
        if(isset($_FILES['edit_student_profile_photo']['name']) and !empty($_FILES['edit_student_profile_photo']['name'])){
          echo  $file=$_FILES['edit_student_profile_photo']['name'];
@@ -101,7 +104,19 @@ if (!velifyLogin()) {
             $edit_student_profile_photo = addslashes(file_get_contents($_FILES['edit_student_profile_photo']['tmp_name']));
               $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."',photo='".$edit_student_profile_photo."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
-        //  echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
+           $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='".$edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
+           if ($event_query) {
+              echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
+           }else{
+                echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+           }
+       
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -116,7 +131,18 @@ if (!velifyLogin()) {
             $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
           
-           echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
+          $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='". $edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
+           if ($event_query) {
+              echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
+           }else{
+                echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+           }
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -181,7 +207,7 @@ if (!velifyLogin()) {
                         <label>Nickname :</label>
                  <div class=" col-md- input-group input-group">              
                   <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                   <input type="text" value="<?php echo $rows_details['nickname'];?>" name="edit_student_nickname"  class="form-control"   placeholder="Nickname" required>
+                   <input type="text" value="<?php echo $rows_details['nickname'];?>" name="edit_student_nickname"  class="form-control"   placeholder="Nickname" >
                 </div>
                 </div>
                 </div>           
@@ -347,7 +373,7 @@ if (!velifyLogin()) {
                    <div class="form-group has-feedback input-group-">
                         <label>Comment:</label>
                  <div class=" col-md-12 input-group input-group">              
-                 <textarea class="form-control" name="edit_healthyComment" placeholder="Healthy comment" required><?php echo $rows_details['other_Details'];?></textarea>
+                 <textarea class="form-control" name="edit_healthyComment" placeholder="Healthy comment" ><?php echo $rows_details['other_Details'];?></textarea>
                 </div>
                   </div>
                 </div>

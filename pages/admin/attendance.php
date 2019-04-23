@@ -75,19 +75,29 @@ if (!velifyLogin()) {
     foreach ($_POST['attendance_status'] as $id => $attendance_status)
     {   
         $classID= $class_ID;
-        $student_id = $_POST['studentID'][$id];
+       // $attendance_status = $_POST['attendance_status'][$id];
+        if(isset($_POST['student_ID'][$id]) and isset($_POST['student_name'][$id])){
+         $student_id = $_POST['student_ID'][$id];
         $student_name = $_POST['student_name'][$id];
+
         $date_created = date('Y-m-d H:i:s');
         $date_modified = date('Y-m-d H:i:s');
         $school_ID = $_SESSION['login_user_school_ID'];
         $attendance=mysqli_query($conn,"insert into `attendance` (student_id, student_name,class_ID, date_entered, date_modified, status,school_ID
           ) 
-          values('$student_id', '$student_name','$classID', '$date_created', '$date_modified', '$attendance_status','$school_ID') ");
-       
+          values('$student_id', '$student_name','$class_ID', '$date_created', '$date_modified', '$attendance_status','$school_ID') ");
+       }
     }
      
     if ($attendance) {
-      echo  $msg = "Attendance has been added successfully";
+      //echo  $msg = "Attendance has been added successfully";
+       echo' <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Attendance has been added successfully.
+          </div>';   
       // echo '<script> window.location="attendance.php?insert=True" </script>';
     }else{
        echo' <div class="alert alert-danger alert-dismissable">
@@ -178,12 +188,12 @@ if (!velifyLogin()) {
                     }
                     $fullName=$row1['first_Name']." ". $row1['last_Name'];
 
-                  echo"  <input type='hidden' name='classID[]'' value='".$classID."' />
+                  echo"  <input type='hidden' name='classID' value='".$classID."' />
                   <tr>
                      
-                   <td>".$row1['registration_No']." <input type='hidden' name='studentID[]'' value='".$row1['student_ID']."' /></td>
+                   <td>".$row1['registration_No']." <input type='hidden' name='student_ID[]' value='".$row1['student_ID']."' /></td>
                   <td>".$img."</td>
-                  <td>".$row1['first_Name']." ". $row1['last_Name']."<input type='hidden' name='student_name[]'' value='".$fullName."' /></td>";
+                  <td>".$row1['first_Name']." ". $row1['last_Name']."<input type='hidden' name='student_name[]' value='".$fullName."' /></td>";
                  
                 echo' <td>
                     <label for="present4">

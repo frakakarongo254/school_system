@@ -485,9 +485,9 @@ if(isset($_POST['editDocumentBtn'])){
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-<!--include footer-->
+
 <?php
- include('include/footer.php');
+ //include('include/footer.php');
  ?>
 <!--include settings-sidebar-->
  
@@ -504,8 +504,7 @@ if(isset($_POST['editDocumentBtn'])){
 <!-- ./wrapper -->
 
 
-<!-- include script-->
-<?php include("include/script.php")?>
+
 <!-- page script -->
 <script>
   $(function () {
@@ -544,5 +543,7 @@ if(isset($_POST['editDocumentBtn'])){
   }
 
 </script>
+<!-- include script-->
+<?php include("include/script.php")?>
 </body>
 </html>
