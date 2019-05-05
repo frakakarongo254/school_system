@@ -373,7 +373,7 @@ chart.render();
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
-              <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Add new Event</a>
+              
               <a href="event.php" class="btn btn-sm btn-default btn-flat pull-right">View All Events</a>
             </div>
             <!-- /.box-footer -->

@@ -63,7 +63,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
 
 
     <!-- Main content -->
-    <div></div>
+
     <section class="content box box-primary">
       <!-- Small boxes (Stat box) -->
       <div class="row bg-#fff">
@@ -265,7 +265,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
-    </div>
+    </div
   </div>
   <!-- /.content-wrapper -->
 <!--include footer-->
@@ -275,7 +275,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
 
 
 </div>
-</section>
+
   <!-- Logout Modal-->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

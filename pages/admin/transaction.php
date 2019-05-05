@@ -102,6 +102,7 @@ if (!velifyLogin()) {
 
       }
       ?>
+      
     </section>
     <!-- Main content -->
     <section class="content">
@@ -109,12 +110,41 @@ if (!velifyLogin()) {
         <!-- Custom Tabs -->
            <div class="box" style="padding-right: 20px;padding-left: 20px">
             <br>
+             <form action="transaction.php" method="POST">
           <div class="row">
-              <div class="col-md-8"><b><h3>PAYMENT</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="createinvoice.php" ><i class="fa fa-plus"></i><b> New Invoice </b></a></div>
+           
+              <div class="col-md-3"><b><h3>PAYMENT</h3> </b></div>
+              <div class="col-md-3">
+                <div class=" input-group input-group-">
+              <span class="input-group-addon">FROM:   <i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="date" name="fromDate"  id="" class="form-control"   placeholder="Starting Time" required>
             </div>
+          </div>
+              <div class="col-md-3">
+                <div class=" input-group input-group-">
+              <span class="input-group-addon">TO:   <i class="glyphicon glyphicon-calendar"></i></span>
+             <input type="date" name="toDate"  class="form-control"   placeholder="Ending time" required>
+            </div>
+              </div>
+              <div class="col-md-1 ">
+              
+              <button type="submit" name="printPaymentBtn" class="btn btn-primary btn-sm"><i class="fa fa-filter"></i> Filter</button>
             
-               <table id="example1" class="table table-bordered table-striped">
+                </div>
+          
+              <div class="col-md-2">
+                <a class="btn btn-success pull-right btn-sm" href="" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print Payment</b></a>
+              </div>
+             
+            </div>
+          </form>
+         <?php
+              if (isset($_POST['printPaymentBtn']) and isset($_POST['fromDate']) and isset($_POST['toDate']) ) {
+               $printFromDate=$_POST['fromDate'];
+               $printFromTo=$_POST['toDate'];
+
+               ?>
+                <table id="example2" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                               
@@ -131,7 +161,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' ORDER BY payment_date DESC")or
+                               $query2 = mysqli_query($conn,"select * from payment where date(payment_date) between date('$printFromDate') and date('$printFromTo')  and school_ID = '$school_ID' ORDER BY date('$printFromDate')  DESC")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
@@ -166,6 +196,82 @@ if (!velifyLogin()) {
                                       
                                        echo' 
                                           <td>
+                                          <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                         <button type="button"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            
+                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"> View</span></a>
+
+                                         <button type="button"  class="btn btn-primary btn-flat" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
+                                       </td>
+                                    </tr>';
+
+                               
+                              }
+                                }
+                              }
+                              ?>
+                           
+                             </tbody>
+                            
+                          </table>
+               <?php
+
+             } else {
+              ?>
+              <table id="example2" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              
+                              <th>Invoice Ref</th>
+                              <th>Receipt No </th>
+                              <th>Date</th>
+                              <th>Name</th>
+                              <th>Remark</th>
+                              <th>Amount</th>
+                              <th>Action</th>
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               
+                               $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' ORDER BY id DESC")or
+                               die(mysqli_error());
+                               $total_amount=0.00;
+                               while ($row2=mysqli_fetch_array($query2)){
+                                $total_amount= $total_amount + $row2['amount_paid']  ;
+                               $invoiceID= $row2['invoice_ID'];
+                               $paymentID= $row2['payment_ID'];
+                                $invoive_date= $row2['payment_date'];
+                                $studentid= $row2['student_ID'];
+                                $slipNo= $row2['slip_no'];
+                               $newDate = date("d-m-Y", strtotime($invoive_date));
+                                $total_amount=0.00;
+                                $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='$invoiceID' and school_ID = '$school_ID' ");
+                              
+                               while ($row3=mysqli_fetch_array($query3)){
+                                $invoice_ref=$row3['reff_no'];
+                              $query4 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+                              
+                               while ($row4=mysqli_fetch_array($query4)){
+                                $name=$row4['first_Name']." ".$row4['last_Name'];
+                                $reg=$row4['registration_No'];
+                                echo' <tr>
+                                   <td>   <a href="view_invoice.php?invoice='.$invoiceID.'"> '.$invoice_ref.' </a></td>';
+
+                                  echo " <td> ".$slipNo."</td>
+                                          <td>".$newDate."</td>
+                                         <td>".$reg ." ".$name."</td>
+                                        <td>".$row2['remarks']." </td>
+                                        <td>".$row2['amount_paid']."</td>
+                                        ";
+                                         
+                                          
+                                      
+                                       echo' 
+                                          <td>
+                                           <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
+
                                          <button type="button"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
                                            <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"> View</span></a>
@@ -183,6 +289,12 @@ if (!velifyLogin()) {
                              </tbody>
                             
                           </table>
+
+
+            <?php ;}
+         ?>
+            
+               
             <!-- /.tab-content -->
           </div>
           <!-- nav-tabs-custom -->
@@ -269,6 +381,68 @@ if (!velifyLogin()) {
       </div>
     </div>
      </div>
+
+     <div class="modal fade" id="modal-printInvoice">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b>Print Payment List</b></h4>
+              </div>
+              <div class="modal-body">
+                 <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+              <!-- /.tab-pane -->
+            <form  action="print_payment_list.php" method="POST" target="_blank">
+          
+          
+           
+          <br>
+           <div class="row">
+            <div class=" col-md-12">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">FROM:   <i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="date" name="printFromDate"  id="printFromDate" class="form-control"   placeholder="Starting Time" required>
+            </div>
+          </div>
+          
+          </div>
+           
+          <br>
+           
+          <div class="row">
+            <div class=" col-md-12">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">TO:   <i class="glyphicon glyphicon-calendar"></i></span>
+             <input type="date" name="printToDate" id="printToDate" class="form-control"   placeholder="Ending time" required>
+            </div>
+          </div>
+          
+          </div>
+          <br>
+           
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                <button type="submit" name="printTransactionBtn"  class="btn btn-primary">Print</button>
+              </div>
+              </div>
+             </form>
+            </div>
+            <!-- /.tab-content -->
+          </div>
+              </div>
+              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+ 
+       
     </section>
     <!-- /.content -->
   </div>
@@ -316,6 +490,11 @@ if (!velifyLogin()) {
   }
   });
   }
+
+
+
+  //<!--priny payment list -->
+  
 </script>
 <script>
   $(function () {
@@ -323,8 +502,8 @@ if (!velifyLogin()) {
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
+      'searching'   : true,
+      'ordering'    : false,
       'info'        : true,
       'autoWidth'   : false
     })

@@ -22,6 +22,17 @@
    $_SESSION['login_user_ID'] = $row['parent_ID'];
    $_SESSION['login_user_photo'] = $row['photo'];
   // $_SESSION['login_user_role'] = $row['role'];
+
+    $school_data_sql = mysqli_query($conn,"select * from `school` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+     $school_row = mysqli_fetch_array($school_data_sql,MYSQLI_ASSOC);
+     $school_row['school_Name'];
+   
+   #currency formatting
+    function formatCurrency($num){
+
+$formattedNum = number_format($num, 2);
+return $formattedNum;
+     }
    
    function velifyLogin(){
 	if (isset($_SESSION['login_user_email']) && isset($_SESSION['login_user_school_ID'])) {

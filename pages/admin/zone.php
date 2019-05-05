@@ -162,14 +162,7 @@ if (!velifyLogin()) {
                   ?>
                
                  </tbody>
-                <tfoot>
-                 <tr>   
-                  <th>Zone</th>
-                  <th>One Way Charge</th>
-                  <th>Two Way Charge</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+               
               </table>
             </div>
             <!-- /.box-body -->
@@ -204,7 +197,7 @@ if (!velifyLogin()) {
              <div class="row">   
               <label for="nationality">One Way Charge:</label>
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-">Ksh</i></span>
+                <span class="input-group-addon"><i class="fa fa-"><?php echo $school_row['currency']?></i></span>
                 <input type="text" class="form-control" name="oneWayCharge">
                 
               </div>
@@ -214,7 +207,7 @@ if (!velifyLogin()) {
             <div class="row">   
               <label for="nationality">Two Way Charge:</label>
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-"></i>Ksh</span>
+                <span class="input-group-addon"><i class="fa fa-"></i><?php echo $school_row['currency']?></span>
                 <input type="text" class="form-control" name="twoWayCharge">
                 
               </div>

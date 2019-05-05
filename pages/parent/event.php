@@ -175,7 +175,7 @@ $login_parent_email=$_SESSION['login_user_email'];
           <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                  <th>title</th>
+                  <th>Title</th>
                   <th>Location</th>
                   <th>Start Date & time</th>
                   <th>End Date  & time</th>
@@ -212,7 +212,7 @@ $login_parent_email=$_SESSION['login_user_email'];
           </tbody>
                 <tfoot>
                 <tr>
-                 <th>title</th>
+                 <th>Title</th>
                   <th>Location</th>
                   <th>Start Date & time</th>
                   <th>End Date  & time</th>

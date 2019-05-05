@@ -40,31 +40,22 @@
               <!-- Menu toggle button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-envelope-o"></i>
-                <span class="label label-success">0</span>
+                <span class="label label-success">
+                  <?php 
+                  $Parent_email=   $_SESSION['login_user_email'];
+
+               $query_inbox= mysqli_query($conn,"select * from `email` where `school_ID` ='".$_SESSION['login_user_school_ID']."' and recipient='$Parent_email' and status='0'");
+                $query_inbox_row=mysqli_num_rows ( $query_inbox );
+                echo $query_inbox_row ;
+                ?> 
+
+                </span>
               </a>
               <ul class="dropdown-menu">
-                <li class="header">You have  messages</li>
+                <li class="header">You have   <?php  echo $query_inbox_row ;?> messages</li>
                 <li>
                   <!-- inner menu: contains the messages -->
-                  <ul class="menu">
-                    <li><!-- start message -->
-                      <a href="#">
-                        <div class="pull-left">
-                          <!-- User Image -->
-                          <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                        </div>
-                        <!-- Message title and timestamp -->
-                        <h4>
-                          Support Team
-                          <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                        </h4>
-                        <!-- The message -->
-                        <p>Why not buy a new awesome theme?</p>
-                      </a>
-                    </li>
-                    <!-- end message -->
-                  </ul>
-                  <!-- /.menu -->
+                  
                 </li>
                 <li class="footer"><a href="#">See All Messages</a></li>
               </ul>
@@ -82,9 +73,9 @@
               // img circle class
               $user_img_circle='<img class="img-circle" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['login_user_photo'] ).'"  height="160px" width="160px" />';
              }else{
-              $user_img='<img src="../dist/img/avatar.png" class="user-image" alt="User Image">';
+              $user_img='<img src="../../dist/img/avatar.png" class="user-image" alt="User Image">';
               // img circle class
-              $user_img_circle='<img src="../dist/img/avatar.png" class="img-circle" alt="User Image">';
+              $user_img_circle='<img src="../../dist/img/avatar.png" class="img-circle" alt="User Image">';
              }
             ?>
               <!-- Menu Toggle Button -->
@@ -94,7 +85,7 @@
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                 <span class="hidden-xs"><?php echo $_SESSION['login_user_fullName']?></span>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown dropdown-menu">
                 <!-- The user image in the menu -->
                 <li class="user-header">
                   <?php echo $user_img_circle;?>

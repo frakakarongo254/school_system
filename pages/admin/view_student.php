@@ -6,7 +6,7 @@ if (!velifyLogin()) {
 $school_ID=$_SESSION['login_user_school_ID'];
 $student_ID="";
 if(isset($_GET['id'])){
-  $student_ID =$_GET['id'];
+   $student_ID =$_GET['id'];
 }
  #get mile stone details from db
 $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' LIMIT 1 ");
@@ -341,6 +341,54 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
 
 }   
 }    
+
+#save immunization record
+if (isset($_POST['saveImmunizationBtn'])) {
+  echo "yes";
+  $sql023 = mysqli_query($conn,"select * from `immunization` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' ");
+$row23 = mysqli_fetch_array($sql023 ,MYSQLI_ASSOC);
+$count= mysqli_num_rows($sql023);
+$query11='';
+if ($count > 0) {
+ $de_query=mysqli_query($conn,"DELETE FROM immunization WHERE `student_ID`='".$student_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
+ if ($de_query) {
+           for($i = 0; $i<count($_POST['immunization']); $i++)  
+      {  
+      $query11=mysqli_query($conn,"INSERT INTO immunization  
+      SET   
+      student_ID = '{$student_ID}',  
+      immunization = '{$_POST['immunization'][$i]}',
+      vaccinationDate = '{$_POST['vaccinationDate'][$i]}',  
+      renewalDate = '{$_POST['renewalDate'][$i]}',  
+
+      school_ID = '{$school_ID}'"); 
+
+      //echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
+      }
+      if (!$query11) {
+       echo "erro  happened".mysqli_error($conn);
+      }
+ }
+}else{
+  # code...
+  for($i = 0; $i<count($_POST['immunization']); $i++)  
+{  
+$query1=mysqli_query($conn,"INSERT INTO immunization  
+SET   
+student_ID = '{$student_ID}',  
+immunization = '{$_POST['immunization'][$i]}',
+vaccinationDate = '{$_POST['vaccinationDate'][$i]}',  
+renewalDate = '{$_POST['renewalDate'][$i]}',  
+
+school_ID = '{$school_ID}'"); 
+
+//echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
+}
+ if (!$query11) {
+       echo "erro  happened".mysqli_error($conn);
+      }
+} 
+}
           ?>
 </div>
 </div>
@@ -362,7 +410,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
              if($row['photo'] !=''){
               $image = '<img class=" profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"  height="40px" width="40px" alt="User profile picture"/>';
             }else{
-                $image = "<img class=' profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' alt='User profile picture'>";
+                $image = "<img class=' profile-user-img img-responsive img-circle' src='../../dist/img/avatar.png' alt='User profile picture'>";
               }
           ?>
           <!-- Profile Image -->
@@ -423,7 +471,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                                while ($row011=mysqli_fetch_array($query2)){
                                         $total_invoiced= $total_invoiced + $row011['amount'];
                                }
-                              echo'<b>'. $total_invoiced .'.00</b>';
+                              echo $school_row['currency'] .   ' <b> '  .formatCurrency($total_invoiced).'</b>';
                                ?>
 
                     </td>
@@ -438,14 +486,14 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                                while ($row011=mysqli_fetch_array($query2)){
                                          $total_amount_paid=  $total_amount_paid + $row011['amount_paid'];
                                }
-                              echo  '<b>'.$total_amount_paid.'.00<b>';
+                              echo  $school_row['currency'] . ' <b>  '.formatCurrency($total_amount_paid).'</b>';
                                ?>
                     </td>
                   </tr>
                   <tr>
                     <td><span>Balance:</span></td>
                     <td>
-                      <b><?php  $bal= $total_invoiced - $total_amount_paid; echo '<b>'.$bal.'.00</b>';?></b>
+                      <?php  $bal= $total_invoiced - $total_amount_paid; echo $school_row['currency'] .  '<b> '  .formatCurrency($bal)  ;?></b>
                     </td>
                   </tr>
                   
@@ -476,8 +524,12 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                   <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Classes</a></li>
                   <li><a href="#tab_2" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Parents</a></li>
                   <li><a href="#tab_3" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Documents</a></li>
-                   <li><a href="#tab_4" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Statement</a></li>
+                   <li><a href="#tab_invoice" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Invoices</a></li>
+                  <li><a href="#tab_payment" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Payment</a></li>
+                  <li><a href="#tab_4" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Statement</a></li>
                     <li><a href="#tab_5" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Milestone</a></li>
+                    <li><a href="#tab_notification" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
+                     <li><a href="#tab_medic" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Immunization</a></li>
                        
                 </ul>
                 <div class="tab-content">
@@ -529,14 +581,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                            ?>
                            
                              </tbody>
-                            <tfoot>
-                            <tr>
-                             <th>Year</th>
-                              <th>Class Name</th>
-                              <th>Stream</th>
-                              <th>Actions</th>
-                            </tr>
-                            </tfoot>
+                            
                           </table>
                     </div>
                     <div class="tab-pane" id="tab_2">
@@ -594,17 +639,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                               ?>
                            
                              </tbody>
-                            <tfoot>
-                            <tr>
-                             <th>Img</th>
-                              <th>Name</th>
-                              <th>Phone</th>
-                              <th>Email</th>
-                              <th>Gender</th>
-                              <th>Relation</th>
-                              <th>Actions</th>
-                            </tr>
-                            </tfoot>
+                          
                           </table>
                     </div>
 
@@ -657,19 +692,12 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                               ?>
                            
                              </tbody>
-                            <tfoot>
-                            <tr>
-                             <th>#</th>
-                              <th>Document Title</th>
-                              <th>Description</th>
-                              <th>Actions</th>
-                            </tr>
-                            </tfoot>
+                           
                           </table>
                     </div>
                     <div class="tab-pane" id="tab_4">
                       <div class="col-md-8"><b><h3>Statement</h3> </b></div>
-                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
+                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)" target="_blank"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <table id="table11" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -711,8 +739,8 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                         <tr>
                         <hr>
                         <td colspan="3"><b><b></td>
-                         <td><b>'.$total_Debit.'.00</b></td>
-                         <td><b>'.$total_Credit.'.00</b></td>
+                         <td><b>'.$school_row['currency'] .formatCurrency($total_Debit).'</b></td>
+                         <td><b>'.$school_row['currency'] .formatCurrency($total_Credit).'</b></td>
                          
                         </tr>
                        
@@ -728,7 +756,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                           <table class="table">
                               <tr>
                 <th style="width:50%">Balance</th>
-                <td><?php echo'<b>'. $total_balance.'.00 </b>';?></td>
+                <td><?php echo $school_row['currency'] .   ' <b> '  .formatCurrency($total_balance).'</b>';?></td>
               </tr>
              
              
@@ -893,8 +921,241 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
                             </div>
                           </div>
                     </div>
-                    <div class="tab-pane" id="tab_6">
-                      bcaacnanc
+                    <div class="tab-pane" id="tab_payment">
+                          <div class="col-md-8"><b><h3>Payment</h3> </b></div>
+                          
+                        
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Receipt No </th>
+                              <th>Date</th>
+                             
+                              <th>Remark</th>
+                              <th>Amount</th>
+                             
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+
+                                 
+                               
+                                $total_amount_paid=0.00;
+                            
+                              // $name= $row2['first_Name']." ".$row2['last_Name'];
+                              $que02 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                             die(mysqli_error());
+                             $std_name;
+                             
+                             while ($row2=mysqli_fetch_array($que02)){
+                              $total_amount_paid= $total_amount_paid + $row2['amount_paid']  ;
+                               $invoiceID= $row2['invoice_ID'];
+                               $paymentID= $row2['payment_ID'];
+                                $invoive_date= $row2['payment_date'];
+                                $studentid= $row2['student_ID'];
+                                $slipNo= $row2['slip_no'];
+                               $newDate = date("d-m-Y", strtotime($invoive_date));
+                                $total_amount=0.00;
+                                echo' <tr>
+                                   <td>   <a href="view_transaction.php?payment_ID='.$paymentID.'"> '.$slipNo.' </a></td>';
+
+                                  echo "
+                                        <td>".$newDate."</td>
+                                       
+                                        <td>".$row2['remarks']." </td>
+                                        <td>".$row2['amount_paid']."</td>
+                                        ";
+                                     
+                                         
+                                echo '</tr>';
+                             }
+                          
+                            
+                               ?>
+                            <tr>
+                                  <td colspan="3">
+                                    <b>Total</b>
+                                  </td>
+                                  <td>
+                                    <b><?php echo $total_amount_paid;?></b>
+                                  </td>
+                                  
+                                </tr>
+                             </tbody>
+                           
+                          </table>
+                        </div>
+                    <div class="tab-pane" id="tab_invoice">
+                       <div class="row">
+                          <div class="col-md-8"><b><h3>Invoices</h3> </b></div>
+                          
+                        </div>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Reference</th>
+                              <th>Date</th>
+                             
+                              <th>Summary</th>
+                              <th>Amount</th>
+                              <th>Balance</th>
+                             
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               $total_bal=0.00;
+                                $total_amount_invoiced=0.00;
+                           
+                              // $name= $row2['first_Name']." ".$row2['last_Name'];
+                              $que2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                             die(mysqli_error());
+                             $std_name;
+                             
+                             while ($row_in=mysqli_fetch_array($que2)){
+                              $total_amount_invoiced= $total_amount_invoiced + $row_in['amount']  ;
+                              $total_bal=$total_bal + $row_in['balance'];
+                               $invoiveID= $row_in['invoice_ID'];
+                                $invoive_date= $row_in['invoice_date'];
+                                $studentid= $row_in['student_ID'];
+                               $newDate = date("d-m-Y", strtotime($invoive_date));
+                                $total_amount=0.00;
+                              echo' <tr>
+                                   <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row_in['reff_no'].' </a></td>';
+
+                                  echo " <td>".$newDate."</td>
+                                        
+                                        <td>".$row_in['summury']." </td>
+                                        <td>".$row_in['amount']."</td>
+                                        <td>".$row_in['balance']."</td>";
+                                         
+                                          
+                                      
+                                        
+                                          
+                                echo ' </tr>';
+                             }
+                         
+                     
+                               ?>
+                                <tr>
+                                  <td colspan="3">
+                                    <b>Total</b>
+                                  </td>
+                                  <td>
+                                    <b><?php echo $total_amount_invoiced;?></b>
+                                  </td>
+                                  <td>
+                                    <b><?php echo $total_bal;?></b>
+                                  </td>
+                                </tr>
+                             </tbody>
+                           
+                          </table>
+                    </div>
+                    <div class="tab-pane" id="tab_notification">
+                         <table id="example1" class="table table-bordered table-striped">
+                          <thead>
+                          <tr>
+                             <th>Notification</th>
+                            
+                           
+                            <th>Date</th>
+                            <th>Action</th>
+                            
+                          </tr>
+                          </thead>
+                          <tbody>
+                             <?php
+
+                             
+                              $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' and student_ID='$student_ID'");
+                             while ($notf_row=mysqli_fetch_array($notf_query)){
+                              $notification_id=$notf_row['notification_ID'];
+                              $date=$notf_row['notification_date'];
+                                 $newDate = date("d-m-Y", strtotime( $date));
+                              echo '<tr>
+                                     
+                                   <td>'.$notf_row['notification_message'].'</td>
+                                   
+                                   <td>'.$newDate.'</td>
+                                   <td><a   href="#" id="'.$notification_id.'" onclick="deleteNotificationFromSystem(this.id)"><span class="pull- badge bg-danger btn-danger"><i class="fa fa-trash"></i> Delete <span> </a></td>
+                                  
+                                 </tr>';
+                               
+                             
+                             //echo $amt;
+                           }
+                         // echo $total_bill;
+                          
+                             ?>
+                         
+                           </tbody>
+                         </table>
+                    </div>
+                    <div class="tab-pane" id="tab_medic">
+                         
+                                <form method="POST" action="view_student.php?id=<?php echo $student_ID?>">
+                                     <div class="row" id="registration1">
+                                     <?php
+                                        $que21 = mysqli_query($conn,"select * from immunization where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                                       die(mysqli_error());
+                                       $std_name;
+                                       
+                                       while ($row_im=mysqli_fetch_array($que21)){
+                                 echo      ' <div class="col-md-4">
+                                    <div class="form-group">
+                                    <label>Immunization</label>
+                                    <input type="text" class="form-control" name="immunization[]" id="immunization1" value="'.$row_im['immunization'].'">
+                                    </div>
+                                    </div>
+
+                                     <div class="col-md-4">
+                                    <div class="form-group">
+                                    <label>Vaccination Date</label>
+                                    <input type="date" class="form-control" name="vaccinationDate[]" id="vaccinationDate1" value="'.$row_im['vaccinationDate'].'">
+                                    </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label>Renewal Date</label>
+                                    <input type="date" class="form-control" name="renewalDate[]" id="renewalDate1" value="'.$row_im['renewalDate'].'">
+                                    </div>
+                                    </div>
+
+                                     <div class="col-md-1"> <br>
+                                    <a href="javascript:void(0);" onclick="deleteImmunization(this.id);" id="'.$row_im['immunization_ID'].'" style="float:left;"> <i  class="fa fa-trash btn btn-danger"></i></a>    
+                                    </div>
+                                    ';
+
+                                       }
+                                     ?>
+                                   
+
+                                    </div>
+                                    
+
+                                <div id="addedRows"></div>
+
+
+                                <div class="row">
+                                <button class="btn btn-warning pull-right" onclick="addMoreRows(this.form);" type="button">Add New</button>    
+                                </div>   
+                                <div class="row">
+                                  <div class="col-md-4">
+                                <div class="form-group">
+
+                                <button type="submit" class="btn btn-primary" name="saveImmunizationBtn">Save</button>
+                                </div>
+                              </div>
+                                </div>
+                                </form>
+                                 
+                             
                     </div>
                 </div>
           </div>
@@ -903,7 +1164,7 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
           </div>
           <!-- /.box -->
         </div>
-      </div>
+     
    <!--- add document Modal -->
       <div class="modal fade" id="modal-addDocument">
           <div class="modal-dialog modal-sm">
@@ -1147,20 +1408,24 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
   </div>
   
   <!-- /.content-wrapper -->
-<!--include footer-->
+
+
+  
+  <!--include footer-->
 <?php
  include('include/footer.php');
  ?>
 <!--include settings-sidebar-->
  
  <?php
- include('include/settings-sidebar.php');
+ //include('include/settings-sidebar.php');
  ?>
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
-
+  
+  
 </div>
   
 <!-- ./wrapper -->
@@ -1179,6 +1444,27 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
   $.ajax({
   type: "POST",
   url: "delete_milestone_level.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    window.location='view_student.php?id=<?php echo $student_ID ?>' ;
+   
+  
+
+  }
+
+
+  });
+  }
+
+   function  deleteImmunization(immunization_id){
+    //alert(milestone_level_id);
+  //var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
+  //alert(id);
+  var details= '&immunization_id='+ immunization_id;
+  $.ajax({
+  type: "POST",
+  url: "delete_immunization.php",
   data: details,
   cache: false,
   success: function(data) {
@@ -1339,5 +1625,26 @@ function calc_total()
     $('#total_amount').val((tax_sum+total).toFixed(2));
 }
 </script>
+
+<script>
+var rowCount = 1;
+function addMoreRows(frm) {
+rowCount ++;
+var recRow = '<div class="row" id="registration'+rowCount+'"><div class="col-md-4"><div class="form-group"> <label>Immunization</label><input type="text" name="immunization[]" id="immunization'+rowCount+'" class="form-control"></div></div><div class="col-md-4"><div class="form-group"> <label>Vaccination Date</label><input type="date" class="form-control" name="vaccinationDate[]" id="vaccinationDate'+rowCount+'"></div></div><div class="col-md-3"><div class="form-group"> <label>Renewal Date Date</label><input type="date" class="form-control" name="renewalDate[]" id="renewalDate'+rowCount+'"></div></div><div class="col-md-1"><a href="javascript:void(0);" onclick="removeRow('+rowCount+');" style="float:left;"> <i  class="fa fa-trash btn btn-danger"></i></a></div></div>';
+jQuery('#addedRows').append(recRow);
+}
+   
+function removeRow(removeNum) {
+    
+if(removeNum == 1){
+    alert("Cannot Delete this Row");
+    return false;
+} else {    
+jQuery('#registration'+removeNum).remove(); 
+}
+
+}   
+</script>
+
 </body>
 </html>

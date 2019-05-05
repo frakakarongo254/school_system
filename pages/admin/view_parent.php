@@ -125,6 +125,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
       #save Notification
       if(isset($_POST['saveNotication'])){
          $notification=$_POST['notificationMessage'];
+          $notification_student_id=$_POST['notification_student_id'];
          #get email sender settings
        $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` =
         '".$_SESSION['login_user_school_ID']."' ");
@@ -145,9 +146,9 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
          if (isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail']) ) {
           #send both emill and sms and save
           
-          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date 
+          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date ,student_ID
           ) 
-          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+          values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
            if ($notification_query) {
               echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
            }
@@ -156,9 +157,9 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
          }elseif (isset($_POST['natificationWithSMS']) and !isset($_POST['natificationWithEmail'])) {
            # send sms only and save
           //$sendNotification=mail($to,$subject,$message,$headers);
-          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date
+          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
           ) 
-          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+          values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
            if ($notification_query) {
               echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
            }
@@ -166,18 +167,18 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
          }elseif (!isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail'])) {
            # send email only and save
            //$sendNotification=mail($to,$subject,$message,$headers);
-            $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date 
+            $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
           ) 
-          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+          values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
            if ($notification_query) {
               echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
            }
            $sendNotification=mail($to,$subject,$message,$headers);
            
          }else{
-           $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date 
+           $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
           ) 
-          values('$school_ID','$to','$get_parentID','$msg','$datetime') ");
+          values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
            if ($notification_query) {
               echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
            }
@@ -264,8 +265,8 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              }
                            }
                          }
-                       echo  $amt_invoiced;
-                               ?>
+                       echo $school_row['currency'] . ' <b> '.formatCurrency($amt_invoiced)  ;
+                               ?></b>
 
 
                     </td>
@@ -296,22 +297,24 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              }
                            }
                          }
-                       echo  $total_amount_paid;
-                               ?>
+                       echo $school_row['currency'] .  '<b> '.formatCurrency($total_amount_paid) ;
+                               ?></b>
                     </td>
                   </tr>
                   <tr>
                     <td><span>Balance:</span></td>
                     <td>
-                      <b>
+                      
                         <?php $total_balance=0.00; $tol=$amt_invoiced - $total_amount_paid;
                       if($tol <=0){
                       $total_balance =0.00;
                       }else{
                        $total_balance=$tol;
                       }
-                      echo $total_balance;
-                      ?></b>
+                      echo $school_row['currency'] .  '  <b>' .formatCurrency($total_balance);
+                      ?></b><br>
+                      
+
                     </td>
                   </tr>
                   
@@ -387,7 +390,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                       <td>Action</td>  
                                       <td>";
                                      echo'   <a class="btn btn-success btn-flat" href="view_student.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
-                                       <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['parent_ID'].'" onclick="delinkStudent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                                       <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['parent_ID'].'" onclick="delinkStudentFromParent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                                      </td>
                                    </tr>';
 
@@ -397,16 +400,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                             ?>
                          
                            </tbody>
-                          <tfoot>
-                          <tr>
-                            <th>Img</th>
-                            <th>Name</th>
-                            <th>Reg No</th>
-                            <th>Phone</th>
-                            <th>Gender</th>
-                            <th>Actions</th>
-                          </tr>
-                          </tfoot>
+                          
                         </table>
                     </div>
                     <div class="tab-pane table-responsive" id="tab_2">
@@ -719,9 +713,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
              
               <div class="form-group">
                     
-                      <textarea class="form-control" id="editor1" name="notificationMessage" rows="3" cols=""  >
-               
-                    </textarea>
+                      <textarea class="form-control" id="editor1" name="notificationMessage" rows="3" cols=""  ></textarea>
                      
               </div>
                <div class="form-group">
@@ -734,6 +726,30 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                   Email
                 </label>
                 
+              </div>
+              <div class="form-group" >
+                 <select class="form-control select1" name="notification_student_id">
+                   <option value="All">All</option>
+                    <?php
+                             #get school Id from current session school id
+                             $school_ID = $_SESSION['login_user_school_ID'];
+                             $query22 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             die(mysqli_error());
+                             while ($row12=mysqli_fetch_array($query22)){
+                             $std_ID= $row12['student_ID'];
+                             #get student details
+                             $query33 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID=' $std_ID'")or
+                             die(mysqli_error());
+                             while ($row_s=mysqli_fetch_array($query33)){
+                              
+                              echo' <option value="'.$row_s['student_ID'].'">'.$row_s['first_Name'].'  '.$row_s['last_Name'].'</option>';
+
+                             }
+                            
+                              }
+                            ?>
+                         
+                 </select>
               </div>
             </div>
             <!-- /.box-body -->
@@ -914,11 +930,12 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
   }
 </script>
 <script >
+
   function delinkStudentFromParent(student_ID,parent_ID){
     //alert(parent_ID);
-  var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
+  var updiv = document.getElementById("message");
   //alert(id);
-  var details= '&student_ID='+ student_ID;
+  var details= '&student_ID='+ student_ID + '&parent_ID='+ parent_ID;
   $.ajax({
   type: "POST",
   url: "unlink_student_parent.php",

@@ -56,9 +56,17 @@
    <link rel="stylesheet" href="../../css/body.css">
 
 
+  <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen">-->
+  
+  <!-- Bootstrap Form Helpers -->
+  <link href="../../dist/css/bootstrap-formhelpers.min.css" rel="stylesheet" media="screen">
+
+
    <script type="text/javascript" src="../../dist/js/fusioncharts.js"></script>
   <script type="text/javascript" src="../../dist/js/fusioncharts/fusioncharts.theme.ocean.js"></script>
   <script src="../dist/js/fusioncharts/fusioncharts.js"></script>
+
+ <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

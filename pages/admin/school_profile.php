@@ -81,8 +81,13 @@
             $school_website =$_POST['school_website'];
             $school_address =$_POST['school_address'];
             $school_moto =$_POST['school_moto'];
-            
-            $insertDdetails_query=mysqli_query($conn,"update `school` SET school_Name= '".$schoolName."',email= '".$school_email."',phone= '".$school_phone."',school_website= '".$school_website."',address_1= '".$school_address."',school_moto= '".$school_moto."' where  `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+             $school_country =$_POST['country'];
+
+             $country_data_sql = mysqli_query($conn,"select currency_symbol from `country` where `name` = '".$school_country."' ");
+              $country_row = mysqli_fetch_array($country_data_sql,MYSQLI_ASSOC);
+              $currency_symbol=$country_row['currency_symbol'];
+
+            $insertDdetails_query=mysqli_query($conn,"update `school` SET school_Name= '".$schoolName."',email= '".$school_email."',phone= '".$school_phone."',school_website= '".$school_website."',address_1= '".$school_address."',school_moto= '".$school_moto."',country='".$school_country."',currency='".$currency_symbol."' where  `school_ID`='".$_SESSION['login_user_school_ID']."' ");
               if($insertDdetails_query){
               echo '<script> window.location="school_profile.php?update=true" </script>';
               }else{
@@ -186,7 +191,7 @@
                    if($school_row['logo_image'] !=''){
                     $logo = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="90" width="90px" />';
                   }else{
-                      $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
+                      $logo = "<img class='profile-user-img img-responsive img-circle' src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
                     }
           ?>
           <!-- Profile Image -->
@@ -201,13 +206,14 @@
                
                     <tr>
                       <td rowspan="2"> <?php echo $logo;?>
-             <h3 class="profile-username text-center"><a data-toggle="modal" data-target="#modal-editSchoolLogo"><span class="pull- badge bg-secondary">Change Logo</span></a></h3></td>
+             <h3 class="profile-username text-center"><a href="#" data-toggle="modal" data-target="#modal-editSchoolLogo"><span class="pull- badge bg-secondary">Change Logo</span></a></h3></td>
                       <td><ul class="nav nav-pills nav-stacked">
                 <li><a href="#"><i class="fa  fa-institution"></i><b><?php echo $school_row['school_Name']?></b></a></li>
                 <li><a href="#"><i class="fa fa-bookmark-o"></i> Po. Box <?php echo $school_row['address_1']?></a></li>
                 <li><a href="#"><i class="fa fa-phone"></i> <?php echo $school_row['phone']?></a></li>
                 <li><a href="#"><i class="fa fa-envelope-o"></i> <?php echo $school_row['email']?></a></li>
                 <li><a href="#"><i class="fa fa-globe"></i> <?php echo $school_row['school_website']?></a></li>
+                <li><a href="#"><i class="fa fa-money"></i>Currency  <?php echo $school_row['currency']?></a></li>
               </ul></td>
                      
                     </tr>
@@ -217,13 +223,23 @@
               </div>
               <div class="col-md-3">
                 <div class="row">
-                 <h3>MOTO:</h3>
+                 <h5><i class="fa  fa-info-circle"></i>    <b> MOTO:</b></h5>
                  <?php echo $school_row['school_moto']?>
                 </div>
                 <div class="row">
-                  <h3> Registration Date</h3>
+                  <h5> <i class="fa fa-calendar"></i>  <b>   Registration Date</b></h5>
                 <?php echo $school_row['registration_Date']?>
                 </div>
+                <div class="row">
+                  <h5> <i class="fa fa-map"></i>   <b>Country</b></h5>
+                <?php echo $school_row['country']?>
+                </div>
+                 <div class="row">
+                  <h5><b><i class="fa fa-money"></i>  Currency</b></h5>
+                <?php echo $school_row['currency']?>
+                </div>
+
+
                </div>
                <div class="col-md-3">
                  <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-editSchoolDetails"><i class="fa fa-pencil"></i><b> Edit Details</b></a>
@@ -354,6 +370,21 @@
                   <textarea type="text" class="form-control " name="school_moto"><?php echo $school_row['school_moto']?></textarea>  
               
                 <!-- /.input group -->
+            </div>
+            <div class="form-group">
+               <label>Country</label>
+               <select class="form-control select2" style="width: 100%;" name="country">
+               <?php
+                 $que2 = mysqli_query($conn,"select * from country ")or
+                     die(mysqli_error());
+                     $x=0;
+                     while ($row11=mysqli_fetch_array($que2)){
+                    echo '<option value="'.$row11['name'].'">'.$row11['name'].'</option>';
+                      
+
+                     }
+               ?>
+             </select>
             </div>
          
         </div>

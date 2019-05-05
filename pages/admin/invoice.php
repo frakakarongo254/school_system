@@ -79,6 +79,9 @@ if (!velifyLogin()) {
          $payment_date=$_POST['payment_date'];
          $payment_remarks=$_POST['payment_remarks'];
          $payment_method=$_POST['payment_Mode'];
+
+         $randPay = substr(number_format(time() * rand(),0,'',''),0,11);
+         $payment_ID=md5($randPay);
          $new_balance;
          if ($amount_paid >= $balance ) {
            $new_balance= 0.00;
@@ -86,9 +89,9 @@ if (!velifyLogin()) {
           $new_balance= $balance - $amount_paid;
          }
 
-          $payment_query=mysqli_query($conn,"insert into `payment` (school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date,payment_method
+          $payment_query=mysqli_query($conn,"insert into `payment` (payment_ID,school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date,payment_method
           ) 
-          values('$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date','$payment_method') ");
+          values('$payment_ID','$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date','$payment_method') ");
 
         
         if($payment_query){
@@ -121,14 +124,45 @@ if (!velifyLogin()) {
     <section class="content">
    
         <!-- Custom Tabs -->
-           <div class="box" style="padding-left: 20px;padding-right:20px">
+           <div class="box" style="padding-left: 10px;padding-right:10px">
             <br>
-          <div class="row">
-              <div class="col-md-8"><b><h3>INVOICES</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="createinvoice.php" ><i class="fa fa-plus"></i><b> New Invoice </b></a></div>
-            </div>
             
-               <table id="example1" class="table table-bordered table-striped">
+             <form action="invoice.php" method="POST">
+          <div class="row">
+           
+              <div class="col-md-1"></div>
+              <div class="col-md-3">
+                <div class=" input-group input-group-">
+              <span class="input-group-addon">FROM:   <i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="date" name="printFromDate"  id="" class="form-control"   placeholder="Starting Time" required>
+            </div>
+          </div>
+              <div class="col-md-3">
+                <div class=" input-group input-group-">
+              <span class="input-group-addon">TO:   <i class="glyphicon glyphicon-calendar"></i></span>
+             <input type="date" name="printToDate"  class="form-control"   placeholder="Ending time" required>
+            </div>
+              </div>
+              <div class="col-md-1 ">
+              
+              <button type="submit" name="printInvoiceBtn" class="btn btn-primary btn-sm"><i class="fa fa-filter"></i> Filter</button>
+            
+                </div>
+          
+              <div class="col-md-2">
+                <a class="btn btn-primary btn-sm " href="createinvoice.php" ><i class="fa fa-plus"></i><b> New Invoice</b></a>
+              </div>
+              <div class="col-md-2"> <a class="btn btn-success btn-sm" href="" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print</b></a></div>
+            </div>
+          </form>
+          <?php
+            if (isset($_POST['printInvoiceBtn']) and isset($_POST['printFromDate']) and isset($_POST['printToDate']) ) {
+               $printFromDate=$_POST['printFromDate'];
+               $printFromTo=$_POST['printToDate'];
+               ?>
+               <div class="table-responsive">
+                
+               <table id="example2" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                               
@@ -145,7 +179,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ORDER BY invoice_date  DESC ")or
+                               $query2 = mysqli_query($conn,"select * from invoice where  date(invoice_date) between date('$printFromDate') and date('$printFromTo')  and school_ID = '$school_ID' ORDER BY date('$printFromDate')  DESC ")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
@@ -161,7 +195,7 @@ if (!velifyLogin()) {
                                 $name=$row3['first_Name']." ".$row3['last_Name'];
                                 $reg=$row3['registration_No'];
                                 echo' <tr>
-                                   <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row2['reff_no'].' </a></td>';
+                                   <td> <span class="hidden">'.$invoiveID.'</span>  <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row2['reff_no'].' </a></td>';
 
                                   echo " <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
@@ -173,6 +207,8 @@ if (!velifyLogin()) {
                                       
                                        echo' 
                                           <td>
+                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
+
                                            <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
                                            <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span>Recieve Payment</button></a>
@@ -189,12 +225,139 @@ if (!velifyLogin()) {
                              </tbody>
                             
                           </table>
+                        </div>
+
+            <?php }else{
+              ?>
+           
+               <table id="example2" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              
+                              <th>Reference</th>
+                              <th>Date</th>
+                              <th>Name</th>
+                              <th>Summary</th>
+                              <th>Amount</th>
+                              <th>Balance</th>
+                              <th>Action</th>
+                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                               <?php
+                               
+                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ORDER BY id  DESC ")or
+                               die(mysqli_error());
+                               $total_amount=0.00;
+                               while ($row2=mysqli_fetch_array($query2)){
+                                $total_amount= $total_amount + $row2['amount']  ;
+                               $invoiveID= $row2['invoice_ID'];
+                                $invoive_date= $row2['invoice_date'];
+                                $studentid= $row2['student_ID'];
+                               $newDate = date("d-m-Y", strtotime($invoive_date));
+                                $total_amount=0.00;
+                              $query3 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+                              
+                               while ($row3=mysqli_fetch_array($query3)){
+                                $name=$row3['first_Name']." ".$row3['last_Name'];
+                                $reg=$row3['registration_No'];
+                                echo' <tr>
+                                   <td> <span class="hidden">'.$invoiveID.'</span>  <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row2['reff_no'].' </a></td>';
+
+                                  echo " <td>".$newDate."</td>
+                                         <td>".$reg ." ".$name."</td>
+                                        <td>".$row2['summury']." </td>
+                                        <td>".$row2['amount']."</td>
+                                        <td>".$row2['balance']."</td>";
+                                         
+                                          
+                                      
+                                       echo' 
+                                          <td>
+                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                          
+                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
+
+                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span>Recieve Payment</button></a>
+
+                                         
+                                       </td>
+                                    </tr>';
+
+                               
+                              }
+                                }
+                              ?>
+                           
+                             </tbody>
+                            
+                          </table>
+                         <?php ;}?>
             <!-- /.tab-content -->
           </div>
           <!-- nav-tabs-custom -->
   
 
-     
+       <div class="modal fade" id="modal-printInvoice">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b>Print Invoices</b></h4>
+              </div>
+              <div class="modal-body">
+                 <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+              <!-- /.tab-pane -->
+            <form  action="print_invoice_list.php" method="POST" target="_blank">
+          
+          
+           
+          <br>
+           <div class="row">
+            <div class=" col-md-12">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">FROM:   <i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="date" name="fromDate"  id="" class="form-control"   placeholder="Starting Time" required>
+            </div>
+          </div>
+          
+          </div>
+           
+          <br>
+           
+          <div class="row">
+            <div class=" col-md-12">
+            <div class=" input-group input-group-">
+              <span class="input-group-addon">TO:   <i class="glyphicon glyphicon-calendar"></i></span>
+             <input type="date" name="toDate"  class="form-control"   placeholder="Ending time" required>
+            </div>
+          </div>
+          
+          </div>
+          <br>
+           
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                <button type="submit" name="printEventBtn" class="btn btn-primary">Print</button>
+              </div>
+              </div>
+             </form>
+            </div>
+            <!-- /.tab-content -->
+          </div>
+              </div>
+              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
     </section>
     <!-- /.content -->
   </div>
@@ -227,8 +390,8 @@ if (!velifyLogin()) {
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
+      'searching'   : true,
+      'ordering'    : false,
       'info'        : true,
       'autoWidth'   : false
     })

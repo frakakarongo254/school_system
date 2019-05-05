@@ -21,11 +21,11 @@ if (!velifyLogin()) {
  $invoice_due_date=$row02['due_date'];
  $invoice_date=$row02['invoice_date'];
  $invoice_summury=$row02['summury'];
-  $invoice_student_id=$row02['student_ID'];
+ $invoice_student_id=$row02['student_ID'];
   $invoice_balance=$row02['balance'];
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
@@ -89,16 +89,21 @@ $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
          $payment_date=$_POST['payment_date'];
          $payment_remarks=$_POST['payment_remarks'];
          $payment_method=$_POST['payment_Mode'];
+
+         $randPay = substr(number_format(time() * rand(),0,'',''),0,11);
+         $payment_ID=md5($randPay);
          $new_balance;
+
+
          if ($amount_paid >= $balance ) {
            $new_balance= 0.00;
          }else{
           $new_balance= $balance - $amount_paid;
          }
 
-          $payment_query=mysqli_query($conn,"insert into `payment` (school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date,payment_method
+          $payment_query=mysqli_query($conn,"insert into `payment` (payment_ID,school_ID,student_ID,invoice_ID,amount_paid, slip_no,remarks,payment_date,payment_method
           ) 
-          values('$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date','$payment_method') ");
+          values('$payment_ID','$school_ID','$student_id','$invoice_id','$amount_paid','$slip_no','$payment_remarks','$payment_date','$payment_method') ");
 
         
         if($payment_query){
@@ -107,7 +112,7 @@ $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
              $que02=mysqli_query($conn,"insert into `statement` (student_ID,school_ID, Credit,ref_no,date_created,description) 
         values('$student_id','$school_ID','$amount_paid','$slip_no','$payment_date','$payment_remarks') ");
 
-             echo '<script> window.location="payment.php?invoice_id='.$get_invoice_ID.'&insert=True" </script>';
+             echo '<script> window.location="invoice.php?invoice_id='.$get_invoice_ID.'&insert=True" </script>';
            }else{
 
          echo' <div class="alert alert-warning alert-dismissable">

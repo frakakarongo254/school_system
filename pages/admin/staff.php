@@ -272,17 +272,7 @@ if (!velifyLogin()) {
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Gender</th>
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+               
               </table>
             </div>
             <!-- /.box-body -->

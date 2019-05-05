@@ -8,6 +8,8 @@ if (!velifyLogin()) {
  if (isset($_POST['invoice_id'])) {
    # code...
   $get_invoice_ID=$_POST['invoice_id'];
+ }else if (isset($_GET['invoice_id'])) {
+   $get_invoice_ID=$_GET['invoice_id'];
  }
  #get details form invoice
  $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
@@ -127,7 +129,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
           <br>
           <b>Invoice Date:</b>'. $invoice_date .'<br>
           
-          <b>Account:</b> '. $invoice_due_date .'
+         
         </div>
         <!-- /.col -->
       </div>

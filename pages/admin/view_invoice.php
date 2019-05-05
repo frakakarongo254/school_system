@@ -78,7 +78,17 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-      
+  
+      <h1>
+         <ol class="breadcrumb">
+        <li><a href="invoice.php"><i class="fa fa-money"></i> Invoices </a></li>
+       
+        <li class="active"> Print Invoice</li>
+        <li class="pull-right"><a class="btn btn-success pull-right btn-sm" href="" onclick="emailInvoiceToParent(this.id)" id="<?php echo $get_invoice_ID?>"><b id="email_parent"><i class="fa fa-print"></i> Email Parent</b></a></li>
+      </ol>
+       
+      </h1>
+    
     </section>
     <!-- Main content -->
    
@@ -208,7 +218,10 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               
           
             <th class="" style="width:50%">Grand Total</th>
-            <td class=""><?php echo $invoice_amount?></td>
+            <td class="">
+              
+              <?php echo $school_row['currency'] .   ' <b> '  .formatCurrency($invoice_amount).'</b>';?>
+            </td>
           </tr>
             </table>
           </div>
@@ -320,6 +333,34 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   
 
   }
+
+
+  });
+  }
+  function emailInvoiceToParent(invoice_id){
+    alert(invoice_id);
+    document.getElementById('email_parent').innerHTML='<b>LOADING ...</b>';
+     var details= '&invoice_id='+invoice_id;
+     $.ajax({
+  type: "POST",
+  url: "print_invoicePDF.php",
+  data: details,
+  cache: false,
+  success: function(det) {
+    alert(det);
+    //$.toast('Toast message to be shown');
+    if (det=='success') {
+     alert("Email Sent successfully");
+    }else{
+       alert("Email Sent successfully");
+    }
+     //document.getElementById('email_parent').innerHTML=det;
+    }
+   // window.location='view_invoice.php?invoice=<?php //echo $get_invoice_ID?>' ;
+   
+  
+
+  
 
 
   });

@@ -8,6 +8,8 @@ if (!velifyLogin()) {
  if (isset($_POST['payment_id'])) {
    # code...
   $get_payment_ID=$_POST['payment_id'];
+ }else if (isset($_GET['payment_id'])) {
+   $get_payment_ID=$_GET['payment_id'];
  }
  #get details form invoice
  $sql022 = mysqli_query($conn,"select * from `payment` where  payment_ID='$get_payment_ID' and `school_ID` = '".$school_ID."' ");

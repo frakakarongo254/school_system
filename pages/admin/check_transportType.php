@@ -41,7 +41,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
             <td>1</td>
             <td>
              <select class="form-control " name="vote_head_id[]"" style="width: 100%;" required>
-                    <option value="'.$vote_head_id.'">Transport '. $transportType_type.'</option>';
+                    <option value="'.$vote_head_id.'">Transport </option>';
                   
                  $query_votehead= mysqli_query($conn,"select * from vote_head where school_ID = '".$_SESSION['login_user_school_ID']."'");
                    while ($votehead_rows=mysqli_fetch_array($query_votehead)){

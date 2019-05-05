@@ -229,13 +229,11 @@ $que=mysqli_query($conn,"update `invoice` SET amount='".$total_amount."', balanc
                 <b>Due Date:</b>
                 <div class=" col-md- input-group input-group-">
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                  <input type="date" name="dueDate" id="" value="<?php echo $invoice_due_date ?>" class="form-control" placeholder="Due Date" required>
+                  <input type="date" name="dueDate" id="" value="<?php echo$invoice_due_date ?>" class="form-control" placeholder="Due Date" required>
                 </div>
                 <br>
                 <b>Summury:</b><br>
-                <textarea class="form-control" rows="3" name="summury" maxlength="100" placeholder="Summury" required>
-                  <?php echo $invoice_summury ?>
-                </textarea>
+                <textarea class="form-control" rows="" name="summury" maxlength="100" placeholder="Summury" required><?php echo $invoice_summury ?></textarea>
                     </div>
                     
                   </div>

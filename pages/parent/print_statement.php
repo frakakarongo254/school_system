@@ -68,7 +68,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body onload="window.print();">
+<body onload="">
 <div class="wrapper">
   <!-- Main content -->
   <?php echo '<section class="invoice">
@@ -150,8 +150,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                         <tr>
                         <hr>
                         <td colspan="3"><b><b></td>
-                         <td><b>'.$total_Debit.'.00</b></td>
-                         <td><b>'.$total_Credit.'.00</b></td>
+                         <td><b>'.$school_row['currency'] . '   '.formatCurrency($total_Debit).'</b></td>
+                         <td><b>'.$school_row['currency'] . '   '.formatCurrency($total_Credit).'</b></td>
                          
                         </tr>
                        
@@ -167,7 +167,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                           <table class="table">
                               <tr>
                 <th style="width:50%">Balance</th>
-                <td> <b>'. $total_balance.'.00 </b></td>
+                <td> <b>'.$school_row['currency'] . ' <b>  '.formatCurrency($total_balance).' </b></td>
               </tr>
              
              
@@ -181,7 +181,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
       <!-- this row will not appear when printing -->
      
-    </section>';?>;
+    </section>';?>
   <!-- /.content -->
 </div>
 <!-- ./wrapper -->

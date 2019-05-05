@@ -91,7 +91,7 @@ if (!velifyLogin()) {
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example2" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>To</th>
@@ -104,7 +104,7 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and sender='$school_email' ORDER BY email_ID  ASC")or
+                   $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and sender='$school_email' ORDER BY date(date_sent)  DESC")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $emailID = $row1['email_ID'];
@@ -114,7 +114,7 @@ if (!velifyLogin()) {
                            
                             <td>".$row1['recipient']." </td>
                              <td>".$row1['email_subject']."</td> 
-                            <td>".$newDate."</td>";
+                            <td><span class='hidden'>".date("Y/m/d", strtotime($date))."</span>".$newDate."</td>";
                           echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
                           
                          </tr>';
@@ -173,8 +173,8 @@ if (!velifyLogin()) {
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
+      'searching'   : true,
+      'ordering'    : false,
       'info'        : true,
       'autoWidth'   : false
     })

@@ -82,9 +82,10 @@ if (!velifyLogin()) {
         $event_endtime=$_POST['event_endtime'];
         $event_description=$_POST['event_description'];
         $event_color=$_POST['event_color'];
-        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID, event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color
+        $event_for=$_POST['event_for'];
+        $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID, event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color,event_for,event_type
           ) 
-          values('$school_ID','$event_title','$event_location','$event_startDate','$event_startime','$event_endDate','$event_endtime','$event_description','$event_color') ");
+          values('$school_ID','$event_title','$event_location','$event_startDate','$event_startime','$event_endDate','$event_endtime','$event_description','$event_color','$event_for','Normal') ");
         if($event_insert_query){
            echo '<script> window.location="event.php?insert=True" </script>';
           
@@ -112,7 +113,9 @@ if (!velifyLogin()) {
          $edit_event_endtime=$_POST['edit_event_endtime'];
         $edit_event_description=$_POST['edit_event_description'];
         $edit_event_color=$_POST['edit_event_color'];
-        $update_udate_query=mysqli_query($conn,"update `event` SET event_title= '".$edit_event_title."', event_location= '".$edit_event_location."',event_startDate='".$edit_event_startDate."',event_startime= '".$edit_event_startime."',event_endDate='".$edit_event_endDate."',event_endtime= '".$edit_event_endtime."' ,event_description= '".$edit_event_description."',event_color= '".$edit_event_color."' where `event_ID`='".$edit_event_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+        $edit_event_for=$_POST['edit_event_for'];
+
+        $update_udate_query=mysqli_query($conn,"update `event` SET event_title= '".$edit_event_title."', event_location= '".$edit_event_location."',event_startDate='".$edit_event_startDate."',event_startime= '".$edit_event_startime."',event_endDate='".$edit_event_endDate."',event_endtime= '".$edit_event_endtime."' ,event_description= '".$edit_event_description."',event_color= '".$edit_event_color."',event_for='".$edit_event_for."' where `event_ID`='".$edit_event_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
         if($update_udate_query){
            echo '<script> window.location="event.php?update=True" </script>';
@@ -188,13 +191,16 @@ if (!velifyLogin()) {
        }else{
          ?>
         <div id="printEventDiv" class="hidden">
-          <div>Event from "</div>
+          <div>Even<div style="font-size: 20px;">Event list for the period starting <b>From: <?php echo date("d-m-Y", strtotime($start)) . "  To  " . date("d-m-Y", strtotime($to)) ?></b> </div>
          <table id="example134" class=" " style="width:100%">
             <thead>
                 <tr>
                   <th class="pull-left">Title</th>
                   <th class="pull-left">Location</th>
-                  <th class="pull-left">Date</th>
+                  <th class="pull-left">Starting Date</th>
+                   <th class="pull-left">Starting Time</th>
+                   <th class="pull-left">Ending Date</th>
+                   <th class="pull-left">Ending Time</th>  
                   <th class="pull-left">Description</th>
                 
                   
@@ -220,7 +226,9 @@ if (!velifyLogin()) {
              </td>
             <td>'.$event_row["event_location"].'</td>
             <td>'.$event_startDate.'</td>
-            
+             <td>'.$event_starttime.'</td>
+              <td>'.$event_endDate.'</td>
+               <td>'.$endtime.'</td>
             <td>'.$event_row["event_description"].'</td>
            
                    
@@ -253,7 +261,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               
-              <div class="col-md- col-pull-right " style=""><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
+              <div class="col-md-12   " style=""><a class="btn btn-primary pull-right" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
             </div>
             </div>
             
@@ -280,7 +288,7 @@ if (!velifyLogin()) {
             </div>
             </div>
 			<div class="box-body table-responsive">
-          <table id="example1" class="table table-bordered table-striped table-responsive">
+          <table id="example2" class="table table-bordered table-striped table-responsive">
             <thead>
                 <tr>
                   <th>Title</th>
@@ -297,7 +305,7 @@ if (!velifyLogin()) {
                 <tbody>
             <?php
           
-            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY event_startDate DESC, event_startime DESC")or
+            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY date(event_startDate) DESC")or
             die(mysqli_error());
             while ($event_row=mysqli_fetch_array($event_query)){
              $eventID=$event_row['event_ID'];
@@ -309,7 +317,7 @@ if (!velifyLogin()) {
               $endtime=$event_row["event_endtime"];
             echo' <tr>
 
-              <td >'.
+              <td ><span class="hidden">'.date("Y/m/d", strtotime($start)).'</span>'.
              $event_row['event_title'].'
              </td>
             <td>'.$event_row["event_location"].'</td>
@@ -413,7 +421,30 @@ if (!velifyLogin()) {
                   <div class="input-group-addon">
                     <i></i>
                   </div>
+              </div>
+               <br>
+              <div class="col-md-12 input-group ">
+                <div class="row">
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="event_for" class=" flat-red"  value="All" checked>
+                    <label>ALL </label>
+                  </label>
+                  </div>
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="event_for" class=" flat-red" value="Parent">
+                    <label>Parent</label>
+                  </label>
                 </div>
+                <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="event_for" class=" flat-red" value="Staff">
+                    <label>Staff</label>
+                  </label>
+                </div>
+                </div>
+              </div>
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
@@ -947,8 +978,8 @@ if (!velifyLogin()) {
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
+      'searching'   : true,
+      'ordering'    : false,
       'info'        : true,
       'autoWidth'   : false
     })

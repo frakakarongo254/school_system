@@ -268,7 +268,7 @@ if (!velifyLogin()) {
                    if($row1['photo'] !=''){
                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
                   }else{
-                      $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                     }
                   echo" <tr>
                            <td>
@@ -293,16 +293,7 @@ if (!velifyLogin()) {
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Gender</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+               
               </table>
             </div>
             <!-- /.box-body -->

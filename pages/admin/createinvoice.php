@@ -5,6 +5,27 @@ if (!velifyLogin()) {
 }
  $school_ID=$_SESSION['login_user_school_ID'];
 
+ function trans_id($param='inv-str') {
+  include('include/config.php');
+  $school_ID=$_SESSION['login_user_school_ID'];
+$dataMax = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT SUBSTR(MAX(`invoice_ID`),-5) AS ID  FROM invoice where school_ID='".$school_ID."'")); // capture maximum data from id transaction
+
+            if($dataMax['ID']=='') { // if data empty
+                $ID = $param."00001";
+            }else {
+                $MaksID = $dataMax['ID'];
+                $MaksID++;
+                if($MaksID < 10) $ID = $param."0000".$MaksID; // value under 10
+                else if($MaksID < 100) $ID = $param."000".$MaksID; // value under 100
+                else if($MaksID < 1000) $ID = $param."00".$MaksID; // value under 1000
+                else if($MaksID < 10000) $ID = $param."0".$MaksID; // value under 10000
+                else $ID = $MaksID; // lebih dari 10000
+            }
+
+            return $ID;
+        }
+ $var=trans_id();
 // create invoice number automaticaly using this function
  function invoice_num ($input, $pad_len = 7, $prefix = null) {
     if ($pad_len <= strlen($input))
@@ -78,7 +99,7 @@ while($rowjj = mysqli_fetch_assoc($resultu)) {
 if(isset($_POST['save']))  
 {  
   
-  $rand = substr(number_format(time() * rand(),0,'',''),0,10);
+  $rand = substr(number_format(time() * rand(),0,'',''),0,11);
   $Ref="INV-".$rand;
 $summury=$_POST['summury'];  
 $invoiceDate=$_POST['invoiceDate'];
@@ -88,12 +109,15 @@ $dueDate= date('Y/m/d H:i:s');//$_POST['dueDate'];
 $studentID=$_POST['studentId'];
 $total_amount=$_POST['total_amount'];
 $balance=$total_amount;
-$que=mysqli_query($conn,"insert into `invoice` (student_ID,school_ID, amount,balance,invoice_date,due_date,summury,reff_no
+
+$invoice_ID=md5($rand);
+
+$que=mysqli_query($conn,"insert into `invoice` (invoice_ID,student_ID,school_ID, amount,balance,invoice_date,due_date,summury,reff_no
         ) 
-        values('$studentID','$school_ID','$total_amount','$balance','$invoiceDate','$dueDate','$summury','$Ref') ");
+        values('$invoice_ID','$studentID','$school_ID','$total_amount','$balance','$invoiceDate','$dueDate','$summury','$Ref') ");
 if($que){
   
- $id=mysqli_insert_id($conn);  
+ $id=$invoice_ID;  
 for($i = 0; $i<count($_POST['vote_head_id']); $i++)  
 {  
 $query1=mysqli_query($conn,"INSERT INTO invoice_item  
@@ -227,9 +251,7 @@ school_ID = '{$school_ID}'");
                 </div>
                 <br>
                 <b>Summury:</b><br>
-                <textarea class="form-control" rows="3" name="summury" maxlength="100" placeholder="Summury" required>
-                  
-                </textarea>
+                <textarea class="form-control" rows="3" name="summury" maxlength="100" placeholder="Summury" required></textarea>
                     </div>
                     
                   </div>

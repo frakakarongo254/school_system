@@ -4,8 +4,9 @@ if (!velifyLogin()) {
   header('location: ../../index.php');
 }
 $student_ID = $_POST['student_ID'];
+$parent_ID = $_POST['parent_ID'];
  
-		$delete_query=mysqli_query($conn,"DELETE FROM parent_relation WHERE `student_ID`='".$student_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
+		$delete_query=mysqli_query($conn,"DELETE FROM parent_relation WHERE `student_ID`='".$student_ID."' and `parent_ID`='".$parent_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."'");
 if ($delete_query) {
 //	header("Refresh:0; url=http://localhost/hardware/user.php");
 	echo 'success';

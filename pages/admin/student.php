@@ -1,23 +1,23 @@
-<?php  include("include/session.php");
+<?php  require_once("include/session.php");
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../../index.php');
 }
 ?>
 
-<?php include("include/header.php")?>
+<?php require_once("include/header.php")?>
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
 <?php
-  include("include/top_navbar.php");
+  require_once("include/top_navbar.php");
 
 ?>
 <!--include sidebar after header-->
 <?php
-  include("include/sidebar.php");
+  require_once("include/sidebar.php");
 
 ?>
  
@@ -227,6 +227,11 @@ if (!velifyLogin()) {
                       $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                       
                     }
+                    $stdId=$row1['student_ID'];
+                    // encryption function 
+  
+                  
+                  //$id =  base64_url_encode($stdId);
                   echo" <tr>
                   <td>".$img."</td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
@@ -236,7 +241,7 @@ if (!velifyLogin()) {
                   <td>";
                $_SESSION['student_ID']=$row1['student_ID'];#send student id as a session to the next page of view student
 
-                  echo'  <a class="btn btn-success btn-flat" href="view_student.php?id='.$row1['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+                  echo'  <a class="btn btn-success btn-flat" href="view_student.php?id='.$stdId.'"><span class= "glyphicon glyphicon-eye-open"></span></a>
 
                   <a class="btn btn-info" href="edit_students.php?id='.$row1['student_ID'].'"> <span class="glyphicon glyphicon-pencil"></span></a>
 
@@ -247,16 +252,7 @@ if (!velifyLogin()) {
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                  <th>Img</th>
-                  <th>Name</th>
-                  <th>Admin No</th>
-                  <th>Gender</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+               
               </table>
               
             <!-- /.tab-content -->

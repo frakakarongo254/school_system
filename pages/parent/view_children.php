@@ -80,7 +80,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
           ?>
           <!-- Profile Image -->
           <section>
-             <b class="pull-" style="font-size: 20px">Student</b>
+             
           </section>
           <div class="box box-primary ">
             <div class="box-body box-profile">
@@ -136,7 +136,8 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                                while ($row011=mysqli_fetch_array($query2)){
                                         $total_invoiced= $total_invoiced + $row011['amount'];
                                }
-                              echo'<b>'. $total_invoiced .'.00</b>';
+                             
+                               echo  $school_row['currency'] . ' <b>  '.formatCurrency($total_invoiced).'</b>';
                                ?>
 
                     </td>
@@ -151,14 +152,18 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                                while ($row011=mysqli_fetch_array($query2)){
                                          $total_amount_paid=  $total_amount_paid + $row011['amount_paid'];
                                }
-                              echo  '<b>'.$total_amount_paid.'.00<b>';
+                             
+                               echo  $school_row['currency'] . ' <b>  '.formatCurrency($total_amount_paid).'</b>';
                                ?>
                     </td>
                   </tr>
                   <tr>
                     <td><span>Balance:</span></td>
                     <td>
-                      <b><?php  $bal= $total_invoiced - $total_amount_paid; echo '<b>'.$bal.'.00</b>';?></b>
+                    <?php  $bal= $total_invoiced - $total_amount_paid; 
+                     echo  $school_row['currency'] . ' <b>  '.formatCurrency($bal).'</b>';
+
+                      ?>
                     </td>
                   </tr>
                   
@@ -350,8 +355,8 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                         <tr>
                         <hr>
                         <td colspan="3"><b><b></td>
-                         <td><b>'.$total_Debit.'.00</b></td>
-                         <td><b>'.$total_Credit.'.00</b></td>
+                         <td><b>'.$school_row['currency'] . '   '.formatCurrency($total_Debit).'</b></td>
+                         <td><b>'.$school_row['currency'] . '   '.formatCurrency($total_Credit).'</b></td>
                          
                         </tr>
                        
@@ -367,7 +372,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                           <table class="table">
                               <tr>
                 <th style="width:50%">Balance</th>
-                <td><?php echo'<b>'. $total_balance.'.00 </b>';?></td>
+                <td><?php echo'<b>'.$school_row['currency'] . '   '.formatCurrency($total_balance).' </b>';?></td>
               </tr>
              
              
@@ -377,7 +382,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                     </div>
                     <div class="tab-pane table-responsive" id="tab_5">
                           
-                         <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" onclick="printMilestone(this.id)"  data-toggle="modal" data-target="#print_milestone_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
+                         <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <div id="milestone_print">
                                 <table id="table" class="table " style="width: 100%">
                                   <tr>
@@ -551,6 +556,53 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
     </div>
      </div>
 
+  <!-- open Print statement-->
+    <div class="modal  fade" id="print_statement_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Print statement</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+     <iframe id="print_Statement" name="print_Statement" style="width: 100%;height: 600px;">
+
+    </iframe>
+            <script >
+         function printSatement(id) {
+         
+         var details= '&student_id='+ id;
+          $.ajax({
+          type: "POST",
+          url: "print_statement.php",
+          data: details,
+          cache: false,
+          success: function(data) {
+
+            //window.location='view_student.php?id=<?php// echo $student_ID ?>' ;
+           
+        var newWin = window.frames["print_Statement"];
+        newWin.document.write('<body onload="window.print()">'+data+'</body>');
+        newWin.document.close();
+
+          }
+
+
+          });
+        } 
+  
+            </script>
+          
+          
+          
+
+        </div>
+          
+      </div>
+    </div>
+     </div>
 
     </section>
     <!-- /.content -->

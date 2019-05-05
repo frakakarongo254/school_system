@@ -57,6 +57,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<?php include("include/header.php")?>
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 <?php
@@ -153,7 +154,8 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                      }
                                    }
                                  }
-                               echo  "Ksh ".$amt_invoiced.".00";
+                              
+                                  echo  $school_row['currency'] . ' <b>  '.formatCurrency($amt_invoiced).'</b>';
                                        ?>
 
                      
@@ -196,7 +198,8 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                      }
                                    }
                                  }
-                                echo  "Ksh ".$total_amount_paid.".00 ";
+                               
+                                 echo  $school_row['currency'] . ' <b>  '.formatCurrency($total_amount_paid).'</b>';
                                        ?>
                       
                     </div>
@@ -211,7 +214,9 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                   <div class="small-box bg-yellow">
                     <div class="inner">
                         <p><b>Balance</b></p>
-                        <?php echo 'Ksh '. $tol=$amt_invoiced - $total_amount_paid.'.00';?>
+                        <?php  $tol=$amt_invoiced - $total_amount_paid;
+                          echo  $school_row['currency'] . ' <b>  '.formatCurrency($tol).'</b>';
+                        ?>
                     
                     </div>
                     <div class="icon">
@@ -284,7 +289,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
 
 //mail($to, $subject, $body, $headers);
         $datetime = date_create()->format('Y-m-d H:i:s');
-        $send=1 ;//mail($to,$subject,$message,$headers);
+        $send=mail($to,$subject,$message,$headers);
         if($send){
           echo "Email Sent successfully";
           $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,recipient_ID,sender,sender_ID,message,date_sent 
@@ -303,11 +308,11 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                   <input type="email" class="form-control" name="emailto" value="<?php echo $senderemail_row['sender_email']?>" placeholder="Email to:" readonly>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="emailSubject" placeholder="Subject">
+                  <input type="text" class="form-control" name="emailSubject" placeholder="Subject" required>
                 </div>
                 <div>
                   <textarea name="emailMessage" class="textarea" placeholder="Message"
-                            style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                            style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" required></textarea>
                 </div>
               
             </div>
@@ -321,7 +326,8 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
            </div>
            <div class="col-md-6">
                  <div class="box box-info">
-            <div class="box-header with-border">Upcoming Events</h3>
+
+            <div class="box-header with-border"><h3 class="box-title">Upcoming Events</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -344,7 +350,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                   <tbody>
                     <?php
           
-            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY event_startDate DESC LIMIT 5")or
+            $event_query = mysqli_query($conn,"select * from event where event_for='All' || event_for='Parent' and school_ID = '$school_ID' ORDER BY event_startDate DESC LIMIT 5")or
             die(mysqli_error());
             while ($event_row=mysqli_fetch_array($event_query)){
              $eventID=$event_row['event_ID'];
@@ -377,12 +383,15 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
             <!-- /.box-body -->
             <div class="box-footer clearfix">
              
-              <a href="" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#view_event_modal">View All Events</a>
+              <a href="" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#view_event_modal">View Calendar</a>
             </div>
             <!-- /.box-footer -->
+
           </div>
           <!-- /.box -->
+          
      </div>
+
            </div>
        
       </section>
@@ -398,6 +407,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                     <ul class="nav nav-tabs">
                       <li class="active"><a href="#children_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Children</a></li>
                       <li><a href="#email_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Email</a></li>
+                      <li><a href="#event_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Event</a></li>
                       <li><a href="#notification_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
                        <li><a href="#finance_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Finance</a></li>
                       
@@ -430,7 +440,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                    if($row2['photo'] !=''){
                                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
                                   }else{
-                                      $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                                     }
                                     echo" <tr>
                                            <td>
@@ -440,7 +450,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                             <td>".$row2['registration_No']." </td>
                                             <td>".$row2['gender_MFU']."</td>  
                                             <td>";
-                                           echo'   <a class="btn btn-success " href="view_children.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span> view</a>
+                                           echo'   <a class="btn btn-success btn-xs " href="view_children.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span> view</a>
                                             
                                            </td>
                                          </tr>';
@@ -488,7 +498,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                     <td>".$row1['sender']." </td>
                                                      <td>".$row1['email_subject']."</td> 
                                                     <td>". $newDate."</td>";
-                                                  echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a></td>
+                                                  echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success btn-xs" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span> view</button></a></td>
                                                   
                                                  </tr>';
                                             }
@@ -523,7 +533,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                           <td>".$row1['recipient']." </td>
                                                            <td>".$row1['email_subject']."</td> 
                                                           <td>".$newDate."</td>";
-                                                        echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
+                                                        echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success btn-xs"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
                                                         
                                                        </tr>';
                                                   }
@@ -536,6 +546,55 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                               </div>
                             </div>
                       </div>
+                      <div class="tab-pane table-responsive" id="event_tab">
+                        
+          <table id="example1" class="table table-bordered table-striped table-responsive">
+            <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Location</th>
+                  <th>Starting Date</th>
+                  <th>Starting  time</th>
+                  <th>Ending Date </th>
+                  <th>Ending time</th>
+                  <th>Description</th>
+                  
+                  
+                </tr>
+                </thead>
+                <tbody>
+            <?php
+          
+            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' and event_for='All' || event_for='Parent' ORDER BY event_startDate DESC")or
+            die(mysqli_error());
+            while ($event_row=mysqli_fetch_array($event_query)){
+             $eventID=$event_row['event_ID'];
+             $start=$event_row["event_startDate"];
+              $event_startDate = date("d-m-Y", strtotime($start));
+              $event_starttime = $event_row['event_startime'];
+              $end=$event_row["event_endDate"];
+              $event_endDate= date("d-m-Y", strtotime($end));
+              $endtime=$event_row["event_endtime"];
+            echo' <tr>
+
+              <td >'.
+             $event_row['event_title'].'
+             </td>
+            <td>'.$event_row["event_location"].'</td>
+            <td>'.$event_startDate.'</td>
+      <td>'.$event_starttime.'</td>
+            <td>'.$event_endDate.'</td>
+       <td>'.$endtime.'</td>
+            <td>'.$event_row["event_description"].'</td>
+            
+            </tr>';
+            }
+            ?>
+          </tbody>
+               
+              </table>
+      
+                    </div>
                       <!-- /.tab-pane -->
                       <div class="tab-pane table-responsive" id="notification_tab">
                             <table id="example1" class="table table-bordered table-striped">
@@ -562,7 +621,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                          <td>'.$notf_row['notification_message'].'</td>
                                          
                                          <td>'.$newDate.'</td>
-                                         <td><a href="view_notification.php?id='.$notification_id.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span>  View</button></a></a></td>
+                                         <td><a href="view_notification.php?id='.$notification_id.'"><button type="button"  class="btn btn-success btn-xs" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span>  View</button></a></a></td>
                                         
                                        </tr>';
                                      
@@ -588,7 +647,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                               <div class="tab-content">
                                 <div class="tab-pane active" id="invoice_tab">
                                        <div class="col-md-8"><b><h3>INVOICES</h3> </b></div>
-                                           <table id="example1" class="table table-bordered table-striped">
+                                           <table id="example2" class="table table-bordered table-striped">
                                               <thead>
                                               <tr>
                                                 
@@ -605,7 +664,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                               <tbody>
                                                  <?php
                                                  
-                                                 $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ")or
+                                                 $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ORDER BY date(invoice_date) DESC")or
                                                  die(mysqli_error());
                                                  $total_amount=0.00;
                                                  while ($row2=mysqli_fetch_array($query2)){
@@ -626,9 +685,9 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                   $name=$row3['first_Name']." ".$row3['last_Name'];
                                                   $reg=$row3['registration_No'];
                                                   echo' <tr>
-                                                     <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row2['reff_no'].' </a></td>';
+                                                     <td>    <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row2['reff_no'].' </a></td>';
 
-                                                    echo " <td>".$newDate."</td>
+                                                    echo " <td><span class='hidden'>".date('Y/m/d', strtotime($invoive_date))."</span>".$newDate."</td>
                                                            <td>".$reg ." ".$name."</td>
                                                           <td>".$row2['summury']." </td>
                                                           <td>".$row2['amount']."</td>
@@ -742,6 +801,125 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
       </div>
     </div>
      </div>
+      <!-- open Print statement-->
+    <div class="modal  fade" id="Print_invoice_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"><b>Invoice</b></h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+        <div>    
+        <div id="printDiv">
+        
+       </div>
+       <br>
+         <button onclick="printi_In()" class="btn btn-default"><i class="fa fa-print"></i>  Print</button>
+     </div>
+      <iframe id="printf" name="printf" class="hidden" style="width: 100%;height: px">
+      
+    </iframe>
+     
+  
+            <script >
+         function print_invoice(invoice_id) {
+        
+         var details= '&invoice_id='+ invoice_id;
+          $.ajax({
+          type: "POST",
+          url: "print_invoice.php",
+          data: details,
+          cache: false,
+          success: function(data) {
+          
+            //window.location='view_student.php?id=<?php// echo $student_ID ?>' ;
+           document.getElementById("printDiv").innerHTML=data;
+        //document.getElementById('printf').innerHTML=data;
+
+          }
+
+
+          });
+        } 
+   function printi_In() {
+      divcont=document.getElementById("printDiv").outerHTML;
+    var newWin = window.frames["printf"];
+        newWin.document.write('<body onload="window.print()">'+divcont+'</body>');
+        newWin.document.close();
+
+     // body...
+   }
+            </script>
+          
+          
+          
+
+        </div>
+          
+      </div>
+    </div>
+     </div>
+  
+
+  <!-- open Print statement-->
+    <div class="modal  fade" id="Print_receipt_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Print Receipt</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="receiptDiv">
+        
+       </div>
+       <br>
+         <button onclick="receipt_fun()" class="btn btn-default"><i class="fa fa-print"></i>  Print</button>
+     </div>
+      <iframe id="print_Receipt" name="print_Receipt" class="hidden" style="width: 100%;height: px">
+      
+    </iframe>
+     
+            <script >
+         function printReceipt(payment_id) {
+               
+        var details= '&payment_id='+payment_id;
+        $.ajax({
+        type: "POST",
+        url: "print_receipt.php",
+        data: details,
+        cache: false,
+        success: function(data) {
+         
+          document.getElementById("receiptDiv").innerHTML=data;
+        
+        }
+
+
+  });
+
+}
+function receipt_fun(){
+   receiptDiv=document.getElementById("receiptDiv").outerHTML;
+    var newWin = window.frames["print_Receipt"];
+        newWin.document.write('<body onload="window.print()">'+receiptDiv+'</body>');
+        newWin.document.close();
+}
+            </script>
+          
+          
+          
+
+        </div>
+          
+      </div>
+    </div>
+     </div>
       </section>
 
     
@@ -749,12 +927,32 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
     <!-- /.container -->
   </div>
   <!-- /.content-wrapper -->
+  
   <?php
  include('include/footer.php');
  ?>
 </div>
 <!-- ./wrapper -->
-<?php include('event_javascript.php')?>
+<?php include('event_javascript.php');
+
+include('include/script.php');
+
+?>
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : false,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+
+</script>
+
 <!-- jQuery 3 -->
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->

@@ -14,6 +14,7 @@ include("include/header.php");
       //$event_startDate = date("d-m-Y", strtotime($start));
       $event_starttime = $rows_event["event_startime"];
       $event_endDate=$rows_event["event_endDate"];
+       $event_for=$rows_event["event_for"];
       //$event_endDate = date("d-m-Y", strtotime($end));
       $event_endtime = $rows_event["event_startime"];
 echo '<form  action="event.php" method="POST">
@@ -81,7 +82,83 @@ echo '<form  action="event.php" method="POST">
                   <div class="input-group-addon">
                     <i></i>
                   </div>
+                </div>';
+                if ($event_for =="Parent") {
+
+               echo '<br>
+              <div class="col-md-12 input-group ">
+                <div class="row">
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red"  value="All" >
+                    <label>ALL </label>
+                  </label>
+                  </div>
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red" value="Parent" checked>
+                    <label>Parent</label>
+                  </label>
                 </div>
+                <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red" value="Staff">
+                    <label>Staff</label>
+                  </label>
+                </div>
+                </div>
+              </div>';
+                }elseif ($event_for =="Staff") {
+               echo '   <br>
+              <div class="col-md-12 input-group ">
+                <div class="row">
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red"  value="All">
+                    <label>ALL </label>
+                  </label>
+                  </div>
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red" value="Parent">
+                    <label>Parent</label>
+                  </label>
+                </div>
+                <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red" value="Staff" checked>
+                    <label>Staff</label>
+                  </label>
+                </div>
+                </div>
+              </div>';
+                  
+                }else{
+                  echo '   <br>
+              <div class="col-md-12 input-group ">
+                <div class="row">
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red"  value="All" checked>
+                    <label>ALL </label>
+                  </label>
+                  </div>
+                  <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red" value="Parent">
+                    <label>Parent</label>
+                  </label>
+                </div>
+                <div class="col-md-2">
+                  <label >
+                    <input type="radio" name="edit_event_for" class=" flat-red" value="Staff">
+                    <label>Staff</label>
+                  </label>
+                </div>
+                </div>
+              </div>';
+                }
+            echo '
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>

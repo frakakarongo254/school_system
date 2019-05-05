@@ -84,7 +84,7 @@ if (!velifyLogin()) {
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example2" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>From</th>
@@ -109,7 +109,7 @@ if (!velifyLogin()) {
                            <a href='vew_email.php?id=".$emailID."'>
                             <td><b>".$row1['sender']." </b></td>
                              <td><b>".$row1['email_subject']."</b></td> 
-                            <td><b>".$newDate."</b></td>
+                            <td><span class='hidden'>".date("Y/m/d", strtotime($date))."</span><b>".$newDate."</b></td>
                             <td><a href='view_email.php?id=".$emailID."' ><button type='button'  class='btn btn-success btn-sm' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-'></span>view</button></a></td></b>
                           
                          </tr>";
@@ -118,7 +118,7 @@ if (!velifyLogin()) {
                            <a href='vew_email.php?id=".$emailID."'>
                             <td>".$row1['sender']." </td>
                              <td>".$row1['email_subject']."</td> 
-                            <td>".$newDate."</td>
+                            <td><span class='hidden'>".date("Y/m/d", strtotime($date))."</span>".$newDate."</td>
                             <td><a href='view_email.php?id=".$emailID."'><button type='button'  class='btn btn-success btn-sm' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-'></span>view</button></a></td>
                               </tr>";
 
@@ -173,8 +173,8 @@ if (!velifyLogin()) {
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
+      'searching'   : true,
+      'ordering'    : false,
       'info'        : true,
       'autoWidth'   : false
     })

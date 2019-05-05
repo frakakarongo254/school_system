@@ -80,6 +80,10 @@ if (!velifyLogin()) {
         $Student_zone=$_POST['student_zone'];
         $zoneChargeType=$_POST['zoneChargeType'];
         $student_class_id=$_POST['student_Class_Id'];
+        $meal_plan=$_POST['meal_plan'];
+
+        $randstd = substr(number_format(time() * rand(),0,'',''),0,10);
+        $student_ID=md5($randstd);
         $eventTitle=$student_first_name ." ".$student_last_name . " Birthday";
         #generate student Reg no based on the last regno from the database 
        $get_last_RegNo_query= mysqli_query($conn,"select * from `student` where `school_ID` ='".$school_ID."'");
@@ -114,13 +118,13 @@ if (!velifyLogin()) {
           $uploadOk = 0;
           }else{
             $student_profile_photo = addslashes(file_get_contents($_FILES['student_profile_photo']['tmp_name']));
-             $sudent_insert_query=mysqli_query($conn,"insert into `student` (first_Name,last_Name,nickname,
-          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,photo,nationality,zone,zone_transport_type,class_ID,status) values('$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
-          '$student_gender','$student_profile_photo','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status') ");
+             $sudent_insert_query=mysqli_query($conn,"insert into `student` (student_ID,first_Name,last_Name,nickname,
+          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,photo,nationality,zone,zone_transport_type,class_ID,status,meal_plan) values('$student_ID','$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
+          '$student_gender','$student_profile_photo','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status','$meal_plan') ");
 
              
         if($sudent_insert_query){
-        $student_id=mysqli_insert_id($conn);
+        $student_id=$student_ID;
         $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID,student_ID ,event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color,event_type
           ) 
           values('$school_ID','$student_id','$eventTitle','School','$student_dateOfBirth','12:00am','$student_dateOfBirth','12:00pm','Student Birthday','#000000','Birthday') ");
@@ -148,12 +152,12 @@ if (!velifyLogin()) {
        }
           }
         }else{
-           $sudent_insert_query=mysqli_query($conn,"insert into `student` (first_Name,last_Name,nickname,
-          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,nationality,zone,zone_transport_type,class_ID,status) values('$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
-          '$student_gender','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status') ");
+           $sudent_insert_query=mysqli_query($conn,"insert into `student` (student_ID,first_Name,last_Name,nickname,
+          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,nationality,zone,zone_transport_type,class_ID,status,meal_plan) values('$student_ID','$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
+          '$student_gender','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status','$meal_plan') ");
         if($sudent_insert_query){
         
-          $student_id=mysqli_insert_id($conn);
+          $student_id=$student_ID;
         $event_insert_query=mysqli_query($conn,"insert into `event` (school_ID,student_ID ,event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color,event_type
           ) 
           values('$school_ID','$student_id','$eventTitle','School','$student_dateOfBirth','12:00am','$student_dateOfBirth','12:00pm','Student Birthday','#000000','Birthday') ");
@@ -292,16 +296,16 @@ if (!velifyLogin()) {
                   <div class="form-group">
                      
                     <label>Status:</label>
-                 <div class=" col-md- input-group input-group">              
-                 <label>
-                    <input type="radio" name="student_status" class=" flat-red"  value="Active" checked>
-                    <label>Active</label>
-                  </label>
-                  <label>
-                    <input type="radio" name="student_status" class=" flat-red" value="Inactive">
-                    <label>Inactive</label>
-                  </label>
-                </div>
+                     
+                 <select class="form-control select2" name="student_status" style="width: 100%">
+                   <option value="Admitted">Admitted</option>
+                   <option value="Toured">Toured</option>
+                   <option value="Interested">Interested</option>
+                   <option value="Waitlisted">Waitlisted</option>
+                  
+                 </select>         
+                 
+                
                 </div>
                 </div>
                 <div class="col-md-4">
@@ -367,16 +371,23 @@ if (!velifyLogin()) {
                 </div>
                 
               </div>
+            
               
                <div class="row">
-                <div class="col-md-2">
-                 <div class="form-group  col-md- mb-3">
-                  <label for="nationality">Profile Photo :</label>
-              
-
-               </div>
-             </div>
+                <div class="col-md-4">
+                   <div class="form-group has-feedback input-group-">
+                        <label>Meal Plan:</label>
+                 <div class=" col-md-12 input-group input-group">              
+                 <select class="form-control select2" name="meal_plan" style="width: 100%;">
+                   <option value="Special">Special</option>
+                   <option value="Normal">Normal</option>
+                 </select>
+                </div>
+                  </div>
+                </div>
+                
                <div class="col-md-2">
+                <label for="nationality">Profile Photo :</label>
                  <div style="border: ;height: 100px;width: 100px;">
                    <img id="blah" alt="your image" src="../../dist/img/user.jpg" width="100" height="100" />
                  </div>

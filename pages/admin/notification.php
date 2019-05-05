@@ -33,24 +33,6 @@ $school_ID = $_SESSION['login_user_school_ID'];
         
       <?php
     
-        if(isset($_GET['insert'])){
-          echo' <div class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert"
-          aria-hidden="true">
-          &times;
-          </button>
-          Success! Zone added  successfully.
-          </div>';   
-        }
-        if(isset($_GET['update'])){
-          echo' <div class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert"
-          aria-hidden="true">
-          &times;
-          </button>
-          Success! Zone updated  successfully.
-          </div>';   
-        }
         if(isset($_GET['delete'])){
           echo' <div class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
@@ -60,55 +42,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
           Success! You have deleted  successfully.
           </div>';   
         }
-       if(isset($_POST['addZoneBtn'])){
-        
-          #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
-        $zone_name=$_POST['zone_name'];
-        $oneWayCharge=$_POST['oneWayCharge'];
-        $twoWayCharge=$_POST['twoWayCharge'];
-       
-        $class_insert_query=mysqli_query($conn,"insert into `zone` (school_ID, zone,oneWayCharge,twoWayCharge
-          ) 
-          values('$school_ID','$zone_name','$oneWayCharge','$twoWayCharge') ");
-
-        
-        if($class_insert_query){
-           echo '<script> window.location="zone.php?insert=True" </script>';
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-      }
-        # edit zone
-        if(isset($_POST['editZoneBtn'])){
-
-        
-        $edit_zone_name=$_POST['edit_zone_name'];
-        $edit_zone_id=$_POST['edit_zone_id'];
-        $edit_oneWayCharge=$_POST['edit_oneWayCharge'];
-        $edit_twoWayCharge=$_POST['edit_twoWayCharge'];
-        $update_zone_query=mysqli_query($conn,"update `zone` SET zone= '".$edit_zone_name."', oneWayCharge= '".$edit_oneWayCharge."',twoWayCharge= '".$edit_twoWayCharge."' where `zone_ID`='".$edit_zone_id."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
-
-
-        if($update_zone_query){
-        echo '<script> window.location="zone.php?update=True" </script>';
-        }else{
-        echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-        }
-        }
-
+      
       
       ?>
     </section>
@@ -266,55 +200,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
     </div>
      </div>
 
-    <!-- edit zone Modal-->
-    <div class="modal  fade" id="edit_zone_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><b>Edit Zone</b></h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-            <script >
-             
-               function editZone(id){ 
-                
-                  if(id !=''){
-                    var details= '&zone_id='+ id ;
-                    $.ajax({
-                    type: "POST",
-                    url: "edit_zone.php",
-                    data: details,
-                    cache: false,
-                    success: function(data) {
-                      document.getElementById("classMessage").innerHTML=data;
-                   
-
-                    }
-
-                    });
-                   
-                  }else{
-                   document.getElementById("classMessage").innerHTML=' You have Not Yet selected a Class';
-                  }
-                 
-                
-                }
-            </script>
-          
-          <div id="classMessage"></div>
-
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-     </div>
+   
     </section>
     <!-- /.content -->
   </div>

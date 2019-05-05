@@ -128,7 +128,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
           <br>
           <b>Invoice Date:</b>'. $invoice_date .'<br>
           
-          <b>Account:</b> '. $invoice_due_date .'
+         
         </div>
         <!-- /.col -->
       </div>
