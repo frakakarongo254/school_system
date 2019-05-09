@@ -7,7 +7,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -115,21 +115,14 @@ if (!velifyLogin()) {
                             <td>".$row1['recipient']." </td>
                              <td>".$row1['email_subject']."</td> 
                             <td><span class='hidden'>".date("Y/m/d", strtotime($date))."</span>".$newDate."</td>";
-                          echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
+                          echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success badge"><span class= "glyphicon glyphicon-eye-open"></span> </a></td>
                           
                          </tr>';
                     }
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                  <th>To</th>
-                  <th>Subject</th>               
-                  <th>Date</th>
-                  <th>View</th>
-                </tr>
-                </tfoot>
+               
               </table>
             </div>
             <!-- /.box-body -->

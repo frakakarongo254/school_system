@@ -8,7 +8,7 @@
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -37,7 +37,7 @@
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span><b class="color-primary" >Setting</b></h3>
+          <h3><span class="fa fa-gear"></span>  <b class="color-primary" >  Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
                 <li><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
@@ -61,7 +61,7 @@
           aria-hidden="true">
           &times;
           </button>
-          Success! Stream updated  successfully.
+          Success!  updated  successfully.
           </div>';   
         }
         if(isset($_GET['delete'])){
@@ -213,7 +213,7 @@
                 <li><a href="#"><i class="fa fa-phone"></i> <?php echo $school_row['phone']?></a></li>
                 <li><a href="#"><i class="fa fa-envelope-o"></i> <?php echo $school_row['email']?></a></li>
                 <li><a href="#"><i class="fa fa-globe"></i> <?php echo $school_row['school_website']?></a></li>
-                <li><a href="#"><i class="fa fa-money"></i>Currency  <?php echo $school_row['currency']?></a></li>
+                
               </ul></td>
                      
                     </tr>
@@ -236,13 +236,13 @@
                 </div>
                  <div class="row">
                   <h5><b><i class="fa fa-money"></i>  Currency</b></h5>
-                <?php echo $school_row['currency']?>
+                <span class="badge btn-primary"> <?php echo $school_row['currency']?></span>
                 </div>
 
 
                </div>
                <div class="col-md-3">
-                 <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-editSchoolDetails"><i class="fa fa-pencil"></i><b> Edit Details</b></a>
+                 <a class="btn btn-primary pull-right" href="#" id="button1" data-toggle="modal" data-target="#modal-editSchoolDetails"><i class="fa fa-pencil"></i><b> Edit Details</b></a>
                </div>
              </div>
              
@@ -250,13 +250,15 @@
              
              <div class="row">
                 <div class="col-md-12">
-                   <h3>Stream:</h3>
-                   <th><a class="btn btn-success pull-right btn-sm" href="#" data-toggle="modal" data-target="#modal-addStream"><i class="fa fa-plus"></i><b> Add Stream</b></a></th>
+                  
+                  
+                   
+                   <br>
                  <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>   
                   <th>Stream Name</th>
-                  <th>Actions</th>
+                  <th>Actions <a class="btn btn-success pull-right btn-sm" href="#" id="button2" data-toggle="modal" data-target="#modal-addStream"><i class="fa fa-plus"></i><b> Add Stream</b></a></th>
                   
                 </tr>
                 </thead>
@@ -264,7 +266,7 @@
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query4 = mysqli_query($conn,"select * from stream where school_ID = '$school_ID'")or
+                   $query4 = mysqli_query($conn,"select * from stream where school_ID = '".$school_ID."'")or
                    die(mysqli_error());
                    while ($row4=mysqli_fetch_array($query4)){
                    $stream_ID=$row4['stream_ID'];
@@ -274,9 +276,9 @@
                            
                             <td colspan='2'>";
                            echo'  
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$stream_ID.'" onclick="editStream(this.id)" data-toggle="modal"  data-target="#edit_stream_Modal"><span class="glyphicon glyphicon-pencil">  Edit</span></button>
+                             <button type="button"  class="btn btn-info badge" id="'.$stream_ID.'" onclick="editStream(this.id)" data-toggle="modal"  data-target="#edit_stream_Modal"><span class="glyphicon glyphicon-pencil">  Edit</span></button>
 
-                             <button type="button" id="'.$row4['stream_ID'].'" class="btn btn-danger btn-flat" value="'.$row4['stream_name'].'" onclick="deleteStream(this.id,this.value)" data-toggle="modal"  data-target="#delete_stream_Modal"><span class="glyphicon glyphicon-trash"></span>  Remove</button>
+                             <button type="button" id="'.$row4['stream_ID'].'" class="btn btn-danger badge" value="'.$row4['stream_name'].'" onclick="deleteStream(this.id,this.value)" data-toggle="modal"  data-target="#delete_stream_Modal"><span class="glyphicon glyphicon-trash"></span>  Remove</button>
                              
                            </td>
                          </tr>';

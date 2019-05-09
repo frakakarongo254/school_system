@@ -7,7 +7,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -90,7 +90,7 @@ if (!velifyLogin()) {
                   <th>From</th>
                   <th>Subject</th>               
                   <th>Date</th>
-                  <th>View</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -110,7 +110,7 @@ if (!velifyLogin()) {
                             <td><b>".$row1['sender']." </b></td>
                              <td><b>".$row1['email_subject']."</b></td> 
                             <td><span class='hidden'>".date("Y/m/d", strtotime($date))."</span><b>".$newDate."</b></td>
-                            <td><a href='view_email.php?id=".$emailID."' ><button type='button'  class='btn btn-success btn-sm' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-'></span>view</button></a></td></b>
+                            <td><a href='view_email.php?id=".$emailID."' ><button type='button'  class='btn btn-success badge' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-eye-open'></span></button></a></td></b>
                           
                          </tr>";
                    }else{
@@ -119,7 +119,7 @@ if (!velifyLogin()) {
                             <td>".$row1['sender']." </td>
                              <td>".$row1['email_subject']."</td> 
                             <td><span class='hidden'>".date("Y/m/d", strtotime($date))."</span>".$newDate."</td>
-                            <td><a href='view_email.php?id=".$emailID."'><button type='button'  class='btn btn-success btn-sm' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-'></span>view</button></a></td>
+                            <td><a href='view_email.php?id=".$emailID."'><button type='button'  class='btn btn-success badge' onclick='viewStudentDetailes()''><span class= 'glyphicon glyphicon-eye-open'></span></button></a></td>
                               </tr>";
 
                    }

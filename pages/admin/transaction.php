@@ -9,7 +9,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -128,12 +128,12 @@ if (!velifyLogin()) {
               </div>
               <div class="col-md-1 ">
               
-              <button type="submit" name="printPaymentBtn" class="btn btn-primary btn-sm"><i class="fa fa-filter"></i> Filter</button>
+              <button type="submit" name="printPaymentBtn" class="btn btn-primary btn-sm" id="button3"><i class="fa fa-filter"></i> Filter</button>
             
                 </div>
           
               <div class="col-md-2">
-                <a class="btn btn-success pull-right btn-sm" href="" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print Payment</b></a>
+                <a class="btn btn-success pull-right btn-sm" id="button3" href="" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print Payment</b></a>
               </div>
              
             </div>
@@ -161,7 +161,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from payment where date(payment_date) between date('$printFromDate') and date('$printFromTo')  and school_ID = '$school_ID' ORDER BY date('$printFromDate')  DESC")or
+                               $query2 = mysqli_query($conn,"select * from payment where date(payment_date) between date('$printFromDate') and date('$printFromTo')  and school_ID = '".$school_ID."' ORDER BY date('$printFromDate')  DESC")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
@@ -173,11 +173,11 @@ if (!velifyLogin()) {
                                 $slipNo= $row2['slip_no'];
                                $newDate = date("d-m-Y", strtotime($invoive_date));
                                 $total_amount=0.00;
-                                $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='$invoiceID' and school_ID = '$school_ID' ");
+                                $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='".$invoiceID."' and school_ID = '".$school_ID."' ");
                               
                                while ($row3=mysqli_fetch_array($query3)){
                                 $invoice_ref=$row3['reff_no'];
-                              $query4 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+                              $query4 = mysqli_query($conn,"select * from student where student_ID='".$studentid."' and school_ID = '".$school_ID."' ");
                               
                                while ($row4=mysqli_fetch_array($query4)){
                                 $name=$row4['first_Name']." ".$row4['last_Name'];
@@ -189,19 +189,19 @@ if (!velifyLogin()) {
                                           <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['remarks']." </td>
-                                        <td>".$row2['amount_paid']."</td>
+                                       <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount_paid'])."</b></td>
                                         ";
                                          
                                           
                                       
                                        echo' 
                                           <td>
-                                          <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
-                                         <button type="button"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                                          <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                         <button type="button"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
                                             
-                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"> View</span></a>
+                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"></span></a>
 
-                                         <button type="button"  class="btn btn-primary btn-flat" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
+                                         <button type="button"  class="btn btn-primary badge" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
                                        </td>
                                     </tr>';
 
@@ -235,7 +235,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' ORDER BY id DESC")or
+                               $query2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' ORDER BY id DESC")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
@@ -247,11 +247,11 @@ if (!velifyLogin()) {
                                 $slipNo= $row2['slip_no'];
                                $newDate = date("d-m-Y", strtotime($invoive_date));
                                 $total_amount=0.00;
-                                $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='$invoiceID' and school_ID = '$school_ID' ");
+                                $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='".$invoiceID."' and school_ID = '$school_ID' ");
                               
                                while ($row3=mysqli_fetch_array($query3)){
                                 $invoice_ref=$row3['reff_no'];
-                              $query4 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+                              $query4 = mysqli_query($conn,"select * from student where student_ID='".$studentid."' and school_ID = '".$school_ID."' ");
                               
                                while ($row4=mysqli_fetch_array($query4)){
                                 $name=$row4['first_Name']." ".$row4['last_Name'];
@@ -263,20 +263,20 @@ if (!velifyLogin()) {
                                           <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['remarks']." </td>
-                                        <td>".$row2['amount_paid']."</td>
+                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount_paid'])."</b></td>
                                         ";
                                          
                                           
                                       
                                        echo' 
                                           <td>
-                                           <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                           <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span> Print </a>
 
-                                         <button type="button"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                                         <button type="button"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"> View</span></a>
+                                           <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"></span></a>
 
-                                         <button type="button"  class="btn btn-primary btn-flat" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
+                                         <button type="button"  class="btn btn-primary badge" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
                                        </td>
                                     </tr>';
 

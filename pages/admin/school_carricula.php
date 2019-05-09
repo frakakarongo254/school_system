@@ -8,7 +8,7 @@
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -67,7 +67,7 @@
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span><b class="color-primary" >Setting</b></h3>
+          <h3><span class="fa fa-gear"></span>  <b class="color-primary" >  Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
                 <li><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
@@ -144,13 +144,13 @@
               <div class="row">
                 <div class="col-md-12  ">
                  <div class="" style="text-align: center;">
-                  <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-addCarrucula"><i class="fa fa-plus"></i><b> Add Carricula</b></a>
+                  <a class="btn btn-primary pull-right" href="#" id="button1" data-toggle="modal" data-target="#modal-addCarrucula"><i class="fa fa-plus"></i><b> Add Carricula</b></a>
                  
             </div>
               </div>
               
              </div>
-             
+              <br>
                  <div class="row">
                    <div class="col-md-12">
                       <table id="example1" class="table table-bordered table-striped">
@@ -165,7 +165,7 @@
                    <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $carri_query = mysqli_query($conn,"select * from carricula where school_ID = '$school_ID'")or
+                   $carri_query = mysqli_query($conn,"select * from carricula where school_ID = '".$school_ID."'")or
                    die(mysqli_error());    
                      
                    while ($carri_row=mysqli_fetch_array($carri_query)){
@@ -176,11 +176,11 @@
                             <td>".$carri_row['code']." </td>  
                             <td>";
                             $_SESSION['carricula_ID'] = $carri_row['carricula_ID']; #send this id to the view carricula  page as a session
-                           echo'   <a class="btn btn-success btn-flat" href="view_carricula.php?id=',$carricula_ID,'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+                           echo'   <a class="btn btn-success badge" href="view_carricula.php?id=',$carricula_ID,'"><span class= "glyphicon glyphicon-eye-open"></span></a>
 
-                             <button type="button" id="'.$carri_row['carricula_ID'].'" class="btn btn-primary btn-flat"  onclick="editCarricula(this.id)" data-toggle="modal"  data-target="#edit_carricula_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button" id="'.$carri_row['carricula_ID'].'" class="btn btn-primary badge"  onclick="editCarricula(this.id)" data-toggle="modal"  data-target="#edit_carricula_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                             <button type="button" id="'.$carri_row['carricula_ID'].'" class="btn btn-danger btn-flat" value="'.$carri_row['name'].'" onclick="deleteCarricula(this.id,this.value)" data-toggle="modal"  data-target="#delete_carricula_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                             <button type="button" id="'.$carri_row['carricula_ID'].'" class="btn btn-danger badge" value="'.$carri_row['name'].'" onclick="deleteCarricula(this.id,this.value)" data-toggle="modal"  data-target="#delete_carricula_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                            </td>
                          </tr>';
 

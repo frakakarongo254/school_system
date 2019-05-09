@@ -7,7 +7,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -214,7 +214,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Staffs</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Teacher</b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" id="button1" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Teacher</b></a></div>
             </div>
             </div>
             
@@ -241,7 +241,7 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from staff where school_ID = '$school_ID'")or
+                   $query2 = mysqli_query($conn,"select * from staff where school_ID = '".$school_ID."'")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $staff_ID= $row1['staff_ID'];
@@ -249,8 +249,13 @@ if (!velifyLogin()) {
                    if($row1['photo'] !=''){
                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
                   }else{
-                      $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                    if ($row1['gender']=="Female") {
+                      $img = "<img src='../../dist/img/avatar2.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                    }else{
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                     }
+                    }
+                    
                   echo" <tr>
                            <td>
                              ".$img."
@@ -262,9 +267,9 @@ if (!velifyLogin()) {
                             <td>".$row1['role']."</td>
                              
                             <td>";
-                           echo'  <a href="view_staff.php?id='.$staff_ID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a>
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$staff_ID.'" onclick="editStaffDetails(this.id)" data-toggle="modal" data-target="#modal-editStaff"><span class="glyphicon glyphicon-pencil"></span></button>
-                             <button type="button" id="'.$row1['staff_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['full_Name'].'" onclick="deleteStaff(this.id,this.value)" data-toggle="modal"  data-target="#delete_staff_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                           echo'  <a href="view_staff.php?id='.$staff_ID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a>
+                             <button type="button"  class="btn btn-info badge" id="'.$staff_ID.'" onclick="editStaffDetails(this.id)" data-toggle="modal" data-target="#modal-editStaff"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button" id="'.$row1['staff_ID'].'" class="btn btn-danger badge" value="'.$row1['full_Name'].'" onclick="deleteStaff(this.id,this.value)" data-toggle="modal"  data-target="#delete_staff_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                             
                            </td>
                          </tr>';

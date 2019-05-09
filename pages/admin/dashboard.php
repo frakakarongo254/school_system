@@ -53,9 +53,8 @@ chart.render();
 
 }
 </script>
-  </head>
-
-<body class="hold-transition skin-purple sidebar-mini">
+  <?php include("include/header.php")?>
+<body class="hold-transition skin-cadetblue sidebar-mini" style="background-color: ">
 <div class="wrapper">
 <!--include header-->
 

@@ -1,5 +1,5 @@
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar skin-purple" style="background-color: ">
+  <aside class="main-sidebar skin-black-light" style="background-color: ">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- Sidebar user panel -->
@@ -7,8 +7,8 @@
       
       <!-- sidebar menu: style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>
-        <li class="active ">
+        <li class="">MAIN NAVIGATION</li>
+        <li class=" ">
           <a href="dashboard.php"  style="font-size: px;color: #fff"><i class="fa fa-dashboard"></i> Dashboard </a>
         
         </li>

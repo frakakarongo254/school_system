@@ -7,7 +7,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -234,7 +234,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Parents</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a></div>
             </div>
             </div>
             
@@ -281,12 +281,12 @@ if (!velifyLogin()) {
                              
                             <td>";
                             $_SESSION['parent_ID'] = $parentID; #send this id to the view parent  page as a session to use there 
-                           echo'  <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a>
+                           echo'  <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a>
 
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$parentID.'" onclick="editParentDetails(this.id)" data-toggle="modal" data-target="#modal-editParent"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button"  class="btn btn-info badge" id="'.$parentID.'" onclick="editParentDetails(this.id)" data-toggle="modal" data-target="#modal-editParent"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                             <button type="button" id="'.$row1['parent_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_parent_Modal"><span class="glyphicon glyphicon-trash"></span></button>
-                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#link_student_Modal" id="'.$row1['parent_ID'].'" onclick=showLinkparentID(this.id) ><a href="#"> Link Student</a></button>
+                             <button type="button" id="'.$row1['parent_ID'].'" class="btn btn-danger badge" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_parent_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                             <button type="button" class="btn btn-secondary " data-toggle="modal" data-target="#link_student_Modal" id="'.$row1['parent_ID'].'" onclick=showLinkparentID(this.id) ><a href="#"> Link Student</a></button>
                            </td>
                          </tr>';
                     }
@@ -361,7 +361,7 @@ if (!velifyLogin()) {
              
             <div class="row">   
               <div class="form-group  col-md-3 mb-3">
-                <label for="nationality">Email :</label>
+                <label for="nationality">Email:</label>
               </div>
               <div class=" col-md-7 input-group input-group-">
                 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
@@ -439,7 +439,7 @@ if (!velifyLogin()) {
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="save_admissionBtn" class="btn btn-primary">Add parent</button>
+                <button type="submit" name="save_admissionBtn" class="btn btn-primary">Save parent</button>
               </div>
               </div>
           

@@ -9,7 +9,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -261,7 +261,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               
-              <div class="col-md-12   " style=""><a class="btn btn-primary pull-right" href="login.html" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
+              <div class="col-md-12   " style=""><a class="btn btn-primary pull-right" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
             </div>
             </div>
             
@@ -278,25 +278,34 @@ if (!velifyLogin()) {
       
       </div>
       <div class="row ">
-          <div class="col-md-12 box "  style="">
+          <div class="col-md-12 "  style="">
            
-           <div class="box">
-			<div class="box-header">
-             <div class="row">
+         <div class="box box-default collapsed-box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title"><b>View Events</b></h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
               
-              <div class="col-md-12 pull- " style=""><a class="btn btn-primary pull-right" href="" data-toggle="modal" data-target="#modal-printEvent"><i class="fa fa-print"></i><b> Print Event</b></a></div>
+              <div class="col-md-12 pull- " style=""><a class="btn btn-primary pull-right" href="" id="button1" data-toggle="modal" data-target="#modal-printEvent"><i class="fa fa-print"></i><b> Print Event</b></a></div>
             </div>
-            </div>
-			<div class="box-body table-responsive">
-          <table id="example2" class="table table-bordered table-striped table-responsive">
+            <br>
+              <table id="example2" class="table table-bordered table-striped table-responsive">
             <thead>
                 <tr>
                   <th>Title</th>
                   <th>Location</th>
                   <th>Starting Date</th>
-				  <th>Starting  time</th>
+          <th>Starting  time</th>
                   <th>Ending Date </th>
-				  <th>Ending time</th>
+          <th>Ending time</th>
                   <th>Description</th>
                   <th>Action</th>
                   
@@ -322,9 +331,9 @@ if (!velifyLogin()) {
              </td>
             <td>'.$event_row["event_location"].'</td>
             <td>'.$event_startDate.'</td>
-			<td>'.$event_starttime.'</td>
+      <td>'.$event_starttime.'</td>
             <td>'.$event_endDate.'</td>
-			 <td>'.$endtime.'</td>
+       <td>'.$endtime.'</td>
             <td>'.$event_row["event_description"].'</td>
             <td>
             <a data-toggle="modal" data-target="#view_event_Modal" href="#" id="'.$eventID.'" onclick="sendEventFunc(this.id)"><span class="pull- badge bg-success btn-success"><i class="fa fa-envelope-open"></i> </span></a>
@@ -338,15 +347,17 @@ if (!velifyLogin()) {
           </tbody>
                
               </table>
-			</div>
-         </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
 		 </div>
      
 	 </div>
     <!--- add Event Modal -->
       <div class="modal fade" id="modal-addEvent">
           <div class="modal-dialog modal-md">
-            <div class="modal-content">
+            <div class="modal-content" style="border-radius: 10px;">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>

@@ -10,7 +10,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -124,12 +124,13 @@ $school_ID = $_SESSION['login_user_school_ID'];
               <div class="row">
                 <div class="col-md-12  ">
                  <div class="" style="text-align: center;">
-                  <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-addCarrucula"><i class="fa fa-plus"></i><b> Add Vote Head</b></a>
+                  <a class="btn btn-primary pull-right" href="#" id="button1" data-toggle="modal" data-target="#modal-addCarrucula"><i class="fa fa-plus"></i><b> Add Vote Head</b></a>
                  
             </div>
               </div>
               
              </div>
+             <br>
              
                  <div class="row">
                    <div class="col-md-12">
@@ -143,7 +144,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                 <tbody>
                    <?php
                  
-                   $head_query = mysqli_query($conn,"select * from vote_head where school_ID = '$school_ID'")or
+                   $head_query = mysqli_query($conn,"select * from vote_head where school_ID = '".$school_ID."'")or
                    die(mysqli_error());    
                      
                    while ($votehead_row=mysqli_fetch_array($head_query)){
@@ -156,7 +157,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                             
                            echo'   
 
-                             <button type="button" id="'.$votehead_row['vote_head_ID'].'" class="btn btn-danger btn-flat" value="'.$votehead_row['name'].'" onclick="deleteVoteHead(this.id,this.value)" data-toggle="modal"  data-target="#delete_voteHead_Modal"><span class="glyphicon glyphicon-trash"></span>   Delete</button>
+                             <button type="button" id="'.$votehead_row['vote_head_ID'].'" class="btn btn-danger badge" value="'.$votehead_row['name'].'" onclick="deleteVoteHead(this.id,this.value)" data-toggle="modal"  data-target="#delete_voteHead_Modal"><span class="glyphicon glyphicon-trash"></span>   </button>
                            </td>
                          </tr>';
 
@@ -166,12 +167,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                   <th>Vote head</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+                
               </table>
                    </div>
                    

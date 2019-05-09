@@ -12,7 +12,7 @@ if (!velifyLogin()) {
   $get_milestone_ID=$_GET['milestone_ID'];
  }
  #get details form invoice
- $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' LIMIT 1 ");
+ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='".$student_ID."' and `school_ID` = '".$school_ID."' LIMIT 1 ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
  $milestone_ID1=$row02['milestone_ID'];
  $milestone_title1=$row02['title'];
@@ -23,7 +23,7 @@ if (!velifyLogin()) {
  $milestone_status1=$row02['status'];
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='". $invoice_student_id."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
@@ -31,7 +31,7 @@ $studentRegNo=$row03['registration_No'];
 $studentclass_id=$row03['class'];
 
 #get class details
-  $sql033 = mysqli_query($conn,"select * from `class` where  class_ID='$studentclass_id' and `school_ID` = '".$school_ID."'  LIMIT 1");
+  $sql033 = mysqli_query($conn,"select * from `class` where  class_ID='".$studentclass_id."' and `school_ID` = '".$school_ID."'  LIMIT 1");
   $row033 = mysqli_fetch_array($sql033 ,MYSQLI_ASSOC);
  $class_name=$row033['name'] ;
   

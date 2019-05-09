@@ -29,7 +29,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -50,10 +50,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-      <h1>
-        <b>Parent</b>
-       
-      </h1>
+     
      <?php
      if(isset($_GET['id']) and isset($_GET['unlink'])){
           echo' <div class="alert alert-danger alert-dismissable">
@@ -102,6 +99,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
 
 //mail($to, $subject, $body, $headers);
         $datetime = date_create()->format('Y-m-d H:i:s');
+        $sudent_insert_query='';
         $send=mail($to,$subject,$message,$headers);
         if($send){
           //echo "Email Sent successfully";
@@ -200,8 +198,8 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
          <div class="col-md-12 ">
          
           <!-- Profile Image -->
-          <div class="box box-primary ">
-            <div class="box-body box-profile">
+          <div class="box box-primary " id="viewParentStdInfo" style="" >
+            <div class="box-body box-profile" >
               <div class="row">
                 <div class="col-md-3 ">
                   <div class="pull-left">
@@ -214,24 +212,28 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                 <div class="col-md-4 table-responsive">
                   <table>
                     <tr>
-                    <td><span style="font-size: 17px">Name:</span></td>
+                    <td><span id="viewCss">Name:</span></td>
                     <td><h3 class="profile-username "><b><?php echo $parent_row['first_Name'] ." ". $parent_row['last_Name'];?></b></h3></td>
                   </tr>
                   <tr>
-                    <td><span style="font-size: 17px">Email:</span></td>
+                    <td><span id="viewCss">Email:</span></td>
                     <td><b><?php echo $parent_row['email']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Phone:</span></td>
+                    <td><span id="viewCss">Phone:</span></td>
                     <td><b><?php echo $parent_row['cell_Mobile_Phone']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Nationality:</span></td>
+                    <td><span id="viewCss">Nationality:</span></td>
                     <td><b><?php echo $parent_row['nationality']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Gender:</span></td>
-                    <td><b><?php echo $parent_row['gender_MFU']?></b></td>
+                    <td ><span id="viewCss">Gender:</span></td>
+                    <td class="" ><b><?php echo $parent_row['gender_MFU']?></b></td>
+                  </tr>
+                  <tr>
+                    <td ><span id="viewCss">Type:</span></td>
+                    <td class="" ><b>Parent</b></td>
                   </tr>
                   
                  </table>
@@ -240,22 +242,22 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                   <table>
                     
                   <tr>
-                    <td><span style="font-size: 17px">Total invoiced:</span></td>
-                    <td>
+                    <td><span id="viewCss">Total invoiced:</span></td>
+                    <td align="right">
                       <?php
                       
                                 $amt_invoiced=0.00;
-                               $query21 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                               $query21 = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
                              die(mysqli_error());
                              while ($row11=mysqli_fetch_array($query21)){
                              $student_Id = $row11['student_ID'];
                              $total=0.00;
-                             $query33 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_Id'")or
+                             $query33 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$student_Id."'")or
                              die(mysqli_error());
                              while ($row22=mysqli_fetch_array($query33)){
                               $std_Id = $row22['student_ID'];
                               // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $query44 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$std_Id'")or
+                              $query44 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' && student_ID='".$std_Id."'")or
                              die(mysqli_error());
                              $std_name;
                              
@@ -271,23 +273,23 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
 
                     </td>
                   </tr>
-                  <tr>
-                    <td><span>Amount Paid:</span></td>
-                    <td>
+                  <tr  style="padding: 20px;">
+                    <td><span id="viewCss">Amount Paid:</span></td>
+                    <td style="padding-left : 20px;">
                       <?php
                        
                             $total_amount_paid=0.00;
-                            $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                            $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
                              die(mysqli_error());
                              while ($row_amount=mysqli_fetch_array($amount_query)){
                              $studentId = $row_amount['student_ID'];
                              
-                             $que= mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentId'")or
+                             $que= mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$studentId."'")or
                              die(mysqli_error());
                              while ($row_std=mysqli_fetch_array($que)){
                               $stdId = $row_std['student_ID'];
                               // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $que2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$stdId'")or
+                              $que2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' && student_ID='".$stdId."'")or
                              die(mysqli_error());
                              $std_name;
                              
@@ -297,13 +299,14 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              }
                            }
                          }
-                       echo $school_row['currency'] .  '<b> '.formatCurrency($total_amount_paid) ;
+                       echo  $school_row['currency'] .  '<b> '.formatCurrency($total_amount_paid) ;
                                ?></b>
                     </td>
                   </tr>
-                  <tr>
-                    <td><span>Balance:</span></td>
-                    <td>
+                  <tr align="">
+                    <td><span id="viewCss">Balance:</span></td>
+
+                    <td align="right">
                       
                         <?php $total_balance=0.00; $tol=$amt_invoiced - $total_amount_paid;
                       if($tol <=0){
@@ -311,8 +314,8 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                       }else{
                        $total_balance=$tol;
                       }
-                      echo $school_row['currency'] .  '  <b>' .formatCurrency($total_balance);
-                      ?></b><br>
+                      echo "<span class='pull-right'>".$school_row['currency'] .  '  <b>' .formatCurrency($total_balance);
+                      ?></b></span>
                       
 
                     </td>
@@ -340,24 +343,26 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
             <div class="box-body">
               <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Children</a></li>
-                  <li><a href="#tab_2" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Emails</a></li>
+                  <li class="active"><a href="#tab_1" data-toggle="tab" id="tab">Children</a></li>
+                  <li><a href="#tab_2" data-toggle="tab" id="tab">Emails</a></li>
                  
-                  <li><a href="#tab_invoice" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Invoices</a></li>
+                  <li><a href="#tab_invoice" data-toggle="tab" id="tab">Invoices</a></li>
 
-                  <li><a href="#tab_payment" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Payment</a></li>
+                  <li><a href="#tab_payment" data-toggle="tab" id="tab">Payment</a></li>
 
-                   <li><a href="#tab_4" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
+                   <li><a href="#tab_4" data-toggle="tab" id="tab">Notification</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active table-responsive" id="tab_1">
+
+                    <div class="tab-pane active " id="tab_1">
+                      <div class="table-responsive">
                          <table id="example3" class="table table-bordered table-striped">
                           <thead>
                           <tr>
                             <th>Img</th>
                             <th>Name</th>
                             <th>Reg No</th>
-                            <th>Phone</th>
+                            
                             <th>Gender</th>
                             <th>Actions</th>
                           </tr>
@@ -366,12 +371,12 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              <?php
                              #get school Id from current session school id
                              $school_ID = $_SESSION['login_user_school_ID'];
-                             $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                             $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
                              die(mysqli_error());
                              while ($row1=mysqli_fetch_array($query2)){
                              $student_ID= $row1['student_ID'];
                              #get student details
-                             $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                             $query3 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                              die(mysqli_error());
                              while ($row2=mysqli_fetch_array($query3)){
                               $img;
@@ -387,10 +392,10 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                       <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
                                       <td>".$row2['registration_No']." </td>
                                       <td>".$row2['gender_MFU']."</td>
-                                      <td>Action</td>  
+                                     
                                       <td>";
-                                     echo'   <a class="btn btn-success btn-flat" href="view_student.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
-                                       <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger btn-flat" value="'.$row1['parent_ID'].'" onclick="delinkStudentFromParent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                                     echo'   <a class="btn btn-success badge" href="view_student.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+                                       <button type="button" id="'.$row2['student_ID'].'" class="btn btn-danger badge" value="'.$row1['parent_ID'].'" onclick="delinkStudentFromParent(this.id,this.value)" data-toggle="modal"  data-target="#delink_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                                      </td>
                                    </tr>';
 
@@ -402,13 +407,15 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                            </tbody>
                           
                         </table>
+                      </div>
                     </div>
-                    <div class="tab-pane table-responsive" id="tab_2">
+                    <div class="tab-pane " id="tab_2">
                     <div class="row">
                     <div class="col-md-8"><b><h3>Emails</h3> </b></div>
-                    <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendEmail_Modal"><i class="fa fa-plus"></i><b> New Email</b></a></div>
+                    <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#sendEmail_Modal"><i class="fa fa-plus"></i><b> New Email</b></a></div>
                     </div>
-                      <table id="example1" class="table table-bordered table-striped">
+                    <div class="table-responsive">
+                      <table id="example1" class="table table-bordered table-striped ">
                           <thead>
                           <tr>
                             
@@ -420,7 +427,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           </thead>
                           <tbody>
                               <?php
-                            $query02 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' && recipient_ID='$get_parentID' ORDER BY date(date_sent)")or
+                            $query02 = mysqli_query($conn,"select * from email where school_ID = '".$school_ID."' && recipient_ID='".$get_parentID."' ORDER BY date(date_sent)")or
                                die(mysqli_error());
                                
                                while ($row0=mysqli_fetch_array($query02)){
@@ -430,7 +437,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                       echo ' <tr>
                                       <td>'.$row0['email_subject'].'</td>
                                        <td>'. $datetime.'</td>
-                                       <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
+                                       <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success badge"><span class= "glyphicon glyphicon-eye-open"></span> </a></td>
                                        </tr>';
                                }
                              
@@ -443,14 +450,16 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                           </tr>
                           </tfoot>
                         </table>
+                       </div>
                     </div>
                     
-                    <div class="tab-pane table-responsive" id="tab_invoice">
+                    <div class="tab-pane " id="tab_invoice">
                         <div class="row">
                           <div class="col-md-8"><b><h3>Invoices</h3> </b></div>
                           
                         </div>
-                        <table id="example1" class="table table-bordered table-striped">
+                        <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped ">
                             <thead>
                             <tr>
                               <th>Reference</th>
@@ -467,19 +476,19 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                <?php
                                
                                 $total_amount_invoiced=0.00;
-                            $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                            $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
                              die(mysqli_error());
                              while ($row_amount=mysqli_fetch_array($amount_query)){
                              $studentId = $row_amount['student_ID'];
                              
-                             $que= mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentId'")or
+                             $que= mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$studentId."'")or
                              die(mysqli_error());
                              while ($row_std=mysqli_fetch_array($que)){
                                $name=$row_std['first_Name']." ".$row_std['last_Name'];
                                 $reg=$row_std['registration_No'];
                               $stdId = $row_std['student_ID'];
                               // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $que2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$stdId'")or
+                              $que2 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' && student_ID='".$stdId."'")or
                              die(mysqli_error());
                              $std_name;
                              
@@ -496,16 +505,17 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                   echo " <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row_in['summury']." </td>
-                                        <td>".$row_in['amount']."</td>
-                                        <td>".$row_in['balance']."</td>";
+                                        <td>".$school_row['currency'] . ' <b> '.formatCurrency($row_in['amount'])."</b></td>
+                                        <td>".$school_row['currency'] . ' <b> '.formatCurrency($row_in['balance']) .
+                               "</b></td>";
                                          
                                           
                                       
                                        echo' 
                                           <td>
-                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
+                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
-                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" "><span class= "glyphicon glyphicon-"></span>Recieve Payment</button></a>
+                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success badge" "><span class= "glyphicon glyphicon-"></span>Recieve Payment</button></a>
 
                                        
                                        </td>
@@ -519,13 +529,15 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              </tbody>
                            
                           </table>
+                        </div>
                     </div>
-                    <div class="tab-pane table-responsive" id="tab_payment">
+                    <div class="tab-pane " id="tab_payment">
                         <div class="row">
                           <div class="col-md-8"><b><h3>Payment</h3> </b></div>
                           
                         </div>
-                        <table id="example1" class="table table-bordered table-striped">
+                        <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped ">
                             <thead>
                             <tr>
                               <th>Receipt No </th>
@@ -542,20 +554,20 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
 
                                  
                                
-                                $total_amount_paid=0.00;
-                            $pay_query = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                            $total_amount_paid=0.00;
+                            $pay_query = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
                              die(mysqli_error());
                              while ($row_amount=mysqli_fetch_array($pay_query)){
                              $studentId = $row_amount['student_ID'];
                              
-                             $query_std= mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$studentId'")or
+                             $query_std= mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$studentId."'")or
                              die(mysqli_error());
                              while ($row_std=mysqli_fetch_array( $query_std)){
                                $name=$row_std['first_Name']." ".$row_std['last_Name'];
                                 $reg=$row_std['registration_No'];
                               $std_Id = $row_std['student_ID'];
                               // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $que02 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$std_Id'")or
+                              $que02 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' && student_ID='".$std_Id."'")or
                              die(mysqli_error());
                              $std_name;
                              
@@ -575,17 +587,17 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                         <td>".$newDate."</td>
                                         <td>".$reg ." ".$name."</td>
                                         <td>".$row2['remarks']." </td>
-                                        <td>".$row2['amount_paid']."</td>
+                                        <td>".$school_row['currency'] . ' <b> '.formatCurrency($row2['amount_paid']) ."</b></td>
                                         ";
                                        
                                        echo' 
                                           <td>
-                                           <a  href="edit_transaction.php?payment_id='.$paymentID.'"  class="btn btn-success btn-flat" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-pencil">Edit</span></a>
+                                           <a  href="edit_transaction.php?payment_id='.$paymentID.'"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-pencil"></span></a>
 
                                         
                                           
 
-                                         <button type="button"  class="btn btn-primary btn-flat" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
+                                         <button type="button"  class="btn btn-primary badge" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
                                        </td>
                                     </tr>';
                              }
@@ -597,15 +609,16 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              </tbody>
                            
                           </table>
-                          
+                          </div>
                     </div>
-                    <div class="tab-pane table-responsive" id="tab_4">
+                    <div class="tab-pane " id="tab_4">
                         <div class="row">
                           <div class="col-md-8"><b><h3>Notification</h3> </b></div>
-                          <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#sendNotification_Modal">
+                          <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#sendNotification_Modal">
                             <i class="fa fa-plus"></i><b> New Notification</b></a></div>
                         </div>
-                        <table id="example1" class="table table-bordered table-striped">
+                        <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped ">
                             <thead>
                             <tr>
                                <th>Notification</th>
@@ -619,7 +632,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                             <tbody>
                                <?php
 
-                                $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' && recipient_ID='$get_parentID'");
+                                $notf_query = mysqli_query($conn,"select * from notification where school_ID = '".$school_ID."' && recipient_ID='".$get_parentID."'");
                                while ($notf_row=mysqli_fetch_array($notf_query)){
                                 $notification_id=$notf_row['notification_ID'];
                                 $date=$notf_row['notification_date'];
@@ -642,6 +655,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              </tbody>
                            
                           </table>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -675,9 +689,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
              
               <div class="form-group">
                     
-                      <textarea class="form-control" id="editor1" name="email_message" rows="10" cols="80">
-               
-                    </textarea>
+                      <textarea class="form-control" id="editor1" name="email_message" rows="10" cols="80"></textarea>
                      
               </div>
            
@@ -713,7 +725,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
              
               <div class="form-group">
                     
-                      <textarea class="form-control" id="editor1" name="notificationMessage" rows="3" cols=""  ></textarea>
+                      <textarea class="form-control" id="editor1" name="notificationMessage" rows="3" cols="" required ></textarea>
                      
               </div>
                <div class="form-group">
@@ -728,17 +740,18 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                 
               </div>
               <div class="form-group" >
-                 <select class="form-control select1" name="notification_student_id">
+                 <select class="form-control select2" name="notification_student_id" style="width:30%;">
+                  <option value="Select Student">Select Student</option>
                    <option value="All">All</option>
                     <?php
                              #get school Id from current session school id
-                             $school_ID = $_SESSION['login_user_school_ID'];
-                             $query22 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$get_parentID'")or
+                           echo  $school_ID = $_SESSION['login_user_school_ID'];
+                             $quer22 = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
                              die(mysqli_error());
-                             while ($row12=mysqli_fetch_array($query22)){
-                             $std_ID= $row12['student_ID'];
+                             while ($ro2=mysqli_fetch_array($quer22)){
+                        echo     $std_ID= $ro2['student_ID'];
                              #get student details
-                             $query33 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID=' $std_ID'")or
+                             $query33 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='". $std_ID."'")or
                              die(mysqli_error());
                              while ($row_s=mysqli_fetch_array($query33)){
                               

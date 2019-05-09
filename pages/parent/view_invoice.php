@@ -178,8 +178,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               
                </td>
                 <td>'.$row2['quantity'].'</td>
-                <td>'.$row2['price'].'</td>
-                <td>'.$row2['amount'].'</td>  
+                <td>'.$school_row['currency'] . ' '.formatCurrency($row2['price']).'</td>
+                <td>'.$school_row['currency'] . ' <b>  '.formatCurrency($row2['amount']).'</b></td>  
                 
              </tr>';
 
@@ -222,7 +222,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               
           
             <th class="" style="width:50%">Grand Total</th>
-            <td class=""><?php echo $invoice_amount?></td>
+            <td class=""><?php echo $school_row['currency'] . ' <b>  '.formatCurrency($invoice_amount)?></b></td>
           </tr>
             </table>
           </div>

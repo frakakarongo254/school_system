@@ -13,7 +13,7 @@
  $page=$_POST['page'];
  }
  #get details form invoice
- $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
+ $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='".$get_invoice_ID."' and `school_ID` = '".$school_ID."' ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
  $invoice_ID=$row02['invoice_ID'];
  $invoice_amount=$row02['amount'];
@@ -24,7 +24,7 @@
   $invoice_balance=$row02['balance'];
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' ".$invoice_student_id."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];

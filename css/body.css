@@ -7,3 +7,115 @@
 .content-wrapper{
 	background-color:  whitesmoke;
 }
+.main-sidebar { background-color: #2F4F4F !important; 
+  /*background-image: linear-gradient(cadetblue, dimgray) !important;*/
+   }
+.main-header{ background-color:  #2F4F4F !important;
+color:#fff !important ;
+
+}
+.main-header .navbar .nav > li > a > .label{
+color:#fff !important;
+text-decoration:none !important;
+text-transform: uppercase !important;
+}
+a.dropdown-toggle:link{
+  color: #fff !important;
+   text-decoration: none !important;
+}
+.skin-cadetblue .main-header .navbar .logo{
+background-color: #000 !important;
+color: #fff ;
+}
+.button1{
+   border-radius: 25px;
+  background: #73AD21;
+  padding: 5px; 
+  width: 200px;
+  height: px;
+}
+#button1{
+  border-radius: 10px;
+  background: #73AD21;
+  padding: 5px; 
+  min-width: 100px;
+  height: px;
+}
+#buttonClass{
+	border-radius: 10px;
+  background: #73AD21;
+  padding: 5px;
+}
+#button2 {
+  border-radius: 5px;
+  background: #2ECC71;
+  padding: 2px; 
+  width:80px ;
+  height: px;
+}
+#button3 {
+  border-radius: 5px;
+  background: #2E86C1;
+  padding: 3px; 
+  width:95px ;
+  height: px;
+}
+.modal-content { 
+    border-radius: 15px !important;
+    -webkit-border-radius:15px !important;
+    -moz-border-radius: 15px !important;
+    padding: 3px;
+}
+.alert{
+	border-radius: 10px;
+	width: px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	max-width: px;
+}
+.input-group{
+
+  
+}
+input {
+    
+    width: 60%;
+      height: 25px;
+      margin: 0 auto !important;
+      border: none !important; /* <-- This thing here */
+      border:solid 1px #ccc !important;
+      border-radius: 8px !important;
+}
+select  {
+    
+     margin: 0 auto !important;
+      border: none !important; /* <-- This thing here */
+      border:solid 0px #ccc !important;
+      border-radius: 0px !important;
+}
+.select2  {
+    
+     margin: 0 auto !important;
+      border: none !important; /* <-- This thing here */
+      border:solid 2px #ccc !important;
+      border-radius: 10px !important;
+}
+#tab{
+font-family: Arial, Helvetica, sans-serif;
+font-weight: 800;
+text-transform: uppercase;
+font-size: 12px;
+}
+
+#viewCss{
+  font-weight: bold-italic;
+  font-size: 12px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+#viewParentStdInfo{
+  border-radius: 10px;
+   background-color: #cccccc;
+  background-image: linear-gradient(beige,  linen);
+}

@@ -82,7 +82,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
           <section>
              
           </section>
-          <div class="box box-primary ">
+          <div class="box box-primary " id="viewParentStdInfo">
             <div class="box-body box-profile">
               <div class="row">
                 <div class="col-md-3 ">
@@ -96,27 +96,27 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                 <div class="col-md-4 table-responsive">
                   <table>
                     <tr>
-                    <td><span style="font-size: 17px">Name:</span></td>
+                    <td><span id="viewCss">Name:</span></td>
                     <td><h3 class="profile-username "><b><?php echo $row['first_Name'] ." ". $row['last_Name'];?></b></h3></td>
                   </tr>
                   <tr>
-                    <td><span style="font-size: 17px">Adm:</span></td>
+                    <td><span id="viewCss">Adm:</span></td>
                     <td><b><?php echo $row['registration_No']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Gender:</span></td>
+                    <td><span id="viewCss">Gender:</span></td>
                     <td><b><?php echo $row['gender_MFU']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Nationality:</span></td>
+                    <td><span id="viewCss">Nationality:</span></td>
                     <td><b><?php echo $row['nationality']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Date of Birth:</span></td>
+                    <td><span id="viewCss">Date of Birth:</span></td>
                     <td><b><?php  $date=$row['date_of_Birth']; echo date("d-m-Y", strtotime($date))?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Admission Date:</span></td>
+                    <td><span id="viewCss">Admission Date:</span></td>
                     <td><b><?php $ad_date=$row['admission_date']; echo date("d-m-Y", strtotime($ad_date))?></b></td>
                   </tr>
                  </table>
@@ -125,8 +125,8 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                   <table>
                     
                   <tr>
-                    <td><span style="font-size: 17px">Total invoiced:  </span></td>
-                    <td>
+                    <td><span id="viewCss">Total invoiced:  </span></td>
+                    <td align="right">
 
 
                       <?php
@@ -143,8 +143,8 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                     </td>
                   </tr>
                   <tr>
-                    <td><span>Amount Paid:</span></td>
-                    <td>
+                    <td><span id="viewCss">Amount Paid:</span></td>
+                    <td align="right">
                       <?php
                        $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$student_ID'")or
                                die(mysqli_error());
@@ -158,8 +158,8 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                     </td>
                   </tr>
                   <tr>
-                    <td><span>Balance:</span></td>
-                    <td>
+                    <td><span id="viewCss">Balance:</span></td>
+                    <td align="right">
                     <?php  $bal= $total_invoiced - $total_amount_paid; 
                      echo  $school_row['currency'] . ' <b>  '.formatCurrency($bal).'</b>';
 
@@ -191,15 +191,16 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
             <div class="box-body">
              <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Classes</a></li>
+                  <li class="active"><a href="#tab_1" data-toggle="tab" id="tab">Student Classes</a></li>
                   
-                  <li><a href="#tab_3" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Documents</a></li>
-                   <li><a href="#tab_4" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Statement</a></li>
-                    <li><a href="#tab_5" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Milestone</a></li>
+                  <li><a href="#tab_3" data-toggle="tab"  id="tab">Documents</a></li>
+                   <li><a href="#tab_4" data-toggle="tab"  id="tab">Student Statement</a></li>
+                    <li><a href="#tab_5" data-toggle="tab"  id="tab">Milestone</a></li>
                        
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active table-responsive" id="tab_1">
+                    <div class="tab-pane active " id="tab_1">
+                      <div id="table-responsive">
                         <table id="table1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -250,14 +251,16 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                             </tr>
                             </tfoot>
                           </table>
+                        </div>
                     </div>
                     
-                     <div class="tab-pane table-responsive" id="tab_3">
+                     <div class="tab-pane " id="tab_3">
                       <div class="row">
               <div class="col-md-8"><b><h3>Documents</h3> </b></div>
               
             </div>
-                      <table id="example3" class="table table-bordered table-striped">
+              <div class="table-responsive">
+                      <table id="example3" class="table table-bordered table-striped ">
                             <thead>
                             <tr>
                               <th>#</th>
@@ -310,11 +313,13 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                             </tr>
                             </tfoot>
                           </table>
+                        </div>
                     </div>
-                    <div class="tab-pane table-responsive" id="tab_4">
+                    <div class="tab-pane " id="tab_4">
                       <div class="col-md-8"><b><h3>Statement</h3> </b></div>
-                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
-                         <table id="table11" class="table table-bordered table-striped">
+                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary button1" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
+                      <div id="table-responsive">
+                         <table id="table11" class="table table-bordered table-striped ">
                             <thead>
                             <tr>
                               <th>Date</th>
@@ -329,7 +334,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                             </thead>
                             <tbody>
                                <?php
-                              $result = mysqli_query($conn,"select * from statement where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                              $result = mysqli_query($conn,"select * from statement where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                die(mysqli_error());
                         $total_Debit=0.00;
                         $total_Credit=0.00;
@@ -346,8 +351,8 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                         <td> '.$newDate.'</td>
                         <td> '.$rows["description"].'</td>
                         <td> '.$rows["ref_no"].'</td>
-                        <td> '.$rows["Debit"].'</td>
-                        <td> '.$rows["Credit"].'</td>
+                        <td align="right"> '.$school_row['currency'] . '   '.formatCurrency($rows["Debit"]).'</td>
+                        <td align="right"> '.$school_row['currency'] . '   '.formatCurrency($rows["Credit"]).'</td>
                         </tr>';
                         }    
 
@@ -355,8 +360,8 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                         <tr>
                         <hr>
                         <td colspan="3"><b><b></td>
-                         <td><b>'.$school_row['currency'] . '   '.formatCurrency($total_Debit).'</b></td>
-                         <td><b>'.$school_row['currency'] . '   '.formatCurrency($total_Credit).'</b></td>
+                         <td align="right"><b>'.$school_row['currency'] . '   '.formatCurrency($total_Debit).'</b></td>
+                         <td align="right"><b>'.$school_row['currency'] . '   '.formatCurrency($total_Credit).'</b></td>
                          
                         </tr>
                        
@@ -367,6 +372,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                              </tbody>
                             
                           </table>
+
                         <div class="row clearfix" style="margin-top:20px">
                         <div class="pull-right col-md-3">
                           <table class="table">
@@ -379,11 +385,13 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                           </table>
                         </div>
                         </div>
+                        </div>
                     </div>
-                    <div class="tab-pane table-responsive" id="tab_5">
+                    <div class="tab-pane " id="tab_5">
                           
-                         <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
+                         <div class="col-md- col-pull-right" style="text-align:right"><a class="btn btn-primary button1" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
                          <div id="milestone_print">
+                          <div id="table-responsive">
                                 <table id="table" class="table " style="width: 100%">
                                   <tr>
                                     <td><label>STUDENT NAME:</label>
@@ -471,6 +479,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                                                     
                                                   </tbody>
                                                 </table>  
+                                              </div>
 
                             </div>
                             </div>

@@ -7,7 +7,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -172,8 +172,8 @@ if (!velifyLogin()) {
 
         
         if($update_session_query){
-          // echo '<script> window.location="class.php?update=1" </script>';
-          echo "updated";
+           echo '<script> window.location="class.php?update=1" </script>';
+         
        }else{
        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -196,7 +196,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Classes </h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addClass"><i class="fa fa-plus"></i><b> New Class</b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="buttonClass" data-toggle="modal" data-target="#modal-addClass"><i class="fa fa-plus"></i><b> New Class</b></a></div>
             </div>
             </div>
             
@@ -244,9 +244,9 @@ if (!velifyLogin()) {
                              
                             <td>";
                            echo'  
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$class_ID.'" onclick="editClassName(this.id)" data-toggle="modal"  data-target="#edit_class_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button"  class="btn btn-info badge" id="'.$class_ID.'" onclick="editClassName(this.id)" data-toggle="modal"  data-target="#edit_class_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                             <button type="button" id="'.$row4['class_ID'].'" class="btn btn-danger btn-flat" value="'.$row4['level_ID'].'" onclick="deleteStudent(this.id)" data-toggle="modal"  data-target="#delete_class_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                             <button type="button" id="'.$row4['class_ID'].'" class="btn btn-danger badge" value="'.$row4['level_ID'].'" onclick="deleteStudent(this.id)" data-toggle="modal"  data-target="#delete_class_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                              
                            </td>
                          </tr>';
@@ -266,7 +266,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Session </h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addSection"><i class="fa fa-plus"></i><b> New Session</b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="buttonClass" data-toggle="modal" data-target="#modal-addSection"><i class="fa fa-plus"></i><b> New Session</b></a></div>
             </div>
             </div>
             
@@ -299,9 +299,9 @@ if (!velifyLogin()) {
                              
                             <td>";
                            echo'  
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$session_ID.'" onclick="editSession(this.id)" data-toggle="modal"  data-target="#edit_session_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button"  class="btn btn-info badge" id="'.$session_ID.'" onclick="editSession(this.id)" data-toggle="modal"  data-target="#edit_session_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                             <button type="button" id="'.$row5['session_ID'].'" class="btn btn-danger btn-flat" value="'.$row5['session_name'].'" onclick="deleteSession(this.id,this.value)" data-toggle="modal"  data-target="#delete_session_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                             <button type="button" id="'.$row5['session_ID'].'" class="btn btn-danger badge" value="'.$row5['session_name'].'" onclick="deleteSession(this.id,this.value)" data-toggle="modal"  data-target="#delete_session_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                              
                            </td>
                          </tr>';

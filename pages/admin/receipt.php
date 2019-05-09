@@ -9,7 +9,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -130,7 +130,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' ")or
+                               $query2 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' ")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
@@ -140,7 +140,7 @@ if (!velifyLogin()) {
                                 $studentid= $row2['student_ID'];
                                $newDate = date("d-m-Y", strtotime($invoive_date));
                                 $total_amount=0.00;
-                              $query3 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+                              $query3 = mysqli_query($conn,"select * from student where student_ID='".$studentid."' and school_ID = '".$school_ID."' ");
                               
                                while ($row3=mysqli_fetch_array($query3)){
                                 $name=$row3['first_Name']." ".$row3['last_Name'];

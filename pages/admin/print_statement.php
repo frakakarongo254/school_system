@@ -11,7 +11,7 @@ if (!velifyLogin()) {
  }
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='$get_student_ID' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='".$get_student_ID."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
@@ -140,8 +140,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                         <td> '.$newDate.'</td>
                         <td> '.$rows["description"].'</td>
                         <td> '.$rows["ref_no"].'</td>
-                        <td> '.$rows["Debit"].'</td>
-                        <td> '.$rows["Credit"].'</td>
+                        <td align="right"> '.$school_row['currency'] .  ' ' .formatCurrency($rows["Debit"]).'</td>
+                        <td align="aright"> '.$school_row['currency'] .   ' ' .formatCurrency($rows["Credit"]).'</td>
                         </tr>';
                         }    
 
@@ -149,8 +149,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                         <tr>
                         <hr>
                         <td colspan="3"><b><b></td>
-                         <td><b>'.$total_Debit.'.00</b></td>
-                         <td><b>'.$total_Credit.'.00</b></td>
+                         <td align="right"><b>'.$school_row['currency'] .   '<b> ' .formatCurrency($total_Debit).'</b></td>
+                         <td align="right">'.$school_row['currency'] .   '<b> ' .formatCurrency($total_Credit).'</b></td>
                          
                         </tr>
                        
@@ -166,7 +166,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                           <table class="table">
                               <tr>
                 <th style="width:50%">Balance</th>
-                <td> <b>'. $total_balance.'.00 </b></td>
+                <td > <b>'.$school_row['currency'] .   '<b> ' .formatCurrency($total_balance).'</b></td>
               </tr>
              
              

@@ -22,7 +22,7 @@ echo ' <form  action="zone.php" method="POST">
              <div class="row">   
               <label for="nationality">One Way Charge:</label>
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <span class="input-group-addon"><i class="fa fa-"></i>'.$school_row['currency'].'</span>
                 <input type="text" value="'.$rows_zone['oneWayCharge'].'" class="form-control" name="edit_oneWayCharge">
                 
               </div>
@@ -32,7 +32,7 @@ echo ' <form  action="zone.php" method="POST">
             <div class="row">   
               <label for="nationality">Two Way Charge:</label>
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <span class="input-group-addon"><i class="fa fa-"></i>'.$school_row['currency'].'</span>
                 <input type="text" value="'.$rows_zone['twoWayCharge'].'" class="form-control" name="edit_twoWayCharge">
                 
               </div>

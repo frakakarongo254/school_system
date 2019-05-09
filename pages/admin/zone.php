@@ -6,8 +6,9 @@ if (!velifyLogin()) {
 ?>
 
 <?php include("include/header.php")?>
+<script src="../../js/toast/toast.js"></script>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -110,6 +111,15 @@ if (!velifyLogin()) {
 
       
       ?>
+
+      <script type="text/javascript">
+     function  toastFun(){
+          alert("hello");
+var toast = new iqwerty.toast.Toast();
+toast.setText('This is a basic toast message!').show();
+}
+      </script>
+      <button onclick="toastFun()">Toast</button>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -121,7 +131,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Zone</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addZone"><i class="fa fa-plus"></i><b> New Zone</b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="button1" data-toggle="modal" data-target="#modal-addZone"><i class="fa fa-plus"></i><b> New Zone</b></a></div>
             </div>
             </div>
             
@@ -140,7 +150,7 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query4 = mysqli_query($conn,"select * from zone where school_ID = '$school_ID'")or
+                   $query4 = mysqli_query($conn,"select * from zone where school_ID = '".$school_ID."'")or
                    die(mysqli_error());
                    while ($row4=mysqli_fetch_array($query4)){
                    $zone_ID=$row4['zone_ID'];
@@ -152,9 +162,9 @@ if (!velifyLogin()) {
                              
                             <td>";
                            echo'  
-                             <button type="button"  class="btn btn-info btn-flat" id="'.$zone_ID.'" onclick="editZone(this.id)" data-toggle="modal"  data-target="#edit_zone_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button"  class="btn btn-info badge" id="'.$zone_ID.'" onclick="editZone(this.id)" data-toggle="modal"  data-target="#edit_zone_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                             <button type="button" id="'.$row4['zone_ID'].'" class="btn btn-danger btn-flat" value="'.$row4['zone'].'" onclick="deleteZone(this.id,this.value)" data-toggle="modal"  data-target="#delete_zone_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                             <button type="button" id="'.$row4['zone_ID'].'" class="btn btn-danger badge" value="'.$row4['zone'].'" onclick="deleteZone(this.id,this.value)" data-toggle="modal"  data-target="#delete_zone_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                              
                            </td>
                          </tr>';
@@ -374,5 +384,6 @@ if (!velifyLogin()) {
   });
   }
 </script>
+<script src="../../js/toast/toast.js"></script>
 </body>
 </html>

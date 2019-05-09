@@ -12,7 +12,7 @@ if(isset($_GET['id'])){
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -71,7 +71,7 @@ if(isset($_GET['id'])){
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span><b class="color-primary" >Setting</b></h3>
+          <h3><span class="fa fa-gear"></span>  <b class="color-primary" > Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
                 <li><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
@@ -155,13 +155,13 @@ if(isset($_GET['id'])){
               <div class="row">
                 <div class="col-md-12  ">
                  <div class="" style="text-align: center;">
-                  <a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#modal-addLevel"><i class="fa fa-plus"></i><b> Add Level</b></a>
+                  <a class="btn btn-primary pull-right" href="#" id="button1" data-toggle="modal" data-target="#modal-addLevel"><i class="fa fa-plus"></i><b> Add Level</b></a>
                  
             </div>
               </div>
               
              </div>
-             
+             <br>
                  <div class="row">
                    <div class="col-md-12">
                       <table id="example1" class="table table-bordered table-striped">
@@ -177,7 +177,7 @@ if(isset($_GET['id'])){
                    <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $carri_query = mysqli_query($conn,"select * from carricula_level where carricula_ID='$carricula_id' and school_ID = '$school_ID'")or
+                   $carri_query = mysqli_query($conn,"select * from carricula_level where carricula_ID='".$carricula_id."' and school_ID = '".$school_ID."'")or
                    die(mysqli_error());    
                      
                    while ($carri_row=mysqli_fetch_array($carri_query)){
@@ -189,9 +189,9 @@ if(isset($_GET['id'])){
                             <td>".$carri_row['level_name']." </td> 
                             <td>";
                            echo'  
-                             <button type="button" id="'.$carri_row['carricula_level_ID'].'" class="btn btn-primary btn-flat"  onclick="editLevel(this.id)" data-toggle="modal"  data-target="#edit_level_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button" id="'.$carri_row['carricula_level_ID'].'" class="btn btn-primary badge"  onclick="editLevel(this.id)" data-toggle="modal"  data-target="#edit_level_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                             <button type="button" id="'.$carri_row['carricula_level_ID'].'" class="btn btn-danger btn-flat" value="'.$carri_row['level_name'].'" onclick="deleteLevel(this.id,this.value)" data-toggle="modal"  data-target="#delete_level_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                             <button type="button" id="'.$carri_row['carricula_level_ID'].'" class="btn btn-danger badge" value="'.$carri_row['level_name'].'" onclick="deleteLevel(this.id,this.value)" data-toggle="modal"  data-target="#delete_level_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                            </td>
                          </tr>';
 
@@ -201,14 +201,7 @@ if(isset($_GET['id'])){
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                  <th>Level</th>
-                  <th>Abbreviation</th>
-                  <th>Name</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+                
               </table>
                    </div>
                    

@@ -37,7 +37,7 @@ $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -92,6 +92,7 @@ $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
 
          $randPay = substr(number_format(time() * rand(),0,'',''),0,11);
          $payment_ID=md5($randPay);
+         
          $new_balance;
 
 

@@ -10,7 +10,7 @@ if (!velifyLogin()) {
   $get_invoice_ID=$_GET['invoice'];
  }
  #get details form invoice
- $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
+ $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='".$get_invoice_ID."' and `school_ID` = '".$school_ID."' ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
  $invoice_amount=$row02['amount'];
  $due_date=$row02['due_date'];
@@ -23,17 +23,17 @@ if (!velifyLogin()) {
  $invoice_reff=$row02['reff_no'];
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
 $studentRegNo=$row03['registration_No'];
 
 #get parent details
-  $sql033 = mysqli_query($conn,"select * from `parent_relation` where  student_ID='$invoice_student_id' and `school_ID` = '".$school_ID."'  LIMIT 1");
+  $sql033 = mysqli_query($conn,"select * from `parent_relation` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."'  LIMIT 1");
   $row033 = mysqli_fetch_array($sql033 ,MYSQLI_ASSOC);
  $parentID=$row033['parent_ID'] ;
-  $sql034 = mysqli_query($conn,"select * from `parents` where  parent_ID='$parentID' and `school_ID` = '".$school_ID."' ");
+  $sql034 = mysqli_query($conn,"select * from `parents` where  parent_ID='".$parentID."' and `school_ID` = '".$school_ID."' ");
   $row034 = mysqli_fetch_array($sql034 ,MYSQLI_ASSOC);
   $parentName=$row034['first_Name']." ".$row034['last_Name'];
   $parentPhone=$row034['cell_Mobile_Phone'];
@@ -57,7 +57,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -84,7 +84,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <li><a href="invoice.php"><i class="fa fa-money"></i> Invoices </a></li>
        
         <li class="active"> Print Invoice</li>
-        <li class="pull-right"><a class="btn btn-success pull-right btn-sm" href="" onclick="emailInvoiceToParent(this.id)" id="<?php echo $get_invoice_ID?>"><b id="email_parent"><i class="fa fa-print"></i> Email Parent</b></a></li>
+        <li class="pull-right" ><a class="btn btn-success pull-right " style="border-radius:10px;"  href="" onclick="emailInvoiceToParent(this.id)" id="<?php echo $get_invoice_ID?>"><b id="email_parent"><i class="fa fa-print"></i> Email Parent</b></a></li>
       </ol>
        
       </h1>
@@ -158,12 +158,12 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
            <?php
         #get school Id from current session school id
 
-        $query2 = mysqli_query($conn,"select * from invoice_item where invoice_id='$get_invoice_ID' and school_ID = '$school_ID' ")or
+        $query2 = mysqli_query($conn,"select * from invoice_item where invoice_id='".$get_invoice_ID."' and school_ID = '".$school_ID."' ")or
         die(mysqli_error());
         while ($row2=mysqli_fetch_array($query2)){
         $invoice_item_ID= $row2['invoice_item_ID'];
         $vote_head_ID= $row2['vote_head_ID'];
-        $query3 = mysqli_query($conn,"select * from vote_head where vote_head_ID='$vote_head_ID' and school_ID = '$school_ID' ")or
+        $query3 = mysqli_query($conn,"select * from vote_head where vote_head_ID='".$vote_head_ID."' and school_ID = '".$school_ID."' ")or
         die(mysqli_error());
         while ($row3=mysqli_fetch_array($query3)){
         echo' <tr>
@@ -174,8 +174,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               
                </td>
                 <td>'.$row2['quantity'].'</td>
-                <td>'.$row2['price'].'</td>
-                <td>'.$row2['amount'].'</td>  
+                <td>'.$school_row['currency'] . ' '.formatCurrency($row2['price']).'</td>
+                <td>'.$school_row['currency'] . '<b> '.formatCurrency($row2['amount']).'</b></td>  
                 
              </tr>';
 
@@ -338,7 +338,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   });
   }
   function emailInvoiceToParent(invoice_id){
-    alert(invoice_id);
+    //alert(invoice_id);
     document.getElementById('email_parent').innerHTML='<b>LOADING ...</b>';
      var details= '&invoice_id='+invoice_id;
      $.ajax({
@@ -347,7 +347,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   data: details,
   cache: false,
   success: function(det) {
-    alert(det);
+   // alert(det);
     //$.toast('Toast message to be shown');
     if (det=='success') {
      alert("Email Sent successfully");

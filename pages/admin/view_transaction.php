@@ -10,7 +10,7 @@ if (!velifyLogin()) {
   $get_payment_ID=$_GET['payment_ID'];
  }
  #get details form invoice
- $sql022 = mysqli_query($conn,"select * from `payment` where  payment_ID='$get_payment_ID' and `school_ID` = '".$school_ID."' ");
+ $sql022 = mysqli_query($conn,"select * from `payment` where  payment_ID='".$get_payment_ID."' and `school_ID` = '".$school_ID."' ");
  $row022 = mysqli_fetch_array($sql022 ,MYSQLI_ASSOC);
  $invoiceID=$row022['invoice_ID'];
  $amount_paid=$row022['amount_paid'];
@@ -20,7 +20,7 @@ if (!velifyLogin()) {
  $payment_method=$row022['payment_method'];
 
  #get details form invoice
- $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$invoiceID' and `school_ID` = '".$school_ID."' ");
+ $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='".$invoiceID."' and `school_ID` = '".$school_ID."' ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
  $invoice_ID=$row02['invoice_ID'];
  $invoice_amount=$row02['amount'];
@@ -32,7 +32,7 @@ if (!velifyLogin()) {
    $invoice_ref=$row02['reff_no'];
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
@@ -56,7 +56,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -157,7 +157,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               
                </td>
                
-                <td>'.$amount_paid.'</td>  
+                <td>'. $school_row['currency'] . '<b> '.formatCurrency($amount_paid).'</b></td>  
                 
              </tr>';
 

@@ -61,7 +61,7 @@ while($rowjj = mysqli_fetch_assoc($resultu)) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -110,7 +110,7 @@ $studentID=$_POST['studentId'];
 $total_amount=$_POST['total_amount'];
 $balance=$total_amount;
 
-$invoice_ID=md5($rand);
+ $invoice_ID=md5($rand);
 
 $que=mysqli_query($conn,"insert into `invoice` (invoice_ID,student_ID,school_ID, amount,balance,invoice_date,due_date,summury,reff_no
         ) 
@@ -259,7 +259,7 @@ school_ID = '{$school_ID}'");
           <table class="table table-bordered table-hover" id="tab_logic">
         <thead>
           <tr>
-            <th class="text-center"> # </th>
+            <th class="text-center hidden"> # </th>
             <th class="text-center"> Product </th>
             <th class="text-center"> Qty </th>
             <th class="text-center"> Price </th>
@@ -273,7 +273,7 @@ school_ID = '{$school_ID}'");
            
           </tr>
           <tr id='addr0'>
-            <td>1</td>
+            <td class="hidden">1</td>
             <td>
               <select class="form-control " name='vote_head_id[]' style="width: 100%;" required>
                     <option value="">--Select item--</option>
@@ -288,8 +288,14 @@ school_ID = '{$school_ID}'");
                 ?>
                  </select></td>
             <td><input type="number" name='qty[]' placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
-            <td><input type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
-            <td><input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/></td>
+            <td><div class=" col-md- input-group input-group-">
+                  <span class="input-group-addon"><?php echo $school_row['currency']  ?></span>
+                 <input type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/>
+                </div></td>
+            <td><div class=" col-md- input-group input-group">
+                  <span class="input-group-addon"><?php echo $school_row['currency']  ?></span>
+                 <input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/>
+                </div></td>
           </tr>
           <tr id='addr1'></tr>
         </tbody>
@@ -318,7 +324,10 @@ school_ID = '{$school_ID}'");
           </tr>
           <tr>
             <th class="text-center">Grand Total</th>
-            <td class="text-center"><input type="number" name='total_amount' id="total_amount" placeholder='0.00' class="form-control" readonly/></td>
+            <td class="text-center"><div class=" col-md- input-group input-group">
+                  <span class="input-group-addon" sty><?php echo $school_row['currency']  ?></span>
+                  <input type="number" name='total_amount' id="total_amount" placeholder='0.00' class="form-control" readonly/>
+                </div></td>
           </tr>
         </tbody>
       </table>

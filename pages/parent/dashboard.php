@@ -405,11 +405,11 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                          <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                      <li class="active"><a href="#children_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Children</a></li>
-                      <li><a href="#email_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Email</a></li>
-                      <li><a href="#event_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Event</a></li>
-                      <li><a href="#notification_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
-                       <li><a href="#finance_tab" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Finance</a></li>
+                      <li class="active"><a href="#children_tab" data-toggle="tab" id="tab">Children</a></li>
+                      <li><a href="#email_tab" data-toggle="tab" id="tab">Email</a></li>
+                      <li><a href="#event_tab" data-toggle="tab" id="tab">Event</a></li>
+                      <li><a href="#notification_tab" data-toggle="tab" id="tab">Notification</a></li>
+                       <li><a href="#finance_tab" data-toggle="tab" id="tab">Finance</a></li>
                       
                     </ul>
                     <div class="tab-content">
@@ -428,12 +428,12 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                    <?php
                                    #get school Id from current session school id
                                    $school_ID = $_SESSION['login_user_school_ID'];
-                                   $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && parent_ID='$login_parent_ID'")or
+                                   $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$login_parent_ID."'")or
                                    die(mysqli_error());
                                    while ($row1=mysqli_fetch_array($query2)){
                                    $student_ID= $row1['student_ID'];
                                    #get student details
-                                   $query3 = mysqli_query($conn,"select * from student where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                                   $query3 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                    die(mysqli_error());
                                    while ($row2=mysqli_fetch_array($query3)){
                                     $img;
@@ -450,7 +450,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                             <td>".$row2['registration_No']." </td>
                                             <td>".$row2['gender_MFU']."</td>  
                                             <td>";
-                                           echo'   <a class="btn btn-success btn-xs " href="view_children.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span> view</a>
+                                           echo'   <a class="btn btn-success badge " href="view_children.php?id='.$row2['student_ID'].'"><span class= "glyphicon glyphicon-eye-open"></span> </a>
                                             
                                            </td>
                                          </tr>';
@@ -487,7 +487,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                           <?php
                                            #get school Id from current session school id
                                            $school_ID = $_SESSION['login_user_school_ID'];
-                                           $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and recipient='$login_parent_email'");
+                                           $query2 = mysqli_query($conn,"select * from email where school_ID = '".$school_ID."' and recipient='".$login_parent_email."'");
                                            while ($row1=mysqli_fetch_array($query2)){
                                            $emailID = $row1['email_ID'];
                                             $date=$row1['date_sent'];
@@ -498,7 +498,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                     <td>".$row1['sender']." </td>
                                                      <td>".$row1['email_subject']."</td> 
                                                     <td>". $newDate."</td>";
-                                                  echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success btn-xs" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span> view</button></a></td>
+                                                  echo'  <td><a href="view_email.php?id='.$emailID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span></button></a></td>
                                                   
                                                  </tr>';
                                             }
@@ -522,7 +522,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                 <?php
                                                  #get school Id from current session school id
                                                  $school_ID = $_SESSION['login_user_school_ID'];
-                                                 $query2 = mysqli_query($conn,"select * from email where school_ID = '$school_ID' and sender='$login_parent_email' ORDER BY email_ID  ASC")or
+                                                 $query2 = mysqli_query($conn,"select * from email where school_ID = '".$school_ID."' and sender='".$login_parent_email."' ORDER BY email_ID  ASC")or
                                                  die(mysqli_error());
                                                  while ($row1=mysqli_fetch_array($query2)){
                                                  $emailID = $row1['email_ID'];
@@ -533,7 +533,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                           <td>".$row1['recipient']." </td>
                                                            <td>".$row1['email_subject']."</td> 
                                                           <td>".$newDate."</td>";
-                                                        echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success btn-xs"><span class= "glyphicon glyphicon-eye-open"></span> View</a></td>
+                                                        echo'  <td><a href="view_email.php?id='.$emailID.'" class=" btn btn-success badge"><span class= "glyphicon glyphicon-eye-open"></span> </a></td>
                                                         
                                                        </tr>';
                                                   }
@@ -565,7 +565,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                 <tbody>
             <?php
           
-            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' and event_for='All' || event_for='Parent' ORDER BY event_startDate DESC")or
+            $event_query = mysqli_query($conn,"select * from event where school_ID = '".$school_ID."' and event_for='All' || event_for='Parent' ORDER BY event_startDate DESC")or
             die(mysqli_error());
             while ($event_row=mysqli_fetch_array($event_query)){
              $eventID=$event_row['event_ID'];
@@ -621,7 +621,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                          <td>'.$notf_row['notification_message'].'</td>
                                          
                                          <td>'.$newDate.'</td>
-                                         <td><a href="view_notification.php?id='.$notification_id.'"><button type="button"  class="btn btn-success btn-xs" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span>  View</button></a></a></td>
+                                         <td><a href="view_notification.php?id='.$notification_id.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"></span> </button></a></a></td>
                                         
                                        </tr>';
                                      
@@ -690,8 +690,8 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                     echo " <td><span class='hidden'>".date('Y/m/d', strtotime($invoive_date))."</span>".$newDate."</td>
                                                            <td>".$reg ." ".$name."</td>
                                                           <td>".$row2['summury']." </td>
-                                                          <td>".$row2['amount']."</td>
-                                                          <td>".$row2['balance']."</td>";
+                                                          <td align='right'>".$school_row["currency"] . " " .formatCurrency($row2['amount'])."</td>
+                                                          <td align='right'>".$school_row["currency"] . " " .formatCurrency($row2['balance'])."</td>";
                                                          
                                                          echo' 
                                                             
@@ -757,7 +757,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
                                                        echo   "  <td>".$newDate."</td>
                                                            <td>".$reg ." ".$name."</td>
                                                           <td>".$row2['remarks']." </td>
-                                                          <td>".$row2['amount_paid']."</td>
+                                                          <td>".$school_row["currency"] . " " .formatCurrency($row2['amount_paid'])."</td>
                                                           ";
                                                          
                                                       echo '</tr>';

@@ -21,7 +21,7 @@ if (!velifyLogin()) {
 </script>
 
     
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -252,8 +252,8 @@ if(isset($_POST['editDocumentBtn'])){
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Document</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addDocument"><i class="fa fa-plus"></i><b> New Document</b></a></div>
+              <div class="col-md-8"><b><h3> School Document</h3> </b></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="button1" data-toggle="modal" data-target="#modal-addDocument"><i class="fa fa-plus"></i><b> New Document</b></a></div>
             </div>
             </div>
             
@@ -272,7 +272,7 @@ if(isset($_POST['editDocumentBtn'])){
                   <?php
                     #get school Id from current session school id
                                $school_ID = $_SESSION['login_user_school_ID'];
-                               $query2 = mysqli_query($conn,"select * from document where school_ID = '$school_ID' and student_ID='0' ")or
+                               $query2 = mysqli_query($conn,"select * from document where school_ID = '".$school_ID."' and student_ID='0' ")or
                                die(mysqli_error());
                                $x=0;
                                while ($row1=mysqli_fetch_array($query2)){
@@ -288,13 +288,13 @@ if(isset($_POST['editDocumentBtn'])){
                                           
                                         <td>";
                                        echo'  
-                                       <button type="button"  class="btn btn-info btn-flat" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span></button>
+                                       <button type="button"  class="btn btn-info badge" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span></button>
 
                                      
 
-                                        <a href="#" class="openDocument"><button type="button"  class="btn btn-success btn-flat openDocument" name="'.$document_name.'" onclick="openDocument(this.name)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#" class="openDocument"><button type="button"  class="btn btn-success badge openDocument" name="'.$document_name.'" onclick="openDocument(this.name)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
-                                         <button type="button"  class="btn btn-danger btn-flat" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                                         <button type="button"  class="btn btn-danger badge" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
 
                                         
                                        </td>
@@ -304,14 +304,7 @@ if(isset($_POST['editDocumentBtn'])){
                   ?>
                
                  </tbody>
-                <tfoot>
-                 <tr>   
-                  <th>#</th>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+               
               </table>
             </div>
             <!-- /.box-body -->
@@ -390,7 +383,7 @@ if(isset($_POST['editDocumentBtn'])){
                
                 var updiv = document.getElementById("docMessage"); //document.getElementById("highodds-details");
              
-                alert(document_ID);
+               
                 var details= '&document_id='+ document_ID ;
                 $.ajax({
                 type: "POST",

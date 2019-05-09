@@ -21,7 +21,7 @@
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" style="text-decoration: none;color: #fff">
         <span class="sr-only">Toggle navigation</span>
       </a>
 
@@ -31,7 +31,7 @@
           <!-- Messages: style can be found in dropdown.less-->
            
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;color: #fff">
               <i class="fa fa-envelope-o"></i>
               <span class="label label-success">
                  <?php 
@@ -57,7 +57,7 @@
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;color: #fff">
               <i class="fa fa-bell-o"></i>
               <span class="label label-warning">
                 <?php
@@ -104,7 +104,7 @@
           <!-- Tasks: style can be found in dropdown.less -->
           
           <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
+          <li class="dropdown user user-menu" style="text-decoration: none;color: #fff">
             <?php
              $user_img;
              if( $_SESSION['login_user_photo'] !==''){
@@ -117,7 +117,7 @@
               $user_img_circle='<img src="../../dist/img/avatar.png" class="img-circle" alt="User Image">';
              }
             ?>
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;color: #fff">
               <?php echo $user_img ;?>
               <span class="hidden-xs"><?php echo $_SESSION['login_user_fname'] ;?></span>
             </a>
@@ -127,7 +127,7 @@
               <li class="user-header">
                
                 <?php echo $user_img_circle ;?>
-                <p>
+                <p style="color: black">
                  <?php echo $_SESSION['login_user_fname'] .  " - "  .$_SESSION['login_user_role'];?> 
                   <small></small>
                 </p>

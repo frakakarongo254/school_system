@@ -9,7 +9,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -145,14 +145,14 @@ if (!velifyLogin()) {
               </div>
               <div class="col-md-1 ">
               
-              <button type="submit" name="printInvoiceBtn" class="btn btn-primary btn-sm"><i class="fa fa-filter"></i> Filter</button>
+              <button type="submit" name="printInvoiceBtn" class="btn btn-primary btn-" id="button2"><i class="fa fa-filter"></i> Filter</button>
             
                 </div>
           
               <div class="col-md-2">
-                <a class="btn btn-primary btn-sm " href="createinvoice.php" ><i class="fa fa-plus"></i><b> New Invoice</b></a>
+                <a class="btn btn-primary btn-sm " href="createinvoice.php" id="button3" ><i class="fa fa-plus"></i><b> New Invoice</b></a>
               </div>
-              <div class="col-md-2"> <a class="btn btn-success btn-sm" href="" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print</b></a></div>
+              <div class="col-md-2"> <a class="btn btn-success btn-sm" href="" id="button2" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print</b></a></div>
             </div>
           </form>
           <?php
@@ -200,18 +200,18 @@ if (!velifyLogin()) {
                                   echo " <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['summury']." </td>
-                                        <td>".$row2['amount']."</td>
-                                        <td>".$row2['balance']."</td>";
+                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
+                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
                                          
                                           
                                       
                                        echo' 
                                           <td>
-                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span>Print </a>
 
-                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
+                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
-                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span>Recieve Payment</button></a>
+                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span>Recieve Payment</button></a>
 
                                          
                                        </td>
@@ -268,18 +268,18 @@ if (!velifyLogin()) {
                                   echo " <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['summury']." </td>
-                                        <td>".$row2['amount']."</td>
-                                        <td>".$row2['balance']."</td>";
+                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
+                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
                                          
                                           
                                       
                                        echo' 
                                           <td>
-                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary btn-flat"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span>  Print </a>
                                           
-                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
+                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
-                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span>Recieve Payment</button></a>
+                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span>Recieve Payment</button></a>
 
                                          
                                        </td>

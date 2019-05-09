@@ -48,6 +48,13 @@
 <!-- Select2 -->
 <script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="../../dist/js/fusioncharts/fusioncharts.js"></script>
+
+
+
+<script src="../../js/toast/toast.js"></script>
+
+
+
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 <script>
   $(function () {

@@ -59,7 +59,7 @@ $studentId=$row03['student_ID'];
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav" onload="javascript:window.print()">
+<body class="hold-transition skin-cadetblue layout-top-nav" onload="javascript:window.print()">
 <div class="wrapper">
 
   <header class="main-header">

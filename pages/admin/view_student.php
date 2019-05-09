@@ -9,7 +9,7 @@ if(isset($_GET['id'])){
    $student_ID =$_GET['id'];
 }
  #get mile stone details from db
-$sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' LIMIT 1 ");
+$sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='".$student_ID."' and `school_ID` = '".$school_ID."' LIMIT 1 ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
  $milestone_ID1=$row02['milestone_ID'];
  $milestone_title1=$row02['title'];
@@ -22,7 +22,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -255,7 +255,7 @@ $milestone_title=$_POST['milestone_title'];
 $milestone_attempt_allowed=$_POST['milestone_attempt_allowed'];
 $milestone_status=$_POST['milestone_status'];
 
-$sql022 = mysqli_query($conn,"select * from `milestone` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' ");
+$sql022 = mysqli_query($conn,"select * from `milestone` where  student_ID='".$student_ID."' and `school_ID` = '".$school_ID."' ");
 $row022 = mysqli_fetch_array($sql022 ,MYSQLI_ASSOC);
 $count= mysqli_num_rows($sql022);
 if ($count > 0) {
@@ -344,8 +344,8 @@ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Miles
 
 #save immunization record
 if (isset($_POST['saveImmunizationBtn'])) {
-  echo "yes";
-  $sql023 = mysqli_query($conn,"select * from `immunization` where  student_ID='$student_ID' and `school_ID` = '".$school_ID."' ");
+ 
+  $sql023 = mysqli_query($conn,"select * from `immunization` where  student_ID='".$student_ID."' and `school_ID` = '".$school_ID."' ");
 $row23 = mysqli_fetch_array($sql023 ,MYSQLI_ASSOC);
 $count= mysqli_num_rows($sql023);
 $query11='';
@@ -363,10 +363,17 @@ if ($count > 0) {
 
       school_ID = '{$school_ID}'"); 
 
-      //echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
+      
+      echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Immunization" </script>';
       }
       if (!$query11) {
-       echo "erro  happened".mysqli_error($conn);
+        echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
       }
  }
 }else{
@@ -382,10 +389,17 @@ renewalDate = '{$_POST['renewalDate'][$i]}',
 
 school_ID = '{$school_ID}'"); 
 
-//echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
+ 
+ echo '<script> window.location="view_student.php?id='.$student_ID.'&insert=Immunization" </script>';
 }
  if (!$query11) {
-       echo "erro  happened".mysqli_error($conn);
+        echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
       }
 } 
 }
@@ -414,10 +428,8 @@ school_ID = '{$school_ID}'");
               }
           ?>
           <!-- Profile Image -->
-          <section>
-             <b class="pull-" style="font-size: 20px">Student</b>
-          </section>
-          <div class="box box-primary ">
+          
+          <div class="box box-primary " id="viewParentStdInfo">
             <div class="box-body box-profile">
               <div class="row">
                 <div class="col-md-3 ">
@@ -431,28 +443,32 @@ school_ID = '{$school_ID}'");
                 <div class="col-md-4">
                   <table>
                     <tr>
-                    <td><span style="font-size: 17px">Name:</span></td>
+                    <td><span id="viewCss">Name:</span></td>
                     <td><h3 class="profile-username "><b><?php echo $row['first_Name'] ." ". $row['last_Name'];?></b></h3></td>
                   </tr>
                   <tr>
-                    <td><span style="font-size: 17px">Adm:</span></td>
+                    <td><span id="viewCss">Adm:</span></td>
                     <td><b><?php echo $row['registration_No']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Gender:</span></td>
+                    <td><span id="viewCss">Gender:</span></td>
                     <td><b><?php echo $row['gender_MFU']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Nationality:</span></td>
+                    <td><span id="viewCss">Nationality:</span></td>
                     <td><b><?php echo $row['nationality']?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Date of Birth:</span></td>
+                    <td><span id="viewCss">Date of Birth:</span></td>
                     <td><b><?php  $date=$row['date_of_Birth']; echo date("d-m-Y", strtotime($date))?></b></td>
                   </tr>
                   <tr>
-                    <td><span>Admission Date:</span></td>
+                    <td><span id="viewCss">Admission Date:</span></td>
                     <td><b><?php $ad_date=$row['admission_date']; echo date("d-m-Y", strtotime($ad_date))?></b></td>
+                  </tr>
+                  <tr>
+                    <td><span id="viewCss">Type:</span></td>
+                    <td><b>Student</b></td>
                   </tr>
                  </table>
                 </div>
@@ -460,12 +476,12 @@ school_ID = '{$school_ID}'");
                   <table>
                     
                   <tr>
-                    <td><span style="font-size: 17px">Total invoiced:  </span></td>
-                    <td>
+                    <td><span id="viewCss">Total invoiced:  </span></td>
+                    <td align="right">
 
 
                       <?php
-                       $query2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                       $query2 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                die(mysqli_error());
                                $total_invoiced=0.00;
                                while ($row011=mysqli_fetch_array($query2)){
@@ -477,10 +493,10 @@ school_ID = '{$school_ID}'");
                     </td>
                   </tr>
                   <tr>
-                    <td><span>Amount Paid:</span></td>
-                    <td>
+                    <td><span id="viewCss">Amount Paid:</span></td>
+                    <td align="right">
                       <?php
-                       $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                       $query2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                die(mysqli_error());
                                $total_amount_paid=0.00;
                                while ($row011=mysqli_fetch_array($query2)){
@@ -491,8 +507,8 @@ school_ID = '{$school_ID}'");
                     </td>
                   </tr>
                   <tr>
-                    <td><span>Balance:</span></td>
-                    <td>
+                    <td><span id="viewCss">Balance:</span></td>
+                    <td align="right">
                       <?php  $bal= $total_invoiced - $total_amount_paid; echo $school_row['currency'] .  '<b> '  .formatCurrency($bal)  ;?></b>
                     </td>
                   </tr>
@@ -521,19 +537,20 @@ school_ID = '{$school_ID}'");
             <div class="box-body">
              <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Classes</a></li>
-                  <li><a href="#tab_2" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Parents</a></li>
-                  <li><a href="#tab_3" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Documents</a></li>
-                   <li><a href="#tab_invoice" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Invoices</a></li>
-                  <li><a href="#tab_payment" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Payment</a></li>
-                  <li><a href="#tab_4" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Statement</a></li>
-                    <li><a href="#tab_5" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Milestone</a></li>
-                    <li><a href="#tab_notification" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Notification</a></li>
-                     <li><a href="#tab_medic" data-toggle="tab"  style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Immunization</a></li>
+                  <li class="active"><a href="#tab_1" data-toggle="tab" id="tab">Student Classes</a></li>
+                  <li><a href="#tab_2" data-toggle="tab"  id="tab">Student Parents</a></li>
+                  <li><a href="#tab_3" data-toggle="tab"  id="tab">Documents</a></li>
+                   <li><a href="#tab_invoice" data-toggle="tab"  id="tab">Invoices</a></li>
+                  <li><a href="#tab_payment" data-toggle="tab"  id="tab">Payment</a></li>
+                  <li><a href="#tab_4" data-toggle="tab"  id="tab">Student Statement</a></li>
+                    <li><a href="#tab_5" data-toggle="tab"  id="tab">Milestone</a></li>
+                    <li><a href="#tab_notification" data-toggle="tab"  id="tab">Notification</a></li>
+                     <li><a href="#tab_medic" data-toggle="tab"  id="tab">Immunization</a></li>
                        
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
+                      <div class="table-responsive">
                         <table id="table1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -570,7 +587,7 @@ school_ID = '{$school_ID}'");
                                         
                                           
                                         <td>";
-                                       echo'  <a href="#"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  View</button></a>
+                                       echo'  <a href="#" class=""><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
                                         
                                        </td>
@@ -583,8 +600,10 @@ school_ID = '{$school_ID}'");
                              </tbody>
                             
                           </table>
+                        </div>
                     </div>
                     <div class="tab-pane" id="tab_2">
+                      <div class="table-responsive">
                            <table id="example1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -601,13 +620,13 @@ school_ID = '{$school_ID}'");
                                <?php
                                #get school Id from current session school id
                                $school_ID = $_SESSION['login_user_school_ID'];
-                               $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                               $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                die(mysqli_error());
                                while ($row1=mysqli_fetch_array($query2)){
                                $parentID= $row1['parent_ID'];
                                $parent_relation= $row1['relation'];
                                #get student details
-                               $query3 = mysqli_query($conn,"select * from parents where school_ID = '$school_ID' && parent_ID='$parentID'")or
+                               $query3 = mysqli_query($conn,"select * from parents where school_ID = '".$school_ID."' && parent_ID='".$parentID."'")or
                                die(mysqli_error());
                                while ($row2=mysqli_fetch_array($query3)){
                                 $img;
@@ -641,13 +660,14 @@ school_ID = '{$school_ID}'");
                              </tbody>
                           
                           </table>
+                        </div>
                     </div>
 
                      <div class="tab-pane" id="tab_3">
                       <div class="row">
               <div class="col-md-8"><b><h3>Documents</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" data-target="#modal-addDocument"><i class="fa fa-plus"></i><b> New Document</b></a></div>
-            </div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addDocument"><i class="fa fa-plus"></i><b> New Document</b></a></div>
+            </div> <div class="table-responsive">
                       <table id="example3" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -662,7 +682,7 @@ school_ID = '{$school_ID}'");
                               
                                #get school Id from current session school id
                                $school_ID = $_SESSION['login_user_school_ID'];
-                               $query2 = mysqli_query($conn,"select * from document where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                               $query2 = mysqli_query($conn,"select * from document where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                die(mysqli_error());
                                $x=0;
                                while ($row1=mysqli_fetch_array($query2)){
@@ -678,11 +698,11 @@ school_ID = '{$school_ID}'");
                                           
                                         <td>";
                                        echo'  
-                                       <button type="button"  class="btn btn-info btn-flat" id="'.$documentID.'" onclick="editDocument(this.id)" data-toggle="modal" data-target="#modal-editDocument"><span class="glyphicon glyphicon-pencil"></span></button>
+                                       <a type="button"  class="btn btn-info badge" id="'.$documentID.'" name="'.$student_ID.'" onclick="editDocument(this.id,this.name)" data-toggle="modal" data-target="#modal-editDocument1"><span class="glyphicon glyphicon-pencil"></span></a>
 
-                                        <a href="#"><button type="button"  class="btn btn-success btn-flat" id="'.$document_name.'" onclick="openDocument(this.id)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#"><button type="button"  class="btn btn-success badge" id="'.$document_name.'" onclick="openDocument(this.id)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
-                                         <button type="button"  class="btn btn-danger btn-flat" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                                         <button type="button"  class="btn btn-danger badge" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
 
                                         
                                        </td>
@@ -694,10 +714,12 @@ school_ID = '{$school_ID}'");
                              </tbody>
                            
                           </table>
+                        </div>
                     </div>
                     <div class="tab-pane" id="tab_4">
                       <div class="col-md-8"><b><h3>Statement</h3> </b></div>
-                      <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)" target="_blank"  data-toggle="modal" data-target="#print_statement_Modal"><i class="fa fa-print"></i><b> Print Statement</b></a></div>
+                      <div class="col-md-4 col-pull-right" style="text-align:right;text-decoration: none;"><a class="button1"  id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)" target="_blank"     data-toggle="modal" data-target="#print_statement_Modal" ><b style="color: #fff"> <i class="fa fa-print"></i> Print Statement</b></a></div>
+
                          <table id="table11" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -713,7 +735,7 @@ school_ID = '{$school_ID}'");
                             </thead>
                             <tbody>
                                <?php
-                              $result = mysqli_query($conn,"select * from statement where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                              $result = mysqli_query($conn,"select * from statement where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                die(mysqli_error());
                         $total_Debit=0.00;
                         $total_Credit=0.00;
@@ -730,8 +752,8 @@ school_ID = '{$school_ID}'");
                         <td> '.$newDate.'</td>
                         <td> '.$rows["description"].'</td>
                         <td> '.$rows["ref_no"].'</td>
-                        <td> '.$rows["Debit"].'</td>
-                        <td> '.$rows["Credit"].'</td>
+                        <td align="right"> '.$school_row["currency"] .   '  '  .formatCurrency($rows["Debit"]).'</td>
+                        <td align="right"> '.$school_row["currency"] .   '  '  .formatCurrency($rows["Credit"]).'</td>
                         </tr>';
                         }    
 
@@ -739,8 +761,8 @@ school_ID = '{$school_ID}'");
                         <tr>
                         <hr>
                         <td colspan="3"><b><b></td>
-                         <td><b>'.$school_row['currency'] .formatCurrency($total_Debit).'</b></td>
-                         <td><b>'.$school_row['currency'] .formatCurrency($total_Credit).'</b></td>
+                         <td align="right"><b>'.$school_row['currency'] .formatCurrency($total_Debit).'</b></td>
+                         <td align="right"><b>'.$school_row['currency'] .formatCurrency($total_Credit).'</b></td>
                          
                         </tr>
                        
@@ -843,6 +865,7 @@ school_ID = '{$school_ID}'");
                                           </div>
                                           <div class="row">
                                             <div class="col-md-12">
+                                              
                                                 <table class="table table-bordered table-hover" id="tab_logic">
                                                   <thead>
                                                     <tr>
@@ -857,7 +880,7 @@ school_ID = '{$school_ID}'");
                                                         <?php
                                                      
                                                       
-                                                       $query2 = mysqli_query($conn,"select * from milestone_levels where milestone_ID='$milestone_ID1' and school_ID = '$school_ID' ")or
+                                                       $query2 = mysqli_query($conn,"select * from milestone_levels where milestone_ID='".$milestone_ID1."' and school_ID = '".$school_ID."' ")or
                                                        die(mysqli_error());
                                                        while ($row2=mysqli_fetch_array($query2)){
                                                        $milestone_level_ID= $row2['milestone_level_ID'];
@@ -945,7 +968,7 @@ school_ID = '{$school_ID}'");
                                 $total_amount_paid=0.00;
                             
                               // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $que02 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                              $que02 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                              die(mysqli_error());
                              $std_name;
                              
@@ -965,7 +988,7 @@ school_ID = '{$school_ID}'");
                                         <td>".$newDate."</td>
                                        
                                         <td>".$row2['remarks']." </td>
-                                        <td>".$row2['amount_paid']."</td>
+                                        <td align='right'>". $school_row['currency'] .   " <b> " .formatCurrency($row2['amount_paid'])."</b></td>
                                         ";
                                      
                                          
@@ -978,8 +1001,9 @@ school_ID = '{$school_ID}'");
                                   <td colspan="3">
                                     <b>Total</b>
                                   </td>
-                                  <td>
-                                    <b><?php echo $total_amount_paid;?></b>
+                                  <td align="right">
+                                   
+                                    <?php echo $school_row['currency'] .   ' <b> '  .formatCurrency($total_amount_paid).'</b>';?>
                                   </td>
                                   
                                 </tr>
@@ -1011,7 +1035,7 @@ school_ID = '{$school_ID}'");
                                 $total_amount_invoiced=0.00;
                            
                               // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $que2 = mysqli_query($conn,"select * from invoice where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                              $que2 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                              die(mysqli_error());
                              $std_name;
                              
@@ -1029,8 +1053,8 @@ school_ID = '{$school_ID}'");
                                   echo " <td>".$newDate."</td>
                                         
                                         <td>".$row_in['summury']." </td>
-                                        <td>".$row_in['amount']."</td>
-                                        <td>".$row_in['balance']."</td>";
+                                        <td align='right'>".$school_row['currency'] .   "  " .formatCurrency($row_in['amount'])."</td>
+                                        <td align='right'>".$school_row['currency'] .   "  " .formatCurrency($row_in['balance'])."</td>";
                                          
                                           
                                       
@@ -1045,11 +1069,13 @@ school_ID = '{$school_ID}'");
                                   <td colspan="3">
                                     <b>Total</b>
                                   </td>
-                                  <td>
-                                    <b><?php echo $total_amount_invoiced;?></b>
+                                  <td align='right'>
+                                   
+                                    <?php echo $school_row['currency'] .   ' <b> '  .formatCurrency($total_amount_invoiced).'</b>';?>
                                   </td>
-                                  <td>
-                                    <b><?php echo $total_bal;?></b>
+                                  <td align='right'>
+                                    
+                                    <?php echo $school_row['currency'] .   ' <b> '  .formatCurrency($total_bal).'</b>';?>
                                   </td>
                                 </tr>
                              </tbody>
@@ -1072,7 +1098,7 @@ school_ID = '{$school_ID}'");
                              <?php
 
                              
-                              $notf_query = mysqli_query($conn,"select * from notification where school_ID = '$school_ID' and student_ID='$student_ID'");
+                              $notf_query = mysqli_query($conn,"select * from notification where school_ID = '".$school_ID."' and student_ID='".$student_ID."'");
                              while ($notf_row=mysqli_fetch_array($notf_query)){
                               $notification_id=$notf_row['notification_ID'];
                               $date=$notf_row['notification_date'];
@@ -1101,7 +1127,7 @@ school_ID = '{$school_ID}'");
                                 <form method="POST" action="view_student.php?id=<?php echo $student_ID?>">
                                      <div class="row" id="registration1">
                                      <?php
-                                        $que21 = mysqli_query($conn,"select * from immunization where school_ID = '$school_ID' && student_ID='$student_ID'")or
+                                        $que21 = mysqli_query($conn,"select * from immunization where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                        die(mysqli_error());
                                        $std_name;
                                        
@@ -1221,22 +1247,24 @@ school_ID = '{$school_ID}'");
 
            <!--Edit document model-->
          
-      <div class="modal fade" id="modal-editDocument">
+      <div class="modal fade" id="modal-editDocument1">
           <div class="modal-dialog modal-sm">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Document</h4>
+                <h4 class="modal-title">Edit Document </h4>
               </div>
               <div class="modal-body">
-                <script >
-                function editDocument(document_ID){
                
+                <script >
+                function editDocument(document_ID,student_id){
+              
                 var updiv = document.getElementById("docMessage"); //document.getElementById("highodds-details");
-                var student_id= <?php echo $_GET['id']?>;
-                //alert(id);
-                var details= '&document_id='+ document_ID+'&student_id='+student_id;
+           
+                
+                var details= '&document_id='+ document_ID +'&student_id='+student_id;
+              
                 $.ajax({
                 type: "POST",
                 url: "edit_document.php",

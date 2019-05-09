@@ -7,7 +7,7 @@ if (!velifyLogin()) {
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -26,6 +26,7 @@ if (!velifyLogin()) {
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+
    
  <section class="content-header">
       
@@ -190,6 +191,8 @@ if (!velifyLogin()) {
 
 
       ?>
+
+     
     </section>
     <!-- Main content -->
     <section class="content">

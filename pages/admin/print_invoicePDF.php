@@ -13,7 +13,7 @@ if (!velifyLogin()) {
     $get_invoice_ID=$_GET['invoice_id'];
  }
  #get details form invoice
- $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
+ $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='".$get_invoice_ID."' and `school_ID` = '".$school_ID."' ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
  $invoice_amount=$row02['amount'];
  $due_date=$row02['due_date'];
@@ -26,17 +26,17 @@ if (!velifyLogin()) {
  $invoice_reff=$row02['reff_no'];
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
 $studentRegNo=$row03['registration_No'];
 
 #get parent details
-  $sql033 = mysqli_query($conn,"select * from `parent_relation` where  student_ID='$invoice_student_id' and `school_ID` = '".$school_ID."'  LIMIT 1");
+  $sql033 = mysqli_query($conn,"select * from `parent_relation` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."'  LIMIT 1");
   $row033 = mysqli_fetch_array($sql033 ,MYSQLI_ASSOC);
  $parentID=$row033['parent_ID'] ;
-  $sql034 = mysqli_query($conn,"select * from `parents` where  parent_ID='$parentID' and `school_ID` = '".$school_ID."' ");
+  $sql034 = mysqli_query($conn,"select * from `parents` where  parent_ID='".$parentID."' and `school_ID` = '".$school_ID."' ");
   $row034 = mysqli_fetch_array($sql034 ,MYSQLI_ASSOC);
   $parentName=$row034['first_Name']." ".$row034['last_Name'];
   $parentPhone=$row034['cell_Mobile_Phone'];
@@ -115,12 +115,12 @@ $content .=' <table class="table" style="width:100%">
           
         #get school Id from current session school id
 
-        $query2 = mysqli_query($conn,"select * from invoice_item where ref_no='$invoice_reff' and school_ID = '$school_ID' ")or
+        $query2 = mysqli_query($conn,"select * from invoice_item where ref_no='".$invoice_reff."' and school_ID = '".$school_ID."' ")or
         die(mysqli_error());
         while ($row2=mysqli_fetch_array($query2)){
         $invoice_item_ID= $row2['invoice_item_ID'];
         $vote_head_ID= $row2['vote_head_ID'];
-        $query3 = mysqli_query($conn,"select * from vote_head where vote_head_ID='$vote_head_ID' and school_ID = '$school_ID' ")or
+        $query3 = mysqli_query($conn,"select * from vote_head where vote_head_ID='".$vote_head_ID."' and school_ID = '".$school_ID."' ")or
         die(mysqli_error());
         while ($row3=mysqli_fetch_array($query3)){
    $content  .=  ' <tr>
@@ -145,7 +145,7 @@ $content .=' <table class="table" style="width:100%">
        
             ?>
            <?php 
-           $query3 = mysqli_query($conn,"select * from payment_mode where school_ID = '$school_ID' ")or
+           $query3 = mysqli_query($conn,"select * from payment_mode where school_ID = '".$school_ID."' ")or
         die(mysqli_error());
         $mode="";
         while ($row03=mysqli_fetch_array($query3)){
@@ -172,11 +172,11 @@ $content .=' <table class="table" style="width:100%">
             </table>
          ';
 
-        echo $content ;
+         $content ;
 
-     echo $mailto = $parentEmail;
-        echo $mailfrom = $school_row['email'];
-        $mailsubject = "Invoice";
+      $mailto = $parentEmail;
+      $mailfrom = $school_row['email'];
+      $mailsubject = "Invoice";
        
 
 

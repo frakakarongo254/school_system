@@ -7,7 +7,7 @@ if (!velifyLogin()) {
 
 <?php require_once("include/header.php")?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-cadetblue sidebar-mini">
 <div class="wrapper">
 <!--include header-->
 
@@ -190,9 +190,12 @@ if (!velifyLogin()) {
           <div class="nav-tabs-custom" style="padding-right: 20px;padding-left: 20px">
           <div class="row">
               <div class="col-md-8"><b><h3>Students</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="add_student.php" ><i class="fa fa-plus"></i><b> New Student </b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right">
+                <br><a class="btn btn-primary btn-bg" id="button1" href="add_student.php" style="  "><i class="fa fa-plus"></i><b> New Student </b></a>
+              <br>
+              </div>
             </div>
-            
+            <br>
                  <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -208,17 +211,16 @@ if (!velifyLogin()) {
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from student where school_ID = '$school_ID'")or
+                   $query2 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."'")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
                    $student_regNoID= $row1['registration_No'];
                    $status;
-                   if($row1['status'] =='Inactive'){
-                     $status='<span class="btn btn-danger">Inactive</span>';
-                   }elseif ($row1['status'] =='Active') {
-                      $status='<span class="btn btn-success">Active</span>';
+                   if($row1['status'] =='Admitted'){
+                     $status='Active';
+                  
                    }else{
-                    $status='<span class="btn btn-success">Active</span>';
+                    $status=$row1['status'];
                    }
                    $img;
                    if($row1['photo'] !=''){
@@ -241,11 +243,11 @@ if (!velifyLogin()) {
                   <td>";
                $_SESSION['student_ID']=$row1['student_ID'];#send student id as a session to the next page of view student
 
-                  echo'  <a class="btn btn-success btn-flat" href="view_student.php?id='.$stdId.'"><span class= "glyphicon glyphicon-eye-open"></span></a>
+                  echo'  <a class="btn btn-success badge " href="view_student.php?id='.$stdId.'"><span class= "glyphicon glyphicon-eye-open"></span></a>
 
-                  <a class="btn btn-info" href="edit_students.php?id='.$row1['student_ID'].'"> <span class="glyphicon glyphicon-pencil"></span></a>
+                  <a class="btn btn-info badge" href="edit_students.php?id='.$row1['student_ID'].'"> <span class="glyphicon glyphicon-pencil"></span></a>
 
-                  <button type="button" id="'.$row1['registration_No'].'" class="btn btn-danger btn-flat" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                  <button type="button" id="'.$row1['registration_No'].'" class="btn btn-danger badge" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                   </td>
                   </tr>';
                     }
