@@ -52,6 +52,8 @@
 
 
 <script src="../../js/toast/toast.js"></script>
+<script src="../../js/canvas/canvasjs.min.js"></script>
+
 
 
 

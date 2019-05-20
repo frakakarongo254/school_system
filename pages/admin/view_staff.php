@@ -9,7 +9,19 @@ if(isset($_GET['id'])){
 }
 
 ?>
+ <?php
+// $school_ID=$_SESSION['login_user_school_ID'];
+$staff_data_sql = mysqli_query($conn,"select * from `staff` where `staff_ID` = '".$get_staffID."' and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
 
+$staff_row = mysqli_fetch_array($staff_data_sql,MYSQLI_ASSOC);
+//  $user_row['school_Name'];
+$staff_image;
+if($staff_row['photo'] !=''){
+$staff_image = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $staff_row['photo'] ).'"  height="90" width="90px" />';
+}else{
+$staff_image = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
+}
+?>
 <?php include("include/header.php")?>
 
 <body class="hold-transition skin-cadetblue sidebar-mini">
@@ -38,10 +50,13 @@ if(isset($_GET['id'])){
       <div class="row">
        
            <div class="col-md-2 box-primary ">
-          <h3><span class="glyphicon glyphicon-list-alt"></span><b class="color-primary" >  Staff Profile</b></h3>
+          <h3><a href="#"><span class="glyphicon glyphicon-list-alt"></span>    <b class="color-primary" > Profile</b></a></h3>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="view_staff.php?id=<?php echo  $get_staffID;?>"><i class="fa fa-arrow-circle-right"></i> Staff Details</a></li>
-                <li><a href="#"><i class="fa fa-arrow-circle-right"></i> Staff Classes</a></li>
+                <li>
+                  <a href="view_staff.php?id=<?php echo  $get_staffID;?>"> <?php echo $staff_image ?></a>
+                  
+                </li>
+              
               </ul>
          </div>
        
@@ -82,44 +97,57 @@ if(isset($_GET['id'])){
             }
             }
           ?>
-          <?php
-            // $school_ID=$_SESSION['login_user_school_ID'];
-            $staff_data_sql = mysqli_query($conn,"select * from `staff` where `staff_ID` = '".$get_staffID."' and `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
-
-            $staff_row = mysqli_fetch_array($staff_data_sql,MYSQLI_ASSOC);
-            //  $user_row['school_Name'];
-            $staff_image;
-            if($staff_row['photo'] !=''){
-            $staff_image = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $staff_row['photo'] ).'"  height="90" width="90px" />';
-            }else{
-            $staff_image = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
-            }
-          ?>
+         
           <!-- Profile Image -->
           <div class="box box-secondary col-md-">
             <div class="box-body box-profile col-md-">
               <div class="row">
-                <div class="col-md-12  ">
-                 <div class="" style="text-align: center;">
+                <div class="col-md-12 " style="font-size: 14px;font-weight: ;text-transform: uppercase;">
                 
-                  <center>
-              <table>
-               
-                    <tr>
-                      <td rowspan="2"> <?php echo $staff_image;?>
-             <h3 class="profile-username text-center"><a data-toggle="modal" data-target="#modal-editSchoolLogo"><span class="pull- badge bg-secondary"><i class="fa fa-image"></i> Change photo</span></a></h3></td>
-                      <td><ul class="nav nav-pills nav-stacked">
-                <li><a href="#"><i class="fa  fa-"></i><b><?php echo $staff_row['full_Name'] ;?></b></a></li>
-                <li><a href="#"><i class="fa fa-bookmark-o"></i> <?php echo $staff_row['gender']?></a></li>
-                <li><a href="#"><i class="fa fa-phone"></i> <?php echo $staff_row['phone']?></a></li>
-                <li><a href="#"><i class="fa fa-envelope-o"></i> <?php echo $staff_row['email']?></a></li>
-                <li><a href="#"><i class="fa fa-flag"></i> <?php echo $staff_row['nationality']?></a></li>
-              </ul></td>
-                     
-                    </tr>
-              </table>
-            </center>
-            </div>
+              <div class="row">
+                 <div class="col-md-2">
+                  <b> Name :</b>
+                 </div>
+                 <div class="col-md-2">
+                   <?php echo $staff_row['full_Name'] ;?>
+                 </div>
+                 
+                 
+              </div>
+              <br>
+              <br>
+              <div class="row">
+                 
+                 <div class="col-md-2">
+                  <b> Phone:</b>
+                 </div>
+                 <div class="col-md-2">
+                   <?php echo $staff_row['phone']?>
+                 </div>
+                 
+              </div>
+              <br>
+              <br>
+              <div class="row">
+                 <div class="col-md-2">
+                  <b> Email :</b>
+                 </div>
+                 <div class="col-md-2">
+                 <?php echo $staff_row['email']?>
+                 </div>
+                 
+              </div>
+              <br>
+              <br>
+              <div class="row">
+                 
+                 <div class="col-md-2">
+                  <b>Nationality:</b>
+                 </div>
+                 <div class="col-md-2">
+                   <?php echo $staff_row['nationality']?>
+                 </div>
+              </div>
               </div>
               
              </div>

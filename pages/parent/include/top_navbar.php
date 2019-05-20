@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
              <li><span class="logo-mini"><?php echo $logo;?></span></li>
-            <li><a href="dashboard.php"><b style="font-size: 24px"><?php echo $school_row['school_Name']?></b></a></li>
+            <li><a href="dashboard.php"><b style="font-size: 24px;color: #fff"><?php echo $school_row['school_Name']?></b></a></li>
           
           </ul>
          

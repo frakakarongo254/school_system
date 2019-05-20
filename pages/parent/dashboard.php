@@ -58,7 +58,7 @@ $sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$login
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <?php include("include/header.php")?>
-<body class="hold-transition skin-blue layout-top-nav">
+<body class="hold-transition skin-cadetblue layout-top-nav">
 <div class="wrapper">
 <?php
   include("include/top_navbar.php");

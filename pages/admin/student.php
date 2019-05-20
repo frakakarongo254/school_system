@@ -181,6 +181,24 @@ if (!velifyLogin()) {
         </div>'; 
        }
       }
+
+
+      if(isset($_POST["Export"])){
+     echo "yes";
+      header('Content-Type: text/csv; charset=utf-8');  
+      header('Content-Disposition: attachment; filename=data.csv');  
+      $output = fopen("php://output", "w");  
+      fputcsv($output, array('first_Name','last_Name','nickname',
+          'registration_No','school_ID'));  
+      $queryz = "SELECT id,first_Name,last_Name,nickname,
+          registration_No,school_ID from student ORDER BY id DESC LIMT 5";  
+      $resultz = mysqli_query($conn, $queryz);  
+      while($rowz = mysqli_fetch_assoc($resultz))  
+      {  
+           fputcsv($output, $rowz);  
+      }  
+      fclose($output);  
+ }  
       ?>
     </section>
     <!-- Main content -->
@@ -188,7 +206,7 @@ if (!velifyLogin()) {
    
         <!-- Custom Tabs -->
           <div class="nav-tabs-custom" style="padding-right: 20px;padding-left: 20px">
-          <div class="row">
+           <div class="row">
               <div class="col-md-8"><b><h3>Students</h3> </b></div>
               <div class="col-md-4 col-pull-right" style="text-align:right">
                 <br><a class="btn btn-primary btn-bg" id="button1" href="add_student.php" style="  "><i class="fa fa-plus"></i><b> New Student </b></a>
@@ -235,7 +253,7 @@ if (!velifyLogin()) {
                   
                   //$id =  base64_url_encode($stdId);
                   echo" <tr>
-                  <td>".$img."</td>
+                  <td><a href='view_student.php?id=".$stdId."'>".$img."</a></td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
                   <td>".$row1['registration_No']." </td>
                   <td>".$row1['gender_MFU']."</td>

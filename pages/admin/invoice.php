@@ -152,7 +152,7 @@ if (!velifyLogin()) {
               <div class="col-md-2">
                 <a class="btn btn-primary btn-sm " href="createinvoice.php" id="button3" ><i class="fa fa-plus"></i><b> New Invoice</b></a>
               </div>
-              <div class="col-md-2"> <a class="btn btn-success btn-sm" href="" id="button2" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print</b></a></div>
+              <div class="col-md-2"> </div>
             </div>
           </form>
           <?php
@@ -200,8 +200,8 @@ if (!velifyLogin()) {
                                   echo " <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['summury']." </td>
-                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
-                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
+                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
+                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
                                          
                                           
                                       
@@ -268,14 +268,14 @@ if (!velifyLogin()) {
                                   echo " <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['summury']." </td>
-                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
-                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
+                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
+                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
                                          
                                           
                                       
                                        echo' 
                                           <td>
-                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span>  Print </a>
+                                          <a href="#"  class="btn btn-primary badge" onclick="myFunction(this.id)" id="'.$invoiveID.'"> <span class="glyphicon glyphicon-print"></span>  Print </a>
                                           
                                            <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
@@ -383,6 +383,16 @@ if (!velifyLogin()) {
 
 <!-- include script-->
 <?php include("include/script.php")?>
+ <script>
+function myFunction(invoice_id) {
+
+    
+     window.open("print_invoice.php?invoice_id="+invoice_id, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=1000");
+  
+  
+ 
+}
+</script>
 <!-- page script -->
 <script>
   $(function () {

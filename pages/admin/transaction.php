@@ -133,7 +133,7 @@ if (!velifyLogin()) {
                 </div>
           
               <div class="col-md-2">
-                <a class="btn btn-success pull-right btn-sm" id="button3" href="" data-toggle="modal" data-target="#modal-printInvoice"><i class="fa fa-print"></i><b> Print Payment</b></a>
+                
               </div>
              
             </div>
@@ -189,7 +189,7 @@ if (!velifyLogin()) {
                                           <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['remarks']." </td>
-                                       <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount_paid'])."</b></td>
+                                       <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount_paid'])."</b></td>
                                         ";
                                          
                                           
@@ -263,7 +263,7 @@ if (!velifyLogin()) {
                                           <td>".$newDate."</td>
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['remarks']." </td>
-                                        <td>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount_paid'])."</b></td>
+                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount_paid'])."</b></td>
                                         ";
                                          
                                           

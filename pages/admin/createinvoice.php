@@ -449,6 +449,7 @@ school_ID = '{$school_ID}'");
 
 function calc()
 {
+  
     $('#tab_logic tbody tr').each(function(i, element) {
         var html = $(this).html();
         if(html!='')

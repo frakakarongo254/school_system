@@ -22,7 +22,7 @@ if(isset($_GET['id'])){
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue layout-top-nav">
+<body class="hold-transition skin-cadetblue layout-top-nav">
 <div class="wrapper">
 <!--include header-->
 

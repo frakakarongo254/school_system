@@ -104,7 +104,7 @@
           <!-- Tasks: style can be found in dropdown.less -->
           
           <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu" style="text-decoration: none;color: #fff">
+          <li class="dropdown user user-menu" style="text-decoration:;color:">
             <?php
              $user_img;
              if( $_SESSION['login_user_photo'] !==''){
@@ -117,33 +117,20 @@
               $user_img_circle='<img src="../../dist/img/avatar.png" class="img-circle" alt="User Image">';
              }
             ?>
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;color: #fff">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: ;color:#fff ">
               <?php echo $user_img ;?>
-              <span class="hidden-xs"><?php echo $_SESSION['login_user_fname'] ;?></span>
+              <span class="hidden-xs"><?php echo $_SESSION['login_user_fullName'] ;?></span>
             </a>
             
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-               
-                <?php echo $user_img_circle ;?>
-                <p style="color: black">
-                 <?php echo $_SESSION['login_user_fname'] .  " - "  .$_SESSION['login_user_role'];?> 
-                  <small></small>
-                </p>
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="profile.php" class="btn btn-secondary btn-flat"><i class="fa fa-fw fa-user"></i><b>Profile</b></a>
-                </div>
-                <div class="pull-right">
-                 <!-- Find logout Modal from footer file from include folder -->
-                  <a class="nav-link"  href="#" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i><b>Sign out</b></a>
-                </div>
-              </li>
-            </ul>
+             <ul class="dropdown-menu" role="menu">
+                   <li><a href="#"><b><?php
+                     echo $_SESSION['login_user'];
+                    ?></b></a></li>
+                    <li><a href="profile.php"><i class="fa fa-user"></i><b> Profile</b></a></li>
+                   
+                    <li class="divider"></li>
+                    <li><a href="include/logout.php"><i class="fa fa-sign-out"></i><b>Logout</b></a></li>
+                  </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
           <li>

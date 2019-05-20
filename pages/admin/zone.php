@@ -157,8 +157,8 @@ toast.setText('This is a basic toast message!').show();
                   echo" <tr>
                           
                             <td>".$row4['zone']."</td>
-                            <td>".$row4['oneWayCharge']."</td>
-                            <td>".$row4['twoWayCharge']."</td>
+                            <td>".$school_row['currency'] ." ". $row4['oneWayCharge']."</td>
+                            <td>".$school_row['currency'] ." ".$row4['twoWayCharge']."</td>
                              
                             <td>";
                            echo'  

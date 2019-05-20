@@ -57,7 +57,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue layout-top-nav bg-gainsboro">
+<body class="hold-transition skin-cadetblue layout-top-nav bg-gainsboro">
 <div class="wrapper">
 <!--include header-->
 

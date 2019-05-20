@@ -6,14 +6,28 @@ if (!velifyLogin()) {
  $school_ID=$_SESSION['login_user_school_ID'];
  $printFromDate="";
  $printFromTo="";
- $printFromDate=$_POST['printFromDate'];
-  $printFromTo=$_POST['printToDate'];
- if (isset($_POST['from']) and isset($_POST['to']) ) {
-    $printFromDate=$_POST['printFromDate'];
-  $printFromTo=$_POST['printToDate'];
- }
+ $report_class_id="";
+ $class_Name="";
  
+ if (isset($_GET['from']) and isset($_GET['to']) ) {
+   # code...
+ $printFromDate=$_GET['from'];
+$printFromTo=$_GET['to'];
+$report_class_id=$_GET['class_id'];
+ }else{
+//echo "not set";
 
+ }
+ #get class Details
+ if ($_GET['class_id'] !=="All") {
+  $report_class_id=$_GET['class_id'];
+   # code...
+  $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."' and class_ID='".$report_class_id."'");
+  $class_n= mysqli_fetch_array($query_c,MYSQLI_ASSOC);
+  $class_Name= 'For Class   '  . $class_n['name'] ;
+ }else{
+  $class_Name= "For All Classes";
+ }
   #get school details
 $school_ID=$_SESSION['login_user_school_ID'];
 $school_data_sql = mysqli_query($conn,"select * from `school` where `school_ID` = '".$school_ID."' ");
@@ -31,11 +45,11 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 ?>
 
 <!DOCTYPE html>
-<html>
+<html style="overflow-y: scroll;">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><?php echo $school_row['school_Name']?> | Invoice</title>
+  <title><?php echo $school_row['school_Name']?> | Payment List</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -47,6 +61,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
 
+  <link rel="stylesheet" href="../../css/body.css">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -57,7 +73,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body onload='window.print();window.open(url, "_blank");'>
+<body onload=''>
 <div class="wrapper">
   <!-- Main content -->
 
@@ -68,10 +84,12 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         
           
         <div class="col-md-12">
-          <table class="table">
+        
+          <table class="table " border="0" style="border:0px;" >
+         
             <tr>
-              <td>'. $logo .'</td>
-              <td> <address>
+            
+              <td>'. $logo .'<br><address id="address" style="">
             <strong>'. strtoupper($school_row['school_Name']) .'</strong><br>
             Po. Box ' .$school_row['address_1'].'<br>
             Phone: '. $school_row['phone'].'<br>
@@ -84,8 +102,10 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <!-- /.col -->
       </div>
       <div class="row">
-         <div class="col-xs-12">
-           <b style="">Payment List From  ' . $printFromDate. '  To ' . $printFromTo .'</b>
+         <div class="col-xs-12 text-center">
+           <b style="font-size:20px;font-weight:800;text-transform:uppercase;text-align:center">Payment Report From  ' . date("d-m-Y", strtotime($printFromDate)).   '    To    '  .date("d-m-Y", strtotime($printFromTo))  .'  '.  $class_Name .'</b>
+           <br>
+           <br>
          </div>
       </div>
 
@@ -108,12 +128,14 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
           </thead>
           <tbody>';?>
              <?php
+             if ($report_class_id =="All") {
+               # code...
              
-             $query2 = mysqli_query($conn,"select * from payment where school_ID = '$school_ID' ORDER BY payment_date DESC")or
+             $query2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' ORDER BY payment_date DESC")or
              die(mysqli_error());
-             $total_amount=0.00;
+             $total_payment_amount=0.00;
              while ($row2=mysqli_fetch_array($query2)){
-              $total_amount= $total_amount + $row2['amount_paid']  ;
+            
              $invoiceID= $row2['invoice_ID'];
              $paymentID= $row2['payment_ID'];
               $invoive_date= $row2['payment_date'];
@@ -121,13 +143,14 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               $slipNo= $row2['slip_no'];
              $newDate = date("d-m-Y", strtotime($invoive_date));
               $total_amount=0.00;
-              $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='$invoiceID' and school_ID = '$school_ID' ");
+              $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='".$invoiceID."' and school_ID = '".$school_ID."' ");
             
              while ($row3=mysqli_fetch_array($query3)){
               $invoice_ref=$row3['reff_no'];
-            $query4 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
+            $query4 = mysqli_query($conn,"select * from student where student_ID='".$studentid."' and school_ID = '".$school_ID."' ");
             
              while ($row4=mysqli_fetch_array($query4)){
+              $total_payment_amount= $total_payment_amount + $row2['amount_paid']  ;
               $name=$row4['first_Name']." ".$row4['last_Name'];
               $reg=$row4['registration_No'];
               echo' <tr>
@@ -137,7 +160,60 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                         <td>".$newDate."</td>
                        <td>".$reg ." ".$name."</td>
                       <td>".$row2['remarks']." </td>
-                      <td>".$row2['amount_paid']."</td>
+                     <td align='right'>".$school_row['currency'] .   " " .formatCurrency($row2['amount_paid'])."</td>
+                      ";
+                       
+                        
+                    
+                     echo' 
+                      
+                  </tr>';
+
+             
+            }
+              }
+            }
+        echo'<tr>
+            <td colspan="5" align="right"><b style="font-size:20px">Total</b></td>
+            
+            <td align="right"><b style="font-size:20px">'.$school_row['currency'] .   " " .formatCurrency($total_payment_amount).'</b></td>
+            </tr>';
+            }else{
+              $total_payment_amount=0.00;
+               $query12 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' and class_ID='".$report_class_id."' ORDER BY registration_No DESC")or
+             die(mysqli_error());
+                  while ($row12=mysqli_fetch_array($query12)){
+                   $std_ID= $row12['student_ID'];
+                  $query2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' and student_ID='".$std_ID."' ORDER BY payment_date DESC")or
+             die(mysqli_error());
+             
+             while ($row2=mysqli_fetch_array($query2)){
+            
+             $invoiceID= $row2['invoice_ID'];
+             $paymentID= $row2['payment_ID'];
+              $invoive_date= $row2['payment_date'];
+              $studentid= $row2['student_ID'];
+              $slipNo= $row2['slip_no'];
+             $newDate = date("d-m-Y", strtotime($invoive_date));
+              $total_amount=0.00;
+              $query3 = mysqli_query($conn,"select * from invoice where invoice_ID='".$invoiceID."' and school_ID = '".$school_ID."' ");
+            
+             while ($row3=mysqli_fetch_array($query3)){
+              $invoice_ref=$row3['reff_no'];
+            $query4 = mysqli_query($conn,"select * from student where student_ID='".$studentid."' and school_ID = '".$school_ID."' ");
+            
+             while ($row4=mysqli_fetch_array($query4)){
+               $total_payment_amount= $total_payment_amount + $row2['amount_paid']  ;
+              $name=$row4['first_Name']." ".$row4['last_Name'];
+              $reg=$row4['registration_No'];
+              echo' <tr>
+                 <td> '.$invoice_ref.'</td>';
+
+                echo " <td> ".$slipNo."</td>
+                        <td>".$newDate."</td>
+                       <td>".$reg ." ".$name."</td>
+                      <td>".$row2['remarks']." </td>
+                      <td align='right'>".$school_row['currency'] .   " " .formatCurrency($row2['amount_paid'])."</td>
                       ";
                        
                         
@@ -151,6 +227,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               }
             }
             
+         }
+          echo'<tr>
+            <td colspan="5" align="right"><b style="font-size:20px">Total</b></td>
+            
+            <td align="right"><b style="font-size:20px">'.$school_row['currency'] .   " " .formatCurrency($total_payment_amount).'</b></td>
+            </tr>';
+        }
          
          echo ' </tbody>
           

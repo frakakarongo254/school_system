@@ -25,7 +25,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
 
 <?php include("include/header.php")?>
 
-<body class="hold-transition skin-blue layout-top-nav">
+<body class="hold-transition skin-cadetblue layout-top-nav">
 <div class="wrapper">
 <!--include header-->
 

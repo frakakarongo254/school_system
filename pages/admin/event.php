@@ -487,7 +487,7 @@ if (!velifyLogin()) {
               <div class="tab-content">
                
               <!-- /.tab-pane -->
-            <form  action="event.php" method="POST">
+            <form  action="" method="POST">
           
            <br>
            
@@ -496,7 +496,7 @@ if (!velifyLogin()) {
             <div class=" col-md-12">
             <div class=" input-group input-group-">
               <span class="input-group-addon">FROM:   <i class="glyphicon glyphicon-calendar"></i></span>
-              <input type="date" name="printFromDate"  id="" class="form-control"   placeholder="Starting Time" required>
+              <input type="date" name="printFromDate"  id="printFromDate" class="form-control"   placeholder="Starting Time" required>
             </div>
           </div>
           
@@ -508,7 +508,7 @@ if (!velifyLogin()) {
             <div class=" col-md-12">
             <div class=" input-group input-group-">
               <span class="input-group-addon">TO:   <i class="glyphicon glyphicon-calendar"></i></span>
-             <input type="date" name="printToDate"  class="form-control"   placeholder="Ending time" required>
+             <input type="date" name="printToDate" id="printToDate"  class="form-control"   placeholder="Ending time" required>
             </div>
           </div>
           
@@ -520,16 +520,17 @@ if (!velifyLogin()) {
                   
                  <div class=" col-md- input-group input-group">              
                  <label>
-                    <input type="radio" name="print_event_type" class=" flat-red"  value="All" checked>
-                    <label>ALL Events</label>
+                    <input type="radio" name="print_event_type" id="print_event_type" class=" flat-red"  value="All" checked>
+                    ALL Events
                   </label>
-                  <br>
+                  &nbsp;&nbsp;&nbsp;
                   <label>
-                    <input type="radio" name="print_event_type" class=" flat-red" value="Birthday">
-                    <label>Birthday Events</label>
+                    <input type="radio" name="print_event_type" id="print_event_type" class=" flat-red" value="Birthday">
+                    Birthday Events
                   </label>
                 </div>
                 </div>
+                
             </div>
             <br>
           </div>
@@ -537,7 +538,7 @@ if (!velifyLogin()) {
             <div class="row">
               <div class="col-md-12">
                 <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="printEventBtn" class="btn btn-primary">Print</button>
+                <button type="submit" name="printEventB" class="btn btn-primary" onclick="myFunction()">Print</button>
               </div>
               </div>
              </form>
@@ -720,12 +721,45 @@ if (!velifyLogin()) {
   <div class="control-sidebar-bg"></div>
 
 </div>
+  <script>
+function myFunction() {
+var event_type;
+  var from_date=document.getElementById('printFromDate').value;
+  var to_date=document.getElementById('printToDate').value;
+  var event_type=document.getElementById('print_event_type').value;
+  var radios=document.getElementsByName('print_event_type');
+
+  for (var i = 0, length = radios.length; i < length; i++) {
+    if (radios[i].checked) {
+        // do whatever you want with the checked radio
+       // alert(radios[i].value);
+event_type=radios[i].value;
+        // only one radio can be logically checked, don't check the rest
+        break;
+    }
+}
+ // alert(event_type);
+  if (from_date =='' || to_date =='' || event_type =='' ) {
+    alert("All fields are required");
+  }else if(from_date =='' && to_date !=='' && event_type !==''  ){
+    alert("Date From is required");
+  }else if(to_date =='' && from_date !=='' && event_type !==''  ){
+    alert("Date To is required");
+  }else if (event_type =='' && from_date !=='' && to_date  !=='' ) {
+    alert("Please Select class");
+  }else if(from_date !=='' && to_date !=='' && event_type !==''){
+    
+     window.open("print_event.php?from="+from_date+"&to="+ to_date+"&event_type="+event_type , "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=1000");
+  }
   
+ 
+}
+</script>
 <!-- ./wrapper -->
 
 
 <!-- include script-->
-<!--<?php# include("include/script.php")?>-->
+
 <!-- jQuery 3 -->
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -750,6 +784,47 @@ if (!velifyLogin()) {
 
 <script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="../../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<!-- Sparkline -->
+<script src="../../bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<!-- jvectormap  -->
+<script src="../../plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="../../plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<!-- SlimScroll -->
+<script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- ChartJS -->
+<script src="../../bower_components/chart.js/Chart.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="../../dist/js/pages/dashboard2.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- CK Editor -->
+<script src="../../bower_components/ckeditor/ckeditor.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="../../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
+<!-- InputMask -->
+<script src="../../plugins/input-mask/jquery.inputmask.js"></script>
+<script src="../../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="../../plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<!-- date-range-picker -->
+<script src="../../bower_components/moment/min/moment.min.js"></script>
+<script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- bootstrap color picker -->
+<script src="../../bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+<!-- bootstrap time picker -->
+<script src="../../plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="../../plugins/iCheck/icheck.min.js"></script>
+<!-- Select2 -->
+<script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
+<script src="../../dist/js/fusioncharts/fusioncharts.js"></script>
+
+
 <!-- FastClick -->
 <!-- include script-->
 <?php //include("include/script.php")?>
@@ -997,5 +1072,6 @@ if (!velifyLogin()) {
   })
 
 </script>
+<?php //include("include/script.php");?>
 </body>
 </html>

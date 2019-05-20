@@ -54,8 +54,8 @@ $school_ID = $_SESSION['login_user_school_ID'];
                  </select>
             </td>
             <td><input type="number" name="qty[]" placeholder="Enter Qty" class="form-control qty" value="1" step="0" min="0"/></td>
-            <td><input type="number" name="price[]"" placeholder="Enter Unit Price" class="form-control price" step="0.00" min="0" value="'.$charges.'"/></td>
-            <td><input type="number" name="total[]" placeholder="0.00" value="'.$charges.'" class="form-control total" readonly/></td>
+            <td> <div class=" col-md- input-group input-group-"> <span class="input-group-addon">'.$school_row['currency'].'  </span><input type="number" name="price[]"" placeholder="Enter Unit Price" class="form-control price" step="0.00" min="0" value="'.$charges.'"/></div></td>
+            <td><div class=" col-md- input-group input-group-"> <span class="input-group-addon">'.$school_row['currency'].'  </span><input type="number" name="total[]" placeholder="0.00" value="'.$charges.'" class="form-control total" readonly/></div></td>
           ';
         }else{
           echo '<div style="font-weight:bold;">You have not yet set up Transport as Vote Head <a href="vote_head.php" style="text-decoration:none;font-weight:bold;">Set now</a><div>';

@@ -1,33 +1,53 @@
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar skin-black-light" style="background-color: ">
+  <aside class="main-sidebar skin-green" style="background-color: ">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- Sidebar user panel -->
-      
-      
+      <?php
+      $tab='';
+        if (isset($_GET['tab'])) {
+          # code...
+          $tab=$_GET['tab'];
+        }else{
+          $tab='Dashboard';
+        }
+        if (isset($_POST['tab'])) {
+          # code...
+          $tab=$_POST['tab'];
+        }else{
+          $tab='Dashboard';
+        }
+      ?>
+      <script >
+        function check(tab){
+          alert('yes');
+          var tab =tab;
+         
+        }
+      </script>
       <!-- sidebar menu: style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="">MAIN NAVIGATION</li>
-        <li class=" ">
+        <li class="">
           <a href="dashboard.php"  style="font-size: px;color: #fff"><i class="fa fa-dashboard"></i> Dashboard </a>
         
         </li>
          
-        <li>
-          <a href="email_inbox.php" style="font-size: px;color: #fff">
+        <li class="">
+          <a href="email_inbox.php" style="font-size: px;color: #fff" >
             <i class="fa fa-envelope-open"></i>    <span >  Email</span>
            
           </a>
         </li>
         
-        <li>
-          <a href="class.php"  style="font-size: px;color: #fff">
+        <li class="">
+          <a href="class.php"  style="font-size: px;color: #fff" >
             <i class="fa fa-user"></i> <span>Class</span>
            
           </a>
         </li>
         
-        <li class="treeview">
+        <li class="treeview ">
           <a href="#"  style="font-size: px;color: #fff">
             <i class="fa fa-bar-chart"></i>
 
@@ -38,38 +58,38 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="manage_attendance.php"><i class="fa fa-circle-o"></i> Manage Attendance</a></li>
+            <li><a href="manage_attendance.php" ><i class="fa fa-circle-o"></i> Manage Attendance</a></li>
             <li><a href="attendance.php"><i class="fa fa-plus"></i> New attedance</a></li>
             
           </ul>
         </li>
-        <li>
-          <a href="event.php"  style="font-size: px;color: #fff">
+        <li class="">
+          <a href="event.php"  style="font-size: px;color: #fff" >
             <i class="fa fa-calendar"></i> <span>Events</span>
            
           </a>
         </li>
-         <li>
-          <a href="zone.php"  style="font-size: px;color: #fff">
+         <li class="">
+          <a href="zone.php"  style="font-size: px;color: #fff" >
             <i class="fa fa-map-marker"></i> <span>Zone</span>
            
           </a>
         </li>
         
          <li>
-          <a href="student.php"  style="font-size: px;color: #fff">
+          <a href="student.php"  style="font-size: px;color: #fff" >
             <i class="fa fa-graduation-cap"></i> <span>Student</span>
            
           </a>
         </li>
          <li>
-          <a href="parent.php"  style="font-size: px;color: #fff">
+          <a href="parent.php"  style="font-size: px;color: #fff" >
             <i class="fa fa-users"></i> <span>Parents</span>
            
           </a>
         </li>
          <li>
-          <a href="staff.php"  style="font-size: px;color: #fff">
+          <a href="staff.php"  style="font-size: px;color: #fff" >
             <i class="fa fa-users"></i>   <span> Staffs</span>
            
           </a>
@@ -102,6 +122,7 @@
        
       
         <li><a href="document.php"  style="font-size: px;color: #fff"><i class="fa fa-book"></i> <span>Documents</span></a></li>
+         <li><a href="report.php"  style="font-size: px;color: #fff"><i class="fa fa-signal"></i> <span>Reports</span></a></li>
           <li><a href="school_profile.php"  style="font-size: px;color: #fff"><i class="fa fa fa-gears"></i> <span>Settings</span></a></li>
         
       </ul>

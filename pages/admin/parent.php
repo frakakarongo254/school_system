@@ -272,7 +272,7 @@ if (!velifyLogin()) {
                     }
                   echo" <tr>
                            <td>
-                             ".$img."
+                            <a href='view_parent.php?id=".$parentID."'> ".$img."</a>
                            </td>
                             <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
                             <td>".$row1['email']." </td>
@@ -315,7 +315,7 @@ if (!velifyLogin()) {
               <div class="tab-content">
                
               <!-- /.tab-pane -->
-                   <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" enctype="multipart/form-data">
+                   <form id="fileinfo" name="fileinfo" autocomplete='off' action="parent.php" method="POST" enctype="multipart/form-data">
                 <div class="row">
               <div class=" col-md-6 mb-3">
                 <div class="form-group has-feedback input-group-lg">
@@ -363,9 +363,10 @@ if (!velifyLogin()) {
               <div class="form-group  col-md-3 mb-3">
                 <label for="nationality">Email:</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
+              <div class=" col-md-7 input-group ">
                 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                <input type="email" name="parent_email" class="form-control" placeholder="" required>
+                <input type="email" name="parent_email" class="form-control" placeholder="Email" autocomplete="new-email" autocorrect="off" autocapitalize="off" spellcheck="false" required >
+               
               </div>
               
             </div>
@@ -385,9 +386,10 @@ if (!velifyLogin()) {
               <div class="form-group  col-md-3 mb-3">
                 <label for="phone">Password :</label>
               </div>
-              <div class=" col-md-7 input-group input-group-">
+              <div class=" col-md-7 input-group ">
                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                <input type="Password" name="parent_password" class="form-control" placeholder="" required>
+                <input type="password" name="parent_password" class="form-control" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="" required>
+               
               </div>    
             </div>
             <br>

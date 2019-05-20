@@ -646,7 +646,7 @@ school_ID = '{$school_ID}'");
                                         <td>". $parent_relation."</td>
                                           
                                         <td>";
-                                       echo'   <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success btn-flat" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  View</button></a>
+                                       echo'   <a href="view_parent.php?id='.$parentID.'"><button type="button"  class="btn btn-success  badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span> </button></a>
 
                                         
                                        </td>
@@ -945,17 +945,17 @@ school_ID = '{$school_ID}'");
                           </div>
                     </div>
                     <div class="tab-pane" id="tab_payment">
-                          <div class="col-md-8"><b><h3>Payment</h3> </b></div>
+                          <div class="col-md-8"><b><h3>Payment </h3> </b></div>
                           
                         
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="paymentTable1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                               <th>Receipt No </th>
                               <th>Date</th>
                              
                               <th>Remark</th>
-                              <th>Amount</th>
+                              <th align="right" style="text-align: right;">Amount</th>
                              
                               
                             </tr>
@@ -1465,7 +1465,7 @@ school_ID = '{$school_ID}'");
  
   //delete invoice item function
   function  deleteMilestone_level(milestone_level_id){
-    alert(milestone_level_id);
+    //alert(milestone_level_id);
   //var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
   //alert(id);
   var details= '&milestone_level_id='+ milestone_level_id;
@@ -1502,6 +1502,27 @@ school_ID = '{$school_ID}'");
 
   }
 
+
+  });
+  }
+</script>
+<script >
+  function deleteNotificationFromSystem(notification_id){
+  //alert(notification_id);
+  var details= '&notification_id='+ notification_id;
+  $.ajax({
+  type: "POST",
+  url: "delete_notification.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+    if(data=='success'){
+ window.location='view_student.php?id=<?php echo $student_ID ?>';
+    }else{
+      alert("OOp! Could not delete .Please try again!");
+    }
+  
+  }
 
   });
   }
@@ -1553,7 +1574,28 @@ school_ID = '{$school_ID}'");
       'autoWidth'   : false
     })
   })
-
+ $(function () {
+    $('#invoice1').DataTable()
+    $('#invoice2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+ $(function () {
+    $('#paymentTable1').DataTable()
+    $('#paymentTable2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : false,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
 </script>
 
 <script >

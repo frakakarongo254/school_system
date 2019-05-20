@@ -3,6 +3,16 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../../index.php');
 }
+
+$school_ID = $_SESSION['login_user_school_ID'];
+#get sender and signature from email setting table
+$emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+$senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+
+
+$fromEmail=$senderemail_row['sender_email'];
+$fromSenderName=$senderemail_row['sender_name'];
+$footer=$senderemail_row['sender_signature'];
 ?>
 
 <?php include("include/header.php")?>
@@ -42,17 +52,17 @@ if (!velifyLogin()) {
           Email was sent  successfully.
           </div>';   
         }
-      if(isset($_POST['sendEmail'])){
-        $school_ID = $_SESSION['login_user_school_ID'];
-        #get sender and signature from email setting table
-         $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
-        $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-        $folder_path = 'document/';
-        $document="";
-
-        $from=$senderemail_row['sender_email'];
-        $fromName=$senderemail_row['sender_name'];
-        $footer=$senderemail_row['sender_signature'];
+        if(isset($_GET['failed'])){
+          echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+         Your contact request submission failed, please try again.
+          </div>';   
+        }
+      if(isset($_POST['sendEmailD'])){
+       
         $to=$_POST['email_to'];
         $subject=$_POST['email_subject'];
         $message=$_POST['email_message'];
@@ -75,7 +85,150 @@ if (!velifyLogin()) {
            echo "Sorry! Email was not sent";
         }
       }   
+
+
+ $postData = $uploadedFile = $statusMsg = '';
+$msgClass = 'errordiv';
+if(isset($_POST['sendEmail'])){
+    // Get the submitted form data
+    $postData = $_POST;
+     $to=$_POST['email_to'];
+      $subject=$_POST['email_subject'];
+      $message=$_POST['email_message'];
+        $message1=$_POST['email_message'];
+      $datetime = date_create()->format('Y-m-d H:i:s');
+    // Check whether submitted data is not empty
+    if(!empty($to)  && !empty($subject) && !empty($message)){
+#insert details to db
+          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,sender,message,date_sent 
+          ) 
+          values('$school_ID','$subject','$to','$fromEmail',' $message1','$datetime') ");
+
+        if ($sudent_insert_query) {
+          # code...
+        
+        // Validate email
+        if(filter_var($to, FILTER_VALIDATE_EMAIL) === false){
+            $statusMsg = 'Please enter your valid email.';
+        }else{
+            $uploadStatus = 1;
+            
+            // Upload attachment file
+            if(!empty($_FILES["attachment"]["name"])){
+                
+                // File path config
+                $targetDir = "document/";
+                $fileName = basename($_FILES["attachment"]["name"]);
+                $targetFilePath = $targetDir . $fileName;
+                $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+                
+                // Allow certain file formats
+                $allowTypes = array('pdf', 'doc', 'docx', 'jpg', 'png', 'jpeg');
+                if(in_array($fileType, $allowTypes)){
+                    // Upload file to the server
+                    if(move_uploaded_file($_FILES["attachment"]["tmp_name"], $targetFilePath)){
+                        $uploadedFile = $targetFilePath;
+                    }else{
+                        $uploadStatus = 0;
+                        $statusMsg = "Sorry, there was an error uploading your file.";
+                    }
+                }else{
+                    $uploadStatus = 0;
+                    $statusMsg = 'Sorry, only PDF, DOC, JPG, JPEG, & PNG files are allowed to upload.';
+                }
+            }
+            
+            if($uploadStatus == 1){
+                
+                // Recipient
+                 $toEmail = $_POST['email_to'];;
+
+                // Sender
+                $from = $fromEmail;
+                $fromName = $fromSenderName;
+                
+                // Subject
+                $emailSubject = $_POST['email_subject'];
+                
+                // Message 
+                $htmlContent = '<html><body>'.$message.'</body></html>';
+                
+                // Header for sender info
+                $headers = "From: $fromName"." <".$from.">";
+
+                if(!empty($uploadedFile) && file_exists($uploadedFile)){
+                    
+                    // Boundary 
+                    $semi_rand = md5(time()); 
+                    $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
+                    
+                    // Headers for attachment 
+                    $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
+                    
+                    // Multipart boundary 
+                    $message = "--{$mime_boundary}\n" . "Content-Type: text/html; charset=\"UTF-8\"\n" .
+                    "Content-Transfer-Encoding: 7bit\n\n" . $htmlContent . "\n\n"; 
+                    
+                    // Preparing attachment
+                    if(is_file($uploadedFile)){
+                        $message .= "--{$mime_boundary}\n";
+                        $fp =    @fopen($uploadedFile,"rb");
+                        $data =  @fread($fp,filesize($uploadedFile));
+                        @fclose($fp);
+                        $data = chunk_split(base64_encode($data));
+                        $message .= "Content-Type: application/octet-stream; name=\"".basename($uploadedFile)."\"\n" . 
+                        "Content-Description: ".basename($uploadedFile)."\n" .
+                        "Content-Disposition: attachment;\n" . " filename=\"".basename($uploadedFile)."\"; size=".filesize($uploadedFile).";\n" . 
+                        "Content-Transfer-Encoding: base64\n\n" . $data . "\n\n";
+                    }
+                    
+                    $message .= "--{$mime_boundary}--";
+                    $returnpath = "-f" . $to;
+                   
+                    // Send email
+                    $mail = mail($toEmail, $emailSubject, $message, $headers, $returnpath);
+                    
+                    // Delete attachment file from the server
+                    @unlink($uploadedFile);
+                }else{
+                     // Set content-type header for sending HTML email
+                    $headers .= "\r\n". "MIME-Version: 1.0";
+                    $headers .= "\r\n". "Content-type:text/html;charset=UTF-8";
+                    
+                    // Send email
+                    $mail = mail($toEmail, $emailSubject, $htmlContent, $headers); 
+                }
+                
+                // If mail sent
+                if($mail and  $sudent_insert_query){
+                    //$statusMsg = 'Your contact request has been submitted successfully !';
+                    //$msgClass = 'succdiv';
+                     echo '<script> window.location="email_compose.php?sent=True" </script>';
+                    $postData = '';
+                }else{
+                   // $statusMsg = 'Your contact request submission failed, please try again.'
+                     echo '<script> window.location="email_compose.php?failed=True" </script>';
+                }
+            }
+        }
+   }else{
+    echo 'Sorry error occured';
+   } 
+ }else{
+        $statusMsg = 'Please fill all the fields.';
+    }
+}
      ?>
+      <?php if(!empty($statusMsg)){ ?>
+            
+            <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+        <p class="statusMsg <?php echo !empty($msgClass)?$msgClass:''; ?>"><?php echo $statusMsg; ?></p>
+          </div>
+          <?php } ?>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -127,7 +280,9 @@ if (!velifyLogin()) {
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form method="POST" action="email_compose.php">
+                      <!-- Display submission status -->
+         
+             <form method="POST" action="email_compose.php" enctype="multipart/form-data">
               <div class="form-group">
                 <input class="form-control" placeholder="To:" name="email_to" required>
               </div>
@@ -140,9 +295,7 @@ if (!velifyLogin()) {
                $signt_row['sender_signature'];
               ?>
               <div class="form-group">
-                    <textarea id="compose-textarea" class="textarea form-control"   style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"name="email_message">
-                      
-                    </textarea>
+                    <textarea id="compose-textarea" class="textarea form-control"   style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"name="email_message"></textarea>
                      
               </div>
               <div class="form-group">
@@ -156,10 +309,10 @@ if (!velifyLogin()) {
             <!-- /.box-body -->
             <div class="box-footer">
               <div class="pull-right">
-                
-                <button type="submit" name="sendEmail" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
+                <button type="reset" class="btn btn-default"><i class="fa fa-times"></i> Discard</button>
+               
               </div>
-              <button type="reset" class="btn btn-default"><i class="fa fa-times"></i> Discard</button>
+               <button type="submit" name="sendEmail" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
             </div>
           </form>
             <!-- /.box-footer -->

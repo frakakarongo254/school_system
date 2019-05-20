@@ -95,67 +95,106 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
     <!-- /.content -->
      <section class="invoice">
       <!-- title row -->
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="page-">
-            <i class="pull-left"><?php echo $logo ?></i>
-            <small class="pull-right">Date: <?php echo date('d-m-Y ')?></small>
-          </div>
-        </div>
-        <!-- /.col -->
-      </div>
+      
       <!-- info row -->
-      <div class="row invoice-info">
-        <div class="col-sm-4 invoice-col">
-          From
-          <address>
-            <strong><?php echo $school_row['school_Name']?></strong><br>
-            Po. Box <?php echo $school_row['address_1']?><br>
-            Phone: <?php echo $school_row['phone']?><br>
-            Email: <?php echo $school_row['email']?><br>
-            Website:<?php echo $school_row['school_website']?>
-          </address>
-        </div>
-        <!-- /.col -->
-        <div class="col-sm-4 invoice-col">
-          To
-          <address>
-            <strong><?php echo $studentRegNo ." ". $studentName?> </strong><br>
-            
-          Parent<br>
-          <strong><?php echo $parentName;?></strong><br>
-            Phone: <?php echo $parentPhone ?><br>
-            Email: <?php echo $parentEmail ?><br>
-           
-          </address>
-        </div>
-        <!-- /.col -->
-        <div class="col-sm-4 invoice-col">
-          <b>Invoice #<?php echo $invoice_reff ?></b><br>
-          <br>
-          <b>Invoice Date:</b><?php echo $invoice_date ?><br>
-          
-          <b>Account:</b> <?php  ?>
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
 
-      <!-- Table row -->
       <div class="row">
-        <div class="col-xs-12 table-responsive">
-          <table class="table table-striped">
-            <thead>
-            <tr>
+        <!-- accepted payments column -->
+        <div class="col-md-12 " style="text-align: ;padding-left: 55px;" >
+        <?php
+          $content ='';
+$content .='<div style="border:1px solid green;width:720px;padding:0px 10px 0px 10px;background-color:#efefef" frame="" >';
+ $content .= '
+<table align="" border="0" cellpadding="0" cellspacing="0" width="710px" style="border-collapse: collapse;table-layout:fixed;border:;padding-left:15px;" >
+  <tr>
+  <td colspan="2"></td>
+      <td colspan="" style="height:50px;text-align:"><b style="font-weight:bold;font-size: 24px;">INVOICE</b></td>
+    </tr>
+ <tr>
+  <td width="300" valign="top">
+   <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    
+    <tr>
+     <td>
+      '. $logo .'
+     </td>
+    </tr>
+    <tr>
+     <td style="padding: 25px 0 0 0;">
+      <address>
+            <strong>'. $school_row['school_Name'].'</strong><br>
+            Po. Box '. $school_row['address_1'].'<br>
+            Phone: '. $school_row['phone'].'<br>
+            Email: '.$school_row['email'].'<br>
+            Website:'.$school_row['school_website'].'
+          </address>
+          <br>
+     </td>
+    </tr>
+   </table>
+  </td>
+  <td style="font-size: 0; line-height: 0;" width="200" style="200px">
+   &nbsp;
+  </td>
+  <td width="200" valign="top" style="text-align:;">
+   <table border="0" cellpadding="0" cellspacing="0" width="100%" >
+    <tr>
+     <td style="padding: 15px 0px 0px 0px;">
+      <p class="mb-none">
+        <strong><span class="text-dark">Invoice No #:</span>
+        <span class="value"> '.$invoice_reff.'</span></strong>
+    </p>
+     <p class="mb-none">
+        <span class="text-dark">Invoice Date:</span>
+        <span class="value"> '.date($invoice_date).'</span>
+    </p>
+    <p class="mb-none">
+        <span class="text-dark">Due Date:</span>
+        <span class="value">'.date($invoice_due_date).'</span>
+    </p>
+     </td>
+    </tr>
+    <tr>
+     <td style="padding: 15px 0px 0px 0px;">
+       <p class="h5 mb-xs text-dark text-semibold"><strong>Invoiced To:</strong></p>
+      
+          <address>
+            '. $studentRegNo ." ". $studentName .'<br>
+            
+          
            
-            <th> Product </th>
-            <th > Qty </th>
-            <th> Price </th>
-              <th>Subtotal</th>
+          </address>
+          <br>
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+ <tr>
+ <td style="font-size: 0; line-height: 0;" width="100" style="" colspan="3">
+   &nbsp;
+   <br><br>
+  </td>
+ </tr>
+ <tr >
+ 
+   <td colspan="3"  width="900px" style="width:900px">
+    <table border="0"  cellpadding="0" cellspacing="0"  border="" width="700px" style="700px" >
+       
+<col width="175">
+<col width="175">
+<col width="175">
+<col width="175">
+            <tr >
+           
+            <th style="text-align:left"> Item </th>
+            <th style="text-align:left" > Qty </th>
+            <th style="text-align:right" > Price </th>
+              <th style="text-align:right">Subtotal</th>
             </tr>
-            </thead>
-            <tbody>
-           <?php
+            <tr><td colspan="4"><hr style="color:red;background-color:black;"></td></tr>
+            ';
+           
         #get school Id from current session school id
 
         $query2 = mysqli_query($conn,"select * from invoice_item where invoice_id='".$get_invoice_ID."' and school_ID = '".$school_ID."' ")or
@@ -166,7 +205,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         $query3 = mysqli_query($conn,"select * from vote_head where vote_head_ID='".$vote_head_ID."' and school_ID = '".$school_ID."' ")or
         die(mysqli_error());
         while ($row3=mysqli_fetch_array($query3)){
-        echo' <tr>
+ $content .=' <tr >
                
                 <td>'.$row3['name'].'
              
@@ -174,57 +213,98 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
               
                </td>
                 <td>'.$row2['quantity'].'</td>
-                <td>'.$school_row['currency'] . ' '.formatCurrency($row2['price']).'</td>
-                <td>'.$school_row['currency'] . '<b> '.formatCurrency($row2['amount']).'</b></td>  
+                <td align="right">'.$school_row['currency'] . ' '.formatCurrency($row2['price']).'</td>
+                <td align="right">'.$school_row['currency'] . ' '.formatCurrency($row2['amount']).'</td>  
                 
              </tr>';
 
         }
 
         }
-        ?>
-            </tbody>
+        
+    $content .=   '  <tr>
+          <td colspan="4" width="">
+            <hr style="color:red;background-color:black;">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="right"><b>Grand Total</b></td>
+          <td align="right">
+            
+              '. $school_row['currency'] .   ' <b> '  .formatCurrency($invoice_amount).'</b>
+          </td>
+        </tr>
+           <tr>
+              <td colspan="2"></td>
+              <td colspan="2"><hr style="color:red;background-color:black;"></td>
+           </tr>
           </table>
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-
-      <div class="row">
-        <!-- accepted payments column -->
-        <div class="col-xs-6">
-          <p class="lead">Payment Methods:</p>
-          
-
-          <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+   </td>
+  
+ </tr>
+ <tr rowspan="3">
+   <td colspan="" width="">
+    <br>
+    <br>
+    <br>
+    <br>
+     
+   </td>
+ </tr>
+ <tr>
+   <td colspan="3">
+     <table>
+       <tr>
+         <td colspan="" width="520">
+           <b style="color: #FF5733">Terms & Conditions</b>
+         </td>
+         <td rowspan="2" align="center">
+           <span style="font-size: 20;font-weight: 800px;color: #FF5733;font-style: bold;"><b>Thank you</b></span>
+         </td>
+       </tr>
+       <tr>
+         <td>
+         Payment is due within ';
+        $date1 = new DateTime($invoice_due_date);
+        $date3=date('d-m-Y');
+        $date2 = new DateTime($date3);
+    if ($date2>$date1) {
+          # code...
+       $content .= ' by '.$date1->diff($date2)->format("%d") . "  days";
+        }else{
+         $content .= ' within '.$date1->diff($date2)->format("%d") ." days";
+        }
+      $content .= ' </td>
+       </tr>
+       <tr>
+         <td>
+            <p class="text-muted well well-sm " style="margin-top: 10px;">
              You can make payment via 
-           <?php 
+           ';
            $query3 = mysqli_query($conn,"select * from payment_mode where school_ID = '$school_ID' ")or
         die(mysqli_error());
         $mode="";
         while ($row03=mysqli_fetch_array($query3)){
          $mode=$mode.','.$row03['mode_name'];
         }
-        echo $mode;
-          ?>
-          </p>
-        </div>
-        <!-- /.col -->
-        <div class="col-xs-6">
-          <p class="lead"> Due Date: <?php echo $invoice_due_date ?></p>
-
-          <div class="table-responsive">
-            <table class="table">
-              
+       $content .=   $mode;
           
-            <th class="" style="width:50%">Grand Total</th>
-            <td class="">
-              
-              <?php echo $school_row['currency'] .   ' <b> '  .formatCurrency($invoice_amount).'</b>';?>
-            </td>
-          </tr>
-            </table>
-          </div>
+     $content .=    ' </p>
+         </td>
+       </tr>
+       <tr>
+         <td>
+           
+         </td>
+       </tr>
+     </table>
+   </td>
+ </tr>
+</table>
+';
+$content .= '</div>';
+echo '<div id="tabDiv">' .$content.'</div>';
+        ?>
         </div>
         <!-- /.col -->
       </div>
@@ -233,12 +313,10 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
       <!-- this row will not appear when printing -->
       <div class="row no-print">
         <div class="col-xs-12">
-          <a href="#" target="_blank" class="btn btn-default" id="<?php echo $get_invoice_ID?>" onclick="print_invoice(this.id)" data-toggle="modal" data-target="#Print_invoice_Modal"><i class="fa fa-print" ></i> Print</a>
-         <a href="invoice.php"> <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
-          </button></a>
-         <!-- <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
-            <i class="fa fa-download"></i> Generate PDF
-          </button>-->
+          <br>
+          <a href="#"  class="btn btn-default" id="<?php echo $get_invoice_ID?>" onclick="createPDF()" ><i class="fa fa-print" ></i> Print</a>
+         
+       
         </div>
       </div>
        <!-- open Print statement-->
@@ -278,6 +356,33 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
           });
         } 
   
+function createPDF() {
+ 
+       var sTable = document.getElementById('tabDiv').innerHTML;
+        //var sTable = <?php //echo $content ?>;
+        var style = "<style>";
+        style = style + "table {width: 100%;font: 17px Calibri;}";
+        style = style + "table, th, td {border: solid 0px #DDD; border-collapse: collapse;";
+        style = style + "padding: 2px 3px;;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=700,width=700');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>Profile</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+
+        win.document.close();   // CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+    }
+
+
             </script>
           
           
@@ -338,16 +443,17 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   });
   }
   function emailInvoiceToParent(invoice_id){
-    //alert(invoice_id);
+   // alert(invoice_id);
     document.getElementById('email_parent').innerHTML='<b>LOADING ...</b>';
      var details= '&invoice_id='+invoice_id;
+     //alert(details);
      $.ajax({
   type: "POST",
-  url: "print_invoicePDF.php",
+  url: "email_invoicePDF.php",
   data: details,
   cache: false,
   success: function(det) {
-   // alert(det);
+    //alert(det);
     //$.toast('Toast message to be shown');
     if (det=='success') {
      alert("Email Sent successfully");
