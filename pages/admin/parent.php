@@ -3,6 +3,86 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../../index.php');
 }
+ $school_ID = $_SESSION['login_user_school_ID'];
+if(isset($_POST["Export"])){
+     //echo "yes";
+    // $filename = "members_" . date('Y-m-d') . ".csv";
+      header('Content-Type: text/csv; charset=utf-8');  
+      header('Content-Disposition: attachment; filename=data.csv');  
+      $output = fopen("php://output", "w");  
+      fputcsv($output, array('first_Name', 'last_Name', 'password', 'cell_Mobile_Phone',' gender_MFU', 'nationality', 'email', 'profession'));  
+      $queryz = "SELECT first_Name, last_Name, password, cell_Mobile_Phone, gender_MFU, nationality, email, profession from parents where school_ID='".$school_ID."' ORDER BY id ASC";  
+      $resultz = mysqli_query($conn, $queryz);  
+      
+      while($rowz = mysqli_fetch_assoc($resultz))  
+      {  
+         
+           fputcsv($output, $rowz);  
+      }  
+      fclose($output);  
+      //return ob_get_clean();
+    exit();
+ } 
+
+
+ if(isset($_POST["importBtn"])){
+    
+    $filename=$_FILES["importFile"]["tmp_name"];    
+
+
+     if($_FILES["importFile"]["size"] > 0)
+     {
+        $file = fopen($filename, "r");
+        $count = 0;
+         $x=0;
+          while (($getData = fgetcsv($file, 10000, ",")) !== FALSE)
+           {
+
+             $count++; 
+            if($count>1)
+            { 
+                
+            
+            $x++;
+              $randstd = substr(number_format(time() * rand(),0,'',''),0,10 + $x);
+              $parent_ID=md5($randstd);
+              $first_Name = mysqli_real_escape_string($conn,$getData[0]);
+              $last_Name = mysqli_real_escape_string($conn,$getData[1]);
+              $password = mysqli_real_escape_string($conn,$getData[2]);
+              $cell_Mobile_Phone = mysqli_real_escape_string($conn,$getData[3]);
+              $gender_MFU = mysqli_real_escape_string($conn,$getData[4]);
+              $address = mysqli_real_escape_string($conn,$getData[5]);
+              $nationality = mysqli_real_escape_string($conn,$getData[6]);
+              $email = mysqli_real_escape_string($conn,$getData[7]);
+              $profession = mysqli_real_escape_string($conn,$getData[8]);
+              
+                        
+             $sql = "INSERT into parents (parent_ID,school_ID,first_Name, last_Name, password, cell_Mobile_Phone, gender_MFU, nationality, email, profession) 
+                   values ('".$parent_ID."','".$school_ID."','".$first_Name."','".$last_Name."','".$password."','".$cell_Mobile_Phone."','".$gender_MFU."','". $nationality."','".$email."','".$profession."')";
+                   $result = mysqli_query($conn, $sql);
+
+
+        if(!isset($result))
+        {
+          echo "<script type=\"text/javascript\">
+              alert(\"Invalid File:Please Upload CSV File.\");
+              window.location = \"parent.php\"
+              </script>"; 
+              //mysql_error()  
+        }
+        else {
+           echo "<script type=\"text/javascript\">
+            alert(\"CSV File has been successfully Imported.\");
+            window.location = \"parent.php\"
+          </script>";
+        }
+           }
+         }
+      
+           fclose($file); 
+     }
+  }  
+
 ?>
 
 <?php include("include/header.php")?>
@@ -233,8 +313,19 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Parents</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a></div>
+              <div class="col-md-6"><b><h3>Parents</h3> </b></div>
+              <div class="col-md-2">
+                
+                <form action="" method="POST">
+                  <button type="submit" class="btn" id="button1" style="color:#fff" name="Export" onclick="">Export</button>
+
+                </form>
+              </div>
+              <div class="col-md-2">
+              
+                <button href="#" class="btn" id="button1" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
+              </div>
+              <div class="col-md-2 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a></div>
             </div>
             </div>
             
@@ -527,7 +618,30 @@ if (!velifyLogin()) {
       </div>
     </div>
      </div>
-
+  <!-- Import student-->
+ <div class="modal fade" id="modal-importStudent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Upload CSV file</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+         <form id="fileinfo" name="" action="parent.php" method="POST" enctype="multipart/form-data">
+           <input type="file" name="importFile" class="form-control" value="upload">
+         
+        </div>
+          <div class="modal-footer">
+            <button type="submit" class="pull-left btn btn-primary" name="importBtn" href="#">Upload</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
     <!-- Link  student  with parent Modal-->
     <div class="modal  fade" id="link_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

@@ -16,4 +16,5 @@ foreach ($query_event as $row_event) {
 
 echo json_encode($events);
 
+
 ?>

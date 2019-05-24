@@ -393,7 +393,11 @@ if (!velifyLogin()) {
                  
                   <div style="border: ;height: 100px;width: 100px;">
                    
-                     <?php echo '<img  id="blah" src="data:image/jpeg;base64,'.base64_encode( $rows_details['photo'] ).'"  height="100px" width="100px" />';?>
+                     <?php  if ($rows_details['photo'] !='') {
+                     echo '<img  id="blah" src="data:image/jpeg;base64,'.base64_encode( $rows_details['photo'] ).'"  height="100px" width="100px" />';
+                     } else{
+                  echo    $img = "<img src='../../dist/img/user.jpg' class='img-circle' alt='User Image' height='90px' width='90px'>";
+                   }?>
                  </div>
                  <br>
                   <span class="btn btn-default btn-file">

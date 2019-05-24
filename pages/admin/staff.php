@@ -72,6 +72,10 @@ if (!velifyLogin()) {
       $staff_phone=$_POST['staff_phone'];
       $staff_email=$_POST['staff_email'];
       $staff_gender=$_POST['staff_gender'];
+
+      #generate staff id
+      $randstaffID = substr(number_format(time() * rand(),0,'',''),0,11);
+        $staff_ID=md5($randstaffID);
          # check image
        if(isset($_FILES['staff_photo']['name']) and !empty($_FILES['staff_photo']['name'])){
            $file=$_FILES['staff_photo']['name'];
@@ -88,9 +92,9 @@ if (!velifyLogin()) {
           $uploadOk = 0;
           }else{
              $staff_photo = addslashes(file_get_contents($_FILES['staff_photo']['tmp_name']));
-            $staff_insert_query=mysqli_query($conn,"insert into `staff` (school_ID, 
+            $staff_insert_query=mysqli_query($conn,"insert into `staff` (staff_ID,school_ID, 
           full_Name,staff_No,gender,email,phone,nationality,role,photo) 
-          values('$school_ID','$staff_name','$staff_no','$staff_gender','$staff_email','$staff_phone','$staff_nationality','$staff_role','$staff_photo') ");
+          values('$staff_ID','$school_ID','$staff_name','$staff_no','$staff_gender','$staff_email','$staff_phone','$staff_nationality','$staff_role','$staff_photo') ");
         if($staff_insert_query){
           
            echo '<script> window.location="staff.php?insert=True" </script>';
@@ -105,9 +109,9 @@ if (!velifyLogin()) {
        }
           }
         }else{
-            $staff_insert_query=mysqli_query($conn,"insert into `staff` (school_ID, 
+            $staff_insert_query=mysqli_query($conn,"insert into `staff` (staff_ID,school_ID, 
           full_Name,staff_No,gender,email,phone,nationality,role) 
-          values('$school_ID','$staff_name','$staff_no','$staff_gender','$staff_email','$staff_phone','$staff_nationality','$staff_role') ");
+          values('$staff_ID','$school_ID','$staff_name','$staff_no','$staff_gender','$staff_email','$staff_phone','$staff_nationality','$staff_role') ");
         if($staff_insert_query){
           
            echo '<script> window.location="staff.php?insert=True" </script>';
@@ -257,8 +261,8 @@ if (!velifyLogin()) {
                     }
                     
                   echo" <tr>
-                           <td>
-                             ".$img."
+                           <td><a href='view_staff.php?id=".$staff_ID."'>
+                             ".$img."</a>
                            </td>
                             <td>".$row1['full_Name']."</td>
                             <td>".$row1['email']." </td>

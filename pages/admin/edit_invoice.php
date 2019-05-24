@@ -105,9 +105,10 @@ $que=mysqli_query($conn,"update `invoice` SET amount='".$total_amount."', balanc
    // echo '<script> window.location="edit_invoice.php?invoice='.$get_invoice_ID.'&update=true" </script>'; 
       } 
       if($query1){
+       
         $que02=mysqli_query($conn,"update `statement` SET Debit='".$total_amount."' where `ref_no`='".$invoice_ref_no."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
-  //echo $invoice_ref_no;
-     // echo '<script> window.location="edit_invoice.php?invoice='.$get_invoice_ID.'&update=true" </script>'; 
+ //echo $invoice_ref_no;
+     echo '<script> window.location="edit_invoice.php?invoice='.$get_invoice_ID.'&update=true" </script>'; 
       }
 
       }else{

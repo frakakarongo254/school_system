@@ -12,7 +12,7 @@ if (!velifyLogin()) {
    $get_invoice_ID=$_GET['invoice_id'];
  }
  #get details form invoice
- $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='$get_invoice_ID' and `school_ID` = '".$school_ID."' ");
+ $sql02 = mysqli_query($conn,"select * from `invoice` where  invoice_ID='".$get_invoice_ID."' and `school_ID` = '".$school_ID."' ");
  $row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
  $invoice_amount=$row02['amount'];
  $due_date=$row02['due_date'];
@@ -25,17 +25,17 @@ if (!velifyLogin()) {
  $invoice_reff=$row02['reff_no'];
 
   #get student details
-  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID=' $invoice_student_id' and `school_ID` = '".$school_ID."' ");
+  $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."' ");
   $row03 = mysqli_fetch_array($sql03 ,MYSQLI_ASSOC);
  $studentName=$row03['first_Name'] ." ". $row03['last_Name'];
 $studentId=$row03['student_ID'];
 $studentRegNo=$row03['registration_No'];
 
 #get parent details
-  $sql033 = mysqli_query($conn,"select * from `parent_relation` where  student_ID='$invoice_student_id' and `school_ID` = '".$school_ID."'  LIMIT 1");
+  $sql033 = mysqli_query($conn,"select * from `parent_relation` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."'  LIMIT 1");
   $row033 = mysqli_fetch_array($sql033 ,MYSQLI_ASSOC);
  $parentID=$row033['parent_ID'] ;
-  $sql034 = mysqli_query($conn,"select * from `parents` where  parent_ID='$parentID' and `school_ID` = '".$school_ID."' ");
+  $sql034 = mysqli_query($conn,"select * from `parents` where  parent_ID='".$parentID."' and `school_ID` = '".$school_ID."' ");
   $row034 = mysqli_fetch_array($sql034 ,MYSQLI_ASSOC);
   $parentName=$row034['first_Name']." ".$row034['last_Name'];
   $parentPhone=$row034['cell_Mobile_Phone'];
@@ -51,7 +51,7 @@ $logo;
 if($school_row['logo_image'] !=''){
 $logo = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="90" width="90px" />';
 }else{
-$logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
+$logo = "<img class='profile-user-img img-responsive img-circle' src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
 }
 
  
@@ -222,12 +222,17 @@ $content .='<div style="border:1px solid green;width:720px;padding:0px 10px 0px 
        </tr>
        <tr>
          <td>
-         Payment is due within ';
+         Payment is due';
+      
         $date1 = new DateTime($invoice_due_date);
         $date3=date('d-m-Y');
         $date2 = new DateTime($date3);
-    $content .= $date2->diff($date1)->format("%d");
-      
+    if ($date2>$date1) {
+          # code...
+       $content .= ' by '.$date1->diff($date2)->format("%d") . "  days";
+        }else{
+         $content .= ' within '.$date1->diff($date2)->format("%d") ." days";
+        }
       $content .= ' </td>
        </tr>
        <tr>

@@ -8,6 +8,9 @@ if (!velifyLogin()) {
  if (isset($_POST['student_id'])) {
    # code...
   $get_student_ID=$_POST['student_id'];
+ }elseif (isset($_GET['student_id'])) {
+   # code...
+  $get_student_ID=$_GET['student_id'];
  }
 
   #get student details
@@ -131,7 +134,11 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                         while($rows = $result->fetch_assoc()) {
                         $total_Debit= $total_Debit + $rows["Debit"];
                         $total_Credit=$total_Credit + $rows["Credit"];
-                        $total_balance=$total_Credit + $total_Debit;
+                        $total_balance= $total_Debit - $total_Credit;
+                        if ($total_balance < 0) {
+                          # code...
+                           $total_balance=  $total_Credit - $total_Debit;
+                        }
                         $date_created= $rows['date_created'];
                         $newDate = date("d-m-Y", strtotime($date_created));
                        

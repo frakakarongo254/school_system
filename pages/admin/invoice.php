@@ -179,7 +179,7 @@ if (!velifyLogin()) {
                             <tbody>
                                <?php
                                
-                               $query2 = mysqli_query($conn,"select * from invoice where  date(invoice_date) between date('$printFromDate') and date('$printFromTo')  and school_ID = '$school_ID' ORDER BY date('$printFromDate')  DESC ")or
+                               $query2 = mysqli_query($conn,"select * from invoice where  date(invoice_date) between date('$printFromDate') and date('$printFromTo')  and school_ID = '".$school_ID."' ORDER BY date('$printFromDate')  DESC ")or
                                die(mysqli_error());
                                $total_amount=0.00;
                                while ($row2=mysqli_fetch_array($query2)){
@@ -187,6 +187,11 @@ if (!velifyLogin()) {
                                $invoiveID= $row2['invoice_ID'];
                                 $invoive_date= $row2['invoice_date'];
                                 $studentid= $row2['student_ID'];
+                                $Inv_balance= $row2['amount'] - $row2['amount_paid'];
+                                if ($Inv_balance < 0) {
+                                  # code...
+                                  $Inv_balance=0.00;
+                                }
                                $newDate = date("d-m-Y", strtotime($invoive_date));
                                 $total_amount=0.00;
                               $query3 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
@@ -201,13 +206,13 @@ if (!velifyLogin()) {
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['summury']." </td>
                                         <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
-                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
+                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($Inv_balance)."</b></td>";
                                          
                                           
                                       
                                        echo' 
                                           <td>
-                                          <a href="print_invoice.php?invoice_id='.$invoiveID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                          <a href="#"  class="btn btn-primary badge" onclick="myFunction(this.id)" id="'.$invoiveID.'"> <span class="glyphicon glyphicon-print"></span>  Print </a>
 
                                            <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
@@ -257,6 +262,11 @@ if (!velifyLogin()) {
                                 $studentid= $row2['student_ID'];
                                $newDate = date("d-m-Y", strtotime($invoive_date));
                                 $total_amount=0.00;
+                                 $Inv_balance= $row2['amount'] - $row2['amount_paid'];
+                                if ($Inv_balance < 0) {
+                                  # code...
+                                  $Inv_balance=0.00;
+                                }
                               $query3 = mysqli_query($conn,"select * from student where student_ID='$studentid' and school_ID = '$school_ID' ");
                               
                                while ($row3=mysqli_fetch_array($query3)){
@@ -269,7 +279,7 @@ if (!velifyLogin()) {
                                          <td>".$reg ." ".$name."</td>
                                         <td>".$row2['summury']." </td>
                                         <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['amount'])."</b></td>
-                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($row2['balance'])."</b></td>";
+                                        <td align='right'>".$school_row['currency'] .   "<b> " .formatCurrency($Inv_balance)."</b></td>";
                                          
                                           
                                       

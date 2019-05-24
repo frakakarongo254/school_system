@@ -19,7 +19,7 @@ $staff_image;
 if($staff_row['photo'] !=''){
 $staff_image = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $staff_row['photo'] ).'"  height="90" width="90px" />';
 }else{
-$staff_image = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
+$staff_image = "<img class='profile-user-img img-responsive img-circle' src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
 }
 ?>
 <?php include("include/header.php")?>

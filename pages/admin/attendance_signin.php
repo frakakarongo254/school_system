@@ -39,7 +39,7 @@ if (!velifyLogin()) {
           aria-hidden="true">
           &times;
           </button>
-          Success! Attendance updated  successfully.
+          Success! Attendance signed successfully.
           </div>';   
         }
         if(isset($_GET['link'])){
@@ -96,7 +96,7 @@ if (!velifyLogin()) {
           aria-hidden="true">
           &times;
           </button>
-          Attendance has been added successfully.
+          Attendance has been signed successfully.
           </div>';   
       // echo '<script> window.location="attendance.php?insert=True" </script>';
     }else{
@@ -109,7 +109,52 @@ if (!velifyLogin()) {
           </div>';   
     }
 }
+ if(isset($_POST['submitSignIn'])){//to run PHP script on submit
+  $query1='';
+if(!empty($_POST['check'])){
+// Loop to store and display values of individual checked checkbox.
+foreach($_POST['check'] as $selected){
+//echo $selected."</br>";
+}
+$signedBy=$_POST['signedBy'];
+ $attendanceTime=$_POST['attendanceTime'];
+$Date= date('Y/m/d');
 
+for($i = 0; $i<count($_POST['check']); $i++)  
+{  
+ $studentID=$_POST['check'][$i]."</br>"; 
+ $classId = $_POST['classId'][$i]."</br>";
+$que = mysqli_query($conn,"select * from attendance where student_ID='".$_POST['check'][$i]."' and date_entered='".$Date."' and school_ID = '".$school_ID."' ")or
+    die(mysqli_error());
+    if (mysqli_num_rows($que) == 0) {
+    $query1=mysqli_query($conn,"INSERT INTO attendance 
+SET   
+signed_in_by = '{$signedBy}',  
+sign_in_time = '{$attendanceTime}',
+student_ID = '{$_POST['check'][$i]}',  
+class_ID = '{$_POST['classId'][$i]}',  
+date_entered = '{$Date}',  
+school_ID = '{$school_ID}'"); 
+echo '<script> window.location="manage_attendance.php?insert=True" </script>';
+    }else{
+      
+     
+    }
+                   
+
+//echo '<script> window.location="createinvoice.php?invoice=True" </script>'; 
+} 
+
+}else{
+	 echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+         No student selected.
+          </div>';   
+}
+}
     
       ?>
     </section>
@@ -120,12 +165,21 @@ if (!velifyLogin()) {
         <div class="col-md-12">
           <div class="box">
             <div class="box-header">
-             <div class="row">
-              <form  method="POST" action="attendance.php">
-              <div class="col-md-6">
+              <div><b><h2>SIGN IN ATTENDANCE</h2></b></div>
+            </div>
+            
+            <!-- /.box-header -->
+            <div class="box-body">
+              
+     <div class="row">
+      <div class="col-md-12">
+       
+        
+       <form  method="POST" action="attendance_signin.php">
+              <div class="col-md-3">
                  <div class=" form-group">
                 
-                  <select class="form-control select2" name="attendance_class__id" style="width: 100%;" required>
+                  <select class="form-control select2" onchange="" name="attendance_class__id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
                   <?php
                  $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
@@ -147,77 +201,168 @@ if (!velifyLogin()) {
                 <button type="submit" class="btn btn-success" name="searchAttendance">Search</button>
               </div>
              </form>
-            </div>
-            </div>
-            
-            <!-- /.box-header -->
-            <div class="box-body">
-               
-     
-     
-       
-       <form action="" method="post">
-              <table id="" class="table table-bordered table-striped">
+             
+       </div>
+     </div>
+     <div class="row">
+      <form method="POST" action="attendance_signin.php">
+      <div class="col-md-4">
+         <br>
+         <br>
+         <br>
+        <div class="form-group">
+          <input type="text" name="signedBy" class="form-control" placeholder="Signed in By"required>
+
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+        <div class="input-group date">
+          <?php
+          $currentTimeinSec = time(); 
+          $currentDateTime = date('F d Y', $currentTimeinSec);
+          $time =date("h:i:sa"); ?>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control pull-right" id="datepicker" value="<?php echo $currentDateTime ?>" disabled>
+                </div>
+                </div>
+                <div class="col-md-6">
+             <div class="form-group">
+                  
+
+                  <div class="input-group">
+                    <input type="text" name="attendanceTime" class="form-control timepicker" required>
+
+                    <div class="input-group-addon">
+                      <i class="fa fa-clock-o"></i>
+                    </div>
+                  </div>
+                  <!-- /.input group -->
+                </div>
+                <br>
+                
+                </div>
+              </div>
+           <div class="form-group">
+                   <button type="submit" name="submitSignIn" class="btn " id="button1">Signin</button>
+                </div>
+      </div>
+      <div class="col-md-8">
+        <div class="" id="">
+         <label>
+                  <input type="checkbox" id="select_all" class="" style="width: 20px;height: 20px;"> All
+                </label>
+              </div>
+        <div id="signInDiv">
+
+           <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>#</th>
+                <th>#</th>
                   <th>Img</th>
                   <th>Name</th>
-                  <th>Attendance</th>
-                  
+                  <th>Admin No</th>
+                  <th>Gender</th>
+                 
                 </tr>
                 </thead>
                 <tbody>
-                  <?php
-                  if (isset($_POST['searchAttendance'])) {
-                   echo $classID=$_POST['attendance_class__id'];
-                  
-                     $query2 = mysqli_query($conn,"select * from student where class_ID =' $classID' and school_ID = '$school_ID'")or
+
+                <?php
+                if(isset($_POST['searchAttendance'])){
+                  $classID=$_POST['attendance_class__id'];
+                   #get school Id from current session school id
+                   $school_ID = $_SESSION['login_user_school_ID'];
+                   $query2 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' and class_ID='".$classID."' ")or
                    die(mysqli_error());
-                   $x=0;
                    while ($row1=mysqli_fetch_array($query2)){
-                    $x ++;
                    $student_regNoID= $row1['registration_No'];
+                   $status;
+                   if($row1['status'] =='Admitted'){
+                     $status='Active';
                   
+                   }else{
+                    $status=$row1['status'];
+                   }
                    $img;
                    if($row1['photo'] !=''){
                      $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
                   }else{
-                      $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                       
                     }
-                    $fullName=$row1['first_Name']." ". $row1['last_Name'];
+                    $stdId=$row1['student_ID'];
+                    $class_Id=$row1['class_ID'];
+                    // encryption function 
+  
+                  
+                  //$id =  base64_url_encode($stdId);
+                  echo" <tr>
+                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$stdId."'></td>
+                  <td><input type='hidden' value='".$class_Id."' name='classId[]'><a href='view_student.php?id=".$stdId."'>".$img."</a></td>
+                  <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
+                  <td>".$row1['registration_No']." </td>
+                  <td>".$row1['gender_MFU']."</td>
+                   
+                  ";
+              #send student id as a session to the next page of view student
 
-                  echo"  <input type='hidden' name='classID' value='".$classID."' />
-                  <tr>
-                     
-                   <td>".$row1['registration_No']." <input type='hidden' name='student_ID[]' value='".$row1['student_ID']."' /></td>
-                  <td>".$img."</td>
-                  <td>".$row1['first_Name']." ". $row1['last_Name']."<input type='hidden' name='student_name[]' value='".$fullName."' /></td>";
-                 
-                echo' <td>
-                    <label for="present4">
-                        <input type="radio" id="present'.$x.'" name="attendance_status['.$x.']" value="Present"> Present
-                    </label>
-                    <label for="absent4">
-                        <input type="radio" id="absent'.$x.'" name="attendance_status['.$x.']" value="Absent"> Absent
-                    </label>
-                </td>
-                 
-                  </tr>';
+                   
+                 echo' </tr>';
                     }
-                    
+                  }else{
+                    $query2 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' ")or
+                   die(mysqli_error());
+                   while ($row1=mysqli_fetch_array($query2)){
+                   $student_regNoID= $row1['registration_No'];
+                   $status;
+                   if($row1['status'] =='Admitted'){
+                     $status='Active';
+                  
+                   }else{
+                    $status=$row1['status'];
+                   }
+                   $img;
+                   if($row1['photo'] !=''){
+                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                  }else{
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      
+                    }
+                    $stdId=$row1['student_ID'];
+                    $class_Id=$row1['class_ID'];
+                    // encryption function 
+  
+                  
+                  //$id =  base64_url_encode($stdId);
+                  echo" <tr>
+                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$stdId."'></td>
+                  <td><input type='hidden' value='".$class_Id."' name='classId[]'<a href='view_student.php?id=".$stdId."'>".$img."</a></td>
+                  <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
+                  <td>".$row1['registration_No']." </td>
+                  <td>".$row1['gender_MFU']."</td>
+                   
+                  ";
+              #send student id as a session to the next page of view student
+
+                   
+                 echo' </tr>';
+                    }
                   }
-                   
-                   
-                  ?>
-               
-               
-                 </tbody>
+               ?>
+              </tbody>
                
               </table>
-              <button type="submit" class=" btn btn-primary" href="#" name="saveAttendanceBtn" ><i class="fa fa-"></i><b> Control Attendace</b></button>
-            </form>
+
+        </div>
+      </div>
+     </form>
+   </div>
+    
+       
+        
+         
             </div>
             <!-- /.box-body -->
           </div>
@@ -344,6 +489,52 @@ if (!velifyLogin()) {
 
 <!-- include script-->
 <?php include("include/script.php")?>
+<script>
+var select_all = document.getElementById("select_all"); //select all checkbox
+var checkboxes = document.getElementsByClassName("checkbox"); //checkbox items
+
+//select all checkboxes
+select_all.addEventListener("change", function(e){
+  for (i = 0; i < checkboxes.length; i++) { 
+    checkboxes[i].checked = select_all.checked;
+  }
+});
+
+
+for (var i = 0; i < checkboxes.length; i++) {
+  checkboxes[i].addEventListener('change', function(e){ //".checkbox" change 
+    //uncheck "select all", if one of the listed checkbox item is unchecked
+    if(this.checked == false){
+      select_all.checked = false;
+    }
+    //check "select all" if all checkbox items are checked
+    if(document.querySelectorAll('.checkbox:checked').length == checkboxes.length){
+      select_all.checked = true;
+    }
+  });
+}
+</script>
+<script >
+  function signinDetails(class_id) {
+    //alert(class_id);
+    //var info=document.getElementById("hiddenDiv").outerHTML;
+   // alert(info);
+    var details= '&class_id='+ class_id;
+    $.ajax({
+  type: "POST",
+  url: "attendance_signin.php",
+  data: details,
+  cache: false,
+  success: function(result) {
+   // $("#checkAllboxDiv").html(data);
+   // document.getElementById("checkAllboxDiv").innerHTML=info;
+     $("#signInDiv").html(result);
+  
+  }
+
+  });
+};
+</script>
 <!-- page script -->
 <script>
   $(function () {
@@ -360,28 +551,6 @@ if (!velifyLogin()) {
 
 </script>
 
-<script >
-  function deleteParentFromSystem(parent_ID){
-   
-  var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
-  //alert(id);
-  var details= '&parent_ID='+ parent_ID;
-  $.ajax({
-  type: "POST",
-  url: "delete_parent.php",
-  data: details,
-  cache: false,
-  success: function(data) {
-    if(data=='success'){
- window.location="parent.php?delete=True" 
-    }else{
-      alert("OOp! Could not delete the student.Please try again!");
-    }
-  
-  }
 
-  });
-  }
-</script>
 </body>
 </html>

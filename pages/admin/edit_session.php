@@ -23,7 +23,7 @@ echo '<form  action="class.php" method="POST">
              <input type="hidden" name="edit_session_id" value="'.$rows_session ['session_ID'].'">
               <div class="form-group">
                
-              <select class="form-control select2" name="edit_session_carricula_id" style="width: 100%;" placeholder="Title eg Term, Session" required >
+              <select class="form-control " name="edit_session_carricula_id" style="width: 100%;" placeholder="Title eg Term, Session" required >
                     <option value="'.$carricula_Id.'">'.$carri_Name_row['name'].'</option>
                   ';
                  $query3= mysqli_query($conn,"select * from carricula where school_ID = '".$_SESSION['login_user_school_ID']."'")or
@@ -37,7 +37,7 @@ echo '<form  action="class.php" method="POST">
                </div>
                <div class="form-group">
                 
-              <select class="form-control select2" name="edit_session_title" style="width: 100%;" required>
+              <select class="form-control " name="edit_session_title" style="width: 100%;" required>
                   <option value="'.$rows_session['session_title'].'">'.$rows_session['session_title'].'</option>
                   <option value="Tearm">Term</option>
                   <option value="Semester">Semester</option>
@@ -46,7 +46,7 @@ echo '<form  action="class.php" method="POST">
                </div>
                 <div class="form-group">
                 
-              <select class="form-control select2" name="edit_session_name" style="width: 100%;" required>
+              <select class="form-control " name="edit_session_name" style="width: 100%;" required>
                 <option value="'.$rows_session['session_name'].'">'.$rows_session['session_name'].'</option>
                  <option value="Term 1">Term 1</option>
                   <option value="Term 2">Term 2</option>

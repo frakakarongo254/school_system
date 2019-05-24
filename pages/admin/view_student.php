@@ -718,7 +718,7 @@ school_ID = '{$school_ID}'");
                     </div>
                     <div class="tab-pane" id="tab_4">
                       <div class="col-md-8"><b><h3>Statement</h3> </b></div>
-                      <div class="col-md-4 col-pull-right" style="text-align:right;text-decoration: none;"><a class="button1"  id="<?php echo  $student_ID;?>"onclick="printSatement(this.id)" target="_blank"     data-toggle="modal" data-target="#print_statement_Modal" ><b style="color: #fff"> <i class="fa fa-print"></i> Print Statement</b></a></div>
+                      <div class="col-md-4 col-pull-right" style="text-align:right;text-decoration: none;"><a href="#" class="button1"  id="<?php echo  $student_ID;?>"onclick="printStatemetFun(this.id)" target=""     data-toggle="modal" data-target="#print_statement_Modalk" ><b style="color: #fff"> <i class="fa fa-print"></i> Print Statement</b></a></div>
 
                          <table id="table11" class="table table-bordered table-striped">
                             <thead>
@@ -1032,8 +1032,9 @@ school_ID = '{$school_ID}'");
                             <tbody>
                                <?php
                                $total_bal=0.00;
+                                $tol_amount_paid=0.00;
                                 $total_amount_invoiced=0.00;
-                           
+                                 $sub_bal=0.00;
                               // $name= $row2['first_Name']." ".$row2['last_Name'];
                               $que2 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                              die(mysqli_error());
@@ -1041,12 +1042,17 @@ school_ID = '{$school_ID}'");
                              
                              while ($row_in=mysqli_fetch_array($que2)){
                               $total_amount_invoiced= $total_amount_invoiced + $row_in['amount']  ;
-                              $total_bal=$total_bal + $row_in['balance'];
+                              $sub_bal=$row_in['amount'] - $row_in['amount_paid'];
+                              $tol_amount_paid=$tol_amount_paid + $row_in['amount_paid'];
                                $invoiveID= $row_in['invoice_ID'];
                                 $invoive_date= $row_in['invoice_date'];
                                 $studentid= $row_in['student_ID'];
                                $newDate = date("d-m-Y", strtotime($invoive_date));
                                 $total_amount=0.00;
+                               if ($sub_bal < 0) {
+                                 # code...
+                                $sub_bal= 0.00;
+                               }
                               echo' <tr>
                                    <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row_in['reff_no'].' </a></td>';
 
@@ -1054,7 +1060,7 @@ school_ID = '{$school_ID}'");
                                         
                                         <td>".$row_in['summury']." </td>
                                         <td align='right'>".$school_row['currency'] .   "  " .formatCurrency($row_in['amount'])."</td>
-                                        <td align='right'>".$school_row['currency'] .   "  " .formatCurrency($row_in['balance'])."</td>";
+                                        <td align='right'>".$school_row['currency'] .   "  " .formatCurrency( $sub_bal)."</td>";
                                          
                                           
                                       
@@ -1075,7 +1081,9 @@ school_ID = '{$school_ID}'");
                                   </td>
                                   <td align='right'>
                                     
-                                    <?php echo $school_row['currency'] .   ' <b> '  .formatCurrency($total_bal).'</b>';?>
+                                    <?php 
+                                  $Total_bal= $total_amount_invoiced - $tol_amount_paid;
+                                    echo $school_row['currency'] .   ' <b> '  .formatCurrency($Total_bal).'</b>';?>
                                   </td>
                                 </tr>
                              </tbody>
@@ -1461,6 +1469,12 @@ school_ID = '{$school_ID}'");
 
 <!-- include script-->
 <?php include("include/script.php")?>
+<script>
+  function printStatemetFun(id){
+    window.open("print_statement.php?student_id="+ id , "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=1000");
+  }
+  
+</script>
 <script >
  
   //delete invoice item function
@@ -1600,7 +1614,7 @@ school_ID = '{$school_ID}'");
 
 <script >
   function deleteDocumentFromSystem(documentId){
-    alert(documentId);
+   
   var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
   //alert(id);
   var details= '&document_id='+ documentId;

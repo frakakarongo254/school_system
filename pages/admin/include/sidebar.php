@@ -47,21 +47,12 @@
           </a>
         </li>
         
-        <li class="treeview ">
-          <a href="#"  style="font-size: px;color: #fff">
-            <i class="fa fa-bar-chart"></i>
-
-
-            <span>Attendance</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+        
+        <li class="">
+          <a href="manage_attendance.php"  style="font-size: px;color: #fff" >
+            <i class="fa fa-clock-o"></i> <span>Attendance</span>
+           
           </a>
-          <ul class="treeview-menu">
-            <li><a href="manage_attendance.php" ><i class="fa fa-circle-o"></i> Manage Attendance</a></li>
-            <li><a href="attendance.php"><i class="fa fa-plus"></i> New attedance</a></li>
-            
-          </ul>
         </li>
         <li class="">
           <a href="event.php"  style="font-size: px;color: #fff" >

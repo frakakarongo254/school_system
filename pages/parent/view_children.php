@@ -196,6 +196,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
                   <li><a href="#tab_3" data-toggle="tab"  id="tab">Documents</a></li>
                    <li><a href="#tab_4" data-toggle="tab"  id="tab">Student Statement</a></li>
                     <li><a href="#tab_5" data-toggle="tab"  id="tab">Milestone</a></li>
+                    <li><a href="#tab_6" data-toggle="tab"  id="tab">Attendance</a></li>
                        
                 </ul>
                 <div class="tab-content">
@@ -483,6 +484,164 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='$stude
 
                             </div>
                             </div>
+                             <div class="tab-pane " id="tab_6">
+                               <div class="row">
+               
+              <form method="POST" action="view_children.php">
+               <div class="col-md-3">
+                  
+               </div>
+               <?php $currentTimeinSeconds = time(); 
+          $currentDate = date('F d Y', $currentTimeinSeconds);
+          $time =date("h:i:sa"); ?>
+              <div class="col-md-3 pull-" style="text-align:">
+                
+                 <input type="text" name="attendance_date" class="form-control pull-right" id="datepicker" value="<?php echo $currentDate?>" >
+              </div>
+              <div class="col-md-3 col-" style="text-align:">
+                <button class="btn btn-primary" id="button1" type="submit" name="searchAttendance" href="" ><i class="fa fa-filter"></i> filter Attendance</button>
+              </div>
+              <div class="col-md-3 col-" style="text-align:t">
+                
+                
+              </div>
+            </form>
+            </div>
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  
+                  <th>Sudent Name</th>
+                  <th>Sign-in Time</th>
+                  <th>Signed In By</th>
+                  <th>Signed Out Time</th>
+                   <th>Signed Out By</th>
+                  <th>Attended time</th>
+                  
+                </tr>
+                </thead>
+                <tbody>
+               <?php
+                if (isset($_POST['searchAttendance'])) {
+                   $school_ID = $_SESSION['login_user_school_ID'];
+                  $attndDate=$_POST['attendance_date'];
+                $attendanceDate= date("Y-m-d", strtotime($attndDate));
+                 
+                 // $attendance_class_id=$_POST['attendance_class_id'];
+                 
+               
+                 
+                   
+                   $query22 = mysqli_query($conn,"select * from attendance where school_ID = '".$school_ID."'  and date_entered='".$attendanceDate."' and student_ID='".$student_ID."'  ")or
+                   die(mysqli_error());
+                    while ($row11=mysqli_fetch_array($query22)){
+                     $student_id=$row11['student_ID'];
+                      $attendance_ID=$row11['attendance_ID'];
+                     $query2 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' and student_ID='".$student_id."'")or
+                   die(mysqli_error());
+                   while ($row1=mysqli_fetch_array($query2)){
+                   $student_regNoID= $row1['registration_No'];
+                  
+                   $img;
+                   if($row1['photo'] !=''){
+                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                  }else{
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      
+                    }
+                    $stdId=$row1['student_ID'];
+                    $class_Id=$row1['class_ID'];
+                    $name= $row1['first_Name']." ". $row1['last_Name'];
+                   $time_in=$row11['sign_in_time'];
+                 $time_out=$row11['sign_out_time'];
+
+                   $startTime = new DateTime($time_in);
+                   $endTime = new DateTime($time_out);
+                   $duration = $startTime->diff($endTime); //$duration is a DateInterval object
+                   $diff= $duration->format("%H:%I:%S");
+              // encryption function 
+
+              
+                //$id =  base64_url_encode($stdId);
+                  echo" <tr>
+                  
+                  <td><input type='hidden' value='".$class_Id."' name='classId[]'><a href='view_student.php?id=".$stdId."'>".$img." ".$name."</a></td>
+                  <td>".$row11['sign_in_time']."</td>
+                  <td>".$row11['signed_in_by']." </td>
+                  <td>".$row11['sign_out_time']."</td>
+                   <td>".$row11['signed_out_by']."</td>
+                   <td>".$diff."</td>
+                    <td>";
+             
+              #send student id as a session to the next page of view student
+
+                   
+                 echo' </tr>';
+                    }
+                  }
+                  }else{
+                    
+                $attendanceDate= date("Y-m-d");
+                    $query22 = mysqli_query($conn,"select * from attendance where school_ID = '".$school_ID."' and student_ID='".$student_ID."' ")or
+                   die(mysqli_error());
+                    while ($row11=mysqli_fetch_array($query22)){
+                     $student_id=$row11['student_ID'];
+                      $attendance_ID=$row11['attendance_ID'];
+                     $query2 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' and student_ID='".$student_id."'")or
+                   die(mysqli_error());
+                   while ($row1=mysqli_fetch_array($query2)){
+                   $student_regNoID= $row1['registration_No'];
+                   
+                   $img;
+                   if($row1['photo'] !=''){
+                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                  }else{
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      
+                    }
+                    $stdId=$row1['student_ID'];
+                    $class_Id=$row1['class_ID'];
+                   $name= $row1['first_Name']." ". $row1['last_Name'];
+                   $time_in=$row11['sign_in_time'];
+                 $time_out=$row11['sign_out_time'];
+
+                   $startTime = new DateTime($time_in);
+                   $endTime = new DateTime($time_out);
+                   $duration = $startTime->diff($endTime); //$duration is a DateInterval object
+                   $diff= $duration->format("%H:%I:%S");
+              // encryption function 
+
+              
+                //$id =  base64_url_encode($stdId);
+                  echo" <tr>
+                  
+                  <td><input type='hidden' value='".$class_Id."' name='classId[]'><a href='view_student.php?id=".$stdId."'>".$img." ".$name."</a></td>
+                  <td>".$row11['sign_in_time']."</td>
+                  <td>".$row11['signed_in_by']." </td>
+                  <td>".$row11['sign_out_time']."</td>
+                   <td>".$row11['signed_out_by']."</td>
+                   <td>".$diff."</td>
+                   
+                  ";
+                  
+              #send student id as a session to the next page of view student
+
+                   
+                 echo' </tr>';
+                    }
+                  }
+                
+                  }
+                
+                
+               ?>
+     
+       </tbody>
+               
+             </table>
+       
+       
+                             </div>
                           </div>
                     </div>
                    

@@ -22,7 +22,11 @@ if (!velifyLogin()) {
  $invoice_date=$row02['invoice_date'];
  $invoice_summury=$row02['summury'];
  $invoice_student_id=$row02['student_ID'];
-  $invoice_balance=$row02['balance'];
+$invoice_balance=$row02['amount'] - $row02['amount_paid'];
+  if ($invoice_balance < 0) {
+    # code...
+    $invoice_balance=0.00;
+  }
 
   #get student details
   $sql03 = mysqli_query($conn,"select * from `student` where  student_ID='".$invoice_student_id."' and `school_ID` = '".$school_ID."' ");
@@ -170,13 +174,13 @@ $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
             <div class="col-md-6 ">
             <lable><b>TOTAL AMOUNT</b></lable>
 
-               <input type="text" name="total_amount"  id="datepicker" class="form-control"  value="<?php echo $invoice_amount ?>" placeholder="total amount" readonly>
+               <input type="text" name="total_amount"  id="datepicker" class="form-control"  value="<?php echo  $school_row['currency'] . ' '.formatCurrency($invoice_amount); ?>" placeholder="total amount" readonly>
             </div>
            <div class="col-md-6">
               <lable><b>BALANCE:</b></lable>
               <input type="hidden"name="amount_balance" value="<?php echo $invoice_balance ?>" >
 
-              <input type="text" name="balance"  value="<?php echo $invoice_balance ?>"  class="form-control"  placeholder="Ending time" readonly>
+              <input type="text" name="balance"  value="<?php echo  $school_row['currency'] . ' '.formatCurrency($invoice_balance); ?>"  class="form-control"  placeholder="Ending time" readonly>
             </div>
             </div>
           
@@ -240,67 +244,7 @@ $receipt_No = "REC-".substr(number_format(time() * rand(),0,'',''),0,5);
         </div>
         <div class="col-md-2"></div>
       </div>
-    <!--- add zone Modal -->
-      <div class="modal fade" id="modal-addZone">
-          <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><b>Add Zone</b></h4>
-              </div>
-              <div class="modal-body">
-                 <div class="nav-tabs-custom">
-              <div class="tab-content">
-               
-              <!-- /.tab-pane -->
-            <form  action="zone.php" method="POST">
-            <div class="row">   
-              <label for="nationality">Zone Name:</label>
-              <div class=" col-md-12 input-group input-group-">
-                
-                <input type="text" name="zone_name" class="form-control" placeholder="Zone Name" required>
-              </div>
-              <br>
-            </div>
-             <div class="row">   
-              <label for="nationality">One Way Charge:</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                <input type="text" class="form-control" name="oneWayCharge">
-                
-              </div>
-              
-            </div>
-           <br>
-            <div class="row">   
-              <label for="nationality">Two Way Charge:</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                <input type="text" class="form-control" name="twoWayCharge">
-                
-              </div>
-              
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-md-12">
-                <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="addZoneBtn" class="btn btn-primary">Add Zone</button>
-              </div>
-              </div>
-             </form>
-            </div>
-            <!-- /.tab-content -->
-          </div>
-              </div>
-              
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+ 
        
       
 

@@ -21,7 +21,7 @@ echo '  <form  action="staff.php" method="POST" enctype="multipart/form-data">
             </div>
              <div class="form-group">
                 <label>Role</label>
-                <select class="form-control select2" name="edit_staff_role" style="width: 100%;">
+                <select class="form-control " name="edit_staff_role" style="width: 100%;">
                   <option value="'.$rows_staff['role'].'" selected="selected">'.$rows_staff['role'].'</option>
                   <option value="">Role</option>
                   <option value="Admin">Admin</option>
@@ -32,7 +32,7 @@ echo '  <form  action="staff.php" method="POST" enctype="multipart/form-data">
               </div>
              <div class="form-group">   
               <label for="nationality">Nationality:</label>
-                 <select class="form-control select2" name="edit_staff_nationality" style="width: 100%;">';
+                 <select class="form-control " name="edit_staff_nationality" style="width: 100%;">';
                  
                     include("include/nationality.php");
 
@@ -42,7 +42,7 @@ echo '  <form  action="staff.php" method="POST" enctype="multipart/form-data">
             
              <div class="form-group">
                 <label>Gender</label>
-                <select class="form-control select2"  name="edit_staff_gender" style="width: 100%;">
+                <select class="form-control select"  name="edit_staff_gender" style="width: 100%;">
                 <option value="'.$rows_staff['gender'].'" selected="selected">'.$rows_staff['gender'].'</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>

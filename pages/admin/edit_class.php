@@ -27,7 +27,7 @@ echo '<form  action="class.php" method="POST">
           <input type="hidden" name="edit_class_id" value="'.$class_id.'">
             <div class="form-group">
               <label>Year</label>
-            <select class="form-control select2" name="edit_class_year" style="width: 100%;" required>>
+            <select class="form-control " name="edit_class_year" style="width: 100%;" required>>
             <option value="'.$rows_class['year'].'">'.$rows_class['year'].'</option>
                 ';
                   $year = date('Y');
@@ -41,7 +41,7 @@ echo '<form  action="class.php" method="POST">
             </div>
               <div class="form-group">
                 <label>Level</label>
-              <select class="form-control select2" name="edit_class_level_id" style="width: 100%;" required>
+              <select class="form-control " name="edit_class_level_id" style="width: 100%;" required>
                     <option value="'.$levelId.'">'.$level_Name_row['level_name'].'</option>
                   ';
                  $query_level2= mysqli_query($conn,"select * from carricula_level where school_ID = '".$_SESSION['login_user_school_ID']."'")or
@@ -55,7 +55,7 @@ echo '<form  action="class.php" method="POST">
                </div>
                <div class="form-group">
                 <label>Stream</label>
-              <select class="form-control select2" name="edit_class_stream_id" style="width: 100%;" required>
+              <select class="form-control " name="edit_class_stream_id" style="width: 100%;" required>
                     <option value="'.$streamId.'">'.$stream_Name_row['stream_name'].'</option>';
                   
                  $query_stream2= mysqli_query($conn,"select * from stream where school_ID = '".$_SESSION['login_user_school_ID']."'")or
@@ -69,7 +69,7 @@ echo '<form  action="class.php" method="POST">
                </div>
                 <div class="form-group">
                 <label>Teacher</label>
-              <select class="form-control select2" name="edit_class_teacher_id" style="width: 100%;" required>
+              <select class="form-control " name="edit_class_teacher_id" style="width: 100%;" required>
                     <option value="'.$teacherId.'">'.$teacher_Name_row['full_Name'].'</option>';
                   
                  $query_staff_Teacher= mysqli_query($conn,"select * from staff where role='Teacher' and school_ID = '".$_SESSION['login_user_school_ID']."'")or

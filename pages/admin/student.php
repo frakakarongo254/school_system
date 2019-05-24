@@ -1,9 +1,101 @@
-<?php  require_once("include/session.php");
+<?php // error_reporting(0); 
+ require_once("include/session.php");
+
 if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../../index.php');
 }
+ #get school Id from current session school id
+  $school_ID = $_SESSION['login_user_school_ID'];
+if(isset($_POST["Export"])){
+     //echo "yes";
+    // $filename = "members_" . date('Y-m-d') . ".csv";
+      header('Content-Type: text/csv; charset=utf-8');  
+      header('Content-Disposition: attachment; filename=data.csv');  
+      $output = fopen("php://output", "w");  
+      fputcsv($output, array('registration_No','first_Name','last_Name','gender_MFU','nationality','zone','zone_transport_type','status','class_ID','admission_date','date_of_Birth','other_Details','meal_plan'));  
+      $queryz = "SELECT registration_No,first_Name,last_Name,gender_MFU,nationality,zone,zone_transport_type,status,class_ID,admission_date,date_of_Birth,other_Details,meal_plan from student where school_ID='".$school_ID."' ORDER BY id ASC";  
+      $resultz = mysqli_query($conn, $queryz);  
+      
+      while($rowz = mysqli_fetch_assoc($resultz))  
+      {  
+         
+           fputcsv($output, $rowz);  
+      }  
+      fclose($output);  
+      //return ob_get_clean();
+    exit();
+ }  
 ?>
+<?php
+
+
+ if(isset($_POST["importBtn"])){
+    
+    $filename=$_FILES["importFile"]["tmp_name"];    
+
+
+     if($_FILES["importFile"]["size"] > 0)
+     {
+        $file = fopen($filename, "r");
+        $count = 0;
+         $x=0;
+          while (($getData = fgetcsv($file, 10000, ",")) !== FALSE)
+           {
+
+             $count++; 
+            if($count>1)
+            { 
+                
+            
+            $x++;
+              $randstd = substr(number_format(time() * rand(),0,'',''),0,10 + $x);
+              $student_ID=md5($randstd);
+              $registration_No = mysqli_real_escape_string($conn,$getData[0]);
+              $first_Name = mysqli_real_escape_string($conn,$getData[1]);
+              $last_Name = mysqli_real_escape_string($conn,$getData[2]);
+              $gender_MFU = mysqli_real_escape_string($conn,$getData[3]);
+              $nationality = mysqli_real_escape_string($conn,$getData[4]);
+              $zone = mysqli_real_escape_string($conn,$getData[5]);
+              $zone_transport_type = mysqli_real_escape_string($conn,$getData[6]);
+              $status = mysqli_real_escape_string($conn,$getData[7]);
+              $class_ID = mysqli_real_escape_string($conn,$getData[8]);
+              $adm_date = mysqli_real_escape_string($conn,$getData[9]);
+               $admission_date= date("Y-m-d", strtotime($adm_date));
+              
+              $date_Birth = mysqli_real_escape_string($conn,$getData[10]);
+               $date_of_Birth = date("Y-m-d", strtotime($date_Birth));
+              $other_Details = mysqli_real_escape_string($conn,$getData[11]);
+              $meal_plan = mysqli_real_escape_string($conn,$getData[12]);
+                        
+             $sql = "INSERT into student (student_ID,school_ID,registration_No,first_Name,last_Name,gender_MFU,nationality,zone,zone_transport_type,status,class_ID,admission_date,date_of_Birth,other_Details,meal_plan) 
+                   values ('".$student_ID."','".$school_ID."','".$registration_No."','".$first_Name."','".$last_Name."','".$gender_MFU."','".$nationality."','".$zone."','".$zone_transport_type."','". $status."','".$class_ID."','".$admission_date."','". $date_of_Birth."','".$other_Details."','".$meal_plan."')";
+                   $result = mysqli_query($conn, $sql);
+
+
+        if(!isset($result))
+        {
+          echo "<script type=\"text/javascript\">
+              alert(\"Invalid File:Please Upload CSV File.\");
+              window.location = \"student.php\"
+              </script>"; 
+              //mysql_error()  
+        }
+        else {
+            echo "<script type=\"text/javascript\">
+            alert(\"CSV File has been successfully Imported.\");
+            window.location = \"student.php\"
+          </script>";
+        }
+           }
+         }
+      
+           fclose($file); 
+     }
+  }  
+
+
+ ?>
 
 <?php require_once("include/header.php")?>
 
@@ -183,22 +275,7 @@ if (!velifyLogin()) {
       }
 
 
-      if(isset($_POST["Export"])){
-     echo "yes";
-      header('Content-Type: text/csv; charset=utf-8');  
-      header('Content-Disposition: attachment; filename=data.csv');  
-      $output = fopen("php://output", "w");  
-      fputcsv($output, array('first_Name','last_Name','nickname',
-          'registration_No','school_ID'));  
-      $queryz = "SELECT id,first_Name,last_Name,nickname,
-          registration_No,school_ID from student ORDER BY id DESC LIMT 5";  
-      $resultz = mysqli_query($conn, $queryz);  
-      while($rowz = mysqli_fetch_assoc($resultz))  
-      {  
-           fputcsv($output, $rowz);  
-      }  
-      fclose($output);  
- }  
+      
       ?>
     </section>
     <!-- Main content -->
@@ -207,9 +284,21 @@ if (!velifyLogin()) {
         <!-- Custom Tabs -->
           <div class="nav-tabs-custom" style="padding-right: 20px;padding-left: 20px">
            <div class="row">
-              <div class="col-md-8"><b><h3>Students</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right">
-                <br><a class="btn btn-primary btn-bg" id="button1" href="add_student.php" style="  "><i class="fa fa-plus"></i><b> New Student </b></a>
+              <div class="col-md-6"><b><h3>Students</h3> </b></div>
+              <div class="col-md-2">
+                <br>
+                <form action="" method="POST">
+                  <button type="submit" class="btn" id="button1" style="color:#fff" name="Export" onclick="">Export</button>
+
+                </form>
+              </div>
+              <div class="col-md-2">
+                <br>
+                <button href="#" class="btn" id="button1" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
+              </div>
+              <div class="col-md-2 col-pull-right" style="text-align:right">
+                <br>
+                <a class="btn btn-primary btn-bg" id="button1" href="add_student.php" style="  "><i class="fa fa-plus"></i><b> New Student </b></a>
               <br>
               </div>
             </div>
@@ -319,6 +408,30 @@ if (!velifyLogin()) {
         </div>
         <!-- /.modal -->
         <!--end of edit student modal-->
+       <!-- Import student-->
+        <div class="modal fade" id="modal-importStudent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Upload CSV file</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+         <form id="fileinfo" name="" action="student.php" method="POST" enctype="multipart/form-data">
+           <input type="file" name="importFile" class="form-control" value="upload">
+         
+        </div>
+          <div class="modal-footer">
+            <button type="submit" class="pull-left btn btn-primary" name="importBtn" href="#">Upload</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
        
          <!-- delete student  Modal-->
     <div class="modal  fade" id="delete_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -388,6 +501,23 @@ if (!velifyLogin()) {
     })
   })
 
+</script>
+<script >
+ function exportSample(){
+        var id='1';
+      var details= '&Export='+ id;
+      alert(details);
+          $.ajax({
+          type: "POST",
+          url: "test.php",
+          data: details,
+          cache: false,
+          success: function(data) {
+         
+          alert(data);
+           }
+          });
+ }
 </script>
 
 <script >
