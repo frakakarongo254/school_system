@@ -130,7 +130,7 @@ $userID=$_SESSION['login_user_ID'];
           <h3><span class="fa fa-gear"> </span>  <b style="color:primary" >  Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="profile.php"><i class="fa fa-arrow-circle-right"></i> Profile Details</a></li>
-                <li><a href="edit_profile.php"><i class="fa fa-arrow-circle-right"></i> Edit Profile</a></li>
+                <li class="active"><a href="edit_profile.php"><i class="fa fa-arrow-circle-right"></i> Edit Profile</a></li>
               </ul>
          </div>
        
@@ -185,7 +185,7 @@ $userID=$_SESSION['login_user_ID'];
                 <div class="col-md-12  ">
                   <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active col-md-5"><a href="#tab_1" data-toggle="tab"><b>GENORAL SETTING</b></a></li>
+              <li class="active col-md-5"><a href="#tab_1" data-toggle="tab"><b>GENERAL SETTINGS</b></a></li>
               <li  class="col-md-5"><a href="#tab_2" data-toggle="tab"><b>EDIT PASSWORD</b></a></li>
               
             </ul>
@@ -193,58 +193,54 @@ $userID=$_SESSION['login_user_ID'];
               <div class="tab-pane active" id="tab_1">
                     <form  action="edit_profile.php" method="POST">
                  <div class="row">
-                   <div class="col-md-6 form-group has-feedback">
+                   <div class="col-md-4 form-group has-feedback">
                      <label>First Name:</label>
                     <input type="text" name="FName" class="form-control" value="<?php echo $user_row['first_name'];?>" placeholder="First Name" required>
                     
                   </div>
-                </div>
-                  <div class="row">
-                  <div class="col-md-6 form-group has-feedback">
-                     <label>Second Name:</label>
+                  <div class="col-md-4 form-group has-feedback">
+                     <label>Last Name:</label>
                     <input type="text" name="SName" class="form-control" value="<?php echo $user_row['second_name'];?>" placeholder="Second Name" required>
                     
                   </div>
-                </div>
-                  <div class="row">
-                  <div class="col-md-6 form-group has-feedback">
+                  <div class="col-md-4 form-group has-feedback">
                      <label>Email:</label>
                     <input type="email" name="email" value="<?php echo $user_row['email'];?>" class="form-control" placeholder="Email" required>
                     
                   </div>
                 </div>
+                  
+                  
                   <div class="row">
-                  <div class="col-md-6 form-group has-feedback">
+                  <div class="col-md-4 form-group has-feedback">
                      <label>Phone:</label>
                      <input type="text" name="phone" autocomplete="username"  value="<?php echo $user_row['phone'];?>" placeholder="Phone" class="form-control" data-inputmask='"mask": "(254) 999-999-999"' required  data-mask>
                     
                   </div>
-                </div>
-                  <div class="row">
-                  <div class="col-md-6 form-group has-feedback">
+                  <div class="col-md-4 form-group has-feedback">
                    <label>Gender</label>
                       <select class="form-control" name="gender">
                         <option value="<?php echo $user_row['gender'];?>"><?php echo $user_row['gender'];?></option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                      
                         
                       </select>
                       <span class="fa fa fa-gender form-control-feedback"></span>
                     </div>
-                 </div>
-                 <div class="row">
-                  <div class="col-md-6 form-group has-feedback">
+                    <div class="col-md-4 form-group has-feedback">
                      <label>Nationality:</label>
                      <input type="text" name="nationality"   value="<?php echo $user_row['nationality'];?>" placeholder="Nationality" class="form-control" required>
                     
                   </div>
-                 </div>
+                </div>
+                  
+                 
                   <div class="row">
                     
                     <!-- /.col -->
-                    <div class="col-xs-4">
-                      <button type="submit" name="saveChanges" class="btn btn-primary btn-block btn-flat">Save Changes</button>
+                    <div class="col-md-4">
+                      <button type="submit" name="saveChanges" class="btn btn-primary btn-md">Save Changes</button>
                     </div>
                     <!-- /.col -->
                   </div>
@@ -274,7 +270,7 @@ $userID=$_SESSION['login_user_ID'];
                 
                 <!-- /.col -->
                 <div class="col-xs-4">
-                  <button type="submit" name="changePassword" class="btn btn-primary btn-block btn-flat"> Save Password</button>
+                  <button type="submit" name="changePassword" class="btn btn-primary btn-md"> Save Password</button>
                 </div>
                 <!-- /.col -->
               </div>

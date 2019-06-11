@@ -105,7 +105,7 @@ $sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='".$stu
 
         } else
         {
-            echo 'fail';
+            
 
              echo' <div class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
@@ -403,7 +403,48 @@ school_ID = '{$school_ID}'");
       }
 } 
 }
-          ?>
+
+    if(isset($_POST['uploadPhotoBtn'])){
+    if(isset($_FILES['student_photo']['name']) and !empty($_FILES['student_photo']['name'])){
+    $file=$_FILES['student_photo']['name'];
+    $path_parts = pathinfo($file);
+    $extension= $path_parts['extension'];
+
+    if ($_FILES["student_photo"]["size"] > 500000) {
+    echo "<script>alert('Sorry, your file is too large.')</script>";
+    $uploadOk = 0;
+    }
+    elseif($extension != "jpg" && $extension != "png" && $extension != "jpeg"
+    && $extension != "gif" ) {
+    echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
+    $uploadOk = 0;
+    }else{
+    $info = pathinfo($_FILES['student_photo']['name']);
+    $ext = $info['extension']; // get the extension of the file
+
+    $newname = $student_ID .".".$ext; 
+    $student_photo = addslashes(file_get_contents($_FILES['student_photo']['tmp_name']));
+    $result_query=mysqli_query($conn,"update `student` SET photo= '". $student_photo."'  where student_ID='".$student_ID."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+
+    if($result_query){
+
+  
+    echo '<script> window.location="view_student.php?id='.$student_ID.'" </script>';
+    }else{
+    echo' <div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert"
+    aria-hidden="true">
+    &times;
+    </button>
+    Sorry! Something went wrong.Please try again.
+    </div>'; 
+    }
+    }
+    }else{
+    echo '<script> alert("You must select an image") </script>';
+    }
+    }
+    ?>
 </div>
 </div>
    </section>
@@ -424,7 +465,7 @@ school_ID = '{$school_ID}'");
              if($row['photo'] !=''){
               $image = '<img class=" profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"  height="40px" width="40px" alt="User profile picture"/>';
             }else{
-                $image = "<img class=' profile-user-img img-responsive img-circle' src='../../dist/img/avatar.png' alt='User profile picture'>";
+                $image = "<img class=' profile-user-img img-responsive img-circle' src='../../dist/img/user.jpg' alt='User profile picture'>";
               }
           ?>
           <!-- Profile Image -->
@@ -436,6 +477,8 @@ school_ID = '{$school_ID}'");
                   <div class="pull-left">
                    
                    <?php echo $image;?>
+
+             <h3 class="profile-username text-center"><a href="#" data-toggle="modal" data-target="#modal-editStudentPhoto"><span class="pull- badge bg-secondary">Change photo</span></a></h3>
 
               
             </div>
@@ -554,48 +597,35 @@ school_ID = '{$school_ID}'");
                         <table id="table1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                              <th>Year</th>
+                              
                               <th>Class Name</th>
-                              <th>Stream</th>
+                              
+                              <th>Year</th>
                               <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                               <?php
-                               #get school Id from current session school id
-                            $ses_sql2 = mysqli_query($conn,"select * from `student` where `student_ID` = '".$student_ID."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
-                            $row2 = mysqli_fetch_array($ses_sql2,MYSQLI_ASSOC);
+                              <?php
+                    $ses_sql2 = mysqli_query($conn,"select * from `student` where `student_ID` = '".$student_ID."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
+                      $row2 = mysqli_fetch_array($ses_sql2,MYSQLI_ASSOC);
                             $classid=$row2['class_ID'];
-                              $class_sql2 = mysqli_query($conn,"select * from `class` where `class_ID` = '".$classid."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
-                            $row3_class = mysqli_fetch_array($class_sql2 ,MYSQLI_ASSOC);
+                    $select_class= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."' and class.class_ID='".$classid."'")or
+                   die(mysqli_error($conn));
+                    foreach ($select_class as $row3_class) {
+                        echo" <tr>
+                          <td> <a href='class_room.php?id=".$classid."'>".$row3_class['level_name']." ".$row3_class['stream_name']."</a></td>
+                          
+                            <td>".$row3_class['year']."</td>
+                            
+                          <td>";
+                         echo'  <a href="class_room.php?id='.$classid.'" class=""><button type="button"  class="btn btn-success badge btn-xs" onclick=""><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
-                               $levelId=$row3_class['level_ID'];
-                                $streamid=$row3_class['stream_ID'];
-
-                              $level_sql2 = mysqli_query($conn,"select * from `carricula_level` where `carricula_level_ID` = '".$levelId."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
-                            $row4_level = mysqli_fetch_array($level_sql2 ,MYSQLI_ASSOC);
-                             // $streamid=$row4_level['stream_ID'];
-
-                             $stream_sql2 = mysqli_query($conn,"select * from `stream` where `stream_ID` = '".$streamid."' && `school_ID` = '".$_SESSION['login_user_school_ID']."'");
-                            $row4_stream = mysqli_fetch_array($stream_sql2 ,MYSQLI_ASSOC);
-                               
-                                echo" <tr>
-                                       
-                                        <td>".$row3_class['year']."</td>
-                                        <td>".$row3_class['name']." </td>
-                                         <td>".$row4_stream['stream_name']." </td>
-                                        
-                                          
-                                        <td>";
-                                       echo'  <a href="#" class=""><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
-
-                                        
-                                       </td>
-                                     </tr>';
-
-                               
+                          
+                         </td>
+                        </tr>';
+                        }
+                   ?>
                               
-                           ?>
                            
                              </tbody>
                             
@@ -700,7 +730,7 @@ school_ID = '{$school_ID}'");
                                        echo'  
                                        <a type="button"  class="btn btn-info badge" id="'.$documentID.'" name="'.$student_ID.'" onclick="editDocument(this.id,this.name)" data-toggle="modal" data-target="#modal-editDocument1"><span class="glyphicon glyphicon-pencil"></span></a>
 
-                                        <a href="#"><button type="button"  class="btn btn-success badge" id="'.$document_name.'" onclick="openDocument(this.id)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#"><button type="button"  class="btn btn-success badge" id="'.$document_name.'" onclick="openDocumentFunc(this.id)" ><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
                                          <button type="button"  class="btn btn-danger badge" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
 
@@ -1142,7 +1172,7 @@ school_ID = '{$school_ID}'");
                                        while ($row_im=mysqli_fetch_array($que21)){
                                  echo      ' <div class="col-md-4">
                                     <div class="form-group">
-                                    <label>Immunization</label>
+                                    <label>VACCINE</label>
                                     <input type="text" class="form-control" name="immunization[]" id="immunization1" value="'.$row_im['immunization'].'">
                                     </div>
                                     </div>
@@ -1356,39 +1386,30 @@ school_ID = '{$school_ID}'");
      </div>
 
 
-   <!-- open document  Modal-->
-    <div class="modal  fade" id="open_document_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
+ 
+   <div class="modal fade" id="modal-editStudentPhoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Document</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Upload Logo</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
-    <div id="dialog" style="display:">
-    
-</div> 
-            <script >
-          function openDocument(document_name){
-            
-            document.getElementById("dialog").innerHTML='<iframe src="document/'+document_name+'" style="width:100%;height:800px"></iframe>';
-          }
-  
-            </script>
-            <div id="documMsg"></div>
-          
-          
-
+         <form id="fileinfo" name="" action="view_student.php?id=<?php echo $student_ID?>" method="POST" enctype="multipart/form-data">
+           <input type="file" name="student_photo" class="form-control" value="upload">
+         
         </div>
           <div class="modal-footer">
-           <div id="Msg"></div>
+            <button type="submit" class="pull-left btn btn-primary" name="uploadPhotoBtn" href="#">Upload</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            
+          </div>
+        </form>
         </div>
       </div>
     </div>
-     </div>
-
 
       <!-- open Print statement-->
     <div class="modal  fade" id="open_document_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1611,7 +1632,16 @@ school_ID = '{$school_ID}'");
     })
   })
 </script>
-
+<script>
+function openDocumentFunc(document_name) {
+    
+    
+     window.open("document/"+document_name, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=1000");
+  
+  
+ 
+}
+</script>
 <script >
   function deleteDocumentFromSystem(documentId){
    
@@ -1714,7 +1744,7 @@ function calc_total()
 var rowCount = 1;
 function addMoreRows(frm) {
 rowCount ++;
-var recRow = '<div class="row" id="registration'+rowCount+'"><div class="col-md-4"><div class="form-group"> <label>Immunization</label><input type="text" name="immunization[]" id="immunization'+rowCount+'" class="form-control"></div></div><div class="col-md-4"><div class="form-group"> <label>Vaccination Date</label><input type="date" class="form-control" name="vaccinationDate[]" id="vaccinationDate'+rowCount+'"></div></div><div class="col-md-3"><div class="form-group"> <label>Renewal Date Date</label><input type="date" class="form-control" name="renewalDate[]" id="renewalDate'+rowCount+'"></div></div><div class="col-md-1"><a href="javascript:void(0);" onclick="removeRow('+rowCount+');" style="float:left;"> <i  class="fa fa-trash btn btn-danger"></i></a></div></div>';
+var recRow = '<div class="row" id="registration'+rowCount+'"><div class="col-md-4"><div class="form-group"> <label>VACCINE</label><input type="text" name="immunization[]" id="immunization'+rowCount+'" class="form-control"></div></div><div class="col-md-4"><div class="form-group"> <label>Vaccination Date</label><input type="date" class="form-control" name="vaccinationDate[]" id="vaccinationDate'+rowCount+'"></div></div><div class="col-md-3"><div class="form-group"> <label>Renewal Date Date</label><input type="date" class="form-control" name="renewalDate[]" id="renewalDate'+rowCount+'"></div></div><div class="col-md-1"><a href="javascript:void(0);" onclick="removeRow('+rowCount+');" style="float:left;"> <i  class="fa fa-trash btn btn-danger"></i></a></div></div>';
 jQuery('#addedRows').append(recRow);
 }
    

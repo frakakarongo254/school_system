@@ -88,11 +88,13 @@ if(isset($_GET['id'])){
             $level_name=$_POST['level_name'];
             $level_number =$_POST['level_number'];
             $level_abbreviation =$_POST['level_abbreviation'];
+            $randLevel = substr(number_format(time() * rand(),0,'',''),0,10);
+          $carricula_level_ID=md5($randLevel);
            #check if such carricula already exist
             $level_data_sql = mysqli_query($conn,"select * from `carricula_level` where `level_name` = '".$level_name."' and `carricula_ID` = '".$carricula_id."' and `school_ID` = '".$school_ID."' ");
             $level_row=mysqli_num_rows( $level_data_sql );
             if ( $level_row !=0) {
-              echo $carricula_id;
+               $carricula_id;
               echo' <div class="alert alert-warning alert-dismissable">
               <button type="button" class="close" data-dismiss="alert"
               aria-hidden="true">
@@ -101,11 +103,11 @@ if(isset($_GET['id'])){
               Such Carricula already exist.
               </div>'; 
             }else{
-              echo $carricula_id;
+               $carricula_id;
 
-             $carricula_insert_query=mysqli_query($conn,"insert into `carricula_level` (school_ID,carricula_ID, level_name,level_number,abbreviation
+             $carricula_insert_query=mysqli_query($conn,"insert into `carricula_level` (carricula_level_ID, school_ID,carricula_ID, level_name,level_number,abbreviation
           ) 
-          values('$school_ID','$carricula_id','$level_name','$level_number','$level_abbreviation') ");
+          values('$carricula_level_ID','$school_ID','$carricula_id','$level_name','$level_number','$level_abbreviation') ");
               if($carricula_insert_query){
                 $carrId=$_GET['id'];
              // echo '<script> window.location="view_carricula.php?id="'.$carricula_id.'"&insert=True" </script>';
@@ -189,7 +191,7 @@ if(isset($_GET['id'])){
                             <td>".$carri_row['level_name']." </td> 
                             <td>";
                            echo'  
-                             <button type="button" id="'.$carri_row['carricula_level_ID'].'" class="btn btn-primary badge"  onclick="editLevel(this.id)" data-toggle="modal"  data-target="#edit_level_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                             <button type="button" id="'.$carri_row['carricula_level_ID'].'" class="btn btn-primary badge" name="'.$carricula_id.'"  onclick="editLevel(this.id,this.name)" data-toggle="modal"  data-target="#edit_level_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
                              <button type="button" id="'.$carri_row['carricula_level_ID'].'" class="btn btn-danger badge" value="'.$carri_row['level_name'].'" onclick="deleteLevel(this.id,this.value)" data-toggle="modal"  data-target="#delete_level_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                            </td>
@@ -215,7 +217,7 @@ if(isset($_GET['id'])){
     <div class="modal fade" id="modal-addLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-          <div class="modal-header btn-default">
+          <div class="modal-header ">
             <center><h5 class="modal-title" id="exampleModalLabel "><i class="fa fa-plus"></i>   <b>  Level</b></h5></center>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
@@ -265,11 +267,17 @@ if(isset($_GET['id'])){
           <div class="modal-body">
               <div class="nav-tabs-custom">
               <div class="tab-content">
-               
+               <script type="text/javascript">
+                  function edit(){
+                alert("hi francis");
+              }
+               </script>
             <script >
              
-               function editLevel(level_id){ 
-                   var carricula_id=<?php echo $carricula_id?>;
+             
+               function editLevel(level_id,carricula_id){ 
+               
+                   var carricula_id= carricula_id;
                   if(level_id !=''){
                     var details= '&level_id='+ level_id +'&carricula_id='+ carricula_id ;
                     $.ajax({
@@ -386,7 +394,7 @@ if(isset($_GET['id'])){
 <?php include("include/script.php")?>
 <script >
   function deleteLevelFromSystem(level_id){
-  var carricula_id=<?php echo $carricula_id?>;
+   
   var details= '&level_id='+ level_id;
   $.ajax({
   type: "POST",
@@ -395,7 +403,7 @@ if(isset($_GET['id'])){
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="view_carricula.php?id="+carricula_id+"&delete=True" 
+ window.location="view_carricula.php?id=<?php echo $carricula_id ?>&delete=True" 
     }else{
       alert("OOp! Could not delete .Please try again!");
     }

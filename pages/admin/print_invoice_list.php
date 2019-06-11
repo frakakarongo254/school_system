@@ -21,10 +21,12 @@ $report_class_id=$_GET['class_id'];
  #get class name
  if ($_GET['class_id'] !=="All") {
   $report_class_id=$_GET['class_id'];
-   # code...
-  $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."' and class_ID='".$report_class_id."'");
-  $class_n= mysqli_fetch_array($query_c,MYSQLI_ASSOC);
-  $class_Name= 'For Class   '  . $class_n['name'] ;
+   $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."' and class.class_ID='".$report_class_id."'");
+               
+  foreach ($query_c as $class_n) {
+                  
+  $class_Name= 'For Class   '  . $class_n['level_name'] .' '.$class_n['stream_name'] ;
+  }
  }else{
   $class_Name= "For All Classes";
  }

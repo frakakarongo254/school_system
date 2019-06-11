@@ -72,7 +72,7 @@ echo '<form  action="class.php" method="POST">
               <select class="form-control " name="edit_class_teacher_id" style="width: 100%;" required>
                     <option value="'.$teacherId.'">'.$teacher_Name_row['full_Name'].'</option>';
                   
-                 $query_staff_Teacher= mysqli_query($conn,"select * from staff where role='Teacher' and school_ID = '".$_SESSION['login_user_school_ID']."'")or
+                 $query_staff_Teacher= mysqli_query($conn,"select * from staff where school_ID = '".$_SESSION['login_user_school_ID']."'")or
                    die(mysqli_error());
                    while ($teacher_rows=mysqli_fetch_array($query_staff_Teacher)){
                     //$student_regNoID= $class_rows['class_name'];

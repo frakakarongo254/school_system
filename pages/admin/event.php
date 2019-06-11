@@ -5,7 +5,97 @@ if (!velifyLogin()) {
 }
  #get school Id from current session school id
  $school_ID = $_SESSION['login_user_school_ID'];
+
+if(isset($_POST["Export"])){
+     //echo "yes";
+    // $filename = "members_" . date('Y-m-d') . ".csv";
+      header('Content-Type: text/csv; charset=utf-8');  
+      header('Content-Disposition: attachment; filename=data.csv');  
+      $output = fopen("php://output", "w");  
+      fputcsv($output, array('Title','Location','Starting Date','Starting Time','Ending Date','Ending Time','Event Type','Description','Event For'));  
+      $queryz = "SELECT event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,
+      event_type,event_description,event_for from event where school_ID='".$school_ID."' ORDER BY event_ID DESC LIMIT 1" ;  
+      $resultz = mysqli_query($conn, $queryz);  
+      
+      while($rowz = mysqli_fetch_assoc($resultz))  
+      {  
+         
+           fputcsv($output, $rowz);  
+      }  
+      fclose($output);  
+      //return ob_get_clean();
+    exit();
+ }  
 ?>
+<?php
+
+
+ if(isset($_POST["importBtn"])){
+    
+    $filename=$_FILES["importFile"]["tmp_name"];    
+
+
+     if($_FILES["importFile"]["size"] > 0)
+     {
+        $file = fopen($filename, "r");
+        $count = 0;
+         $x=0;
+          while (($getData = fgetcsv($file, 10000, ",")) !== FALSE)
+           {
+
+             $count++; 
+            if($count>1)
+            { 
+                
+            
+            $x++;
+              $randstd = substr(number_format(time() * rand(),0,'',''),0,10 + $x);
+              $event_ID=md5($randstd);
+              $title = mysqli_real_escape_string($conn,$getData[0]);
+              $location = mysqli_real_escape_string($conn,$getData[1]);
+              $startDate = mysqli_real_escape_string($conn,$getData[2]);
+              $startTime = mysqli_real_escape_string($conn,$getData[3]);
+              $endDate = mysqli_real_escape_string($conn,$getData[4]);
+              $endTime = mysqli_real_escape_string($conn,$getData[5]);
+               $Type = mysqli_real_escape_string($conn,$getData[6]);
+              $Desc = mysqli_real_escape_string($conn,$getData[7]);
+              $eventFor = mysqli_real_escape_string($conn,$getData[8]);
+            
+
+               $color = '#000000';
+               $eventStart_date= date("Y-m-d", strtotime($startDate));
+              $eventEnd_date= date("Y-m-d", strtotime($endDate));
+
+                        
+             $sql = "INSERT into event (school_ID, event_title,event_location,event_startDate,event_startime,event_endDate,event_endtime,event_description,event_color,event_for,event_type
+          ) 
+                   values ('".$school_ID."','".$title."','".$location."','".$eventStart_date."','".$startTime."','".$eventEnd_date."','".$endTime."','".$Desc."','".$color."','".$eventFor."','".$Type."')";
+                   $result = mysqli_query($conn, $sql);
+
+
+        if(!isset($result))
+        {
+          echo "<script type=\"text/javascript\">
+              alert(\"Invalid File:Please Upload CSV File.\");
+              window.location = \"event.php\"
+              </script>"; 
+              //mysql_error()  
+        }
+        else {
+            echo "<script type=\"text/javascript\">
+            alert(\"CSV File has been successfully Imported.\");
+            window.location = \"event.php\"
+          </script>";
+        }
+           }
+         }
+      
+           fclose($file); 
+     }
+  }  
+
+
+ ?>
 
 <?php include("include/header.php")?>
 
@@ -260,8 +350,21 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              
-              <div class="col-md-12   " style=""><a class="btn btn-primary pull-right" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
+              <div class="col-md-6 col-xs-12">
+                
+              </div>
+               <div class="col-md-2 col-xs-12">
+                
+                <form action="" method="POST">
+                  <button type="submit" class="btn" id="button1" style="color:#fff" name="Export" onclick="">Export</button>
+
+                </form>
+              </div>
+              <div class="col-md-2 col-xs-12">
+                
+                <button href="#" class="btn" id="button1" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
+              </div>
+              <div class="col-md-2 col-xs-12" style=""><a class="btn btn-primary pull-" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addEvent"><i class="fa fa-plus"></i><b> New Event</b></a></div>
             </div>
             </div>
             
@@ -702,6 +805,30 @@ if (!velifyLogin()) {
       </div>
     </div>
      </div>
+      <!-- Import event-->
+        <div class="modal fade" id="modal-importStudent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Upload CSV file</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+         <form id="fileinfo" name="" action="event.php" method="POST" enctype="multipart/form-data">
+           <input type="file" name="importFile" class="form-control" value="upload">
+         
+        </div>
+          <div class="modal-footer">
+            <button type="submit" class="pull-left btn btn-primary" name="importBtn" href="#">Upload</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
     </section>
     <!-- /.content -->
   </div>
@@ -983,7 +1110,7 @@ event_type=radios[i].value;
     if(data=='success'){
  window.location="event.php?delete=True" 
     }else{
-      alert("OOp! Could not delete the class.Please try again!");
+      alert("OOp! Could not delete.Please try again!");
     }
   
   }

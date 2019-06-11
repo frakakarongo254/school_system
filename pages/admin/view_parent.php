@@ -81,32 +81,32 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
         }
 
         if(isset($_POST['sendEmail'])){
-        
-         $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
-        $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-          $senderemail=$senderemail_row['sender_signature'];
-        $recipient_ID=$get_parentID;
-        $from=$senderemail_row['sender_email'];
-        $fromName=$senderemail_row['sender_name'];
-        $footer=$senderemail_row['sender_signature'];
-        $to=$_POST['email_to'];
-        $subject=$_POST['email_subject'];
-        $msg=$_POST['email_message'];
-         $message=$msg ." <br>".  $senderemail;
-        $headers =  'MIME-Version: 1.0' . "\r\n"; 
-        $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
 
-//mail($to, $subject, $body, $headers);
-        $datetime = date_create()->format('Y-m-d H:i:s');
-        $sudent_insert_query='';
-        $send=mail($to,$subject,$message,$headers);
-        if($send){
+          $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` = '".$_SESSION['login_user_school_ID']."' ");
+          $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+          $senderemail=$senderemail_row['sender_signature'];
+          $recipient_ID=$get_parentID;
+          $from=$senderemail_row['sender_email'];
+          $fromName=$senderemail_row['sender_name'];
+          $footer=$senderemail_row['sender_signature'];
+          $to=$_POST['email_to'];
+          $subject=$_POST['email_subject'];
+          $msg=$_POST['email_message'];
+          $message=$msg ." <br>".  $senderemail;
+          $headers =  'MIME-Version: 1.0' . "\r\n"; 
+          $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
+          $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
+
+          //mail($to, $subject, $body, $headers);
+          $datetime = date_create()->format('Y-m-d H:i:s');
+          $sudent_insert_query='';
+          $send=mail($to,$subject,$message,$headers);
+          if($send){
           //echo "Email Sent successfully";
-          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,recipient_ID,message,date_sent 
+          $sudent_insert_query=mysqli_query($conn,"insert into `email` ( school_ID,email_subject,recipient,sender,recipient_ID,message,date_sent 
           ) 
-          values('$school_ID','$subject','$to','$recipient_ID','$msg','$datetime') ");
-        }else{
+          values('$school_ID','$subject','$to','$from','$recipient_ID','$msg','$datetime') ");
+          }else{
           echo' <div class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
           aria-hidden="true">
@@ -114,79 +114,120 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
           </button>
           Sorry! please try again.
           </div>';  
-        }
-        if($sudent_insert_query){
-            echo '<script> window.location="view_parent.php?id='.$recipient_ID.'&insert=email" </script>';
-        }
-      }   
+          }
+          if($sudent_insert_query){
+          echo '<script> window.location="view_parent.php?id='.$recipient_ID.'&insert=email" </script>';
+          }
+          }   
 
-      #save Notification
-      if(isset($_POST['saveNotication'])){
-         $notification=$_POST['notificationMessage'];
+          #save Notification
+          if(isset($_POST['saveNotication'])){
+          $notification=$_POST['notificationMessage'];
           $notification_student_id=$_POST['notification_student_id'];
-         #get email sender settings
-       $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` =
-        '".$_SESSION['login_user_school_ID']."' ");
-        $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
-        $senderemail=$senderemail_row['sender_signature'];
-        $from=$senderemail_row['sender_email'];
-        $fromName=$senderemail_row['sender_name'];
-        $footer=$senderemail_row['sender_signature'];
-        $to= $parent_email;
-        $subject="Notification";
-        $msg=$notification;
-        $message=$msg ." <br>".  $senderemail;
-        $headers =  'MIME-Version: 1.0' . "\r\n"; 
-        $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
-        $sendNotification;
-  $datetime = date_create()->format('Y-m-d H:i:s');
-         if (isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail']) ) {
+          #get email sender settings
+          $emailSignature_sql = mysqli_query($conn,"select * from `email_setting` where `school_ID` =
+          '".$_SESSION['login_user_school_ID']."' ");
+          $senderemail_row = mysqli_fetch_array($emailSignature_sql,MYSQLI_ASSOC);
+          $senderemail=$senderemail_row['sender_signature'];
+          $from=$senderemail_row['sender_email'];
+          $fromName=$senderemail_row['sender_name'];
+          $footer=$senderemail_row['sender_signature'];
+          $to= $parent_email;
+          $subject="Notification";
+          $msg=$notification;
+          $message=$msg ." <br>".  $senderemail;
+          $headers =  'MIME-Version: 1.0' . "\r\n"; 
+          $headers .= 'From: '.$fromName .' <'.$from.'>' . "\r\n";
+          $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
+          $sendNotification;
+          $datetime = date_create()->format('Y-m-d H:i:s');
+          if (isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail']) ) {
           #send both emill and sms and save
-          
+
           $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date ,student_ID
           ) 
           values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
-           if ($notification_query) {
-              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
-           }
-         $sendNotification=mail($to,$subject,$message,$headers);
-           
-         }elseif (isset($_POST['natificationWithSMS']) and !isset($_POST['natificationWithEmail'])) {
-           # send sms only and save
+          if ($notification_query) {
+          echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+          }
+          $sendNotification=mail($to,$subject,$message,$headers);
+
+          }elseif (isset($_POST['natificationWithSMS']) and !isset($_POST['natificationWithEmail'])) {
+          # send sms only and save
           //$sendNotification=mail($to,$subject,$message,$headers);
           $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
           ) 
           values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
-           if ($notification_query) {
-              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
-           }
-         $sendNotification=mail($to,$subject,$message,$headers);
-         }elseif (!isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail'])) {
-           # send email only and save
-           //$sendNotification=mail($to,$subject,$message,$headers);
-            $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
+          if ($notification_query) {
+          echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+          }
+          $sendNotification=mail($to,$subject,$message,$headers);
+          }elseif (!isset($_POST['natificationWithSMS']) and isset($_POST['natificationWithEmail'])) {
+          # send email only and save
+          //$sendNotification=mail($to,$subject,$message,$headers);
+          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
           ) 
           values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
-           if ($notification_query) {
-              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
-           }
-           $sendNotification=mail($to,$subject,$message,$headers);
-           
-         }else{
-           $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
+          if ($notification_query) {
+          echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+          }
+          $sendNotification=mail($to,$subject,$message,$headers);
+
+          }else{
+          $notification_query=mysqli_query($conn,"insert into `notification` ( school_ID,recipient_email,recipient_ID,notification_message,notification_date,student_ID
           ) 
           values('$school_ID','$to','$get_parentID','$msg','$datetime','$notification_student_id') ");
-           if ($notification_query) {
-              echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
-           }
-         $sendNotification=mail($to,$subject,$message,$headers);
+          if ($notification_query) {
+          echo '<script> window.location="view_parent.php?id='.$get_parentID.'&insert=Notification" </script>';
+          }
+          $sendNotification=mail($to,$subject,$message,$headers);
 
-         }
+          }
 
 
-      }
-        ?>
+          }
+
+      if(isset($_POST['uploadPhotoBtn'])){
+    if(isset($_FILES['parent_photo']['name']) and !empty($_FILES['parent_photo']['name'])){
+    $file=$_FILES['parent_photo']['name'];
+    $path_parts = pathinfo($file);
+    $extension= $path_parts['extension'];
+
+    if ($_FILES["parent_photo"]["size"] > 500000) {
+    echo "<script>alert('Sorry, your file is too large.')</script>";
+    $uploadOk = 0;
+    }
+    elseif($extension != "jpg" && $extension != "png" && $extension != "jpeg"
+    && $extension != "gif" ) {
+    echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
+    $uploadOk = 0;
+    }else{
+    $info = pathinfo($_FILES['parent_photo']['name']);
+    $ext = $info['extension']; // get the extension of the file
+
+    $newname = $get_parentID .".".$ext; 
+    $parent_photo = addslashes(file_get_contents($_FILES['parent_photo']['tmp_name']));
+    $result_query=mysqli_query($conn,"update `parents` SET photo= '".$parent_photo."'  where parent_ID='".$get_parentID."' and `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+
+    if($result_query){
+
+  
+    echo '<script> window.location="view_parent.php?id='.$get_parentID.'" </script>';
+    }else{
+    echo' <div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert"
+    aria-hidden="true">
+    &times;
+    </button>
+    Sorry! Something went wrong.Please try again.
+    </div>'; 
+    }
+    }
+    }else{
+    echo '<script> alert("You must select an image") </script>';
+    }
+    }
+          ?>
       
 
     </section>
@@ -205,7 +246,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                   <div class="pull-left">
                    
                    <?php echo $image;?>
-
+                <h3 class="profile-username text-center"><a href="#" data-toggle="modal" data-target="#modal-editParentPhoto"><span class="pull- badge bg-secondary">Change photo</span></a></h3>
               
             </div>
                 </div>
@@ -386,8 +427,8 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                                 $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                               }
                               echo" <tr>
-                                     <td>
-                                      ".$img."
+                                     <td><a href='view_student.php?id=".$row2['student_ID']."'>".$img."</a>
+                                     
                                      </td>
                                       <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
                                       <td>".$row2['registration_No']." </td>
@@ -466,7 +507,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                               <th>Date</th>
                               <th>Student</th>
                               <th>Summary</th>
-                              <th>Amount</th>
+                              <th>Invoiced Amount</th>
                               <th>Balance</th>
                               <th>Action</th>
                               
@@ -474,56 +515,50 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                             </thead>
                             <tbody>
                                <?php
-                               
-                                $total_amount_invoiced=0.00;
-                            $amount_query = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
-                             die(mysqli_error());
-                             while ($row_amount=mysqli_fetch_array($amount_query)){
-                             $studentId = $row_amount['student_ID'];
-                             
-                             $que= mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$studentId."'")or
-                             die(mysqli_error());
-                             while ($row_std=mysqli_fetch_array($que)){
-                               $name=$row_std['first_Name']." ".$row_std['last_Name'];
-                                $reg=$row_std['registration_No'];
-                              $stdId = $row_std['student_ID'];
-                              // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $que2 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' && student_ID='".$stdId."'")or
-                             die(mysqli_error());
-                             $std_name;
-                             
-                             while ($row_in=mysqli_fetch_array($que2)){
-                              $total_amount_invoiced= $total_amount_invoiced + $row_in['amount']  ;
-                               $invoiveID= $row_in['invoice_ID'];
-                                $invoive_date= $row_in['invoice_date'];
-                                $studentid= $row_in['student_ID'];
-                               $newDate = date("d-m-Y", strtotime($invoive_date));
-                                $total_amount=0.00;
-                              echo' <tr>
-                                   <td>   <a href="view_invoice.php?invoice='.$invoiveID.'"> '.$row_in['reff_no'].' </a></td>';
+                                $query33=mysqli_query($conn,"select  parent_relation.student_ID, parent_relation.parent_ID from parent_relation where parent_relation.school_ID = '".$school_ID."' && parent_relation.parent_ID='".$get_parentID."'");
+                                    while ($row33=mysqli_fetch_array($query33)){
+                                    $std_ID = $row33['student_ID'];
+                                    $query3= mysqli_query($conn,"select  invoice.*,student.first_Name,student.last_Name, student.registration_No, student.student_ID from invoice join student on student.student_ID = invoice.student_ID where invoice.school_ID = '".$school_ID."' && invoice.student_ID='".$std_ID."'");
 
-                                  echo " <td>".$newDate."</td>
-                                         <td>".$reg ." ".$name."</td>
-                                        <td>".$row_in['summury']." </td>
-                                        <td>".$school_row['currency'] . ' <b> '.formatCurrency($row_in['amount'])."</b></td>
-                                        <td>".$school_row['currency'] . ' <b> '.formatCurrency($row_in['balance']) .
-                               "</b></td>";
-                                         
-                                          
-                                      
-                                       echo' 
-                                          <td>
-                                           <a href="edit_invoice.php?invoice='.$invoiveID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
 
-                                           <a href="payment.php?invoice_id='.$invoiveID.'"><button type="button"  class="btn btn-success badge" "><span class= "glyphicon glyphicon-"></span>Recieve Payment</button></a>
+                                    while ($row3=mysqli_fetch_array($query3)){
+                                    $name=$row3['first_Name']." ".$row3['last_Name'];
+                                    $reg=$row3['registration_No'];
+                                    $invoiceID=$row3['invoice_ID'];
+                                    $invoice_date= $row3['invoice_date'];
+                                    $bal=$row3['amount'] - $row3['amount_paid'];
+                                    if ($bal < 0 ) {
+                                    # code...
+                                    $bal=0.00;
+                                    }else{
+                                    $bal=  $bal;
+                                    }
 
-                                       
-                                       </td>
+                                    $newDate = date("d-m-Y", strtotime($invoice_date));
+                                    $total_amount=0.00;
+                                    echo' <tr>
+                                    <td>    <a href="view_invoice.php?invoice='.$invoiceID.'"> '.$row3['reff_no'].' </a></td>';
+
+                                    echo " <td><span class='hidden'>".date('Y/m/d', strtotime($invoice_date))."</span>".$newDate."</td>
+                                    <td>".$reg ." ".$name."</td>
+                                    <td>".$row3['summury']." </td>
+                                    <td align='right'>".$school_row["currency"] . " " .formatCurrency($row3['amount'])."</td>
+                                    <td align='right'>".$school_row["currency"] . " " .formatCurrency($bal)."</td>";
+
+                                    
+                                
+                             echo'   <td>
+                                 <a href="edit_invoice.php?invoice='.$invoiceID.'"><button type="button"  class="btn btn-success badge" onclick="viewStudentDetailes()"><span class= "glyphicon glyphicon-pencil"></span></button></a>
+
+                                <a href="payment.php?invoice_id='.$invoiceID.'"><button type="button"  class="btn btn-success badge" "><span class= "glyphicon glyphicon-"></span>Recieve Payment</button></a>
+                                </td>
+
                                     </tr>';
-                             }
-                           }
-                         }
-                     
+
+
+                                    }
+                                    } 
+                               
                                ?>
                            
                              </tbody>
@@ -542,7 +577,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                             <tr>
                               <th>Receipt No </th>
                               <th>Date</th>
-                              <th>Name</th>
+                              <th>Student</th>
                               <th>Remark</th>
                               <th>Amount</th>
                               <th>Action</th>
@@ -552,58 +587,49 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                             <tbody>
                                <?php
 
-                                 
-                               
-                            $total_amount_paid=0.00;
-                            $pay_query = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
-                             die(mysqli_error());
-                             while ($row_amount=mysqli_fetch_array($pay_query)){
-                             $studentId = $row_amount['student_ID'];
-                             
-                             $query_std= mysqli_query($conn,"select * from student where school_ID = '".$school_ID."' && student_ID='".$studentId."'")or
-                             die(mysqli_error());
-                             while ($row_std=mysqli_fetch_array( $query_std)){
-                               $name=$row_std['first_Name']." ".$row_std['last_Name'];
-                                $reg=$row_std['registration_No'];
-                              $std_Id = $row_std['student_ID'];
-                              // $name= $row2['first_Name']." ".$row2['last_Name'];
-                              $que02 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' && student_ID='".$std_Id."'")or
-                             die(mysqli_error());
-                             $std_name;
-                             
-                             while ($row2=mysqli_fetch_array($que02)){
-                              $total_amount_paid= $total_amount_paid + $row2['amount_paid']  ;
-                               $invoiceID= $row2['invoice_ID'];
-                               $paymentID= $row2['payment_ID'];
-                                $invoive_date= $row2['payment_date'];
-                                $studentid= $row2['student_ID'];
-                                $slipNo= $row2['slip_no'];
-                               $newDate = date("d-m-Y", strtotime($invoive_date));
-                                $total_amount=0.00;
-                                echo' <tr>
-                                   <td>   <a href="view_transaction.php?payment_ID='.$paymentID.'"> '.$slipNo.' </a></td>';
+                                  $total_amount_p=0.00;
+                                  $query2 = mysqli_query($conn,"select * from parent_relation where school_ID = '".$school_ID."' && parent_ID='".$get_parentID."'")or
+                                  die(mysqli_error());
+                                  while ($row11=mysqli_fetch_array($query2)){
+                                  $studentid= $row11['student_ID'];
+                                  $que3 = mysqli_query($conn,"select payment.*, invoice.reff_no, student.first_Name, student.last_Name, student.registration_No, student.student_ID from payment join invoice on invoice.invoice_ID=payment.invoice_ID join student on student.student_ID=payment.student_ID where payment.school_ID = '".$school_ID."' and payment.student_ID='".$studentid."' ORDER BY payment_date DESC")or
+                                  die(mysqli_error());
 
-                                  echo "
-                                        <td>".$newDate."</td>
-                                        <td>".$reg ." ".$name."</td>
-                                        <td>".$row2['remarks']." </td>
-                                        <td>".$school_row['currency'] . ' <b> '.formatCurrency($row2['amount_paid']) ."</b></td>
-                                        ";
-                                       
-                                       echo' 
-                                          <td>
-                                           <a  href="edit_transaction.php?payment_id='.$paymentID.'"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-pencil"></span></a>
+                                  foreach ($que3 as $row2) {
+                                  $total_amount_p= $total_amount_p + $row2['amount_paid']  ;
+                                  $invoiceID= $row2['invoice_ID'];
+                                  $paymentID= $row2['payment_ID'];
+                                  $invoive_date= $row2['payment_date'];
+                                  $studentid= $row2['student_ID'];
+                                  $slipNo= $row2['slip_no'];
+                                  $newDate = date("d-m-Y", strtotime($invoive_date));
 
-                                        
-                                          
+                                  $invoice_ref=$row2['reff_no'];
+                                  $name=$row2['first_Name']." ".$row2['last_Name'];
+                                  $reg=$row2['registration_No'];
+                                  echo' <tr>
 
-                                         <button type="button"  class="btn btn-primary badge" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
-                                       </td>
-                                    </tr>';
-                             }
-                           }
-                         }
-                            
+
+                                  <td><a  href="view_transaction.php?payment_ID='.$paymentID.'"   >'.$slipNo.'</a></td>';
+                                  echo   "  <td>".$newDate."</td>
+                                  <td>".$reg ." ".$name."</td>
+                                  <td>".$row2['remarks']." </td>
+                                  <td style='text-align:right;'>".$school_row["currency"] . " " .formatCurrency($row2['amount_paid'])."</td>
+                                  ";
+
+                                  echo'   <td>
+                                  <a  href="edit_transaction.php?payment_id='.$paymentID.'"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-pencil"></span></a>
+
+                                  <button type="button"  class="btn btn-primary badge" id="'.$paymentID.'" name="'. $slipNo.'" onclick="cancelTransaction(this.id,this.name)" data-toggle="modal" data-target="#cancel_transaction_Modal"><span class="glyphicon glyphicon-"></span>Cancel Transaction</button>
+                                  </td>
+                                  </tr>';
+
+                                  }
+
+
+                                  }
+
+                           
                                ?>
                            
                              </tbody>
@@ -871,6 +897,30 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
       </div>
     </div>
      </div>
+
+     <div class="modal fade" id="modal-editParentPhoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Upload Logo</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+         <form id="fileinfo" name="" action="view_parent.php?id=<?php echo $get_parentID ?>" method="POST" enctype="multipart/form-data">
+           <input type="file" name="parent_photo" class="form-control" value="upload"/>
+         
+        </div>
+          <div class="modal-footer">
+            <button type="submit" class="pull-left btn btn-primary" name="uploadPhotoBtn" href="#">Upload</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
     </section>
     <!-- /.content -->
   </div>

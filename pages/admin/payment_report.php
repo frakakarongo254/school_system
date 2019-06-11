@@ -39,8 +39,9 @@
          <div class="col-md-2 box-primary ">
           <h3><a href="report.php"><span class="fa fa-bar-chart"></span>  <b class="color-primary" >  Reports</b></a></h3>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
+                <li class="active"><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
                 <li><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
+                 <li class=""><a href="attendance_report.php"><i class="fa fa-arrow-circle-right"></i> Attendance</a></li>
               </ul>
          </div>
        
@@ -63,17 +64,15 @@
                   <select class="form-control select2" name="report_class_id" id="report_class_id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
                     <option value="All">All</option>
-                  <?php
-                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($crows=mysqli_fetch_array($query_c)){
-
-                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($class_rows=mysqli_fetch_array($query_level)){
-                          //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['level_name'].''.$crows['name'].'</option>';
+                   <?php
+                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <option value="'.$row_value['class_ID'].'">'.$row_value['level_name'].' '.$row_value['stream_name'].'</option>';
                    }
                  
-                   }
+                   
                 ?>
                  </select>
                 </div>

@@ -187,8 +187,9 @@ $login_parent_email=$_SESSION['login_user_email'];
                 <tbody>
             <?php
           
-            $event_query = mysqli_query($conn,"select * from event where school_ID = '$school_ID' ORDER BY event_startDate DESC, event_startime DESC")or
-            die(mysqli_error());
+            $event_query = mysqli_query($conn,"select * from event where event_for='All' || event_for='Parent' and school_ID = '".$school_ID."' ORDER BY event_startDate ")or
+            die(mysqli_error($conn));
+
             while ($event_row=mysqli_fetch_array($event_query)){
              $eventID=$event_row['event_ID'];
              $start=$event_row["event_startDate"];

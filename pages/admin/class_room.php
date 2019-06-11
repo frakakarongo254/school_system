@@ -7,96 +7,11 @@ if (!velifyLogin()) {
 }
  #get school Id from current session school id
   $school_ID = $_SESSION['login_user_school_ID'];
-if(isset($_POST["Export"])){
-     //echo "yes";
-    // $filename = "members_" . date('Y-m-d') . ".csv";
-      header('Content-Type: text/csv; charset=utf-8');  
-      header('Content-Disposition: attachment; filename=data.csv');  
-      $output = fopen("php://output", "w");  
-      fputcsv($output, array('registration_No','first_Name','last_Name','gender_MFU','nationality','zone','zone_transport_type','status','class_ID','admission_date','date_of_Birth','other_Details','meal_plan'));  
-      $queryz = "SELECT registration_No,first_Name,last_Name,gender_MFU,nationality,zone,zone_transport_type,status,class_ID,admission_date,date_of_Birth,other_Details,meal_plan from student where school_ID='".$school_ID."' ORDER BY id ASC";  
-      $resultz = mysqli_query($conn, $queryz);  
-      
-      while($rowz = mysqli_fetch_assoc($resultz))  
-      {  
-         
-           fputcsv($output, $rowz);  
-      }  
-      fclose($output);  
-      //return ob_get_clean();
-    exit();
- }  
+  $getClass_ID="";
+if(isset($_GET['id'])){
+   $getClass_ID =$_GET['id'];
+}
 ?>
-<?php
-
-
- if(isset($_POST["importBtn"])){
-    
-    $filename=$_FILES["importFile"]["tmp_name"];    
-
-
-     if($_FILES["importFile"]["size"] > 0)
-     {
-        $file = fopen($filename, "r");
-        $count = 0;
-         $x=0;
-          while (($getData = fgetcsv($file, 10000, ",")) !== FALSE)
-           {
-
-             $count++; 
-            if($count>1)
-            { 
-                
-            
-            $x++;
-              $randstd = substr(number_format(time() * rand(),0,'',''),0,10 + $x);
-              $student_ID=md5($randstd);
-              $registration_No = mysqli_real_escape_string($conn,$getData[0]);
-              $first_Name = mysqli_real_escape_string($conn,$getData[1]);
-              $last_Name = mysqli_real_escape_string($conn,$getData[2]);
-              $gender_MFU = mysqli_real_escape_string($conn,$getData[3]);
-              $nationality = mysqli_real_escape_string($conn,$getData[4]);
-              $zone = mysqli_real_escape_string($conn,$getData[5]);
-              $zone_transport_type = mysqli_real_escape_string($conn,$getData[6]);
-              $status = mysqli_real_escape_string($conn,$getData[7]);
-              $class_ID = mysqli_real_escape_string($conn,$getData[8]);
-              $adm_date = mysqli_real_escape_string($conn,$getData[9]);
-               $admission_date= date("Y-m-d", strtotime($adm_date));
-              
-              $date_Birth = mysqli_real_escape_string($conn,$getData[10]);
-               $date_of_Birth = date("Y-m-d", strtotime($date_Birth));
-              $other_Details = mysqli_real_escape_string($conn,$getData[11]);
-              $meal_plan = mysqli_real_escape_string($conn,$getData[12]);
-                        
-             $sql = "INSERT into student (student_ID,school_ID,registration_No,first_Name,last_Name,gender_MFU,nationality,zone,zone_transport_type,status,class_ID,admission_date,date_of_Birth,other_Details,meal_plan) 
-                   values ('".$student_ID."','".$school_ID."','".$registration_No."','".$first_Name."','".$last_Name."','".$gender_MFU."','".$nationality."','".$zone."','".$zone_transport_type."','". $status."','".$class_ID."','".$admission_date."','". $date_of_Birth."','".$other_Details."','".$meal_plan."')";
-                   $result = mysqli_query($conn, $sql);
-
-
-        if(!isset($result))
-        {
-          echo "<script type=\"text/javascript\">
-              alert(\"Invalid File:Please Upload CSV File.\");
-              window.location = \"student.php\"
-              </script>"; 
-              //mysql_error()  
-        }
-        else {
-            echo "<script type=\"text/javascript\">
-            alert(\"CSV File has been successfully Imported.\");
-            window.location = \"student.php\"
-          </script>";
-        }
-           }
-         }
-      
-           fclose($file); 
-     }
-  }  
-
-
- ?>
-
 <?php require_once("include/header.php")?>
 
 <body class="hold-transition skin-cadetblue sidebar-mini">
@@ -120,23 +35,9 @@ if(isset($_POST["Export"])){
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-     <?php
-      #delete All student
-      if (isset($_POST['deleteAllbutton'])) {
-        # code...
-        echo "kihiko";
-        if (!empty($_POST['check'])) {
-          # code...
-        
-    for($i = 0; $i<count($_POST['check']); $i++)  
-     {  
-      echo $studentID=$_POST['check'][$i];
-      }
-        }
-       
-        
-    }
-      ?>
+     
+      
+      
     </section>
     <!-- Main content -->
     <section class="content">
@@ -144,31 +45,32 @@ if(isset($_POST["Export"])){
         <!-- Custom Tabs -->
           <div class="nav-tabs-custom" style="padding-right: 20px;padding-left: 20px">
            <div class="row">
-              <div class="col-md-4"><b><h3>Students</h3> </b></div>
+
+              <div class="col-md-4"><b>
+                <h3>
+                 <?php
+                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.class_ID='".$getClass_ID."' and class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <h3 >'.$row_value['level_name'].'  '.$row_value['stream_name'].'  '.$row_value['year'].'</h3>';
+                   }
+                 
+                   
+                ?>
+              </h3> </b></div>
               <div class="col-md-2">
                
-                <div id="deleteAll" style="display:none">
-                <br>
-                
-                  <button type="submit" class="btn" id="button1" style="color:#fff;background-color:#D02E0B;" data-toggle="modal" data-target="#modal-deleteCheckedStudent">Delete</button>
-
                 
               </div>
+              <div class="col-md-2">
+                
               </div>
               <div class="col-md-2">
-                <br>
-                <form action="" method="POST">
-                  <button type="submit" class="btn" id="button1" style="color:#fff" name="Export" onclick="">Export</button>
-
-                </form>
-              </div>
-              <div class="col-md-2">
-                <br>
-                <button href="#" class="btn" id="button2" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
+               
               </div>
               <div class="col-md-2 col-pull-right" style="text-align:right">
-                <br>
-                <a class="btn btn-primary btn-bg" id="button1" href="add_student.php" style="  "><i class="fa fa-plus"></i><b> New Student </b></a>
+               
               
               </div>
             </div>
@@ -181,13 +83,10 @@ if(isset($_POST["Export"])){
                  <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th><label>
-            <input type="checkbox" id="select_all" class="" onchange="deleteCheckbox()" style="width: 15px;height: 15px;background-color: red"> All
-          </label></th>
+                 
                   <th>Img</th>
                   <th>Name</th>
                   <th>Admin No</th>
-                  <th>Class Room</th>
                   <th>Gender</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -197,15 +96,10 @@ if(isset($_POST["Export"])){
                   <?php
                    #get school Id from current session school id
                    $school_ID = $_SESSION['login_user_school_ID'];
-                   $query2 = mysqli_query($conn,"select * from student where school_ID = '".$school_ID."'")or
+                   $query2 = mysqli_query($conn,"select * from student where class_ID='".$getClass_ID."' and school_ID = '".$school_ID."'")or
                    die(mysqli_error());
                    while ($row1=mysqli_fetch_array($query2)){
-                    $stdId=$row1['student_ID'];
-                    $classId=$row1['class_ID'];
-
-                    $select_class= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."' and class.class_ID='".$classId."'");
-                    foreach ($select_class as $row3_class) {
-                       $student_regNoID= $row1['registration_No'];
+                   $student_regNoID= $row1['registration_No'];
                    $status;
                    if($row1['status'] =='Admitted'){
                      $status='Active';
@@ -217,32 +111,31 @@ if(isset($_POST["Export"])){
                    if($row1['photo'] !=''){
                      $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
                   }else{
-                      $img = "<img src='../../dist/img/user.jpg' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                       
                     }
-                        
-                           echo" <tr>
-                  <td> <input class='checkbox' type='checkbox' id='check' name='check[]' value='".$stdId."' style='width: 15px;height: 15px;'></td>
+                    $stdId=$row1['student_ID'];
+                    // encryption function 
+  
+                  
+                  //$id =  base64_url_encode($stdId);
+                  echo" <tr>
+                 
                   <td><a href='view_student.php?id=".$stdId."'>".$img."</a></td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
                   <td>".$row1['registration_No']."</td>
-                  <td><a href='class_room.php?id=".$classId."'>".$row3_class['level_name']." ".$row3_class['stream_name']."</a></td>
                   <td>".$row1['gender_MFU']."</td>
                   <td>".$status."</td>  
                   <td>";
-            
+               $_SESSION['student_ID']=$row1['student_ID'];#send student id as a session to the next page of view student
 
                   echo'  <a class="btn btn-success badge " href="view_student.php?id='.$stdId.'"><span class= "glyphicon glyphicon-eye-open"></span></a>
 
                   <a class="btn btn-info badge" href="edit_students.php?id='.$row1['student_ID'].'"> <span class="glyphicon glyphicon-pencil"></span></a>
 
-                  <button type="button" id="'.$stdId.'" class="btn btn-danger badge" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                 
                   </td>
                   </tr>';
-                        }
-
-                  
-                 
                     }
                   ?>
                
@@ -255,7 +148,45 @@ if(isset($_POST["Export"])){
           <!-- nav-tabs-custom -->
   
 
-      
+        <!--Edit student model-->
+         
+      <div class="modal fade" id="modal-editStudent">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit Student</h4>
+              </div>
+              <div class="modal-body">
+                <script >
+                function editStudentDetails(RegNo){
+               
+                var updiv = document.getElementById("editMessage"); //document.getElementById("highodds-details");
+                //alert(id);
+                var details= '&RegNo='+ RegNo;
+                $.ajax({
+                type: "POST",
+                url: "edit_student.php",
+                data: details,
+                cache: false,
+                success: function(data) {
+               
+                document.getElementById("editMessage").innerHTML=data;
+                 }
+                });
+                }
+                </script>
+                <div id="editMessage"></div>
+              </div>
+              
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <!--end of edit student modal-->
        <!-- Import student-->
         <div class="modal fade" id="modal-importStudent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" role="document">
@@ -334,7 +265,6 @@ if(isset($_POST["Export"])){
       </div>
     </div>
     </div>
-  </div>
     </section>
     <!-- /.content -->
   </div>
@@ -506,7 +436,26 @@ for (var i = 0; i < checkboxes.length; i++) {
   });
   }
 </script>
+<script>
+  function myFunction() {
+  // Get the snackbar DIV
+  var x = document.getElementById("snackbar");
 
+  // Add the "show" class to DIV
+  x.className = "show";
 
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+</script>
+<script>
+  function testFun(){
+    alert('yes');
+  var toast = new iqwerty.toast.Toast();
+toast.setText('This is a basic toast message!')
+.setDuration(5000)
+.show();
+  }
+</script>
 </body>
 </html>

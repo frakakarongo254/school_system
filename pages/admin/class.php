@@ -3,6 +3,8 @@ if (!velifyLogin()) {
   $_SESSION['msg'] = "You must log in first";
   header('location: ../../index.php');
 }
+  #get school Id from current session school id
+$school_ID = $_SESSION['login_user_school_ID'];
 ?>
 
 <?php include("include/header.php")?>
@@ -79,17 +81,17 @@ if (!velifyLogin()) {
         }
         #Add class
        if(isset($_POST['addClassBtn'])){
-        
-          #get school Id from current session school id
-         $school_ID = $_SESSION['login_user_school_ID'];
+        $class_teacher_id='';
+        $randstd = substr(number_format(time() * rand(),0,'',''),0,10);
+        $class_ID=md5($randstd);
         $class_level_id=$_POST['class_level_id'];
         $class_stream_id=$_POST['class_stream_id'];
         $class_year=$_POST['class_year'];
         $class_teacher_id=$_POST['class_teacher_id'];
-       $className=$_POST['className'];
-        $class_insert_query=mysqli_query($conn,"insert into `class` (school_ID,name, stream_ID,level_ID,teacher_ID,year
+       //$className=$_POST['className'];
+        $class_insert_query=mysqli_query($conn,"insert into `class` (class_ID,school_ID, stream_ID,level_ID,teacher_ID,year
           ) 
-          values('$school_ID','$className','$class_stream_id','$class_level_id','$class_teacher_id','$class_year') ");
+          values('$class_ID','$school_ID','$class_stream_id','$class_level_id','$class_teacher_id','$class_year') ");
 
         
         if($class_insert_query){
@@ -132,16 +134,16 @@ if (!velifyLogin()) {
  # Add session
       if(isset($_POST['addSessionBtn'])){
         
-          #get school Id from current session school id
-        $school_ID = $_SESSION['login_user_school_ID'];
+        $randsession = substr(number_format(time() * rand(),0,'',''),0,10);
+        $session_ID=md5($randsession);
         $session_carricula_id=$_POST['session_carricula_id'];
         $session_title=$_POST['session_title'];
         $session_name=$_POST['session_name'];
         $session_range=$_POST['session_range'];
        
-        $section_insert_query=mysqli_query($conn,"insert into `session` (school_ID, session_name,session_title,carricula_ID,session_range
+        $section_insert_query=mysqli_query($conn,"insert into `session` (session_ID,school_ID, session_name,session_title,carricula_ID,session_range
           ) 
-          values('$school_ID','$session_name','$session_title','$session_carricula_id','$session_range') ");
+          values(' $session_ID','$school_ID','$session_name','$session_title','$session_carricula_id','$session_range') ");
 
         
         if($section_insert_query){
@@ -161,8 +163,8 @@ if (!velifyLogin()) {
       if(isset($_POST['editSessionBtn'])){
         
           #get school Id from current session school id
-       echo $school_ID = $_SESSION['login_user_school_ID'];
-      echo  $edit_session_session_id=$_POST['edit_session_id'];
+       $school_ID = $_SESSION['login_user_school_ID'];
+       $edit_session_session_id=$_POST['edit_session_id'];
         $edit_session_carricula_id=$_POST['edit_session_carricula_id'];
         $edit_session_title=$_POST['edit_session_title'];
         $edit_session_name=$_POST['edit_session_name'];
@@ -196,7 +198,7 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Classes </h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="buttonClass" data-toggle="modal" data-target="#modal-addClass"><i class="fa fa-plus"></i><b> New Class</b></a></div>
+              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="buttonClass" data-toggle="modal" data-target="#modal-addClass"><i class="fa fa-plus"></i><b> New Class </b></a></div>
             </div>
             </div>
             
@@ -205,7 +207,8 @@ if (!velifyLogin()) {
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>   
-                  <th>Name</th>
+                    
+                  <th>Class Room</th>
                   <th>Level</th>
                   <th>Stream</th>
                   <th>Year</th>
@@ -215,28 +218,27 @@ if (!velifyLogin()) {
                 </thead>
                 <tbody>
                   <?php
-                   #get school Id from current session school id
-                   $school_ID = $_SESSION['login_user_school_ID'];
-                   $query4 = mysqli_query($conn,"select * from class where school_ID = '$school_ID'")or
+                  
+                   $query4 = mysqli_query($conn,"select * from class where school_ID = '".$school_ID."'")or
                    die(mysqli_error());
                    while ($row4=mysqli_fetch_array($query4)){
                   $class_ID=$row4['class_ID'];
                   $levelID=$row4['level_ID'];
                   #get levelname
-                    $levelName = mysqli_query($conn,"select level_name from carricula_level where school_ID = '$school_ID' and carricula_level_ID='$levelID' ");
+                    $levelName = mysqli_query($conn,"select level_name from carricula_level where school_ID = '".$school_ID."' and carricula_level_ID='".$levelID."' ");
                     $levelName_row = mysqli_fetch_array($levelName,MYSQLI_ASSOC);
                     #get teacher name
                     $teacherID=$row4['teacher_ID'];
-                    $teacherName = mysqli_query($conn,"select full_Name from staff where school_ID = '$school_ID' and staff_ID='$teacherID' ");
+                    $teacherName = mysqli_query($conn,"select full_Name from staff where school_ID = '".$school_ID."' and staff_ID='".$teacherID."' ");
                     $teacherName_row = mysqli_fetch_array($teacherName,MYSQLI_ASSOC);
                     #get stream name
                     $streamID=$row4['stream_ID'];
-                    $streamName = mysqli_query($conn,"select stream_name from stream where school_ID = '$school_ID' and stream_ID='$streamID' ");
+                    $streamName = mysqli_query($conn,"select stream_name from stream where school_ID = '".$school_ID."' and stream_ID='".$streamID."' ");
                     $streamName_row = mysqli_fetch_array($streamName,MYSQLI_ASSOC);
                   
                   
                    echo" <tr>
-                          <td>".$row4['name']."</td>
+                          <td><a href='class_room.php?id=".$class_ID."'>".$levelName_row['level_name']." ".$streamName_row['stream_name']."</a></td>
                             <td>".$levelName_row['level_name']."</td>
                             <td>".$streamName_row['stream_name']."</td>
                             <td>".$row4['year']."</td>
@@ -588,8 +590,7 @@ if (!velifyLogin()) {
               </select>
             </div>
             <div class="form-group">
-                <label>Class Name:</label>
-              <input type="test" name="className" class="form-control">
+               
               <div class="form-group">
                 <label>Level:</label>
               <select class="form-control select2" name="class_level_id" style="width: 100%;" required>
@@ -620,7 +621,7 @@ if (!velifyLogin()) {
                </div>
                 <div class="form-group">
                 <label>Teacher:</label>
-              <select class="form-control select2" name="class_teacher_id" style="width: 100%;" required>
+              <select class="form-control select2" name="class_teacher_id" style="width: 100%;" >
                     <option value="">--Select Teacher--</option>
                   <?php
                  $query_staff_Teacher= mysqli_query($conn,"select * from staff where role='Teacher' and school_ID = '".$_SESSION['login_user_school_ID']."'")or

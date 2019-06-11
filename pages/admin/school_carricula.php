@@ -82,6 +82,8 @@
             $school_ID = $_SESSION['login_user_school_ID'];
             $carricula_name=$_POST['carricula_name'];
             $carricula_code =$_POST['carricula_code'];
+            $randCurr = substr(number_format(time() * rand(),0,'',''),0,10);
+          $carricula_ID=md5( $randCurr);
            #check if such carricula already exist
             $carricula_data_sql = mysqli_query($conn,"select * from `carricula` where `code` = '".$carricula_code."' and `name` = '".$carricula_name."' and `school_ID` = '".$school_ID."' ");
             $carricula_row=mysqli_num_rows ( $carricula_data_sql );
@@ -95,9 +97,9 @@
               </div>'; 
             }else{
 
-             $carricula_insert_query=mysqli_query($conn,"insert into `carricula` (school_ID, name,code
+             $carricula_insert_query=mysqli_query($conn,"insert into `carricula` (carricula_ID,school_ID, name,code
           ) 
-          values('$school_ID','$carricula_name','$carricula_code') ");
+          values('$carricula_ID','$school_ID','$carricula_name','$carricula_code') ");
               if($carricula_insert_query){
               echo '<script> window.location="school_carricula.php?insert=true" </script>';
               }else{

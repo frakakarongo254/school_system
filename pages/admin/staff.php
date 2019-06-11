@@ -218,7 +218,16 @@ if (!velifyLogin()) {
             <div class="box-header">
              <div class="row">
               <div class="col-md-8"><b><h3>Staffs</h3> </b></div>
-              <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" data-toggle="modal" id="button1" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Teacher</b></a></div>
+              <div class="col-md-2">
+               
+                <div id="deleteAll" style="display:none">
+               
+                  <button type="submit" class="btn" id="button1" style="color:#fff;background-color:#D02E0B;" data-toggle="modal" data-target="#modal-deleteCheckedStaff">Delete</button>
+
+                
+              </div>
+              </div>
+              <div class="col-md-2 col-pull-right" style="text-align:"><a class="btn btn-primary" href="login.html" data-toggle="modal" id="button1" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Staff</b></a></div>
             </div>
             </div>
             
@@ -232,7 +241,10 @@ if (!velifyLogin()) {
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Img</th>
+                   <th><label>
+            <input type="checkbox" id="select_all" class="" onchange="deleteCheckbox()" style="width: 15px;height: 15px;background-color: red"> All
+          </label></th>
+                  
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
@@ -261,10 +273,10 @@ if (!velifyLogin()) {
                     }
                     
                   echo" <tr>
-                           <td><a href='view_staff.php?id=".$staff_ID."'>
-                             ".$img."</a>
-                           </td>
-                            <td>".$row1['full_Name']."</td>
+                  <td> <input class='checkbox' type='checkbox' id='check' name='check[]' value='".$staff_ID."' style='width: 15px;height: 15px;'></td>
+                           
+                            <td><a href='view_staff.php?id=".$staff_ID."'>
+                             ".$img."</a> " .  $row1['full_Name']."</td>
                             <td>".$row1['email']." </td>
                              <td>".$row1['phone']."</td> 
                             <td>".$row1['gender']."</td>
@@ -440,7 +452,31 @@ if (!velifyLogin()) {
       </div>
     </div>
      </div>
+ <div class="modal  fade" id="modal-deleteCheckedStaff" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete the selected staffs?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           Are you sure you want to delete all selected staffs from the system?
+           
+          
+          <div id="Allmsg"></div>
 
+        </div>
+          <div class="modal-footer">
+           <div id="modalAllMsg">
+           <div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger pull-left" name="deleteAllbutton" id="" type="submit"  onclick="deletefromSystem()">Delete</button>
+           </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
    
     </section>
     <!-- /.content -->
@@ -502,6 +538,76 @@ if (!velifyLogin()) {
     }
   
   }
+
+  });
+  }
+</script>
+<script>
+var select_all = document.getElementById("select_all"); //select all checkbox
+var checkboxes = document.getElementsByClassName("checkbox"); //checkbox items
+
+//select all checkboxes
+select_all.addEventListener("change", function(e){
+  for (i = 0; i < checkboxes.length; i++) { 
+    checkboxes[i].checked = select_all.checked;
+  }
+});
+
+
+for (var i = 0; i < checkboxes.length; i++) {
+  checkboxes[i].addEventListener('change', function(e){ //".checkbox" change 
+    //uncheck "select all", if one of the listed checkbox item is unchecked
+    if(this.checked == false){
+      select_all.checked = false;
+    }
+    //check "select all" if all checkbox items are checked
+    if(document.querySelectorAll('.checkbox:checked').length == checkboxes.length){
+      select_all.checked = true;
+    }
+  });
+}
+</script>
+<script>
+ function deleteCheckbox(){
+  var select_all = document.getElementById("select_all");
+  var delete_all = document.getElementById("deleteAll");
+  if (select_all.checked ==true) {
+  
+    delete_all.style.display = "block";
+  }else{
+    
+   
+   delete_all.style.display = "none";
+  }
+
+ }
+</script>
+<script type="text/javascript">
+  function deletefromSystem(){
+
+    var selected_value = []; // initialize empty array 
+    $("#check:checked").each(function(){
+        selected_value.push($(this).val());
+        
+    });
+   // document.getElementById("AllDiv").innerHTML= selected_value+'<br;
+    var details= '&staff_id='+ selected_value;
+  $.ajax({
+  type: "POST",
+  url: "delete_staff.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+
+    if(data=='success'){
+ window.location="staff.php?delete=True" 
+    }else{
+      alert("OOp! Could not delete the staffs.Please try again!");
+    }
+  
+
+  }
+
 
   });
   }

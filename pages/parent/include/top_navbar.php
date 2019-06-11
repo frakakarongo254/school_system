@@ -39,7 +39,7 @@
             <li class="dropdown messages-menu">
               <!-- Menu toggle button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-envelope-o"></i>
+                <i class="fa fa-envelope-o" style="color: white;"></i>
                 <span class="label label-success">
                   <?php 
                   $Parent_email=   $_SESSION['login_user_email'];
@@ -64,49 +64,35 @@
 
             
            
-            <!-- User Account Menu -->
-            <li class="dropdown user user-menu">
-              <?php
+           
+             <li class="dropdown user user-menu" style="text-decoration:;color:">
+            <?php
              $user_img;
              if( $_SESSION['login_user_photo'] !==''){
-              $user_img='<img class="user-image" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['login_user_photo'] ).'"  height="160px" width="160px" />';
+              $user_img='<img class="user-image" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['login_user_photo'] ).'"  height="90" width="90px" />';
               // img circle class
-              $user_img_circle='<img class="img-circle" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['login_user_photo'] ).'"  height="160px" width="160px" />';
+              $user_img_circle='<img class="img-circle" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['login_user_photo'] ).'"  height="90" width="90px" />';
              }else{
               $user_img='<img src="../../dist/img/avatar.png" class="user-image" alt="User Image">';
               // img circle class
               $user_img_circle='<img src="../../dist/img/avatar.png" class="img-circle" alt="User Image">';
              }
             ?>
-              <!-- Menu Toggle Button -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <!-- The user image in the navbar-->
-                <?php echo $user_img;?>
-                <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs"><?php echo $_SESSION['login_user_fullName']?></span>
-              </a>
-              <ul class="dropdown dropdown-menu">
-                <!-- The user image in the menu -->
-                <li class="user-header">
-                  <?php echo $user_img_circle;?>
-
-                  <p>
-                    <?php echo $_SESSION['login_user_fullName']?> - Parent
-                    <small></small>
-                  </p>
-                </li>
-                <!-- Menu Body -->
-                
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                  <div class="pull-left">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: ;color:#fff ">
+              <?php echo $user_img ;?>
+              <span class="hidden-xs"><?php echo $_SESSION['login_user_fullName'] ;?></span>
+            </a>
+            
+             <ul class="dropdown-menu" role="menu">
+                   <li><a href="#"><b><?php
+                     echo $_SESSION['login_user'];
+                    ?></b></a></li>
+                    
                    
-                  <div class="pull-right">
-                    <a href="include/logout.php" class="btn btn-default btn-flat"><b>Sign out</b></a>
-                  </div>
-                </li>
-              </ul>
-            </li>
+                    <li class="divider"></li>
+                    <li><a href="include/logout.php"><i class="fa fa-sign-out"></i><b>Logout</b></a></li>
+                  </ul>
+          </li>
           </ul>
         </div>
         <!-- /.navbar-custom-menu -->

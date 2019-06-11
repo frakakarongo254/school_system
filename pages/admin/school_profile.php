@@ -126,16 +126,11 @@ $school_ID=$_SESSION['login_user_school_ID'];
             $school_logo = addslashes(file_get_contents($_FILES['school_logo']['tmp_name']));
             $result_query=mysqli_query($conn,"update `school` SET logo_image= '".$school_logo."' ,logo_image_name= '".$newname."' where  `school_ID`='".$_SESSION['login_user_school_ID']."' ");
 
-
-
-       
           if($result_query){
 
-//$ext = $info['extension']; // get the extension of the file
-//$newname = $school_ID .".".$ext; 
 
-$target = 'images/'.$newname;
-move_uploaded_file( $_FILES['school_logo']['tmp_name'], $target); 
+           $target = 'images/'.$newname;
+           move_uploaded_file( $_FILES['school_logo']['tmp_name'], $target); 
 
             echo '<script> window.location="school_profile.php?link=True" </script>';
             }else{

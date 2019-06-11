@@ -30,6 +30,7 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
+  
      
       <?php
     
@@ -172,26 +173,25 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
             <div class="box-body">
               
      <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6"></div>
+      <div class="col-md-6">
        
         
        <form  method="POST" action="attendance_signin.php">
-              <div class="col-md-3">
+              <div class="col-md-6">
                  <div class=" form-group">
                 
                   <select class="form-control select2" onchange="" name="attendance_class__id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
-                  <?php
-                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($crows=mysqli_fetch_array($query_c)){
-
-                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($class_rows=mysqli_fetch_array($query_level)){
-                          //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['level_name'].''.$crows['name'].'</option>';
+                   <?php
+                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <option value="'.$row_value['class_ID'].'">'.$row_value['level_name'].' '.$row_value['stream_name'].'</option>';
                    }
                  
-                   }
+                   
                 ?>
                  </select>
                 </div>
@@ -203,6 +203,7 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
              </form>
              
        </div>
+
      </div>
      <div class="row">
       <form method="POST" action="attendance_signin.php">
@@ -211,8 +212,23 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
          <br>
          <br>
         <div class="form-group">
-          <input type="text" name="signedBy" class="form-control" placeholder="Signed in By"required>
-
+         
+       
+         <select class="form-control select2" onchange="" name="signedBy" style="width: 100%;" required>
+                    <option value="">--Signed in By--</option>
+                   <?php
+                 $query_c= mysqli_query($conn,"select staff.full_Name as name,admin.first_name as admFName, admin.second_name as admSName from staff join admin on admin.school_ID=staff.school_ID where staff.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <option value="'.$row_value['name'].'">'.$row_value['name'].'</option>';
+                    echo' <option value="'.$row_value['admFName'].' '.$row_value['admSName'].'">'.$row_value['admFName'].' '.$row_value['admSName'].' </option>';
+                   }
+                 
+                   
+                ?>
+                 </select>
+      
         </div>
         <div class="row">
           <div class="col-md-6">
@@ -249,17 +265,23 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
                 </div>
       </div>
       <div class="col-md-8">
-        <div class="" id="">
-         <label>
-                  <input type="checkbox" id="select_all" class="" style="width: 20px;height: 20px;"> All
-                </label>
-              </div>
+        <div class="row">
+          <div class="col-md-4">
+          
+          </div>
+          <div class="col-md-8">
+            
+          </div>
+        </div>
+        
         <div id="signInDiv">
 
            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                <th>#</th>
+                <th> <label>
+            <input type="checkbox" id="select_all" class="" style="width: 15px;height: 15px;background-color: red"> All
+          </label></th>
                   <th>Img</th>
                   <th>Name</th>
                   <th>Admin No</th>
@@ -299,7 +321,7 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
                   
                   //$id =  base64_url_encode($stdId);
                   echo" <tr>
-                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$stdId."'></td>
+                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$stdId."' style='width: 15px;height: 15px;'></td>
                   <td><input type='hidden' value='".$class_Id."' name='classId[]'><a href='view_student.php?id=".$stdId."'>".$img."</a></td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
                   <td>".$row1['registration_No']." </td>
@@ -337,7 +359,7 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
                   
                   //$id =  base64_url_encode($stdId);
                   echo" <tr>
-                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$stdId."'></td>
+                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$stdId."' style='width: 15px;height: 15px;'></td>
                   <td><input type='hidden' value='".$class_Id."' name='classId[]'<a href='view_student.php?id=".$stdId."'>".$img."</a></td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
                   <td>".$row1['registration_No']." </td>

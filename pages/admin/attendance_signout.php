@@ -148,26 +148,23 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
             <div class="box-body">
               
      <div class="row">
-      <div class="col-md-12">
-        
-        
+       <div class="col-md-6"></div>
+      <div class="col-md-6">
+      
        <form  method="POST" action="attendance_signout.php">
-              <div class="col-md-3">
+              <div class="col-md-6">
                  <div class=" form-group">
                 
                   <select class="form-control select2" onchange="" name="attendance_class__id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
-                  <?php
-                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($crows=mysqli_fetch_array($query_c)){
-
-                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($class_rows=mysqli_fetch_array($query_level)){
-                          //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['level_name'].''.$crows['name'].'</option>';
+                   <?php
+                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <option value="'.$row_value['class_ID'].'">'.$row_value['level_name'].' '.$row_value['stream_name'].'</option>';
                    }
                  
-                   }
                 ?>
                  </select>
                 </div>
@@ -187,7 +184,21 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
          <br>
          <br>
         <div class="form-group">
-          <input type="text" name="signedBy" class="form-control" placeholder="Signed Out By"required>
+         
+           <select class="form-control select2" onchange="" name="signedBy" style="width: 100%;" required>
+                    <option value="">--Signed Out By--</option>
+                   <?php
+                 $query_c= mysqli_query($conn,"select staff.full_Name as name,admin.first_name as admFName, admin.second_name as admSName from staff join admin on admin.school_ID=staff.school_ID where staff.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <option value="'.$row_value['name'].'">'.$row_value['name'].'</option>';
+                    echo' <option value="'.$row_value['admFName'].' '.$row_value['admSName'].'">'.$row_value['admFName'].' '.$row_value['admSName'].' </option>';
+                   }
+                 
+                   
+                ?>
+                 </select>
 
         </div>
         <div class="row">
@@ -225,16 +236,16 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
       </div>
       <div class="col-md-8">
         <div class="" id="">
-         <label>
-                  <input type="checkbox" id="select_all" class="" style="width: 20px;height: 20px;"> All
-                </label>
+        
               </div>
         <div id="signInDiv">
 
            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                <th>#</th>
+                <th><label>
+            <input type="checkbox" id="select_all" class="" style="width: 15px;height: 15px;background-color: red"> All
+          </label></th>
                   <th>Img</th>
                   <th>Name</th>
                   <th>Admin No</th>
@@ -281,7 +292,7 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
                   
                   //$id =  base64_url_encode($stdId);
                   echo" <tr>
-                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$attendance_ID."'></td>
+                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$attendance_ID."' style='width: 15px;height: 15px;'></td>
                   <td><input type='hidden' value='".$class_Id."' name='classId[]'><a href='view_student.php?id=".$stdId."'>".$img."</a></td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
                   <td>".$row1['registration_No']." </td>
@@ -326,7 +337,7 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
                   
                   //$id =  base64_url_encode($stdId);
                   echo" <tr>
-                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$attendance_ID."'></td>
+                  <td><input class='checkbox' type='checkbox' name='check[]' value='".$attendance_ID."' style='width: 15px;height: 15px;'></td>
                   <td><input type='hidden' value='".$class_Id."' name='classId[]'<a href='view_student.php?id=".$stdId."'>".$img."</a></td>
                   <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
                   <td>".$row1['registration_No']." </td>
@@ -361,99 +372,9 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
       </div>
    
        
-         <!-- delete parent  Modal-->
-    <div class="modal  fade" id="delete_parent_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this parent?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <script >
-               function deleteStudent(id,name){
-                  
-                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + name + '  </b>from the system?'
-                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="brand"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ id +'" type="submit" data-dismiss="modal" onclick="deleteParentFromSystem(this.id)">Delete</button></form></div>';
-                }
-            </script>
-          
-          <div id="msg"></div>
+    
 
-        </div>
-          <div class="modal-footer">
-           <div id="modalMsg"></div>
-        </div>
-      </div>
-    </div>
-     </div>
-
-    <!-- Link  student  with parent Modal-->
-    <div class="modal  fade" id="link_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><b>Link Student</b></h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form >
-             <div class=" col-md- input-group input-group-">
-                
-                <input type="text" class="form-control" id="searchStudent" onkeyup="searchStudentFunc(this.value)" name="searchStudent" placeholder="Enter Student Reg or Name" required="">
-                 <input type="hidden" class="form-control" id="parentIDVal" name="parentIDVal" placeholder="Sudent Reg No" required="">
-                <span class="input-group-addon"><button type="button" class="btn btn-success" onclick="searchStudentFunc()"><i class="fa fa-search"></i>Search</button></span>
-              </div>
-              </form>  
-            <script >
-             function showLinkparentID(link_parentID){
-              
-              document.getElementById("parentIDVal").value=link_parentID;
-             }
-               function searchStudentFunc(RegNo){ 
-                //var RegNo = document.getElementById("searchStudent").value;
-                var linkParentID = document.getElementById("parentIDVal").value;
-                  if(RegNo !=''){
-                    var details= '&RegNo='+ RegNo +'&linkParentID='+ linkParentID;
-
-                    $.ajax({
-                    type: "POST",
-                    url: "search_student_parentRelation.php",
-                    data: details,
-                    cache: false,
-                    success: function(data) {
-                    if(data=='success'){
-                    document.getElementById("StudentMSG").innerHTML=data;
-                    }else{
-                    document.getElementById("StudentMSG").innerHTML=data;
-                    }
-
-                    }
-
-                    });
-                   
-                  }else{
-                   document.getElementById("StudentMSG").innerHTML=' You have Not entered anything to search';
-                  }
-                 
-                
-                }
-            </script>
-          
-          <div id="StudentMSG"></div>
-
-        </div>
-          <div class="modal-footer">
-           <div id="modalMsg"></div>
-        </div>
-      </div>
-    </div>
-     </div>
+   
     </section>
     <!-- /.content -->
   </div>

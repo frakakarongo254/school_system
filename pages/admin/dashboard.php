@@ -73,28 +73,28 @@ chart.render();
        
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        
       </ol>
+      <hr style="background-color: #000;font-style: 12px;">
     </section>
 
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
-      <div class="row">
+      <div class="row" style="text-transform: uppercase;font-weight: bold;">
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
+          <div class="small-box ">
+            <div class="inner bg-aqua text-center">
                <?php 
                $query_admins= mysqli_query($conn,"select * from `admin` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
                  $query_admins_row=mysqli_num_rows (  $query_admins );
                   echo "<h3>".$query_admins_row.  "</h3>";
                 ?> 
-              <p>Admin</p>
+              <p>ADMIN</p>
             </div>
             <div class="icon">
-              <i class="ion ion-bag"></i>
+              <i class="ion ion-"></i>
             </div>
             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
@@ -102,8 +102,8 @@ chart.render();
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
+          <div class="small-box ">
+            <div class="inner bg-green text-center">
              
                <?php 
                $query_staffs= mysqli_query($conn,"select * from `staff` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
@@ -113,7 +113,7 @@ chart.render();
               <p>Staffs</p>
             </div>
             <div class="icon">
-              <i class="ion ion-stats-bars"></i>
+              <i class="ion ion-"></i>
             </div>
             <a href="staff.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
@@ -121,8 +121,8 @@ chart.render();
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
+          <div class="small-box ">
+            <div class="inner bg-yellow text-center">
               
               <?php 
                $child_query= mysqli_query($conn,"select * from `student` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
@@ -132,7 +132,7 @@ chart.render();
               <p>Children</p>
             </div>
             <div class="icon">
-              <i class="ion ion-person-add"></i>
+              <i class="ion ion-"></i>
             </div>
             <a href="student.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
@@ -140,8 +140,8 @@ chart.render();
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
+          <div class="small-box  bk-primary">
+            <div class="inner bg-aqua text-center">
               
                <?php 
                $query_parent= mysqli_query($conn,"select * from `parents` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
@@ -151,9 +151,64 @@ chart.render();
               <p>Parents</p>
             </div>
             <div class="icon">
-              <i class="ion ion-pie-graph"></i>
+              <i class="ion ion-"></i>
             </div>
             <a href="parent.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box  bk-primary">
+            <div class="inner bg-aqua text-center">
+              
+               <?php 
+                $amt_invoiced=0.00;
+               $query44 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' ")or
+          die(mysqli_error());
+                              
+           while ($row33=mysqli_fetch_array($query44)){
+           $amt_invoiced= $amt_invoiced + $row33['amount'];
+                                     //$total=$total + $amt;
+           }   
+          
+           echo"<h2> ".$school_row['currency'] . formatCurrency($amt_invoiced) ."</h2>";  
+                ?> 
+              <p style="text-transform: uppercase;font-weight: bold;">Invoice Value</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-"></i>
+            </div>
+            <a href="report.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box  bk-primary">
+            <div class="inner bg-green text-center">
+              
+               <?php 
+               $balance=0.00;
+$total_amount_paid=0.00;
+
+$que2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' ")or
+          die(mysqli_error());
+                         
+           while ($row_p=mysqli_fetch_array($que2)){
+                             
+        $total_amount_paid=  $total_amount_paid + $row_p['amount_paid'];
+         }
+
+          echo"<h2> ".$school_row['currency'] . formatCurrency($total_amount_paid) ."</h2>";  
+              
+                ?> 
+              <p>Amount Paid</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-"></i>
+            </div>
+            <a href="report.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -161,88 +216,8 @@ chart.render();
       <!-- /.row -->
    <div class="row">
      <div class="col-md-7">
-          <?php
-// This is a simple example on how to draw a chart using FusionCharts and PHP.
-// We have included includes/fusioncharts.php, which contains functions
-// to help us easily embed the charts.
-/* Include the `fusioncharts.php` file that contains functions  to embed the charts. */
-
-  //include("fusioncharts.php");
-
-/* The following 4 code lines contain the database connection information. Alternatively, you can move these code lines to a separate file and include the file here. You can also modify this code based on your database connection. */
-
-
-
-  // Form the SQL query that returns the top 10 most populous countries
- // $strQuery = "SELECT product_name, available_quantity FROM product ORDER BY available_quantity DESC LIMIT 10";
-  //$result=mysqli_query($condb,"SELECT product_name, available_quantity FROM product ORDER BY available_quantity ");
-/*$result=mysqli_query($conn,"SELECT `class_ID`, COUNT(*) AS `count` FROM student GROUP BY `class_ID`");
-  // Execute the query, or else return the error message.
- // $result = $dbhandle->query($strQuery) or exit("Error code ({$dbhandle->errno}): {$dbhandle->error}");
-
-  // If the query returns a valid response, prepare the JSON string
-  if ($result) {
-    // The `$arrData` array holds the chart attributes and data
-    $arrData = array(
-      "chart" => array(
-          "caption" => "School Details",
-          "paletteColors" => "#0075c2",
-          "bgColor" => "#ffffff",
-          "borderAlpha"=> "20",
-          "canvasBorderAlpha"=> "0",
-          "usePlotGradientColor"=> "0",
-          "plotBorderAlpha"=> "10",
-          "showXAxisLine"=> "1",
-          "xAxisLineColor" => "#999999",
-          "showValues" => "0",
-          "divlineColor" => "#999999",
-          "divLineIsDashed" => "1",
-          "showAlternateHGridColor" => "0"
-        )
-    );
-
-    $arrData["data"] = array();
-
-    // Push the data into the array
-    while($row = mysqli_fetch_array($result)) {
-      array_push($arrData["data"], array(
-          "label" => $row["class_ID"],
-          "value" => $row["count"]
-          )
-      );
-    }
-
-    /*JSON Encode the data to retrieve the string containing the JSON representation of the data in the array. */
-
-   //$jsonEncodedData = json_encode($arrData);
-
-    /*Create an object for the column chart using the FusionCharts PHP class constructor. Syntax for the constructor is ` FusionCharts("type of chart", "unique chart id", width of the chart, height of the chart, "div id to render the chart", "data format", "data source")`. Because we are using JSON data to render the chart, the data format will be `json`. The variable `$jsonEncodeData` holds all the JSON data for the chart, and will be passed as the value for the data source parameter of the constructor.*/
-
-    //$columnChart = new FusionCharts("column2D", "myFirstChart" , 600, 300, "chart-2", "json", $jsonEncodedData);
-
-    // Render the chart
-   // $columnChart->render();
-
-    // Close the database connection
-   // $dbhandle->close();
-  //} ?>
-  
- <!-- <div id="chart-2"> FusionCharts will render here--</div> -->
- <div class="box box-info">
-            <div class="box-header">
-              <i class="fa fa-envelope"></i>
-
-              <h3 class="box-title">Quick Email</h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip"
-                        title="Remove">
-                  <i class="fa fa-times"></i></button>
-              </div>
-              <!-- /. tools -->
-            </div>
-            <div class="box-body">
-                <?php
+   
+    <?php
           if(isset($_GET['send'])){
           echo' <div class="alert alert-success alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
@@ -293,7 +268,22 @@ chart.render();
         
       } 
                 ?>
-              <form action="dashboard.php" method="post">
+  <div class="box box-info collapsed-box">
+            <div class="box-header with-border">
+              <i class="fa fa-envelope"></i>
+
+              <h3 class="box-title">Quick Email</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              
+                <form action="dashboard.php" method="post">
                 <div class="form-group">
                   <input type="email" class="form-control" name="emailto" placeholder="Email to:">
                 </div>
@@ -305,29 +295,34 @@ chart.render();
                             style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                 </div>
               
-            </div>
+            
             <div class="box-footer clearfix">
               <button type="submit" class="pull-right btn btn-default" id="sendEmail" name="sendEmail">Send
                 <i class="fa fa-arrow-circle-right"></i></button>
             </div>
           </form>
+            </div>
+            <!-- /.box-body -->
           </div>
+ <!-- <div id="chart-2"> FusionCharts will render here--</div> -->
+ 
           <!-- /.box -->
      </div>
      <div class="col-md-5">
-          <!-- TABLE: LATEST ORDERS -->
-          <div class="box box-info">
-            <div class="box-header with-border">Upcoming Events</h3>
+          <!-- upcoming Events -->
+          <div class="box box-default collapsed-box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Upcoming Events</h3>
 
               <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                 </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
+              <!-- /.box-tools -->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
+             <div class="table-responsive">
                 <table class="table no-margin">
                   <thead>
                   <tr>
@@ -376,8 +371,10 @@ chart.render();
               <a href="event.php" class="btn btn-sm btn-default btn-flat pull-right">View All Events</a>
             </div>
             <!-- /.box-footer -->
+            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
+
+         
      </div>
    </div>
     
@@ -443,6 +440,7 @@ chart.render();
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
+
 <!-- Bootstrap 3.3.7 -->
 <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
@@ -468,9 +466,148 @@ chart.render();
 <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="../../dist/js/adminlte.min.js"></script>
+
+<!-- ChartJS -->
+<script src="../../bower_components/chart.js/Chart.js"></script>
+<!-- FastClick -->
+<script src="../../bower_components/fastclick/lib/fastclick.js"></script>
+
+
+<!-- FLOT CHARTS -->
+<script src="../../bower_components/Flot/jquery.flot.js"></script>
+<!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+<script src="../../bower_components/Flot/jquery.flot.resize.js"></script>
+<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+<script src="../../bower_components/Flot/jquery.flot.pie.js"></script>
+<!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
+<script src="../../bower_components/Flot/jquery.flot.categories.js"></script>
+
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../../dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
+<script type="text/javascript">
+  $(function () {
+
+   var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieChart       = new Chart(pieChartCanvas)
+    var PieData        = [
+      {
+        value    : 700,
+        color    : '#f56954',
+        highlight: '#f56954',
+        label    : 'Chrome'
+      },
+      {
+        value    : 500,
+        color    : '#00a65a',
+        highlight: '#00a65a',
+        label    : 'IE'
+      },
+      {
+        value    : 400,
+        color    : '#f39c12',
+        highlight: '#f39c12',
+        label    : 'FireFox'
+      },
+      {
+        value    : 600,
+        color    : '#00c0ef',
+        highlight: '#00c0ef',
+        label    : 'Safari'
+      },
+      {
+        value    : 300,
+        color    : '#3c8dbc',
+        highlight: '#3c8dbc',
+        label    : 'Opera'
+      },
+      {
+        value    : 100,
+        color    : '#d2d6de',
+        highlight: '#d2d6de',
+        label    : 'Navigator'
+      }
+    ]
+    var pieOptions     = {
+      //Boolean - Whether we should show a stroke on each segment
+      segmentShowStroke    : true,
+      //String - The colour of each segment stroke
+      segmentStrokeColor   : '#fff',
+      //Number - The width of each segment stroke
+      segmentStrokeWidth   : 2,
+      //Number - The percentage of the chart that we cut out of the middle
+      percentageInnerCutout: 50, // This is 0 for Pie charts
+      //Number - Amount of animation steps
+      animationSteps       : 100,
+      //String - Animation easing effect
+      animationEasing      : 'easeOutBounce',
+      //Boolean - Whether we animate the rotation of the Doughnut
+      animateRotate        : true,
+      //Boolean - Whether we animate scaling the Doughnut from the centre
+      animateScale         : false,
+      //Boolean - whether to make the chart responsive to window resizing
+      responsive           : true,
+      // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+      maintainAspectRatio  : true,
+      //String - A legend template
+      legendTemplate       : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    pieChart.Doughnut(PieData, pieOptions);
+
+
+
+    /*
+     * DONUT CHART
+     * -----------
+     */
+
+    var donutData = [
+      { label: 'Series2', data: 30, color: '#3c8dbc' },
+      { label: 'Series3', data: 20, color: '#0073b7' },
+      { label: 'Series4', data: 50, color: '#00c0ef' }
+    ]
+    $.plot('#donut-chart', donutData, {
+      series: {
+        pie: {
+          show       : true,
+          radius     : 1,
+          innerRadius: 0.5,
+          label      : {
+            show     : true,
+            radius   : 2 / 3,
+            formatter: labelFormatter,
+            threshold: 0.1
+          }
+
+        }
+      },
+      legend: {
+        show: false
+      }
+    })
+    /*
+     * END DONUT CHART
+     */
+
+  })
+
+  /*
+   * Custom Label formatter
+   * ----------------------
+   */
+  function labelFormatter(label, series) {
+    return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
+      + label
+      + '<br>'
+      + Math.round(series.percent) + '%</div>'
+  }
+</sc
+
+  });
+</script>
 </body>
 </html>

@@ -65,13 +65,13 @@ if (!velifyLogin()) {
     
 
 
-      #edit student details
-      if(isset($_POST['editStudentBtn'])){
+        #edit student details
+        if(isset($_POST['editStudentBtn'])){
         $edit_student_nickname="";
         $edit_healthyComment="";
-          #get school Id from current session school id
+        #get school Id from current session school id
 
-         $school_ID = $_SESSION['login_user_school_ID'];
+        $school_ID = $_SESSION['login_user_school_ID'];
 
         $edit_student_first_name=$_POST['edit_student_first_name'];
         $edit_student_last_name=$_POST['edit_student_last_name'];
@@ -81,82 +81,82 @@ if (!velifyLogin()) {
         $edit_student_gender=$_POST['edit_student_gender'];
         $edit_healthyComment=$_POST['edit_healthyComment'];
         $edit_status=$_POST['edit_student_status'];
-       $edit_Student_zone=$_POST['edit_student_zone'];
+        $edit_Student_zone=$_POST['edit_student_zone'];
         $edit_zoneChargeType=$_POST['edit_zoneChargeType'];
-       $edit_student_nationality=$_POST['edit_student_nationality'];
-       $edit_student_class_id=$_POST['edit_student_class_id'];
-       $eventTitle=$edit_student_first_name ." ". $edit_student_last_name . "  Birthday";
+        $edit_student_nationality=$_POST['edit_student_nationality'];
+        $edit_student_class_id=$_POST['edit_student_class_id'];
+        $eventTitle=$edit_student_first_name ." ". $edit_student_last_name . "  Birthday";
         # check image
-       if(isset($_FILES['edit_student_profile_photo']['name']) and !empty($_FILES['edit_student_profile_photo']['name'])){
-         echo  $file=$_FILES['edit_student_profile_photo']['name'];
-             $path_parts = pathinfo($file);
-            $extension= $path_parts['extension'];
+        if(isset($_FILES['edit_student_profile_photo']['name']) and !empty($_FILES['edit_student_profile_photo']['name'])){
+        echo  $file=$_FILES['edit_student_profile_photo']['name'];
+        $path_parts = pathinfo($file);
+        $extension= $path_parts['extension'];
 
-          if ($_FILES["edit_student_profile_photo"]["size"] > 500000) {
-          echo "<script>alert('Sorry, your file is too large.')</script>";
-          $uploadOk = 0;
-          }
-          elseif($extension != "jpg" && $extension != "png" && $extension != "jpeg"
-          && $extension != "gif" ) {
-          echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
-          $uploadOk = 0;
-          }else{
-            $edit_student_profile_photo = addslashes(file_get_contents($_FILES['edit_student_profile_photo']['tmp_name']));
-              $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."',photo='".$edit_student_profile_photo."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
-        if($result_query){
-           $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='".$edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
-           if ($event_query) {
-              echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
-           }else{
-                echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-           }
-       
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-       }
-          }
+        if ($_FILES["edit_student_profile_photo"]["size"] > 500000) {
+        echo "<script>alert('Sorry, your file is too large.')</script>";
+        $uploadOk = 0;
+        }
+        elseif($extension != "jpg" && $extension != "png" && $extension != "jpeg"
+        && $extension != "gif" ) {
+        echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
+        $uploadOk = 0;
         }else{
-            $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
+        $edit_student_profile_photo = addslashes(file_get_contents($_FILES['edit_student_profile_photo']['tmp_name']));
+        $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."',photo='".$edit_student_profile_photo."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
-          
-          $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='". $edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
-           if ($event_query) {
-              echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
-           }else{
-                echo' <div class="alert alert-warning alert-dismissable">
+        $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='".$edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
+        if ($event_query) {
+        echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
+        }else{
+        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
         aria-hidden="true">
         &times;
         </button>
         Sorry! Something went wrong.Please try again.
         </div>'; 
-           }
-       }else{
-       echo' <div class="alert alert-warning alert-dismissable">
+        }
+
+        }else{
+        echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
         aria-hidden="true">
         &times;
         </button>
         Sorry! Something went wrong.Please try again.
         </div>'; 
-       }
+        }
+        }
+        }else{
+        $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
+        if($result_query){
+
+        $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='". $edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
+        if ($event_query) {
+        echo '<script> window.location="edit_students.php?id='.$student_ID.'&update=True" </script>';
+        }else{
+        echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+        }
+        }else{
+        echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+        }
 
         }
-       
-      }
-      ?>
+
+        }
+        ?>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -285,30 +285,28 @@ if (!velifyLogin()) {
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                        <label>Status:</label>
+                      
+                  
+                    <label>Status:</label>
+                     
+                 <select class="form-control select2" name="edit_student_status" style="width: 100%">
+                  <?php 
+                  $status;
+                  if ($rows_details['status'] =='Admitted'){
+                    $status='Active';
+                  } else{
+                     $status=$rows_details['status'];
+                  }?>
+                    
+                  >
+                   <option value="<?php echo $status?>"><?php echo $status?></option>
+                   <option value="Active">Active</option>
+                   <option value="On Hold">On Hold</option>
                    
-                 <div class="form-group">
-                  <?php if($rows_details['status']=="Active"){
-              echo'    <label>
-                    <input type="radio" name="edit_student_status" class=" flat-red"  value="Active" checked>
-                    <label>Active</label>
-                  </label>
-                  <label>
-                    <input type="radio" name="edit_student_status" class=" flat-red" value="Inactive">
-                    <label>Inactive</label>
-                  </label>';
-                 }else{
-                echo' <label>
-                    <input type="radio" name="edit_student_status" class=" flat-red"  value="Active" >
-                    <label>Active</label>
-                  </label>
-                  <label>
-                    <input type="radio" name="edit_student_status" class=" flat-red" value="Inactive" checked>
-                    <label>Inactive</label>
-                  </label>';
-                 }?>            
-                 </div>
-                
+                   <option value="Graduate">Graduate</option>
+                   <option value="Inactive">Inactive</option>
+                  
+                 </select>         
                 </div>
                 
 
@@ -316,22 +314,27 @@ if (!velifyLogin()) {
                 <div class="col-md-4">
                    <div class="form-group ">
                         <label>Class:</label>
-                             
+                            
+                   
                 <select class="form-control select2" name="edit_student_class_id" style="width: 100%;" required>
                    <?php
-                    $select_class= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."' and class_ID='".$rows_details['class_ID']."'")or
-                   die(mysqli_error());
-                   $row_selected = mysqli_fetch_array($select_class,MYSQLI_ASSOC);
-                   echo' <option value="'.$row_selected['class_ID'].'">'.$row_selected['name'].'</option>';
+                    $select_class= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."' and class.class_ID='".$rows_details['class_ID']."'")or
+                   die(mysqli_error($conn));
+                    foreach ($select_class as $row_class) {
+                     
+                  echo'  <option value="'.$row_class['class_ID'].'">'.$row_class['level_name'].' '.$row_class['stream_name'].'</option>';
+                   }
                    ?>
                    
                   <?php
-                 $query_class= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'")or
-                   die(mysqli_error());
-                   while ($class_rows=mysqli_fetch_array($query_class)){
-                    //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$class_rows['class_ID'].'">'.$class_rows['name'].'</option>';
+                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <option value="'.$row_value['class_ID'].'">'.$row_value['level_name'].' '.$row_value['stream_name'].'</option>';
                    }
+                 
+                   
                 ?>
                  </select>
                 </div>

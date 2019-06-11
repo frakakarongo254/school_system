@@ -112,14 +112,6 @@ if (!velifyLogin()) {
       
       ?>
 
-      <script type="text/javascript">
-     function  toastFun(){
-          alert("hello");
-var toast = new iqwerty.toast.Toast();
-toast.setText('This is a basic toast message!').show();
-}
-      </script>
-      <button onclick="toastFun()">Toast</button>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -384,6 +376,6 @@ toast.setText('This is a basic toast message!').show();
   });
   }
 </script>
-<script src="../../js/toast/toast.js"></script>
+
 </body>
 </html>

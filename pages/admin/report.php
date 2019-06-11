@@ -41,6 +41,7 @@
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
                 <li><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
+                <li class=""><a href="attendance_report.php"><i class="fa fa-arrow-circle-right"></i> Attendance</a></li>
               </ul>
          </div>
        

@@ -85,7 +85,7 @@ echo '  <form id="fileinfo" name="fileinfo" action="parent.php" method="POST" en
               </div>
               <div class=" col-md-5 input-group input-group-">
                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                <input type="tel" value="'.$rows_parents['cell_Mobile_Phone'].'" name="edit_parent_phone" class="form-control" placeholder="" required>
+                <input type="text" value="'.$rows_parents['cell_Mobile_Phone'].'" name="edit_parent_phone" class="form-control" placeholder="" required>
               </div>    
             </div>
             <br>

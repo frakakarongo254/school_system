@@ -32,26 +32,23 @@
 
     <!-- Main content -->
     <div></div>
-    <section class="content box box-primary" style="background-color: ;min-height: px;">
+    <section class="content box box-primary" style="background-color: ;min-height: 300px;">
       <!-- Small boxes (Stat box) -->
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-           <h3><a href="report.php"><span class="fa fa-bar-chart"></span>  <b class="color-primary" >  Reports</b></a></h3>
+          <h3><a href="report.php"><span class="fa fa-bar-chart"></span>  <b class="color-primary" >  Reports</b></a></h3>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
-                <li class="active"><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
-                <li class=""><a href="attendance_report.php"><i class="fa fa-arrow-circle-right"></i> Attendance</a></li>
+                <li class=""><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
+                <li><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
+                  <li class="active"><a href="attendance_report.php"><i class="fa fa-arrow-circle-right"></i> Attendance</a></li>
               </ul>
          </div>
        
          <div class="col-md-10  ">
-          <?php
-   
-          ?>
           <div class="row"> 
                  <div class="col-md-12 text-center" style="text-transform: uppercase;font-weight:800;font-size:24px;">
-                   invoice report
+                  Attendance Report
                    <br>
                    
                  </div>
@@ -59,7 +56,6 @@
           <!-- Profile Image -->
           <div class="box box-secondary col-md-">
             <div class="box-body box-profile col-md-">
-              
               <div class="row">
                  <form method="POST" action="">
                <div class="col-md-3">
@@ -68,7 +64,7 @@
                   <select class="form-control select2" name="report_class_id" id="report_class_id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
                     <option value="All">All</option>
-                   <?php
+                  <?php
                  $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
                  
                    foreach ($query_c as $row_value) {
@@ -97,8 +93,10 @@
                  <div class=" form-group">
                   <label><br></label><br>
                 <button class="btn btn-primary" type="submit" id="button2" name="searchAttendance" href="" onclick="myFunction()" ><i class="fa "></i> GENERATE REPORT</button>
+               
               </div>
               </div>
+              
             </form>
              </div>
              
@@ -133,7 +131,7 @@
        <!--include settings-sidebar-->
  
  <?php
- //include('include/settings-sidebar.php');
+ include('include/settings-sidebar.php');
  ?>
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
@@ -144,7 +142,7 @@
   <!-- /.content-wrapper -->
 <!--include footer-->
 <?php
- //include('include/footer.php');
+ include('include/footer.php');
  ?>
 
 
@@ -171,6 +169,7 @@
 <!-- ./wrapper -->
 
 <!-- include script-->
+<?php include("include/script.php")?>
 <script>
 function myFunction() {
   var from_date=document.getElementById('from_date').value;
@@ -186,17 +185,14 @@ function myFunction() {
     alert("Please Select class");
   }else if(from_date !=='' && to_date !=='' && class_id !==''){
     
-   var  win = window.open("print_invoice_list.php?from="+from_date+"&to="+ to_date+"&class_id="+class_id , "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=5000");
-   win.focus();
-    win.print();
-    //win.close();
-     
+    var WindowObject= window.open("print_attendance_list.php?from="+from_date+"&to="+to_date+"&class_id="+class_id , "", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=1000,height=500");
+     WindowObject.focus();
+    WindowObject.print();
+    //WindowObject.close();
   }
   
  
 }
 </script>
-<?php include("include/script.php")?>
-
 </body>
 </html>

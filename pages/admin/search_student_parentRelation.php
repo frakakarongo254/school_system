@@ -8,7 +8,7 @@
     //$id = "1";
     $result_array = array();
 
-    $query_studentData= mysqli_query($conn,"select * from `student` where `school_ID` ='".$_SESSION['login_user_school_ID']."' && `registration_No` LIKE '%$RegNo%' or `first_Name`LIKE '%$RegNo%' or `last_Name`LIKE '%$RegNo%' ");
+    $query_studentData= mysqli_query($conn,"select student.registration_No,student.student_ID,student.first_Name,student.last_Name,student.photo from `student` where `school_ID` ='".$_SESSION['login_user_school_ID']."' && `registration_No` LIKE '%$RegNo%' && `school_ID` ='".$_SESSION['login_user_school_ID']."' || `first_Name`LIKE '%$RegNo%' && `school_ID` ='".$_SESSION['login_user_school_ID']."' || `last_Name`LIKE '%$RegNo%' && `school_ID` ='".$_SESSION['login_user_school_ID']."'");
     $query_search_row=mysqli_num_rows (  $query_studentData );
     if ($query_search_row !=0) {
     //$search_row = mysqli_fetch_array($query_studentData,MYSQLI_ASSOC);
@@ -18,7 +18,7 @@
     if($search_row['photo'] !=''){
     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $search_row['photo'] ).'"  height="40px" width="40px" />';
     }else{
-    $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+    $img = "<img src='../../dist/img/user.jpg' class='img-circle' alt='User Image' height='40px' width='40px'>";
     }
     echo '
     <form method="POST" action="parent.php">

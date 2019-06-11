@@ -1,3 +1,4 @@
+ 
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +7,7 @@
   <title></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -56,6 +58,12 @@
   <link rel="stylesheet" href="../../css/sb-admin.css">
    <link rel="stylesheet" href="../../css/body.css">
 
+    <!--Import Google Icon Font-->
+    <!--  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+      <!--Import materialize.css-->
+    <!--  <link type="text/css" rel="stylesheet" href="../../materialize/css/materialize.min.css"  media="screen,projection"/>-->
+
+     
 
   <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen">-->
   
@@ -97,3 +105,6 @@
         }
         </script>
 </head>
+
+
+     

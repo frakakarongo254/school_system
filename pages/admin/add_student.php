@@ -314,20 +314,21 @@ if (!velifyLogin()) {
                 <div class="col-md-4">
                    <div class="form-group ">
                         <label>Class:</label>
-                             
+                              
                  <select class="form-control select2" name="student_Class_Id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
                   <?php
-                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($crows=mysqli_fetch_array($query_c)){
-
-                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($class_rows=mysqli_fetch_array($query_level)){
+                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                      # code...
+                   
+                   
                           //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['leve_name'].''.$crows['name'].'</option>';
+                  echo'  <option value="'.$row_value['class_ID'].'">'.$row_value['level_name'].' '.$row_value['stream_name'].'</option>';
                    }
                  
-                   }
+                   
                 ?>
                  </select>
                 </div>
@@ -405,8 +406,8 @@ if (!velifyLogin()) {
             
               <div class="row">
               <div class="col-md-9">
-                <button type="reset" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
-                <button type="submit" name="save_admissionBtn" class="btn btn-primary">Add Student</button>
+                <button type="reset" class="btn btn-danger pull-right" data-dismiss="modal">Reset</button>
+                <button type="submit" name="save_admissionBtn" class="btn btn-primary">Save Student</button>
               </div>
               </div>
              </form>

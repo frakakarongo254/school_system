@@ -183,8 +183,8 @@ if(isset($_POST["Export"])){
              $parent_profile_photo = addslashes(file_get_contents($_FILES['parent_profile_photo']['tmp_name']));
             $parent_insert_query=mysqli_query($conn,"insert into `parents` ( parent_ID,school_ID, 
           first_Name,last_Name,address,cell_Mobile_Phone,email,gender_MFU,profession,photo,nationality,password) 
-          values('$parent_ID','$school_ID','$parent_first_name','$parent_last_name','$parent_address','
-          $parent_phone','$parent_email','$parent_gender','$parent_profession','$parent_profile_photo','$parent_nationality','$parent_password') ");
+          values('$parent_ID','$school_ID','$parent_first_name','$parent_last_name','$parent_address',
+          '$parent_phone', '$parent_email','$parent_gender','$parent_profession','$parent_profile_photo','$parent_nationality','$parent_password') ");
         if($parent_insert_query){
           
            echo '<script> window.location="parent.php?insert=True" </script>';
@@ -251,7 +251,7 @@ if(isset($_POST["Export"])){
           $uploadOk = 0;
           }else{
           $edit_parent_profile_photo = addslashes(file_get_contents($_FILES['edit_parent_profile_photo']['tmp_name']));
-          $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',photo='".$edit_parent_profile_photo."',nationality='".$edit_parent_nationality."',password='". $edit_parent_password."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
+          $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',cell_Mobile_Phone='".$edit_parent_phone."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',photo='".$edit_parent_profile_photo."',nationality='".$edit_parent_nationality."',password='". $edit_parent_password."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
           if($result_query){
           echo '<script> window.location="parent.php?update=True" </script>';
        }else{
@@ -265,7 +265,7 @@ if(isset($_POST["Export"])){
        }
           }
         }else{
-            $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',nationality='".$edit_parent_nationality."', password='". $edit_parent_password."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
+            $result_query=mysqli_query($conn,"update `parents` SET first_Name= '".$edit_parent_first_name."',last_Name= '".$edit_parent_last_name."',email= '".$edit_parent_email."',address='".$edit_parent_address."',cell_Mobile_Phone='".$edit_parent_phone."',gender_MFU='".$edit_parent_gender."',profession='".$edit_parent_profession."',nationality='".$edit_parent_nationality."', password='".$edit_parent_password."' where `parent_ID`='".$edit_parent_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
           
            echo '<script> window.location="parent.php?update=True" </script>';
@@ -289,10 +289,25 @@ if(isset($_POST["Export"])){
         $link_student_ID= $_POST['link_studentID'];
         $link_parentID=$_POST['link_parentID'];
         $relation =$_POST['relation'];
+        $queryLink =mysqli_query($conn, "SELECT parent_ID,school_ID,student_ID,relation from parent_relation where school_ID='".$school_ID."'and parent_ID='".$link_parentID."' and student_ID='".$link_student_ID."'"); 
+      
+        if (mysqli_num_rows($queryLink)>0) {
+           # code...
+           echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        That parent and student are already linked.
+        </div>'; 
+
+         } else{
+
         $link_insert_query=mysqli_query($conn,"insert into `parent_relation` ( parent_ID,school_ID,student_ID,relation) 
           values('$link_parentID','$school_ID','$link_student_ID','$relation') ");
         if($link_insert_query){
-           echo '<script> window.location="parent.php?link=True" </script>';
+          
+          echo '<script> window.location="parent.php?link=True" </script>';
         }else{
           echo' <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
@@ -302,6 +317,7 @@ if(isset($_POST["Export"])){
         Sorry! Something went wrong.Please try again.
         </div>'; 
         }
+      }
       }
       ?>
     </section>
@@ -313,11 +329,20 @@ if(isset($_POST["Export"])){
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-6"><b><h3>Parents</h3> </b></div>
+              <div class="col-md-4"><b style="font-size: 24px;font-weight: bold;">Parents </b> </div>
+              <div class="col-md-2">
+              
+                <div id="deleteAll" style="display:none">
+               
+                  <button type="submit" class="btn" id="button1" style="color:#fff;background-color:#D02E0B;" data-toggle="modal" data-target="#modal-deleteCheckedParent">Delete</button>
+
+                
+              </div>
+              </div>
               <div class="col-md-2">
                 
                 <form action="" method="POST">
-                  <button type="submit" class="btn" id="button1" style="color:#fff" name="Export" onclick="">Export</button>
+                  <button type="submit" class="btn" id="button1" style="color:#fff" name="Export" onclick=""><i class="fa fa-export"></i>Export</button>
 
                 </form>
               </div>
@@ -325,7 +350,8 @@ if(isset($_POST["Export"])){
               
                 <button href="#" class="btn" id="button1" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
               </div>
-              <div class="col-md-2 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a></div>
+              <div class="col-md-2 " style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a>
+              </div>
             </div>
             </div>
             
@@ -339,7 +365,10 @@ if(isset($_POST["Export"])){
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Img</th>
+                  <th><label>
+            <input type="checkbox" id="select_all" class="" onchange="deleteCheckbox()" style="width: 15px;height: 15px;background-color: red"> All
+          </label></th>
+                  
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
@@ -362,10 +391,9 @@ if(isset($_POST["Export"])){
                       $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
                     }
                   echo" <tr>
-                           <td>
-                            <a href='view_parent.php?id=".$parentID."'> ".$img."</a>
-                           </td>
-                            <td>".$row1['first_Name']." ". $row1['last_Name']."</td>
+                           <td> <input class='checkbox' type='checkbox' id='check' name='check[]' value='".$parentID."' style='width: 15px;height: 15px;'></td>
+                           
+                            <td> <a href='view_parent.php?id=".$parentID."'> ".$img."</a> " .  $row1['first_Name']." ". $row1['last_Name']."</td>
                             <td>".$row1['email']." </td>
                              <td>".$row1['cell_Mobile_Phone']."</td> 
                             <td>".$row1['gender_MFU']."</td>
@@ -469,7 +497,7 @@ if(isset($_POST["Export"])){
               </div>
               <div class=" col-md-7 input-group input-group-">
                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                <input type="tel" name="parent_phone" class="form-control" placeholder="" required>
+                <input type="text" name="parent_phone" class="form-control" placeholder="" required>
               </div>    
             </div>
             <br>
@@ -526,7 +554,7 @@ if(isset($_POST["Export"])){
               </div>
               <div class=" col-md-7 input-group input-group-">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="file" name="parent_profile_photo" class="form-control" placeholder="" value="Photo" required> 
+                <input type="file" name="parent_profile_photo" class="form-control" placeholder="" value="Photo" > 
               </div>    
             </div>
             <div class="row">
@@ -705,6 +733,32 @@ if(isset($_POST["Export"])){
       </div>
     </div>
      </div>
+
+     <div class="modal  fade" id="modal-deleteCheckedParent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete the selected parents?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           Are you sure you want to delete all selected Parents from the system?
+           
+          
+          <div id="Allmsg"></div>
+
+        </div>
+          <div class="modal-footer">
+           <div id="modalAllMsg">
+           <div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger pull-left" name="deleteAllbutton" id="" type="submit"  onclick="deletefromSystem()">Delete</button>
+           </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
     </section>
     <!-- /.content -->
   </div>
@@ -765,6 +819,76 @@ if(isset($_POST["Export"])){
     }
   
   }
+
+  });
+  }
+</script>
+<script>
+var select_all = document.getElementById("select_all"); //select all checkbox
+var checkboxes = document.getElementsByClassName("checkbox"); //checkbox items
+
+//select all checkboxes
+select_all.addEventListener("change", function(e){
+  for (i = 0; i < checkboxes.length; i++) { 
+    checkboxes[i].checked = select_all.checked;
+  }
+});
+
+
+for (var i = 0; i < checkboxes.length; i++) {
+  checkboxes[i].addEventListener('change', function(e){ //".checkbox" change 
+    //uncheck "select all", if one of the listed checkbox item is unchecked
+    if(this.checked == false){
+      select_all.checked = false;
+    }
+    //check "select all" if all checkbox items are checked
+    if(document.querySelectorAll('.checkbox:checked').length == checkboxes.length){
+      select_all.checked = true;
+    }
+  });
+}
+</script>
+<script>
+ function deleteCheckbox(){
+  var select_all = document.getElementById("select_all");
+  var delete_all = document.getElementById("deleteAll");
+  if (select_all.checked ==true) {
+  
+    delete_all.style.display = "block";
+  }else{
+    
+   
+   delete_all.style.display = "none";
+  }
+
+ }
+</script>
+<script type="text/javascript">
+  function deletefromSystem(){
+
+    var selected_value = []; // initialize empty array 
+    $("#check:checked").each(function(){
+        selected_value.push($(this).val());
+        
+    });
+   // document.getElementById("AllDiv").innerHTML= selected_value+'<br;
+    var details= '&parent_id='+ selected_value;
+  $.ajax({
+  type: "POST",
+  url: "delete_parent.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+
+    if(data=='success'){
+ window.location="parent.php?delete=True" 
+    }else{
+      alert("OOp! Could not delete the parent.Please try again!");
+    }
+  
+
+  }
+
 
   });
   }

@@ -292,7 +292,7 @@ if(isset($_POST['editDocumentBtn'])){
 
                                      
 
-                                        <a href="#" class="openDocument"><button type="button"  class="btn btn-success badge openDocument" name="'.$document_name.'" onclick="openDocument(this.name)" data-toggle="modal" data-target="#open_document_Modal"><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
+                                        <a href="#" class="openDocument"><button type="button"  class="btn btn-success badge openDocument" name="'.$document_name.'" onclick="openDocumentFunc(this.name)" ><span class= "glyphicon glyphicon-eye-open"> </span>  </button></a>
 
                                          <button type="button"  class="btn btn-danger badge" id="'.$documentID.'" onclick="deleteDocument(this.id)" data-toggle="modal" data-target="#delete_document_Modal"><span class="glyphicon glyphicon-trash"></span></button>
 
@@ -437,40 +437,7 @@ if(isset($_POST['editDocumentBtn'])){
     </div>
      </div>
 
-          <!-- open document  Modal-->
-    <div class="modal  fade" id="open_document_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Document</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-    <div id="dialog" style="display:">
-    
-</div> 
-            <script >
-          function openDocument(document_name){
-           
-            document.getElementById("dialog").innerHTML='<iframe src="document/'+document_name+'" style="width:100%;height:800px"></iframe>';
-          }
-  
-            </script>
-            <div id="documMsg"></div>
-          
-          
-
-        </div>
-          <div class="modal-footer">
-           <div id="Msg"></div>
-        </div>
-      </div>
-    </div>
-     </div>
-
-
+         
 
 
 
@@ -496,7 +463,16 @@ if(isset($_POST['editDocumentBtn'])){
   
 <!-- ./wrapper -->
 
-
+<script>
+function openDocumentFunc(document_name) {
+    
+    
+     window.open("document/"+document_name, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=1000");
+  
+  
+ 
+}
+</script>
 
 <!-- page script -->
 <script>

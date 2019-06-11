@@ -37,9 +37,9 @@
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span><b class="color-primary" >Setting</b></h3>
+          <h3><span class="fa fa-gear"></span><b class="color-primary" >Settings</b></h3>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="profile.php"><i class="fa fa-arrow-circle-right"></i> Profile Details</a></li>
+                <li class="active"><a href="profile.php"><i class="fa fa-arrow-circle-right"></i> Profile Details</a></li>
                 <li><a href="edit_profile.php"><i class="fa fa-arrow-circle-right"></i> Edit Profile</a></li>
               </ul>
          </div>
@@ -99,26 +99,73 @@
             <div class="box-body box-profile col-md-">
               <div class="row">
                 <div class="col-md-12  ">
-                 <div class="" style="text-align: center;">
+                 <div class="row">
+                  <div class="col-md-2">
+                    <?php echo $user_image;?>
+                     <h3 class="profile-username text-center"><a href="#" data-toggle="modal" data-target="#modal-editSchoolLogo"><span class="pull- badge bg-secondary"><i class="fa fa-image"></i> Change photo</span></a></h3>
+                  </div>
+                <div class="col-md-10 " style="font-size: 12px;font-weight: ;text-transform: uppercase;">
                 
-                  <center>
-              <table>
-               
-                    <tr>
-                      <td rowspan="2"> <?php echo $user_image;?>
-             <h3 class="profile-username text-center"><a data-toggle="modal" data-target="#modal-editSchoolLogo"><span class="pull- badge bg-secondary"><i class="fa fa-image"></i> Change photo</span></a></h3></td>
-                      <td><ul class="nav nav-pills nav-stacked">
-                <li><a href="#"><i class="fa  fa-"></i><b><?php echo $user_row['first_name'] . " " .$user_row['second_name']?></b></a></li>
-                <li><a href="#"><i class="fa fa-bookmark-o"></i> <?php echo $user_row['gender']?></a></li>
-                <li><a href="#"><i class="fa fa-phone"></i> <?php echo $user_row['phone']?></a></li>
-                <li><a href="#"><i class="fa fa-envelope-o"></i> <?php echo $user_row['email']?></a></li>
-                <li><a href="#"><i class="fa fa-flag"></i> <?php echo $user_row['nationality']?></a></li>
-              </ul></td>
-                     
-                    </tr>
-              </table>
-            </center>
-            </div>
+              <div class="row">
+                 <div class="col-md-2">
+                  <b> Name :</b>
+                 </div>
+                 <div class="col-md-6">
+                   <?php echo $user_row['first_name'] . " " .$user_row['second_name'] ;?>
+                 </div>
+                 
+                 
+              </div>
+              <br>
+            
+              <div class="row">
+                 <div class="col-md-2">
+                  <b> Gender :</b>
+                 </div>
+                 <div class="col-md-2">
+                   <?php  echo $user_row['gender'] ;?>
+                 </div>
+                 
+                 
+              </div>
+              <br>
+             
+              <div class="row">
+                 
+                 <div class="col-md-2">
+                  <b> Phone:</b>
+                 </div>
+                 <div class="col-md-2">
+                   <?php echo $user_row['phone']?>
+                 </div>
+                 
+              </div>
+              <br>
+             
+              <div class="row">
+                 <div class="col-md-2">
+                  <b> Email :</b>
+                 </div>
+                 <div class="col-md-2">
+                 <?php echo $user_row['email']?>
+                 </div>
+                 
+              </div>
+              <br>
+             
+              <div class="row">
+                 
+                 <div class="col-md-2">
+                  <b>Nationality:</b>
+                 </div>
+                 <div class="col-md-2">
+                   <?php echo $user_row['nationality']?>
+                 </div>
+              </div>
+              </div>
+              
+             </div>
+
               </div>
               
              </div>

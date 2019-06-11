@@ -28,6 +28,8 @@ if (!velifyLogin()) {
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
+
+  
      
       <?php
     
@@ -40,15 +42,7 @@ if (!velifyLogin()) {
           Success! Attendance updated  successfully.
           </div>';   
         }
-        if(isset($_GET['link'])){
-          echo' <div class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert"
-          aria-hidden="true">
-          &times;
-          </button>
-          Success! You have linked  successfully.
-          </div>';   
-        }
+        
         if(isset($_GET['delete'])){
           echo' <div class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-dismiss="alert"
@@ -59,7 +53,7 @@ if (!velifyLogin()) {
           </div>';   
         }
         if(isset($_GET['update'])){
-          echo' <div class="alert alert-success alert-dismissable">
+          echo' <div class="alert alert-success alert-dismissable ">
           <button type="button" class="close" data-dismiss="alert"
           aria-hidden="true">
           &times;
@@ -67,34 +61,31 @@ if (!velifyLogin()) {
           Success! You have updated  successfully.
           </div>';   
         }
-       if(isset($_POST['saveAttendanceBtn']))
-{
-    foreach ($_POST['attendance_status'] as $id => $attendance_status)
-    {
-        $roll_no = $_POST['roll_no'][$id];
-        $student_name = $_POST['student_name'][$id];
-        $date_created = date('Y-m-d H:i:s');
-        $date_modified = date('Y-m-d H:i:s');
-        $attendance=mysqli_query($conn,"insert into `attendance` (student_id, student_name, date_entered, date_modified, status
-          ) 
-          values('$roll_no', '$student_name', '$date_created', '$date_modified', '$attendance_status') ");
        
-    }
-     
-    if ($attendance) {
-      echo  $msg = "Attendance has been added successfully";
-       echo '<script> window.location="attendance.php?insert=True" </script>';
-    }else{
-       echo' <div class="alert alert-danger alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert"
-          aria-hidden="true">
-          &times;
-          </button>
-          Oops! Please try again.
-          </div>';   
-    }
-}
+ 
+ if (isset($_POST['submitEditAttendance'])) {
+   # code...
 
+   $edit_attendance_ID=$_POST['edit_attendance_id'];
+$edit_signedInBy=$_POST['edit_signedInBy'];
+  $edit_signedOutBy=$_POST['edit_signedOutBy'];
+  $edit_attendanceTimeIn=$_POST['edit_attendanceTimeIn'];
+  $edit_attendanceTimeOut=$_POST['edit_attendanceTimeOut'];
+
+   $update_attend_query=mysqli_query($conn,"update `attendance` SET signed_in_by= '".$edit_signedInBy."', signed_out_by= '".$edit_signedOutBy."',sign_in_time= '".$edit_attendanceTimeIn."',sign_out_time= '".$edit_attendanceTimeOut."' where `attendance_ID`='".$edit_attendance_ID."' && `school_ID`='".$_SESSION['login_user_school_ID']."' ");
+
+     if($update_attend_query){
+        echo '<script> window.location="manage_attendance.php?update=True" </script>';
+        }else{
+        echo' <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">
+        &times;
+        </button>
+        Sorry! Something went wrong.Please try again.
+        </div>'; 
+        }
+ }
     
       ?>
     </section>
@@ -114,16 +105,14 @@ if (!velifyLogin()) {
                   <select class="form-control select2" name="attendance_class_id" style="width: 100%;" required>
                     <option value="">--Select class--</option>
                   <?php
-                 $query_c= mysqli_query($conn,"select * from class where school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($crows=mysqli_fetch_array($query_c)){
-
-                    $query_level= mysqli_query($conn,"select * from carricula_level where carricula_level_ID = '".$crows['level_ID']."' and school_ID = '".$_SESSION['login_user_school_ID']."'");
-                   while ($class_rows=mysqli_fetch_array($query_level)){
-                          //$student_regNoID= $class_rows['class_name'];
-                  echo'  <option value="'.$crows['class_ID'].'">'.$class_rows['level_name'].''.$crows['name'].'</option>';
+                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 
+                   foreach ($query_c as $row_value) {
+                    
+                  echo'  <option value="'.$row_value['class_ID'].'">'.$row_value['level_name'].' '.$row_value['stream_name'].'</option>';
                    }
                  
-                   }
+                   
                 ?>
                  </select>
                 </div>
@@ -198,7 +187,12 @@ if (!velifyLogin()) {
                    $startTime = new DateTime($time_in);
                    $endTime = new DateTime($time_out);
                    $duration = $startTime->diff($endTime); //$duration is a DateInterval object
-                   $diff= $duration->format("%H:%I:%S");
+                   $diff='';
+                   if ($time_out !=='') {
+                      $diff= $duration->format("%H:%I:%S");
+                   }else{
+                    $diff=' ';
+                   }
               // encryption function 
 
               
@@ -216,9 +210,9 @@ if (!velifyLogin()) {
 
                   echo' 
 
-                  <a class="btn btn-info badge" href="edit_students.php?id='.$attend_id.'"> <span class="glyphicon glyphicon-pencil"></span></a>
+                  <button type="button" id="'.$attend_id.'" class="btn btn-primary badge"  onclick="editAttendance(this.id)" data-toggle="modal"  data-target="#edit_attendance_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
-                  <button type="button" id="'.$row1['registration_No'].'" class="btn btn-danger badge" value="'.$row1['first_Name'].'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                  <button type="button" id="'.$attend_id.'" class="btn btn-danger badge"  onclick="deleteAttendance(this.id)" data-toggle="modal"  data-target="#delete_attendance_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                   </td>
                   ';
               #send student id as a session to the next page of view student
@@ -256,9 +250,12 @@ if (!velifyLogin()) {
                    $startTime = new DateTime($time_in);
                    $endTime = new DateTime($time_out);
                    $duration = $startTime->diff($endTime); //$duration is a DateInterval object
-                   $diff= $duration->format("%H:%I:%S");
-              // encryption function 
-
+                   $diff='';
+                   if ($time_out !=='') {
+                      $diff= $duration->format("%H:%I:%S");
+                   }else{
+                    $diff=' ';
+                   }
               
                 //$id =  base64_url_encode($stdId);
                   echo" <tr>
@@ -275,9 +272,9 @@ if (!velifyLogin()) {
 
                   echo'<td> 
 
-                  <a class="btn btn-info badge" href="edit_students.php?id='.$attend_id.'"> <span class="glyphicon glyphicon-pencil"></span></a>
-
-                  <button type="button" id="'.$attend_id.'" class="btn btn-danger badge" value="'.$attend_id.'" onclick="deleteStudent(this.id,this.value)" data-toggle="modal"  data-target="#delete_student_Modal"><span class="glyphicon glyphicon-trash"></span></button>
+                 
+                   <button type="button" id="'.$attend_id.'" class="btn btn-primary badge" onclick="editAttendance(this.id)" data-toggle="modal"  data-target="#edit_attendance_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
+                  <button type="button" id="'.$attend_id.'" class="btn btn-danger badge" onclick="deleteAttendance(this.id)" data-toggle="modal"  data-target="#delete_attendance_Modal"><span class="glyphicon glyphicon-trash"></span></button>
                   </td>
                   ';
               #send student id as a session to the next page of view student
@@ -343,6 +340,84 @@ if (!velifyLogin()) {
       </div>
     </div>
      </div>
+     <!--edit attendance-->
+<div class="modal  fade" id="edit_attendance_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog " role="document">
+        <div class="modal-content modal-sm">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"><b>Edit </b></h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="nav-tabs-custom">
+              <div class="tab-content">
+               
+            <script >
+             
+               function editAttendance(attendance_id){ 
+                
+                  if(attendance_id !=''){
+                    var details= '&attendance_id='+ attendance_id ;
+                    $.ajax({
+                    type: "POST",
+                    url: "edit_attendance.php",
+                    data: details,
+                    cache: false,
+                    success: function(data) {
+                      document.getElementById("attendMessage").innerHTML=data;
+                   
+
+                    }
+
+                    });
+                   
+                  }else{
+                   document.getElementById("attendMessage").innerHTML=' You have Not Yet selected an item';
+                  }
+                 
+                
+                }
+            </script>
+          
+          <div id="attendMessage"></div>
+
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <!-- delete attendace  Modal-->
+    <div class="modal  fade" id="delete_attendance_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <script >
+               function deleteAttendance(attendance_id){
+                
+                 document.getElementById("msg").innerHTML=' Are you sure you want to delete this from the system?'
+                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
+                updiv.innerHTML ='<form method="POST" action="manage_attendance.php"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ attendance_id +'" type="submit" data-dismiss="modal" onclick="deleteAttendanceFromSystem(this.id)">Delete</button></form></div>';
+                }
+            </script>
+          
+          <div id="msg"></div>
+
+        </div>
+          <div class="modal-footer">
+           <div id="modalMsg"></div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- /.content-wrapper -->
 <!--include footer-->
@@ -383,21 +458,21 @@ if (!velifyLogin()) {
 </script>
 
 <script >
-  function deleteParentFromSystem(parent_ID){
+  function deleteAttendanceFromSystem(attendance_ID){
    
   var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
   //alert(id);
-  var details= '&parent_ID='+ parent_ID;
+  var details= '&attendance_ID='+attendance_ID;
   $.ajax({
   type: "POST",
-  url: "delete_parent.php",
+  url: "delete_attendance.php",
   data: details,
   cache: false,
   success: function(data) {
     if(data=='success'){
- window.location="parent.php?delete=True" 
+ window.location="manage_attendance.php?delete=True" 
     }else{
-      alert("OOp! Could not delete the student.Please try again!");
+      alert("OOp! Could not delete.Please try again!");
     }
   
   }
@@ -405,5 +480,7 @@ if (!velifyLogin()) {
   });
   }
 </script>
+
+
 </body>
 </html>

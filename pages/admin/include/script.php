@@ -2,6 +2,7 @@
 
 <!-- jQuery 3 -->
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+
 <!-- Bootstrap 3.3.7 -->
 <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -49,13 +50,21 @@
 <script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="../../dist/js/fusioncharts/fusioncharts.js"></script>
 
-
+<!--JavaScript at end of body for optimized loading-->
+    <!--  <script type="text/javascript" src="../../materialize/js/materialize.min.js"></script>-->
 
 <script src="../../js/toast/toast.js"></script>
+ <script type="text/javascript" src="../../js/toast/toast.min.js"></script>
 <script src="../../js/canvas/canvasjs.min.js"></script>
 
-
-
+<!--dismiss alert message after few seconds-->
+<script type="text/javascript">
+  window.setTimeout(function () {
+    $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+        $(this).remove();
+    });
+}, 2000);
+</script>
 
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 <script>
