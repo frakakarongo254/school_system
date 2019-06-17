@@ -232,6 +232,7 @@ if(isset($_POST["Export"])){
          <table id="example134" class=" " style="width:100%">
             <thead>
                 <tr>
+                 
                   <th class="pull-left">Title</th>
                   <th class="pull-left">Location</th>
                   <th class="pull-left">Date</th>
@@ -253,8 +254,8 @@ if(isset($_POST["Export"])){
               $end=$event_row["event_endDate"];
               $event_endDate= date("d-m-Y", strtotime($end));
               $endtime=$event_row["event_endtime"];
-            echo' <tr>
-
+             echo' <tr>
+               
               <td >'.
              $event_row['event_title'].'
              </td>
@@ -285,6 +286,7 @@ if(isset($_POST["Export"])){
          <table id="example134" class=" " style="width:100%">
             <thead>
                 <tr>
+                 
                   <th class="pull-left">Title</th>
                   <th class="pull-left">Location</th>
                   <th class="pull-left">Starting Date</th>
@@ -310,8 +312,8 @@ if(isset($_POST["Export"])){
               $event_endDate= date("d-m-Y", strtotime($end));
               $endtime=$event_row["event_endtime"];
             echo' <tr>
-
-              <td >'.
+              
+            <td >'.
              $event_row['event_title'].'
              </td>
             <td>'.$event_row["event_location"].'</td>
@@ -351,8 +353,9 @@ if(isset($_POST["Export"])){
             <div class="box-header">
              <div class="row">
               <div class="col-md-6 col-xs-12">
-                
+                <b style="text-transform: uppercase;font-size: 24px;color:#27AE60"><strong>Events</strong></b>
               </div>
+              
                <div class="col-md-2 col-xs-12">
                 
                 <form action="" method="POST">
@@ -396,13 +399,26 @@ if(isset($_POST["Export"])){
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
-              
-              <div class="col-md-12 pull- " style=""><a class="btn btn-primary pull-right" href="" id="button1" data-toggle="modal" data-target="#modal-printEvent"><i class="fa fa-print"></i><b> Print Event</b></a></div>
+                <div class="col-md-7">
+                  
+                </div>
+              <div class="col-md-2">
+                <div id="deleteAll" style="display:none">
+               
+                  <button type="submit" class="btn" id="button1" style="color:#fff;background-color:#D02E0B;" data-toggle="modal" data-target="#modal-deleteCheckedEvent">Delete</button>
+
+                
+              </div>
+              </div>
+              <div class="col-md-3 pull- " style=""><a class="btn btn-primary pull-right" href="" id="button1" data-toggle="modal" data-target="#modal-printEvent"><i class="fa fa-print"></i><b> Print Event</b></a></div>
             </div>
             <br>
               <table id="example2" class="table table-bordered table-striped table-responsive">
             <thead>
                 <tr>
+                   <th><label>
+            <input type="checkbox" id="select_all" class="" onchange="deleteCheckbox()" style="width: 15px;height: 15px;background-color: red"> All
+          </label></th>
                   <th>Title</th>
                   <th>Location</th>
                   <th>Starting Date</th>
@@ -427,8 +443,9 @@ if(isset($_POST["Export"])){
               $end=$event_row["event_endDate"];
               $event_endDate= date("d-m-Y", strtotime($end));
               $endtime=$event_row["event_endtime"];
-            echo' <tr>
-
+            echo" <tr>
+               <td> <input class='checkbox' type='checkbox' id='check' name='check[]' value='".$eventID."' style='width: 15px;height: 15px;'></td>";
+             echo '
               <td ><span class="hidden">'.date("Y/m/d", strtotime($start)).'</span>'.
              $event_row['event_title'].'
              </td>
@@ -829,6 +846,32 @@ if(isset($_POST["Export"])){
         </div>
       </div>
     </div>
+
+    <div class="modal  fade" id="modal-deleteCheckedEvent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete this event?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           Are you sure you want to delete all selected event from the system?
+           
+          
+          <div id="Allmsg"></div>
+
+        </div>
+          <div class="modal-footer">
+           <div id="modalAllMsg">
+           <div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger pull-left" name="deleteAllbutton" id="" type="submit"  onclick="deletefromSystem()">Delete</button>
+           </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
     </section>
     <!-- /.content -->
   </div>
@@ -950,7 +993,13 @@ event_type=radios[i].value;
 <!-- Select2 -->
 <script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="../../dist/js/fusioncharts/fusioncharts.js"></script>
-
+<script type="text/javascript">
+  window.setTimeout(function () {
+    $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+        $(this).remove();
+    });
+}, 2000);
+</script>
 
 <!-- FastClick -->
 <!-- include script-->
@@ -1198,6 +1247,76 @@ event_type=radios[i].value;
     })
   })
 
+</script>
+<script>
+var select_all = document.getElementById("select_all"); //select all checkbox
+var checkboxes = document.getElementsByClassName("checkbox"); //checkbox items
+
+//select all checkboxes
+select_all.addEventListener("change", function(e){
+  for (i = 0; i < checkboxes.length; i++) { 
+    checkboxes[i].checked = select_all.checked;
+  }
+});
+
+
+for (var i = 0; i < checkboxes.length; i++) {
+  checkboxes[i].addEventListener('change', function(e){ //".checkbox" change 
+    //uncheck "select all", if one of the listed checkbox item is unchecked
+    if(this.checked == false){
+      select_all.checked = false;
+    }
+    //check "select all" if all checkbox items are checked
+    if(document.querySelectorAll('.checkbox:checked').length == checkboxes.length){
+      select_all.checked = true;
+    }
+  });
+}
+</script>
+<script>
+ function deleteCheckbox(){
+  var select_all = document.getElementById("select_all");
+  var delete_all = document.getElementById("deleteAll");
+  if (select_all.checked ==true) {
+  
+    delete_all.style.display = "block";
+  }else{
+    
+   
+   delete_all.style.display = "none";
+  }
+
+ }
+</script>
+<script type="text/javascript">
+  function deletefromSystem(){
+
+    var selected_value = []; // initialize empty array 
+    $("#check:checked").each(function(){
+        selected_value.push($(this).val());
+        
+    });
+   // document.getElementById("AllDiv").innerHTML= selected_value+'<br;
+    var details= '&event_id='+ selected_value;
+  $.ajax({
+  type: "POST",
+  url: "delete_event.php",
+  data: details,
+  cache: false,
+  success: function(data) {
+
+    if(data=='success'){
+ window.location="event.php?delete=True" 
+    }else{
+      alert("OOp! Could not delete the student.Please try again!");
+    }
+  
+
+  }
+
+
+  });
+  }
 </script>
 <?php //include("include/script.php");?>
 </body>

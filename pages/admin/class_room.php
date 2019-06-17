@@ -53,7 +53,7 @@ if(isset($_GET['id'])){
                  
                    foreach ($query_c as $row_value) {
                     
-                  echo'  <h3 >'.$row_value['level_name'].'  '.$row_value['stream_name'].'  '.$row_value['year'].'</h3>';
+                  echo'  <h3 style="text-transform: uppercase;color:#27AE60" ><strong>'.$row_value['level_name'].'  '.$row_value['stream_name'].'  '.$row_value['year'].'</strong></h3>';
                    }
                  
                    
@@ -150,121 +150,9 @@ if(isset($_GET['id'])){
 
         <!--Edit student model-->
          
-      <div class="modal fade" id="modal-editStudent">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Student</h4>
-              </div>
-              <div class="modal-body">
-                <script >
-                function editStudentDetails(RegNo){
-               
-                var updiv = document.getElementById("editMessage"); //document.getElementById("highodds-details");
-                //alert(id);
-                var details= '&RegNo='+ RegNo;
-                $.ajax({
-                type: "POST",
-                url: "edit_student.php",
-                data: details,
-                cache: false,
-                success: function(data) {
-               
-                document.getElementById("editMessage").innerHTML=data;
-                 }
-                });
-                }
-                </script>
-                <div id="editMessage"></div>
-              </div>
-              
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        <!--end of edit student modal-->
-       <!-- Import student-->
-        <div class="modal fade" id="modal-importStudent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Upload CSV file</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-         <form id="fileinfo" name="" action="student.php" method="POST" enctype="multipart/form-data">
-           <input type="file" name="importFile" class="form-control" value="upload">
-         
-        </div>
-          <div class="modal-footer">
-            <button type="submit" class="pull-left btn btn-primary" name="importBtn" href="#">Upload</button>
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            
-          </div>
-        </form>
-        </div>
-      </div>
-    </div>
-       
-         <!-- delete student  Modal-->
-    <div class="modal  fade" id="delete_student_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this student?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <script >
-               function deleteStudent(student_id,student_name){
-                  
-                 document.getElementById("msg").innerHTML=' Are you sure you want to delete<b style="font-size:20px"> ' + student_name + '  </b>from the system?'
-                var updiv = document.getElementById("modalMsg"); //document.getElementById("highodds-details");
-                updiv.innerHTML ='<form method="POST" action="brand"><div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger" name="deletebuttonFunc" id="'+ student_id +'" type="submit" data-dismiss="modal" onclick="deleteStudentFromSystem(this.id)">Delete</button></form></div>';
-                }
-            </script>
-          
-          <div id="msg"></div>
-
-        </div>
-          <div class="modal-footer">
-           <div id="modalMsg"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-     <div class="modal  fade" id="modal-deleteCheckedStudent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this student?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-           Are you sure you want to delete all selected student from the system?
-           
-          
-          <div id="Allmsg"></div>
-
-        </div>
-          <div class="modal-footer">
-           <div id="modalAllMsg">
-           <div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-danger pull-left" name="deleteAllbutton" id="" type="submit"  onclick="deletefromSystem()">Delete</button>
-           </div>
-        </div>
-      </div>
-    </div>
-    </div>
+     
+    
+    
     </section>
     <!-- /.content -->
   </div>

@@ -227,11 +227,11 @@ $content .='<div style="border:1px solid green;width:720px;padding:0px 10px 0px 
         $date1 = new DateTime($invoice_due_date);
         $date3=date('d-m-Y');
         $date2 = new DateTime($date3);
-    if ($date2>$date1) {
+    if ($date2<$date1) {
           # code...
-       $content .= ' by '.$date1->diff($date2)->format("%d") . "  days";
+       $content .= ' by '.$date2->diff($date1)->format("%d") . "  days";
         }else{
-         $content .= ' within '.$date1->diff($date2)->format("%d") ." days";
+         $content .= ' within '.$date2->diff($date1)->format("%d") ." days";
         }
       $content .= ' </td>
        </tr>

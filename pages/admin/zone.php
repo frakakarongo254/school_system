@@ -122,7 +122,7 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Zone</h3> </b></div>
+              <div class="col-md-8"><b style="text-transform: uppercase;color:#27AE60"><h3><strong>Zone</strong></h3> </b></div>
               <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="button1" data-toggle="modal" data-target="#modal-addZone"><i class="fa fa-plus"></i><b> New Zone</b></a></div>
             </div>
             </div>

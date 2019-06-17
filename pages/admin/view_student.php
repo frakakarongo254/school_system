@@ -470,7 +470,7 @@ school_ID = '{$school_ID}'");
           ?>
           <!-- Profile Image -->
           
-          <div class="box box-primary " id="viewParentStdInfo">
+          <div class="box box-primary " id="viewParentStdInfo" style="background-color:">
             <div class="box-body box-profile">
               <div class="row">
                 <div class="col-md-3 ">
@@ -483,44 +483,46 @@ school_ID = '{$school_ID}'");
               
             </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" style="color: ">
                   <table>
                     <tr>
-                    <td><span id="viewCss">Name:</span></td>
-                    <td><h3 class="profile-username "><b><?php echo $row['first_Name'] ." ". $row['last_Name'];?></b></h3></td>
+
+                    <td colspan="2"><h3 class="profile-username " style="text-transform: uppercase;color:#000"><b><?php echo $row['first_Name'] ." ". $row['last_Name'];?></b></h3></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Adm:</span></td>
-                    <td><b><?php echo $row['registration_No']?></b></td>
+                    <td><b id="profileDetails"><?php echo $row['registration_No']?></b></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Gender:</span></td>
-                    <td><b><?php echo $row['gender_MFU']?></b></td>
+                    <td><b id="profileDetails"><?php echo $row['gender_MFU']?></b></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Nationality:</span></td>
-                    <td><b><?php echo $row['nationality']?></b></td>
+                    <td><b id="profileDetails"><?php echo $row['nationality']?></b></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Date of Birth:</span></td>
-                    <td><b><?php  $date=$row['date_of_Birth']; echo date("d-m-Y", strtotime($date))?></b></td>
+                    <td><b id="profileDetails"><?php  $date=$row['date_of_Birth']; echo date("d-m-Y", strtotime($date))?></b></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Admission Date:</span></td>
-                    <td><b><?php $ad_date=$row['admission_date']; echo date("d-m-Y", strtotime($ad_date))?></b></td>
+                    <td><b id="profileDetails"><?php $ad_date=$row['admission_date']; echo date("d-m-Y", strtotime($ad_date))?></b></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Type:</span></td>
-                    <td><b>Student</b></td>
+                    <td><b id="profileDetails">Student</b></td>
                   </tr>
                  </table>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" >
                   <table>
-                    
+                    <tr>
+                      <td >&nbsp;</td>
+                    </tr>
                   <tr>
                     <td><span id="viewCss">Total invoiced:  </span></td>
-                    <td align="right">
+                    <td align="right" id="profileDetails">
 
 
                       <?php
@@ -537,7 +539,7 @@ school_ID = '{$school_ID}'");
                   </tr>
                   <tr>
                     <td><span id="viewCss">Amount Paid:</span></td>
-                    <td align="right">
+                    <td align="right" id="profileDetails">
                       <?php
                        $query2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' && student_ID='".$student_ID."'")or
                                die(mysqli_error());
@@ -551,7 +553,7 @@ school_ID = '{$school_ID}'");
                   </tr>
                   <tr>
                     <td><span id="viewCss">Balance:</span></td>
-                    <td align="right">
+                    <td align="right" id="profileDetails">
                       <?php  $bal= $total_invoiced - $total_amount_paid; echo $school_row['currency'] .  '<b> '  .formatCurrency($bal)  ;?></b>
                     </td>
                   </tr>
@@ -756,8 +758,8 @@ school_ID = '{$school_ID}'");
                               <th>Date</th>
                               <th>Description</th>
                               <th>Reference</th>
-                              <th>Debit</th>
-                              <th>Credit</th>
+                              <th style="text-align: right;">Debit</th>
+                              <th style="text-align: right;">Credit</th>
                               
                               
                               

@@ -84,137 +84,59 @@ chart.render();
    
 
       <div class="row" style="text-transform: uppercase;font-weight: bold;">
-        
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box ">
-            <div class="inner bg-aqua text-center">
-               <?php 
-               $query_admins= mysqli_query($conn,"select * from `admin` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
-                 $query_admins_row=mysqli_num_rows (  $query_admins );
-                  echo "<h3>".$query_admins_row.  "</h3>";
-                ?> 
-              <p>ADMIN</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box ">
-            <div class="inner bg-green text-center">
-             
-               <?php 
-               $query_staffs= mysqli_query($conn,"select * from `staff` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
-                $query_staffs_row=mysqli_num_rows ( $query_staffs );
-                echo "<h3>".$query_staffs_row.  "</h3>";
-                ?> 
-              <p>Staffs</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-"></i>
-            </div>
-            <a href="staff.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box ">
-            <div class="inner bg-yellow text-center">
-              
-              <?php 
-               $child_query= mysqli_query($conn,"select * from `student` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
-               $child_query_row=mysqli_num_rows ( $child_query );
-               echo "<h3>".$child_query_row.  "</h3>";
-                ?> 
-              <p>Children</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-"></i>
-            </div>
-            <a href="student.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box  bk-primary">
-            <div class="inner bg-aqua text-center">
-              
-               <?php 
-               $query_parent= mysqli_query($conn,"select * from `parents` where `school_ID` ='".$_SESSION['login_user_school_ID']."' ");
-               $query_parent_row=mysqli_num_rows ( $query_parent );
-               echo "<h3>".$query_parent_row.  "</h3>";
-                ?> 
-              <p>Parents</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-"></i>
-            </div>
-            <a href="parent.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box  bk-primary">
-            <div class="inner bg-aqua text-center">
-              
-               <?php 
-                $amt_invoiced=0.00;
-               $query44 = mysqli_query($conn,"select * from invoice where school_ID = '".$school_ID."' ")or
-          die(mysqli_error());
-                              
-           while ($row33=mysqli_fetch_array($query44)){
-           $amt_invoiced= $amt_invoiced + $row33['amount'];
-                                     //$total=$total + $amt;
-           }   
-          
-           echo"<h2> ".$school_row['currency'] . formatCurrency($amt_invoiced) ."</h2>";  
-                ?> 
-              <p style="text-transform: uppercase;font-weight: bold;">Invoice Value</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-"></i>
-            </div>
-            <a href="report.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box  bk-primary">
-            <div class="inner bg-green text-center">
-              
-               <?php 
-               $balance=0.00;
-$total_amount_paid=0.00;
+       
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
 
-$que2 = mysqli_query($conn,"select * from payment where school_ID = '".$school_ID."' ")or
-          die(mysqli_error());
-                         
-           while ($row_p=mysqli_fetch_array($que2)){
-                             
-        $total_amount_paid=  $total_amount_paid + $row_p['amount_paid'];
-         }
-
-          echo"<h2> ".$school_row['currency'] . formatCurrency($total_amount_paid) ."</h2>";  
-              
-                ?> 
-              <p>Amount Paid</p>
+            <div class="info-box-content">
+              <span class="info-box-text">CPU Traffic</span>
+              <span class="info-box-number">90<small>%</small></span>
             </div>
-            <div class="icon">
-              <i class="ion ion-"></i>
-            </div>
-            <a href="report.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- /.info-box-content -->
           </div>
+          <!-- /.info-box -->
         </div>
-        <!-- ./col -->
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Likes</span>
+              <span class="info-box-number">41,410</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">New Members</span>
+              <span class="info-box-number">2,000</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Sales</span>
+              <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
       </div>
       <!-- /.row -->
    <div class="row">

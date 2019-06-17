@@ -39,14 +39,21 @@ $school_ID=$_SESSION['login_user_school_ID'];
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span>  <b class="color-primary" >  Setting</b></h3>
+          <h3 style="color:#27AE60"><span class="fa fa-gear"></span>  <b class="color-primary" >  Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
+                <li class="active"><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
                 <li><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
               </ul>
          </div>
        
          <div class="col-md-10  ">
+           <div class="row"> 
+                 <div class="col-md-12 text-center" style="text-transform: uppercase;font-weight:800;font-size:24px;color:#27AE60">
+                    School information
+                   <br>
+                   
+                 </div>
+              </div>
           <?php
           if(isset($_GET['insert'])){
           echo' <div class="alert alert-success alert-dismissable">
@@ -210,6 +217,7 @@ $school_ID=$_SESSION['login_user_school_ID'];
             <div class="box-body box-profile col-md-">
               <div class="row">
                 <div class="col-md-6  ">
+
                  <div class="" style="text-align: center;">
                  
                   <center>
@@ -330,8 +338,8 @@ $school_ID=$_SESSION['login_user_school_ID'];
       </div>
     </div>
         <!-- edit school details-->
-    <div class="modal fade" id="modal-editSchoolDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
+    <div class="modal fade" id="modal-editSchoolDetails" >
+      <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Edit Details</h5>
@@ -388,16 +396,16 @@ $school_ID=$_SESSION['login_user_school_ID'];
                <label>Country</label>
                <select class="form-control select2" style="width: 100%;" name="country">
                <?php
-                 $que2 = mysqli_query($conn,"select * from country ")or
-                     die(mysqli_error());
+                 $que2 = mysqli_query($conn,"select * from country ");
                      $x=0;
                      while ($row11=mysqli_fetch_array($que2)){
                     echo '<option value="'.$row11['name'].'">'.$row11['name'].'</option>';
-                      
-
+                     
                      }
                ?>
              </select>
+
+
             </div>
          
         </div>
@@ -491,7 +499,7 @@ $school_ID=$_SESSION['login_user_school_ID'];
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete this Class?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete this Stream?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>

@@ -136,6 +136,15 @@ if(isset($_POST["Export"])){
        
         
     }
+     if(isset($_GET['delete'])){
+          echo' <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert"
+          aria-hidden="true">
+          &times;
+          </button>
+          Success! You have deleted  successfully.
+          </div>';   
+        }
       ?>
     </section>
     <!-- Main content -->
@@ -144,7 +153,7 @@ if(isset($_POST["Export"])){
         <!-- Custom Tabs -->
           <div class="nav-tabs-custom" style="padding-right: 20px;padding-left: 20px">
            <div class="row">
-              <div class="col-md-4"><b><h3>Students</h3> </b></div>
+              <div class="col-md-4"><b style="text-transform: uppercase;color:#27AE60"><h3><strong>Students</strong> </h3> </b></div>
               <div class="col-md-2">
                
                 <div id="deleteAll" style="display:none">
@@ -395,22 +404,7 @@ if(isset($_POST["Export"])){
 </script>
 
 <script >
-  function editStudentDetails(RegNo){
-             
-              var updiv = document.getElementById("editMessage"); //document.getElementById("highodds-details");
-              //alert(id);
-              var details= '&RegNo='+ RegNo;
-              $.ajax({
-              type: "POST",
-              url: "edit_student.php",
-              data: details,
-              cache: false,
-              success: function(data) {
-             
-              document.getElementById("editMessage").innerHTML=data;
-               }
-              });
-              }
+ 
   function deleteStudentFromSystem(student_ID){
     
   var updiv = document.getElementById("message"); //document.getElementById("highodds-details");

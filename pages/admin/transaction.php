@@ -113,7 +113,7 @@ if (!velifyLogin()) {
              <form action="transaction.php" method="POST">
           <div class="row">
            
-              <div class="col-md-3"><b><h3>PAYMENT</h3> </b></div>
+              <div class="col-md-3"><b style="text-transform: uppercase;color:#27AE60;font-size: 24px;"><strong>payment</strong> </b></div>
               <div class="col-md-3">
                 <div class=" input-group input-group-">
               <span class="input-group-addon">FROM:   <i class="glyphicon glyphicon-calendar"></i></span>
@@ -196,7 +196,7 @@ if (!velifyLogin()) {
                                       
                                        echo' 
                                           <td>
-                                          <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span>Print </a>
+                                          <a href="#"  class="btn btn-primary badge" id="'.$paymentID.'" onclick="printTransactionFun(this.id)"> <span class="glyphicon glyphicon-print"></span>Print </a>
                                          <button type="button"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
                                             
                                            <a  href="view_transaction.php?payment_ID='.$paymentID.'"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" ><span class="glyphicon glyphicon-eye-open"></span></a>
@@ -270,7 +270,7 @@ if (!velifyLogin()) {
                                       
                                        echo' 
                                           <td>
-                                           <a href="print_receipt.php?payment_id='.$paymentID.'" target="_blank" class="btn btn-primary badge"> <span class="glyphicon glyphicon-print"></span> Print </a>
+                                           <a href="#"  class="btn btn-primary badge" id="'.$paymentID.'" onclick="printTransactionFun(this.id)"> <span class="glyphicon glyphicon-print"></span>Print </a>
 
                                          <button type="button"  class="btn btn-success badge" id="'.$paymentID.'" onclick="editpayment(this.id)" data-toggle="modal" data-target="#edit_payment_Modal"><span class="glyphicon glyphicon-pencil"></span></button>
 
@@ -485,7 +485,7 @@ if (!velifyLogin()) {
  window.location="transaction.php?cancel=True" 
     }else{
       
-      alert("OOp! Could not delete the student.Please try again!");
+      alert("OOp! Could not delete.Please try again!");
     }
   }
   });
@@ -495,6 +495,16 @@ if (!velifyLogin()) {
 
   //<!--priny payment list -->
   
+</script>
+ <script>
+function printTransactionFun(transaction_id) {
+
+    
+     window.open("print_receipt.php?payment_id="+transaction_id, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=1000");
+  
+  
+ 
+}
 </script>
 <script>
   $(function () {

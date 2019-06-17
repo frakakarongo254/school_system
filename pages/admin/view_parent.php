@@ -253,38 +253,40 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                 <div class="col-md-4 table-responsive">
                   <table>
                     <tr>
-                    <td><span id="viewCss">Name:</span></td>
-                    <td><h3 class="profile-username "><b><?php echo $parent_row['first_Name'] ." ". $parent_row['last_Name'];?></b></h3></td>
+                    
+                    <td colspan="2"><h3 class="profile-username " style="text-transform: uppercase;"><b><?php echo $parent_row['first_Name'] ." ". $parent_row['last_Name'];?></b></h3></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Email:</span></td>
-                    <td><b><?php echo $parent_row['email']?></b></td>
+                    <td><b id="profileDetails"><?php echo $parent_row['email']?></b></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Phone:</span></td>
-                    <td><b><?php echo $parent_row['cell_Mobile_Phone']?></b></td>
+                    <td><b id="profileDetails"><?php echo $parent_row['cell_Mobile_Phone']?></b></td>
                   </tr>
                   <tr>
                     <td><span id="viewCss">Nationality:</span></td>
-                    <td><b><?php echo $parent_row['nationality']?></b></td>
+                    <td><b id="profileDetails"><?php echo $parent_row['nationality']?></b></td>
                   </tr>
                   <tr>
                     <td ><span id="viewCss">Gender:</span></td>
-                    <td class="" ><b><?php echo $parent_row['gender_MFU']?></b></td>
+                    <td class="" ><b id="profileDetails"><?php echo $parent_row['gender_MFU']?></b></td>
                   </tr>
                   <tr>
                     <td ><span id="viewCss">Type:</span></td>
-                    <td class="" ><b>Parent</b></td>
+                    <td class="" ><b id="profileDetails">Parent</b></td>
                   </tr>
                   
                  </table>
                 </div>
                 <div class="col-md-5 table-responsive">
                   <table>
-                    
+                    <tr>
+                      <td>&nbsp;</td>
+                    </tr>
                   <tr>
                     <td><span id="viewCss">Total invoiced:</span></td>
-                    <td align="right">
+                    <td align="right" id="profileDetails">
                       <?php
                       
                                 $amt_invoiced=0.00;
@@ -316,7 +318,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                   </tr>
                   <tr  style="padding: 20px;">
                     <td><span id="viewCss">Amount Paid:</span></td>
-                    <td style="padding-left : 20px;">
+                    <td style="padding-left : 20px;" id="profileDetails">
                       <?php
                        
                             $total_amount_paid=0.00;
@@ -347,7 +349,7 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                   <tr align="">
                     <td><span id="viewCss">Balance:</span></td>
 
-                    <td align="right">
+                    <td align="right" id="profileDetails">
                       
                         <?php $total_balance=0.00; $tol=$amt_invoiced - $total_amount_paid;
                       if($tol <=0){

@@ -55,7 +55,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Notification</h3> </b></div>
+              <div class="col-md-8"><b style="text-transform: uppercase;color:#27AE60"><h3><strong>Notification</strong></h3> </b></div>
               <div class="col-md-4 col-pull-right" style="text-align:right"></div>
             </div>
             </div>

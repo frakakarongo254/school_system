@@ -141,7 +141,7 @@ echo '<script> window.location="manage_attendance.php?insert=True" </script>';
         <div class="col-md-12">
           <div class="box">
             <div class="box-header">
-             <div><b><h2>SIGN OUT ATTENDANCE</h2></b></div>
+             <div><b style="text-transform: uppercase;color:#27AE60"><h2><strong>SIGN OUT ATTENDANCE</strong></h2></b></div>
             </div>
             
             <!-- /.box-header -->

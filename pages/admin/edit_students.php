@@ -75,7 +75,7 @@ if (!velifyLogin()) {
 
         $edit_student_first_name=$_POST['edit_student_first_name'];
         $edit_student_last_name=$_POST['edit_student_last_name'];
-        $edit_student_nickname=$_POST['edit_student_nickname'];
+        $edit_student_regNo=$_POST['edit_student_regNo'];
         $edit_student_dateOfBirth=$_POST['edit_student_dateOfBirth'];
         $edit_student_admission_date=$_POST['edit_student_admission_date'];
         $edit_student_gender=$_POST['edit_student_gender'];
@@ -102,7 +102,7 @@ if (!velifyLogin()) {
         $uploadOk = 0;
         }else{
         $edit_student_profile_photo = addslashes(file_get_contents($_FILES['edit_student_profile_photo']['tmp_name']));
-        $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."',photo='".$edit_student_profile_photo."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
+        $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',registration_No= '".$edit_student_regNo."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."',photo='".$edit_student_profile_photo."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
         $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='".$edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
         if ($event_query) {
@@ -128,7 +128,7 @@ if (!velifyLogin()) {
         }
         }
         }else{
-        $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',nickname= '".$edit_student_nickname."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
+        $result_query=mysqli_query($conn,"update `student` SET first_Name= '".$edit_student_first_name."',last_Name= '".$edit_student_last_name."',registration_No= '".$edit_student_regNo."',date_of_Birth='".$edit_student_dateOfBirth."',gender_MFU='".$edit_student_gender."',other_Details='".$edit_healthyComment."',admission_date='".$edit_student_admission_date."',status='".$edit_status."',zone='".$edit_Student_zone."',zone_transport_type='".$edit_zoneChargeType."',nationality='".$edit_student_nationality."',class_ID='".$edit_student_class_id."' where `student_ID`='".$student_ID."' and `school_ID`='".$school_ID."' ");
         if($result_query){
 
         $event_query=mysqli_query($conn,"update `event` SET event_title= '".$eventTitle."',event_startDate='". $edit_student_dateOfBirth."',event_endDate='". $edit_student_dateOfBirth."' where `student_ID`='".$student_ID."'  and `school_ID`='".$school_ID."'");
@@ -184,6 +184,16 @@ if (!velifyLogin()) {
               <div class="row">
                 <div class=" col-md-4 mb-3">
                   <div class="form-group has-feedback input-group-lg">
+                        <label>Adm No :</label>
+                 <div class=" col-md- input-group input-group-">
+                   <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <input type="text" value="<?php echo $rows_details['registration_No'];?>" name="edit_student_regNo"  class="form-control"   placeholder="ADM No" required>
+                 
+                </div>
+                </div>
+                </div>
+                <div class=" col-md-4 mb-3">
+                  <div class="form-group has-feedback input-group-lg">
                         <label>First Name :</label>
                  <div class=" col-md- input-group input-group-">
                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -202,15 +212,7 @@ if (!velifyLogin()) {
                 </div>
                 </div>
                 </div>  
-                <div class=" col-md-4 mb-3">
-                 <div class="form-group has-feedback input-group-">
-                        <label>Nickname :</label>
-                 <div class=" col-md- input-group input-group">              
-                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                   <input type="text" value="<?php echo $rows_details['nickname'];?>" name="edit_student_nickname"  class="form-control"   placeholder="Nickname" >
-                </div>
-                </div>
-                </div>           
+                          
               </div>
               <br>
               

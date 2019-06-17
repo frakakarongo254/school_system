@@ -41,7 +41,7 @@ $school_row = mysqli_fetch_array($school_data_sql,MYSQLI_ASSOC);
 $school_row['school_Name'];
 $logo;
 if($school_row['logo_image'] !=''){
-$logo = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="150px" width="150px" />';
+$logo = '<img class=" img-responsive " src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="150px" width="150px" />';
 }else{
 $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='150px' width='150px'>";
 }
@@ -88,10 +88,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         
           
         <div class="col-md-12">
-          <table class="table">
+          <table class="">
+             <tr>
+         <td><span class="pull-left"><?php echo $logo ?></span></td>
+         </tr>
             <tr>
              
-              <td> <?php echo $logo ?><br><address id="address" >
+              <td> <address id="address" >
             <strong> <?php echo  strtoupper($school_row['school_Name']) .'</strong><br>
             Po. Box ' .$school_row['address_1'].'<br>
             Phone: '. $school_row['phone'].'<br>
@@ -104,7 +107,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <!-- /.col -->
       </div>
       <div class="row">
-         <div class="col-xs-12 text-center">
+         <div class="col-xs-12">
            
            <b style="font-size:20px;font-weight:800;text-transform:uppercase;text-align:center">Invoice Report From <?php  echo date("d-m-Y", strtotime($printFromDate)).   '    To    '  .date("d-m-Y", strtotime($printFromTo)).' '.  $class_Name;  ?></b>
            <br>

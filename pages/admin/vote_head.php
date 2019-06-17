@@ -71,13 +71,20 @@ $school_ID = $_SESSION['login_user_school_ID'];
          <div class="col-md-2 box-primary ">
         <span class="fa fa-gear"></span><b class="color-primary" >  Fee Structure</b>
            <ul class="nav nav-pills nav-stacked">
-                <li><a href="vote_head.php"><i class="fa fa-arrow-circle-right"></i> Vote Head</a></li>
+                <li class="active"><a href="vote_head.php"><i class="fa fa-arrow-circle-right"></i><b> Vote Head</b></a></li>
                
                   <li><a href="paymentMode.php"><i class="fa fa-arrow-circle-right"></i>Payment Mode</a></li>
               </ul>
          </div>
        
          <div class="col-md-10  ">
+          <div class="row"> 
+                 <div class="col-md-12 text-center" style="text-transform: uppercase;font-weight:800;font-size:24px;">
+                   Vote Head
+                   <br>
+                   
+                 </div>
+              </div>
           <?php
           #Add school carricula
           if (isset($_POST['addVoteHeadBtn'])) {

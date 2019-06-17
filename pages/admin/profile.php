@@ -37,7 +37,7 @@
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span><b class="color-primary" >Settings</b></h3>
+          <h3 style="color:#27AE60"><span class="fa fa-gear"></span> <b class="color-primary" >  Settings</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li class="active"><a href="profile.php"><i class="fa fa-arrow-circle-right"></i> Profile Details</a></li>
                 <li><a href="edit_profile.php"><i class="fa fa-arrow-circle-right"></i> Edit Profile</a></li>
@@ -110,7 +110,7 @@
                  <div class="col-md-2">
                   <b> Name :</b>
                  </div>
-                 <div class="col-md-6">
+                 <div class="col-md-6" style="color:#27AE60">
                    <?php echo $user_row['first_name'] . " " .$user_row['second_name'] ;?>
                  </div>
                  

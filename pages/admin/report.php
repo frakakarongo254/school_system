@@ -42,6 +42,7 @@
                 <li><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
                 <li><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
                 <li class=""><a href="attendance_report.php"><i class="fa fa-arrow-circle-right"></i> Attendance</a></li>
+                <li class=""><a href="student_report.php"><i class="fa fa-arrow-circle-right"></i>Student Report</a></li>
               </ul>
          </div>
        
@@ -146,7 +147,7 @@
 
 <?php include("json_report.php");?>
 
-<<!-- jQuery 3 -->
+<!-- jQuery 3 -->
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

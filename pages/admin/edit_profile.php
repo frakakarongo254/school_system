@@ -127,7 +127,7 @@ $userID=$_SESSION['login_user_ID'];
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"> </span>  <b style="color:primary" >  Setting</b></h3>
+          <h3 style="color:#27AE60"><span class="fa fa-gear"> </span>  <b style="color:" >  Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="profile.php"><i class="fa fa-arrow-circle-right"></i> Profile Details</a></li>
                 <li class="active"><a href="edit_profile.php"><i class="fa fa-arrow-circle-right"></i> Edit Profile</a></li>

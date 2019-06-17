@@ -217,7 +217,7 @@ if (!velifyLogin()) {
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Staffs</h3> </b></div>
+              <div class="col-md-8"><b style="text-transform: uppercase;font-size: 20px;color:#27AE60"><strong>Staffs</strong></b></div>
               <div class="col-md-2">
                
                 <div id="deleteAll" style="display:none">

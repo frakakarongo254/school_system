@@ -48,9 +48,9 @@ $school_row = mysqli_fetch_array($school_data_sql,MYSQLI_ASSOC);
 $school_row['school_Name'];
 $logo;
 if($school_row['logo_image'] !=''){
-$logo = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="90" width="90px" />';
+$logo = '<img class=" img-responsive " src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="150" width="150px" />';
 }else{
-$logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
+$logo = "<img class=' img-responsive ' src='../dist/img/avatar.png' class='img-circle' alt='logo ' height='150px' width='150px'>";
 }
 
 ?>
@@ -109,7 +109,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
           </div>
             <div class=row>
             <div class="col-md-12">
-                From
+             
           <address>
             <strong>'. $school_row['school_Name'].'</strong><br>
             Po. Box '. $school_row['address_1'].'<br>

@@ -71,14 +71,21 @@ if(isset($_GET['id'])){
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span>  <b class="color-primary" > Setting</b></h3>
+          <h3 style="color:#27AE60"><span class="fa fa-gear"></span>  <b class="color-primary" > Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
-                <li><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
+                <li class="active"><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
               </ul>
          </div>
        
          <div class="col-md-10  ">
+           <div class="row"> 
+                 <div class="col-md-12 text-center" style="text-transform: uppercase;font-weight:800;font-size:24px;color:#27AE60">
+                    School Curricula Levels
+                   <br>
+                   
+                 </div>
+              </div>
           <?php
           #Add level
           if (isset($_POST['addLevelBtn'])) {

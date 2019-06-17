@@ -70,8 +70,8 @@ if (!velifyLogin()) {
   
         $student_first_name=$_POST['student_first_name'];
         $student_last_name=$_POST['student_last_name'];
-        $student_nickname=$_POST['student_nickname'];
-        $student_regNo;
+       $student_regNo=$_POST['student_regNo'];
+       
         $student_dateOfBirth=$_POST['student_dateOfBirth'];
         $student_admission_date=$_POST['student_admission_date'];
         $student_gender=$_POST['student_gender'];
@@ -86,23 +86,7 @@ if (!velifyLogin()) {
         $randstd = substr(number_format(time() * rand(),0,'',''),0,10);
         $student_ID=md5($randstd);
         $eventTitle=$student_first_name ." ".$student_last_name . " Birthday";
-        #generate student Reg no based on the last regno from the database 
-       $get_last_RegNo_query= mysqli_query($conn,"select * from `student` where `school_ID` ='".$school_ID."'");
-       $get_last_RegNo=mysqli_num_rows ( $get_last_RegNo_query );
-       $lastRegNo = $get_last_RegNo + 1;
-       #make sure the new reg no does not exist from the database
-      
-        if($lastRegNo < 9){
-          $datetime = date_create()->format('Y');
-          $student_regNo= $datetime.'/000'.$lastRegNo;
-       }elseif ($lastRegNo < 99) {
-         $datetime = date_create()->format('Y');
-         $student_regNo= $datetime.'/00'.$lastRegNo;
-       }elseif ($lastRegNo > 99) {
-         $datetime = date_create()->format('Y');
-          $student_regNo= $datetime.'/0'.$lastRegNo;
-       }
-
+       
         # check image
        if(isset($_FILES['student_profile_photo']['name']) and !empty($_FILES['student_profile_photo']['name'])){
            $file=$_FILES['student_profile_photo']['name'];
@@ -119,8 +103,8 @@ if (!velifyLogin()) {
           $uploadOk = 0;
           }else{
             $student_profile_photo = addslashes(file_get_contents($_FILES['student_profile_photo']['tmp_name']));
-             $sudent_insert_query=mysqli_query($conn,"insert into `student` (student_ID,first_Name,last_Name,nickname,
-          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,photo,nationality,zone,zone_transport_type,class_ID,status,meal_plan) values('$student_ID','$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
+             $sudent_insert_query=mysqli_query($conn,"insert into `student` (student_ID,first_Name,last_Name,
+          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,photo,nationality,zone,zone_transport_type,class_ID,status,meal_plan) values('$student_ID','$student_first_name','$student_last_name','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
           '$student_gender','$student_profile_photo','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status','$meal_plan') ");
 
              
@@ -153,8 +137,8 @@ if (!velifyLogin()) {
        }
           }
         }else{
-           $sudent_insert_query=mysqli_query($conn,"insert into `student` (student_ID,first_Name,last_Name,nickname,
-          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,nationality,zone,zone_transport_type,class_ID,status,meal_plan) values('$student_ID','$student_first_name','$student_last_name','$student_nickname','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
+           $sudent_insert_query=mysqli_query($conn,"insert into `student` (student_ID,first_Name,last_Name,
+          registration_No,school_ID,admission_date,date_of_Birth,other_Details,gender_MFU,nationality,zone,zone_transport_type,class_ID,status,meal_plan) values('$student_ID','$student_first_name','$student_last_name','$student_regNo','$school_ID','$student_admission_date', '$student_dateOfBirth','$healthyComment',
           '$student_gender','$student_nationality','$Student_zone','$zoneChargeType','$student_class_id','$student_status','$meal_plan') ");
         if($sudent_insert_query){
         
@@ -191,25 +175,75 @@ if (!velifyLogin()) {
 
 
       ?>
-
+ 
+        
+       
+       <div class="row">
+         <div class="col-md-2">
+          <ul class="nav nav-tabs pull-right">
+              <li class=""><a href="student.php"  style="font-size:20px; font-weight: bold;font-family:;text-transform: uppercase; "Times New Roman", Times, serif;"> Student </a></li>
+              
+              
+            </ul>
+         </div>
+         <div class="col-md-3">
+            <ul class="nav nav-tabs">
+              <li class=""><a href="add_student.php"  style="font-size:20px; font-weight: bold;font-family: ;text-transform: uppercase;color: #000000"Times New Roman", Times, serif;">Add Student </a></li>
+              
+              
+            </ul>
+         </div>
+       </div>
      
     </section>
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
+     
     
         <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab" style="font-size:20px; font-weight: bold;font-family: "Times New Roman", Times, serif;">Student Profile</a></li>
-              
-            </ul>
+            
             <div class="tab-content">
               
               <!-- /.tab-pane -->
               <div class="tab-pane active" id="tab_1">
                <form id="fileinfo" name="fileinfo" action="add_student.php" method="POST" enctype="multipart/form-data">
               <div class="row">
+                <div class=" col-md-4 mb-3">
+                  <div class="form-group has-feedback input-group-lg">
+                        <label>Adm No:(outo Generate )</label>
+                 <div class=" col-md- input-group input-group-">
+                  <?php
+                   $student_regNo='';
+                    $get_last_RegNo_query= mysqli_query($conn,"select count(id) as d from `student` where `school_ID` ='".$school_ID."'");
+
+               $get_last_RegNo = mysqli_fetch_array($get_last_RegNo_query,MYSQLI_ASSOC);
+            $get_last_RegNo['d'];
+       //$get_last_RegNo=mysqli_num_rows ( $get_last_RegNo_query );
+       $lastRegNo = $get_last_RegNo['d'] + 1;
+       #make sure the new reg no does not exist from the database
+      
+        if($lastRegNo < 9){
+          $datetime = date_create()->format('Y');
+          $student_regNo= $datetime.'/00'.$lastRegNo;
+       }elseif ($lastRegNo < 99) {
+         $datetime = date_create()->format('Y');
+         $student_regNo= $datetime.'/0'.$lastRegNo;
+       }elseif ($lastRegNo > 99) {
+         $datetime = date_create()->format('Y');
+          $student_regNo= $datetime.'/'.$lastRegNo;
+       }
+          $get_query= mysqli_query($conn,"select registration_No from `student` where `registration_No`='".$student_regNo."' and `school_ID` ='".$school_ID."' ");
+
+
+                  ?>
+                   <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <input type="text" name="student_regNo"  class="form-control" value="<?php echo $student_regNo; ?>"   placeholder="Adm No" required>
+                 
+                </div>
+                </div>
+                </div>
                 <div class=" col-md-4 mb-3">
                   <div class="form-group has-feedback input-group-lg">
                         <label>First Name :</label>
@@ -230,15 +264,7 @@ if (!velifyLogin()) {
                 </div>
                 </div>
                 </div>  
-                <div class=" col-md-4 mb-3">
-                 <div class="form-group has-feedback input-group-">
-                        <label>Nickname :</label>
-                 <div class=" col-md- input-group input-group">              
-                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                  <input type="text" name="student_nickname"  class="form-control"   placeholder="Nickname" >
-                </div>
-                </div>
-                </div>           
+                       
               </div>
               <br>
               

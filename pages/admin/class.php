@@ -197,7 +197,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Classes </h3> </b></div>
+              <div class="col-md-8"><b style="text-transform: uppercase;color:#27AE60"><h3><strong>Classes </strong></h3> </b></div>
               <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="buttonClass" data-toggle="modal" data-target="#modal-addClass"><i class="fa fa-plus"></i><b> New Class </b></a></div>
             </div>
             </div>
@@ -267,7 +267,7 @@ $school_ID = $_SESSION['login_user_school_ID'];
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-8"><b><h3>Session </h3> </b></div>
+              <div class="col-md-8"><b style="text-transform: uppercase;color:#27AE60"><h3><strong>Session </strong></h3> </b></div>
               <div class="col-md-4 col-pull-right" style="text-align:right"><a class="btn btn-primary" href="#" id="buttonClass" data-toggle="modal" data-target="#modal-addSection"><i class="fa fa-plus"></i><b> New Session</b></a></div>
             </div>
             </div>
@@ -359,7 +359,6 @@ $school_ID = $_SESSION['login_user_school_ID'];
                  </select>
                </div>
                 <div class="form-group">
-                
               <select class="form-control select2" name="session_name" style="width: 100%;" required>
                 <option value="">Session</option>
                  <option value="Term 1">Term 1</option>

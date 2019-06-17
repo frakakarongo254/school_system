@@ -42,6 +42,7 @@
                 <li class=""><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
                 <li><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
                   <li class="active"><a href="attendance_report.php"><i class="fa fa-arrow-circle-right"></i> Attendance</a></li>
+                    <li class=""><a href="student_report.php"><i class="fa fa-arrow-circle-right"></i>Student Report</a></li>
               </ul>
          </div>
        

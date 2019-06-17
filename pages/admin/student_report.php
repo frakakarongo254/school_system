@@ -40,10 +40,9 @@
            <h3><a href="report.php"><span class="fa fa-bar-chart"></span>  <b class="color-primary" >  Reports</b></a></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="payment_report.php"><i class="fa fa-arrow-circle-right"></i> Payment</a></li>
-                <li class="active"><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
+                <li class=""><a href="invoice_report.php"><i class="fa fa-arrow-circle-right"></i> Invoices</a></li>
                 <li class=""><a href="attendance_report.php"><i class="fa fa-arrow-circle-right"></i> Attendance</a></li>
-                <li class=""><a href="student_report.php"><i class="fa fa-arrow-circle-right"></i>Student Report</a></li>
-                  <li class=""><a href="student_report.php"><i class="fa fa-arrow-circle-right"></i>Student Report</a></li>
+                <li class="active"><a href="student_report.php"><i class="fa fa-arrow-circle-right"></i>Student Report</a></li>
               </ul>
          </div>
        
@@ -51,7 +50,7 @@
          
           <div class="row"> 
                  <div class="col-md-12 text-center" style="text-transform: uppercase;font-weight:800;font-size:24px;">
-                   invoice report
+                   Student report
                    <br>
                    
                  </div>
@@ -64,16 +63,16 @@
                  <form method="POST" action="">
                <div class="col-md-3">
                   <div class=" form-group">
-                 <label>Class</label>
-                  <select class="form-control select2" name="report_class_id" id="report_class_id" style="width: 100%;" required>
-                    <option value="">--Select class--</option>
-                    <option value="All">All</option>
+                 <label>Student</label>
+                  <select class="form-control select2"  name="student_id" id="student_id" style="width: 100%;" required>
+                    <option value="">--Select Student--</option>
+                  
                    <?php
-                 $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."'");
+                 $query_c= mysqli_query($conn,"select student.* from student where student.school_ID = '".$_SESSION['login_user_school_ID']."'");
                  
                    foreach ($query_c as $row_value) {
                     
-                  echo'  <option value="'.$row_value['class_ID'].'">'.$row_value['level_name'].' '.$row_value['stream_name'].'</option>';
+                  echo'  <option value="'.$row_value['student_ID'].'">'.$row_value['registration_No'].' '.$row_value['first_Name'].' '.$row_value['last_Name'].'</option>';
                    }
                  
                    
@@ -81,18 +80,28 @@
                  </select>
                 </div>
                </div>
-              <div class="col-md-3 pull-" style="text-align:">
-                 <div class=" form-group">
-               <label>From :</label>
-                <input type="date" name="from_date" id="from_date" class="form-control" required>
+              <div class="col-md-6 pull-" style="text-align:">
+                  <label>Include:</label>
+                <div class="form-group">
+                <label>
+                  <input type="checkbox" class="flat-red" id="basicInfo" name="basicInfo" value="basicInfo" checked>
+                  Basic Info
+                </label>
+                <label>
+                  <input type="checkbox" class="flat-red" id="finance" name="finance" value="finance">
+                  Finance
+                </label>
+                <label>
+                  <input type="checkbox" class="flat-red" id="immunization" name="immunization" value="immunization">
+                  Immunization
+                </label>
+                <label>
+                  <input type="checkbox" class="flat-red" id="milestone" name="milestone" value="milestone">
+                  Milestone
+                </label>
               </div>
               </div>
-              <div class="col-md-3" style="text-align:">
-                 <div class=" form-group">
-               <label>To :</label>
-               <input type="date" name="to_date" id="to_date" class="form-control" required>
-             </div>
-              </div>
+             
               <div class="col-md-3" style="text-align:">
                  <div class=" form-group">
                   <label><br></label><br>
@@ -173,26 +182,45 @@
 <!-- include script-->
 <script>
 function myFunction() {
-  var from_date=document.getElementById('from_date').value;
-  var to_date=document.getElementById('to_date').value;
-  var class_id=document.getElementById('report_class_id').value;
-  if (from_date =='' || to_date =='' || class_id =='' ) {
-    alert("All fields are required");
-  }else if(from_date =='' && to_date !=='' && class_id !==''  ){
-    alert("Date From is required");
-  }else if(to_date =='' && from_date !=='' && class_id !==''  ){
-    alert("Date To is required");
-  }else if (class_id =='' && from_date !=='' && to_date  !=='' ) {
-    alert("Please Select class");
-  }else if(from_date !=='' && to_date !=='' && class_id !==''){
-    
-   var  win = window.open("print_invoice_list.php?from="+from_date+"&to="+ to_date+"&class_id="+class_id , "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=5000");
-   win.focus();
-    win.print();
-    //win.close();
-     
-  }
+  var student_ID=document.getElementById('student_id').value;
   
+  var basicInfo=document.getElementById('basicInfo');
+ //alert(basicInfo);
+ if ( basicInfo.checked == true) {
+   basicInfo='yes';
+ }else{
+  basicInfo='no';
+ }
+
+
+ var immunization=document.getElementById('immunization');
+ if ( immunization.checked == true) {
+   immunization='yes';
+ }else{
+  immunization='no';
+ }
+   var milestone=document.getElementById('milestone');
+   if ( milestone.checked == true) {
+   milestone='yes';
+ }else{
+  milestone='no';
+ }
+    var finance=document.getElementById('finance');
+  if ( finance.checked == true) {
+   finance='yes';
+ }else{
+  finance='no';
+ }
+
+ if (student_ID !=='') {
+
+var  win = window.open("print_student_report.php?student_id="+student_ID+"&basicInfo="+ basicInfo+"&milestone="+milestone+"&finance="+finance+"&immunization="+immunization , "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=,left=,width=1000,height=5000");
+   win.focus();
+    //win.print();
+    //win.close();
+ }else{
+  alert('You have not yet selected student');
+ }
  
 }
 </script>

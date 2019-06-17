@@ -20,6 +20,8 @@ if (!velifyLogin()) {
 $studentId=$row03['student_ID'];
 $studentRegNo=$row03['registration_No'];
 $class_ID=$row03['class_ID'];
+$admission_date=$row03['admission_date'];
+$status=$row03['status'];
 
 
    $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."' and class.class_ID='".$class_ID."'");
@@ -75,7 +77,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body onload="window.print();">
+<body onload="">
 <div class="wrapper">
   <!-- Main content -->
   <?php echo '<section class="invoice">
@@ -109,7 +111,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <div class="col-xs-12">
           <div class="">
            
-          <strong> STUDENT STATEMENT</strong>
+          <strong> STUDENT REPORT</strong>
           </div>
         </div>
         <!-- /.col -->
@@ -131,15 +133,25 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                <td>CLASS :</td>
                <td>'. $class_name.'</td>
              </tr>
+             <tr>
+             <td>ADMISSION DATE</td>
+             <td>'.$admission_date.'</td>
+             <td>STATUS</td>
+             <td>'.$status.'</td>
+             </tr>
            </table>
            
         </div>
       </div>
       <!-- /.row -->
-
+'?>
       <!-- Table row -->
+
       <div class="row">
+        <?php if($_GET['finance']=='yes'){?>
         <div class="col-xs-12 table-responsive">
+          
+          <strong style="text-transform: uppercase;font-size: 24px;color:#27AE60 ">FINANCE</strong>
             <table id="table11" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -154,8 +166,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                             </tr>
                             </thead>
                             <tbody>
-                               ';
-                              $result = mysqli_query($conn,"select * from statement where school_ID = '$school_ID' && student_ID='$get_student_ID'")or
+                               <?php
+                              $result = mysqli_query($conn,"select * from statement where school_ID = '".$school_ID."' && student_ID='".$get_student_ID."'")or
                                die(mysqli_error());
                         $total_Debit=0.00;
                         $total_Credit=0.00;
@@ -187,12 +199,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                         <td colspan="3"><b><b></td>
                          <td align="right"><b>'.$school_row['currency'] .   '<b> ' .formatCurrency($total_Debit).'</b></td>
                          <td align="right">'.$school_row['currency'] .   '<b> ' .formatCurrency($total_Credit).'</b></td>
+
                          
-                        </tr>
+                        </tr>';
                        
                         
 
-                              
+                       ?>       
                            
                              </tbody>
                             
@@ -201,8 +214,8 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                         <div class="pull-right col-md-3">
                           <table class="table">
                               <tr>
-                <th style="width:50%">Balance</th>
-                <td > <b>'.$school_row['currency'] .   '<b> ' .formatCurrency($total_balance).'</b></td>
+                <th style="width:50%">Balance </th>
+                <td > <b><?php echo $school_row['currency'] .   '<b> ' .formatCurrency($total_balance)?></b></td>
               </tr>
              
              
@@ -212,13 +225,148 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
       </div>
       <!-- /.row -->
 
-    
+    </div>
+  <?php }  if($_GET['milestone']=='yes'){?>
+
+    <div class="col-xs-12 table-responsive">
+
+ <strong style="text-transform: uppercase;font-size: 24px;color:#27AE60 ">milestone</strong>
+<table id="table1" class="table " style="width: 100%">
+  <?php
+$sql02 = mysqli_query($conn,"select * from `milestone` where  student_ID='".$get_student_ID."' and `school_ID` = '".$school_ID."'  ");
+$row02 = mysqli_fetch_array($sql02 ,MYSQLI_ASSOC);
+$milestone_ID1=$row02['milestone_ID'];
+$milestone_title1=$row02['title'];
+$effective_date1=$row02['effective_date'];
+$anticipated_date1=$row02['anticipated_date'];
+$milestone_attempt_allowed1 =$row02['attempt_allowed'];
+$milestone_official_desc1=$row02['description'];
+$milestone_status1=$row02['status'];
+  ?>
+<tr>
+<td>
+<label>Effective Date:</label><br>
+<?php echo $effective_date1?>
+</td>
+<td>
+<label>Milestone title :</label><br>
+<?php echo $milestone_title1?>
+</td>
+<td>
+<label>Official description :</label><br>
+<?php echo $milestone_official_desc1?>
+</td>
+</tr>
+<tr>
+<td>
+<label>Anticipated Date:</label><br>
+<?php echo $milestone_title1?>
+</td>
+<td>
+<label>Attempt Allowed:</label><br>
+<?php echo $milestone_attempt_allowed1?> 
+</td>
+<td>
+<label>Status :</label><br>
+<?php  echo $milestone_status1 ?>
+</td>
+</tr>
+</table>
+
+
+<table class="table table-bordered " id="" style="width: 100%">
+<thead>
+<tr>
+
+<th class=""> Milestone level </th>
+<th class=""> Description </th>
+<th class=""> Formal Description </th>
+
+</tr>
+</thead>
+<tbody>
+<?php
+
+
+$query2 = mysqli_query($conn,"select * from milestone_levels where milestone_ID='".$milestone_ID1."' and school_ID = '".$school_ID."' ")or
+die(mysqli_error());
+while ($row2=mysqli_fetch_array($query2)){
+$milestone_level_ID= $row2['milestone_level_ID'];
+$milestoneID= $row2['milestone_ID'];
+
+
+echo'<tr >
+
+<td>'.$row2['milestone_level'].'
+
+</td>
+<td>
+'.$row2['description'].'
+
+</td>
+<td>
+'.$row2['formal_description'].'
+
+</td>
+
+</tr>';
+
+}
+
+
+?>
+
+</tbody>
+</table>  
+      
+    </div>
+<?php }  if($_GET['immunization']=='yes'){?> 
+<div class=" col-xs-12 table-responsive">
+  <div class="row">
+    <div class="col-md-12">
+      <strong style="text-transform: uppercase;font-size: 24px;color:#27AE60 ">Immunization</strong>
+    </div>
+  </div>
+  <table class="table table-bordered " id="" style="width: 100%">
+    <thead>
+<tr>
+
+<th class=""> VACCINE </th>
+<th class=""> Vaccination Date</th>
+<th class=""> Renewal Date </th>
+
+</tr>
+</thead>
+<tbody>
+<?php
+                          $que21 = mysqli_query($conn,"select * from immunization where school_ID = '".$school_ID."' && student_ID='".$get_student_ID."'")or
+                                     die(mysqli_error());
+                                     $std_name;
+                                     
+                                     while ($row_im=mysqli_fetch_array($que21)){
+                                    echo'  <tr>
+                                        
+                                         <td>'.$row_im['immunization'].'</td>
+                                         
+                                         <td>'.$row_im['vaccinationDate'].'</td>
+                                       
+                                         <td>'.$row_im['renewalDate'].'</td>
+                                      </tr>';
+                             
+
+                                     }
+                                   ?>
+                                 </tbody>
+                                 </table>  
+</div>
+<?php } ?>
+  </div>
 
       <!-- this row will not appear when printing -->
      
-    </section>';?>;
+    </section>
   <!-- /.content -->
-</div>
+
 <!-- ./wrapper -->
 </body>
 </html>

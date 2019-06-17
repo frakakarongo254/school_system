@@ -329,7 +329,7 @@ if(isset($_POST["Export"])){
           <div class="box">
             <div class="box-header">
              <div class="row">
-              <div class="col-md-4"><b style="font-size: 24px;font-weight: bold;">Parents </b> </div>
+              <div class="col-md-4"><b style="font-size: 24px;font-weight: bold;text-transform: uppercase;color:#27AE60">Parents </b> </div>
               <div class="col-md-2">
               
                 <div id="deleteAll" style="display:none">

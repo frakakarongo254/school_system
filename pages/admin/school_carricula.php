@@ -67,14 +67,21 @@
       <div class="row bg-#fff">
         
          <div class="col-md-2 box-primary ">
-          <h3><span class="fa fa-gear"></span>  <b class="color-primary" >  Setting</b></h3>
+          <h3 style="color:#27AE60"><span class="fa fa-gear"></span>  <b class="color-primary" >  Setting</b></h3>
            <ul class="nav nav-pills nav-stacked">
                 <li><a href="school_profile.php"><i class="fa fa-arrow-circle-right"></i> School Details</a></li>
-                <li><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
+                <li class="active"><a href="school_carricula.php"><i class="fa fa-arrow-circle-right"></i> Curricula</a></li>
               </ul>
          </div>
        
          <div class="col-md-10  ">
+          <div class="row"> 
+                 <div class="col-md-12 text-center" style="text-transform: uppercase;font-weight:800;font-size:24px;color:#27AE60">
+                    School Curricula
+                   <br>
+                   
+                 </div>
+              </div>
           <?php
           #Add school carricula
           if (isset($_POST['addCarruculaBtn'])) {
@@ -192,13 +199,7 @@
                   ?>
                
                  </tbody>
-                <tfoot>
-                <tr>
-                  <th>Name</th>
-                  <th>Code</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
+                
               </table>
                    </div>
                    
@@ -212,7 +213,7 @@
     <div class="modal fade" id="modal-addCarrucula" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-          <div class="modal-header btn-default">
+          <div class="modal-header">
             <center><h5 class="modal-title" id="exampleModalLabel "><i class="fa fa-plus"></i>   <b>  Carrucula</b></h5></center>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>

@@ -44,7 +44,7 @@ $school_row = mysqli_fetch_array($school_data_sql,MYSQLI_ASSOC);
 $school_row['school_Name'];
 $logo;
 if($school_row['logo_image'] !=''){
-$logo = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="150px" width="150px" />';
+$logo = '<img class=" img-responsive " src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="150px" width="150px" />';
 }else{
 $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='150px' width='150px'>";
 }
@@ -91,10 +91,13 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         
           
         <div class="col-md-12">
-          <table class="table">
+          <table class="">
+            <tr>
+              <td><?php echo $logo ?></td>
+            </tr>
             <tr>
              
-              <td> <?php echo $logo ?><br><address id="address" >
+              <td><address id="address" >
             <strong> <?php echo  strtoupper($school_row['school_Name']) .'</strong><br>
             Po. Box ' .$school_row['address_1'].'<br>
             Phone: '. $school_row['phone'].'<br>
@@ -107,7 +110,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <!-- /.col -->
       </div>
       <div class="row">
-         <div class="col-xs-12 text-center">
+         <div class="col-xs-12 ">
            
            <b style="font-size:20px;font-weight:800;text-transform:uppercase;text-align:center">Attendance Report From <?php  echo date("d-m-Y", strtotime($printFromDate)).   '    To    '  .date("d-m-Y", strtotime($printFromTo)).' '.  $class_Name;  ?></b>
            <br>
@@ -137,14 +140,17 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                <?php
                 if ($report_class_id !=="All") {
                    
-                  $query22 = mysqli_query($conn,"select attendance.*,student.first_Name, student.last_Name, student.registration_No,student.photo, class.name as Cn from attendance join student on student.student_ID=attendance.student_ID join class on attendance.class_ID=class.class_ID where date(date_entered) between date('$printFromDate') and date('$printFromTo')  and attendance.school_ID = '".$school_ID."' and attendance.class_ID='".$report_class_id."' ORDER BY date(date_entered)  DESC ");
-                   if (!$query22) {
-                     # code...
-                    echo 'error here'.mysqli_error($conn);
-                   }
-                
+                  $query22 = mysqli_query($conn,"select attendance.*,student.first_Name, student.last_Name, student.registration_No,student.photo, class.class_ID as Cn from attendance join student on student.student_ID=attendance.student_ID join class on attendance.class_ID=class.class_ID where date(date_entered) between date('$printFromDate') and date('$printFromTo')  and attendance.school_ID = '".$school_ID."' and attendance.class_ID='".$report_class_id."' ORDER BY date(date_entered)  DESC ");
+
+                   
                    while ($row1=mysqli_fetch_array($query22)){
-                   $student_regNoID= $row1['registration_No'];
+                    $student_regNoID= $row1['registration_No'];
+                     $class_Id=$row1['Cn'];
+                   $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."' and class.class_ID='".$class_Id."'");
+                 
+                    while ($row_value=mysqli_fetch_array($query_c)){
+                   
+                   $class_room=$row_value['level_name'].' '.$row_value['stream_name'];
                   
                    $img;
                    if($row1['photo'] !=''){
@@ -154,7 +160,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                       
                     }
                     $stdId=$row1['student_ID'];
-                    $class_Id=$row1['Cn'];
+                    //$class_Id=$row1['Cn'];
                     $name= $row1['first_Name']." ". $row1['last_Name'];
                    $time_in=$row1['sign_in_time'];
                  $time_out=$row1['sign_out_time'];
@@ -175,7 +181,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                   echo" <tr>
                   
                   <td>".$img." ".$name."</td>
-                  <td>".$row1['Cn']."</td>
+                  <td>".$class_room."</td>
                   <td>".date("d-m-Y", strtotime($row1['date_entered']))."</td>
                   <td>".$row1['sign_in_time']."</td>
                   <td>".$row1['signed_in_by']." </td>
@@ -184,18 +190,20 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                    <td>".$diff."</td>
                     </tr>";
                     }
-                  
+                  }
                   }else{
                     
-                $query22 = mysqli_query($conn,"select attendance.*,student.first_Name, student.last_Name, student.registration_No,student.photo, class.name as Cn from attendance join student on student.student_ID=attendance.student_ID join class on attendance.class_ID=class.class_ID where date(date_entered) between date('$printFromDate') and date('$printFromTo')  and attendance.school_ID = '".$school_ID."' ORDER BY date(date_entered)  DESC ");
-                   if (!$query22) {
-                     # code...
-                    echo 'error here'.mysqli_error($conn);
-                   }
-                
+                $query22 = mysqli_query($conn,"select attendance.*,student.first_Name, student.last_Name, student.registration_No,student.photo, class.class_ID as Cn from attendance join student on student.student_ID=attendance.student_ID join class on attendance.class_ID=class.class_ID where date(date_entered) between date('$printFromDate') and date('$printFromTo')  and attendance.school_ID = '".$school_ID."' ORDER BY date(date_entered)  DESC ");
+                  
                    while ($row1=mysqli_fetch_array($query22)){
                    $student_regNoID= $row1['registration_No'];
-                  
+                     $class_Id=$row1['Cn'];
+                   $query_c= mysqli_query($conn,"select class.*,carricula_level.carricula_level_ID,carricula_level.level_name,stream.stream_name from class join carricula_level on carricula_level.carricula_level_ID=class.level_ID join stream on stream.stream_ID=class.stream_ID where class.school_ID = '".$_SESSION['login_user_school_ID']."' and class.class_ID='".$class_Id."'");
+                 
+                    while ($row_value=mysqli_fetch_array($query_c)){
+                   
+                   $class_room=$row_value['level_name'].' '.$row_value['stream_name'];
+                
                    $img;
                    if($row1['photo'] !=''){
                      $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
@@ -204,7 +212,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                       
                     }
                     $stdId=$row1['student_ID'];
-                    $class_Id=$row1['Cn'];
+                    
                     $name= $row1['first_Name']." ". $row1['last_Name'];
                    $time_in=$row1['sign_in_time'];
                  $time_out=$row1['sign_out_time'];
@@ -225,7 +233,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                   echo" <tr>
                   
                   <td>".$img." ".$name."</td>
-                  <td>".$row1['Cn']."</td>
+                  <td>".$class_room."</td>
                    <td>".date("d-m-Y", strtotime($row1['date_entered']))."</td>
                   <td>".$row1['sign_in_time']."</td>
                   <td>".$row1['signed_in_by']." </td>
@@ -234,7 +242,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
                    <td>".$diff."</td>
                     </tr>";
                     }
-                
+                  }
                   }
                 
                 
@@ -254,7 +262,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
 
       
      
-    </section>';?>
+    </section>
   <!-- /.content -->
 </div>
 <!-- ./wrapper -->

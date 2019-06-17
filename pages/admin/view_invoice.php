@@ -45,11 +45,11 @@ $school_data_sql = mysqli_query($conn,"select * from `school` where `school_ID` 
 
 $school_row = mysqli_fetch_array($school_data_sql,MYSQLI_ASSOC);
 $school_row['school_Name'];
-$logo;
+$school_logo;
 if($school_row['logo_image'] !=''){
-$logo = '<img class="profile-user-img img-responsive img-circle" src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="90" width="90px" />';
+$school_logo = '<img class=" img-responsive " src="data:image/jpeg;base64,'.base64_encode( $school_row['logo_image'] ).'"  height="150" width="150px" />';
 }else{
-$logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='90px' width='90px'>";
+$school_logo = "<img class=' img-responsive ' src='../dist/img/avatar.png' class='img-circle' alt='logo Image' height='150px' width='150px'>";
 }
 
  
@@ -84,7 +84,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <li><a href="invoice.php"><i class="fa fa-money"></i> Invoices </a></li>
        
         <li class="active"> Print Invoice</li>
-        <li class="pull-right" ><a class="btn btn-success pull-right " style="border-radius:10px;"  href="" onclick="emailInvoiceToParent(this.id)" id="<?php echo $get_invoice_ID?>"><b id="email_parent"><i class="fa fa-print"></i> Email Parent</b></a></li>
+        <li class="pull-right" ><a class="btn btn-success pull-right button1" style="border-radius:10px;"  href="" onclick="emailInvoiceToParent(this.id)" id="<?php echo $get_invoice_ID?>"><b id="email_parent"><i class="fa fa-print"></i> Email Parent</b></a></li>
       </ol>
        
       </h1>
@@ -103,7 +103,7 @@ $logo = "<img class='profile-user-img img-responsive img-circle' src='../dist/im
         <div class="col-md-12 " style="text-align: ;padding-left: 55px;" >
         <?php
           $content ='';
-$content .='<div style="border:1px solid green;width:720px;padding:0px 10px 0px 10px;background-color:#efefef" frame="" >';
+$content .='<div style="border:1px solid green;width:720px;padding:0px 10px 0px 10px;" frame="" >';
  $content .= '
 <table align="" border="0" cellpadding="0" cellspacing="0" width="710px" style="border-collapse: collapse;table-layout:fixed;border:;padding-left:15px;" >
   <tr>
@@ -116,7 +116,7 @@ $content .='<div style="border:1px solid green;width:720px;padding:0px 10px 0px 
     
     <tr>
      <td>
-      '. $logo .'
+      '. $school_logo .'
      </td>
     </tr>
     <tr>
@@ -264,7 +264,7 @@ $content .='<div style="border:1px solid green;width:720px;padding:0px 10px 0px 
        </tr>
        <tr>
          <td>
-         Payment is due within ';
+         Payment is due ';
         $date1 = new DateTime($invoice_due_date);
         $date3=date('d-m-Y');
         $date2 = new DateTime($date3);
