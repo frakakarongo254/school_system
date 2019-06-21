@@ -663,13 +663,13 @@ school_ID = '{$school_ID}'");
                                while ($row2=mysqli_fetch_array($query3)){
                                 $img;
                                if($row2['photo'] !=''){
-                                $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
+                                $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" class="img-circle"/>';
                               }else{
-                                  $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                                  $img = "<img src='../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                                 }
                                 echo" <tr>
-                                       <td>
-                                        ".$img."
+                                       <td><a href='view_parent.php?id=".$parentID."'>
+                                        ".$img."</a>
                                        </td>
                                         <td>".$row2['first_Name']." ". $row2['last_Name']."</td>
                                         <td>".$row2['cell_Mobile_Phone']." </td>

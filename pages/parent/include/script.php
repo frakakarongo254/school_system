@@ -48,6 +48,18 @@
 <!-- Select2 -->
 <script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="../../dist/js/fusioncharts/fusioncharts.js"></script>
+
+
+
+<!--dismiss alert message after few seconds-->
+<script type="text/javascript">
+  window.setTimeout(function () {
+    $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+        $(this).remove();
+    });
+}, 2000);
+</script>
+
 <script>
   $(function () {
     //Initialize Select2 Elements

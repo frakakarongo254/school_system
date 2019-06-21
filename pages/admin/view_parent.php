@@ -424,9 +424,9 @@ $ses_sql = mysqli_query($conn,"select * from `parents` where `parent_ID` = '".$g
                              while ($row2=mysqli_fetch_array($query3)){
                               $img;
                              if($row2['photo'] !=''){
-                              $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" />';
+                              $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row2['photo'] ).'"  height="40px" width="40px" class="img-circle" />';
                             }else{
-                                $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                                $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                               }
                               echo" <tr>
                                      <td><a href='view_student.php?id=".$row2['student_ID']."'>".$img."</a>

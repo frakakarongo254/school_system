@@ -21,6 +21,8 @@
 }
 .content-wrapper{
   background-color:  whitesmoke;
+ 
+  
 }
 .main-sidebar { background-color: #2F4F4F !important; 
   /*background-image: linear-gradient(cadetblue, dimgray) !important;*/
@@ -37,7 +39,7 @@ text-transform: uppercase !important;
 .nav > li > a:hover,
 .nav > li > a:active,
 .nav > li > a:focus {
-  color: white !important;
+  color: #27AE60 !important;
   background: #000!important;
 }
 a.dropdown-toggle:link{
@@ -45,11 +47,12 @@ a.dropdown-toggle:link{
    text-decoration: none !important;
 }
 .skin-cadetblue .main-header .navbar .logo{
-background-color: #000 !important;
+background-color: #27AE60 !important;
 color: #fff ;
 }
+
 .button1{
-    border-radius: 5px;
+  border-radius: 5px;
   background: #2ECC71;
   padding: 2px; 
   min-width: 80px;
@@ -63,9 +66,11 @@ color: #fff ;
   height: px;
 }
 #buttonClass{
-  border-radius: 10px;
-  background: #73AD21;
-  padding: 5px;
+  border-radius: 5px;
+  background: #2ECC71;
+ 
+  padding: 2px; 
+ min-width:80px ;
 }
 #button2 {
   border-radius: 5px;
@@ -126,29 +131,38 @@ select  {
 }
 #tab{
 font-family: Arial, Helvetica, sans-serif;
-font-weight: 800;
+font-weight:bold;
 text-transform: uppercase;
-font-size: 12px;
+font-size: 10px;
 }
 
 #viewCss{
-  font-weight: bold-italic;
+  font-weight: ;
+  color:#27AE60;
+  font-family: ;
+  font-family: "Comic Sans MS", cursive, sans-serif; font-size:11pt; font-style:
+  
+}
+#profileDetails{
+  font-weight: bold;
   font-size: 12px;
-  font-family: Helvetica, Arial, sans-serif;
+  
+ text-transform: capitalize;
+ font-family: "Arial Black", Gadget, sans-serif;
 }
 
 #viewParentStdInfo{
-  border-radius: 10px;
-   background-color: #cccccc;
-  background-image: linear-gradient(beige,  linen);
+  border-radius: 5px;
+   background-color: whitesmoke;
+  background-image: linear-gradient(,  );
 }
 
 #address{
-  font-weight: 600;
-  font-size: 24px;
-  font-family: Helvetica, Arial, sans-serif;
+  font-weight: ;
+  font-size: px;
+  font-family:;
   text-transform: uppercase;
-  text-align: center;
+  text-align: ;
 }
 
 

@@ -173,9 +173,9 @@ $edit_signedInBy=$_POST['edit_signedInBy'];
                   
                    $img;
                    if($row1['photo'] !=''){
-                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" class="img-circle"/>';
                   }else{
-                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                       
                     }
                     $stdId=$row1['student_ID'];
@@ -236,9 +236,9 @@ $edit_signedInBy=$_POST['edit_signedInBy'];
                    
                    $img;
                    if($row1['photo'] !=''){
-                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" class="img-circle"/>';
                   }else{
-                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                       
                     }
                     $stdId=$row1['student_ID'];

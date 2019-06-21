@@ -187,26 +187,7 @@ if (!velifyLogin()) {
        
       }
 
-      #link parent with student 
-      if(isset($_POST['linkStudentBtn'])){
-        $school_ID = $_SESSION['login_user_school_ID'];
-        $link_student_ID= $_POST['link_studentID'];
-        $link_parentID=$_POST['link_parentID'];
-        $relation =$_POST['relation'];
-        $link_insert_query=mysqli_query($conn,"insert into `parent_relation` ( parent_ID,school_ID,student_ID,relation) 
-          values('$link_parentID','$school_ID','$link_student_ID','$relation') ");
-        if($link_insert_query){
-           echo '<script> window.location="parent.php?link=True" </script>';
-        }else{
-          echo' <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">
-        &times;
-        </button>
-        Sorry! Something went wrong.Please try again.
-        </div>'; 
-        }
-      }
+     
       ?>
     </section>
     <!-- Main content -->
@@ -236,7 +217,7 @@ if (!velifyLogin()) {
                
      
      
-       
+            <div class="table-responsive">
        
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
@@ -263,12 +244,12 @@ if (!velifyLogin()) {
                    $staff_ID= $row1['staff_ID'];
                    $img;
                    if($row1['photo'] !=''){
-                    $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                    $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" class="img-circle"/>';
                   }else{
                     if ($row1['gender']=="Female") {
-                      $img = "<img src='../../dist/img/avatar2.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar2.png' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                     }else{
-                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                     }
                     }
                     
@@ -295,6 +276,7 @@ if (!velifyLogin()) {
                  </tbody>
                
               </table>
+            </div>
             </div>
             <!-- /.box-body -->
           </div>

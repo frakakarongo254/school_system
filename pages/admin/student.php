@@ -175,7 +175,7 @@ if(isset($_POST["Export"])){
                 <br>
                 <button href="#" class="btn" id="button2" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
               </div>
-              <div class="col-md-2 col-pull-right" style="text-align:right">
+              <div class="col-md-2" style="text-align:">
                 <br>
                 <a class="btn btn-primary btn-bg" id="button1" href="add_student.php" style="  "><i class="fa fa-plus"></i><b> New Student </b></a>
               
@@ -186,7 +186,7 @@ if(isset($_POST["Export"])){
                 <hr style="background-color: red;font-size: 20px;">
               </div>
             </div>
-            
+            <div class="table-responsive">
                  <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -224,9 +224,9 @@ if(isset($_POST["Export"])){
                    }
                    $img;
                    if($row1['photo'] !=''){
-                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                     $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px"  class="img-circle"/>';
                   }else{
-                      $img = "<img src='../../dist/img/user.jpg' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/user.jpg' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                       
                     }
                         
@@ -258,7 +258,7 @@ if(isset($_POST["Export"])){
                  </tbody>
                
               </table>
-              
+              </div>
             <!-- /.tab-content -->
           </div>
           <!-- nav-tabs-custom -->

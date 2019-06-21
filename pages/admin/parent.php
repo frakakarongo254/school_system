@@ -328,31 +328,37 @@ if(isset($_POST["Export"])){
         <div class="col-md-12">
           <div class="box">
             <div class="box-header">
-             <div class="row">
-              <div class="col-md-4"><b style="font-size: 24px;font-weight: bold;text-transform: uppercase;color:#27AE60">Parents </b> </div>
+              <div class="row">
+              <div class="col-md-4"><b style="text-transform: uppercase;color:#27AE60"><h3><strong>Parents</strong> </h3> </b></div>
               <div class="col-md-2">
-              
-                <div id="deleteAll" style="display:none">
                
-                  <button type="submit" class="btn" id="button1" style="color:#fff;background-color:#D02E0B;" data-toggle="modal" data-target="#modal-deleteCheckedParent">Delete</button>
+                <div id="deleteAll" style="display:none">
+                <br>
+                
+                  <button type="submit" class="btn" id="button1" style="color:#fff;background-color:#D02E0B;" data-toggle="modal" data-target="#modal-deleteCheckedStudent">Delete</button>
 
                 
               </div>
               </div>
               <div class="col-md-2">
-                
+                <br>
                 <form action="" method="POST">
                   <button type="submit" class="btn" id="button1" style="color:#fff" name="Export" onclick=""><i class="fa fa-export"></i>Export</button>
 
                 </form>
               </div>
               <div class="col-md-2">
-              
-                <button href="#" class="btn" id="button1" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
+                <br>
+                 <button href="#" class="btn" id="button1" style="color:#fff" data-toggle="modal" data-target="#modal-importStudent">Import</button>
               </div>
-              <div class="col-md-2 " style="text-align:right"><a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a>
+              <div class="col-md-2 " style="text-align:">
+                <br>
+                <a class="btn btn-primary" href="login.html" id="button1" data-toggle="modal" data-target="#modal-addParent"><i class="fa fa-plus"></i><b> New Parent</b></a>
+              
               </div>
             </div>
+
+             
             </div>
             
             <!-- /.box-header -->
@@ -360,7 +366,7 @@ if(isset($_POST["Export"])){
                
      
      
-       
+            <div class="table-responsive">
        
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
@@ -386,9 +392,9 @@ if(isset($_POST["Export"])){
                    $parentID= $row1['parent_ID'];
                    $img;
                    if($row1['photo'] !=''){
-                    $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px" />';
+                    $img = '<img src="data:image/jpeg;base64,'.base64_encode( $row1['photo'] ).'"  height="40px" width="40px"  class="img-circle"/>';
                   }else{
-                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px'>";
+                      $img = "<img src='../../dist/img/avatar.png' class='img-circle' alt='User Image' height='40px' width='40px' class='img-circle'>";
                     }
                   echo" <tr>
                            <td> <input class='checkbox' type='checkbox' id='check' name='check[]' value='".$parentID."' style='width: 15px;height: 15px;'></td>
@@ -414,6 +420,7 @@ if(isset($_POST["Export"])){
                  </tbody>
                
               </table>
+            </div>
             </div>
             <!-- /.box-body -->
           </div>

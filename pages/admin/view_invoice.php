@@ -78,7 +78,9 @@ $school_logo = "<img class=' img-responsive ' src='../dist/img/avatar.png' class
     <!-- Content Header (Page header) -->
    
  <section class="content-header">
-  
+     <div id="responseMessage">
+        
+     </div>
       <h1>
          <ol class="breadcrumb">
         <li><a href="invoice.php"><i class="fa fa-money"></i> Invoices </a></li>
@@ -443,7 +445,7 @@ function createPDF() {
   });
   }
   function emailInvoiceToParent(invoice_id){
-   // alert(invoice_id);
+   //alert(invoice_id);
     document.getElementById('email_parent').innerHTML='<b>LOADING ...</b>';
      var details= '&invoice_id='+invoice_id;
      //alert(details);
@@ -453,12 +455,15 @@ function createPDF() {
   data: details,
   cache: false,
   success: function(det) {
-    //alert(det);
+    
+     $('#responseMessage').html('<div class="alert alert-success alert-dismissable"><button type="button"class="close" data-dismiss="alert" aria-hidden="true"> &times; </button>  Success! Email sent  successfully </div>');
     //$.toast('Toast message to be shown');
     if (det=='success') {
-     alert("Email Sent successfully");
+    //alert("Email Sent successfully");
+     $('#responseMessage').html('<div class="alert alert-success alert-dismissable"><button type="button"class="close" data-dismiss="alert" aria-hidden="true"> &times; </button>  Success! Email sent  successfully </div>');
     }else{
-       alert("Email Sent successfully");
+      // alert("Email Sent successfully");
+       $('#responseMessage').html('<div class="alert alert-danger alert-dismissable"><button type="button"class="close" data-dismiss="alert" aria-hidden="true"> &times; </button>  Oop! something went wrong. Please try again </div>');
     }
      //document.getElementById('email_parent').innerHTML=det;
     }

@@ -210,11 +210,7 @@ if (!velifyLogin()) {
               <div class="tab-pane active" id="tab_1">
                <form id="fileinfo" name="fileinfo" action="add_student.php" method="POST" enctype="multipart/form-data">
               <div class="row">
-                <div class=" col-md-4 mb-3">
-                  <div class="form-group has-feedback input-group-lg">
-                        <label>Adm No:(outo Generate )</label>
-                 <div class=" col-md- input-group input-group-">
-                  <?php
+                <?php
                    $student_regNo='';
                     $get_last_RegNo_query= mysqli_query($conn,"select count(id) as d from `student` where `school_ID` ='".$school_ID."'");
 
@@ -238,8 +234,23 @@ if (!velifyLogin()) {
 
 
                   ?>
+                <div class=" col-md-4 mb-3">
+                  
+                   <label>Adm No:
+                 ( <input type="checkbox" class=""  id="autoGenerate" onchange="autoGenerateFun(this.value)" name="autoGenerate" value="<?php echo$student_regNo?>"  style="width: 15px;height: 15px;background-color: red"checked>
+                auto Generate)
+                </label>
+                  <div class="form-group has-feedback input-group-lg">
+                       
+                 <div class=" col-md- input-group input-group-">
+                  
+
                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                  <input type="text" name="student_regNo"  class="form-control" value="<?php echo $student_regNo; ?>"   placeholder="Adm No" required>
+                  <div id="regNoDiv">
+                  <input type="text" name="student_regNo"  class="form-control" value="<?php echo $student_regNo ?>"   placeholder="Adm No" readonly>
+                  <input type="hidden" name="student_regNo"  class="form-control" value="<?php echo $student_regNo ?>"   placeholder="Adm No" >
+                   </div>
+                  
                  
                 </div>
                 </div>
@@ -492,29 +503,18 @@ if (!velifyLogin()) {
 </script>
 
 <script >
-  function deleteStudentFromSystem(RegNo){
-    alert(RegNo);
-  var updiv = document.getElementById("message"); //document.getElementById("highodds-details");
-  //alert(id);
-  var details= '&RegNo='+ RegNo;
-  $.ajax({
-  type: "POST",
-  url: "delete_student.php",
-  data: details,
-  cache: false,
-  success: function(data) {
-    if(data=='success'){
- window.location="student.php?delete=True" 
-    }else{
-      alert("OOp! Could not delete the student.Please try again!");
-    }
-  
+function autoGenerateFun(regNo){
 
-  }
+   var autoGenerate=document.getElementById('autoGenerate');
+  if ( autoGenerate.checked == true) {
+   
+   $('#regNoDiv').html('<input type="text" name="student_regNo"  class="form-control" value="'+regNo+'"   placeholder="Adm No" readonly> <input type="hidden" name="student_regNo"  class="form-control" value="'+regNo+'"   placeholder="Adm No" >');
+ }else{
 
-
-  });
-  }
+   $('#regNoDiv').html('<input type="text" name="student_regNo"  class="form-control" value=""   placeholder="Adm No" >');
+ }
+}
 </script>
+
 </body>
 </html>
